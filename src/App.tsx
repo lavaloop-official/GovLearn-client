@@ -23,7 +23,7 @@ function App() {
                     background: "inherit",
                     boxShadow: "0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px 0 rgba(0, 0, 0, 0.02)",
                     padding: "0px 0px",
-                    zIndex: "10000",
+                    zIndex: "1000",
                     position: "sticky",
                     top: "0",
                     height: "100%"
