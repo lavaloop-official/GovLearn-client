@@ -8,7 +8,7 @@ const items: MenuProps['items'] = [
     {
         key: '1',
         label: (
-            <a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com">
+            <a rel="noopener noreferrer" href="/profile">
                 Eingeloggt als:
                 <span style={{
                     textOverflow: "ellipsis",
@@ -64,8 +64,16 @@ function CustomHeader() {
                 padding: "0px 10px",
             }}>
                 <Title level={3}
-                       style={{margin: "auto auto auto 0px", minWidth: "100px", color: "#3f3f3f"}}>Govlearn</Title>
-                <Search placeholder="Kursangebote suchen" style={{maxWidth: "400px", margin: "auto"}}/>
+                       style={{
+                           margin: "auto auto auto 0px",
+                           minWidth: "100px",
+                           color: "#3f3f3f"
+                       }}>
+                    <a href="/" style={{color: "#212321"}}>
+                        Govlearn
+                    </a>
+                </Title>
+                <Search placeholder="Kursangebote suchen" style={{maxWidth: "400px", margin: "auto"}} allowClear/>
                 <div style={{margin: "auto 0px auto auto", minWidth: "32px", lineHeight: "0px"}}>
                     <Dropdown menu={{items}} placement="bottomRight" arrow={{pointAtCenter: true}} trigger={['click']}>
                         <a onClick={(e) => e.preventDefault()}>
@@ -84,12 +92,38 @@ function CustomHeader() {
                 display: "flex",
                 justifyContent: "center"
             }}>
-                <Button type="text" style={{margin: "0", borderRadius: "0px", maxWidth: "250px", width: "100%"}}>PlaceholderNav
-                    1</Button>
-                <Button type="text" style={{margin: "0", borderRadius: "0px", maxWidth: "250px", width: "100%"}}>PlaceholderNav
-                    2</Button>
-                <Button type="text" style={{margin: "0", borderRadius: "0px", maxWidth: "250px", width: "100%"}}>PlaceholderNav
-                    3</Button>
+                <Button
+                    type="text"
+                    style={{
+                        margin: "0",
+                        borderRadius: "0px",
+                        maxWidth: "250px",
+                        width: "100%"
+                    }}>
+                    PlaceholderNav 1
+                </Button>
+                <Button
+                    type="text"
+                    href="/"
+                    style={{
+                        margin: "0",
+                        borderRadius: "0px",
+                        maxWidth: "250px",
+                        width: "100%"
+                    }}>
+                    Entdecken
+                </Button>
+                <Button
+                    type="text"
+                    href="/profile"
+                    style={{
+                        margin: "0",
+                        borderRadius: "0px",
+                        maxWidth: "250px",
+                        width: "100%"
+                    }}>
+                    Profil
+                </Button>
             </div>
         </div>
     );

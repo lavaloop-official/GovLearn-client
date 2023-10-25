@@ -16,7 +16,7 @@ function Recommendation({title = titlePlaceHolder, src = srcplaceholder, ribbon 
             width: "100%",
             height: "100%",
             borderRadius: "20px",
-            display: "flex"
+            display: "flex",
         }}>
             <Badge.Ribbon text={ribbon}>
                 <div style={{height: "120px"}}>
@@ -29,14 +29,15 @@ function Recommendation({title = titlePlaceHolder, src = srcplaceholder, ribbon 
                         pointerEvents: "none"
                     }} src={src}/>
                     <div style={{position: "absolute", left: "0", bottom: "0"}}>
-                        <Button type="link" shape="round" style={{maxWidth: "150px", display: "flex"}}><h3 style={{
-                            margin: "0",
-                            alignSelf: "center",
-                            textOverflow: "ellipsis",
-                            overflow: "hidden",
-                            whiteSpace: "nowrap",
-                            maxWidth: "inherit"
-                        }}>{title}</h3></Button>
+                        <Button type="link" shape="round" href="/detail" style={{maxWidth: "150px", display: "flex"}}>
+                            <h3 style={{
+                                margin: "0",
+                                alignSelf: "center",
+                                textOverflow: "ellipsis",
+                                overflow: "hidden",
+                                whiteSpace: "nowrap",
+                                maxWidth: "inherit"
+                            }}>{title}</h3></Button>
                     </div>
                 </div>
             </Badge.Ribbon>

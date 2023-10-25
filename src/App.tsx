@@ -1,9 +1,11 @@
 import './App.css'
-import {Carousel, ConfigProvider, Divider, Layout} from "antd";
+import {ConfigProvider, Layout} from "antd";
 import {Content, Header} from "antd/es/layout/layout";
-import CarouselPane from './CarouselPane.tsx';
-import CustomHeader from "./CustomHeader.tsx";
-import RecomSlider from "./RecomSlider.tsx";
+import CustomHeader from "./components/CustomHeader.tsx";
+import Discover from "./pages/Discover.tsx";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
+import Details from "./pages/Details.tsx";
+import Profile from "./pages/Profile.tsx";
 
 
 function App() {
@@ -30,51 +32,14 @@ function App() {
                 }}>
                     <CustomHeader/>
                 </Header>
-                <Content style={{
-                    zIndex: "1",
-                    display: "flex",
-                    justifyContent: "center",
-                    flexDirection: "column",
-                    gap: "10px"
-                }}>
-                    <div style={{maxWidth: "1200px", margin: "auto", width: "100%", padding: "10px 10px"}}>
-                        <Carousel autoplay={true} effect="fade">
-                            <div>
-                                <CarouselPane text="Bilden sie sich weiter jetzt hallo"/>
-                            </div>
-                            <div>
-                                <CarouselPane text="lalalalalalal das ist ein Weiterbildungsangebot"
-                                              src="https://www.langweiledich.net/wp-content/uploads/2018/03/die-skurrilsten-wtf-stock-photos_01.jpg"/>
-                            </div>
-                            <div>
-                                <CarouselPane text="2"/>
-                            </div>
-                            <div>
-                                <CarouselPane/>
-                            </div>
-                        </Carousel>
-                    </div>
-                    <div style={{
-                        zIndex: "1",
-                        display: "flex",
-                        justifyContent: "center",
-                        flexDirection: "column",
-                        gap: "10px",
-                        maxWidth: "1200px",
-                        width: "100%",
-                        margin: "auto",
-                    }}>
-                        <Divider style={{margin: "0px", maxWidth: "1100px"}}/>
-                        <RecomSlider/>
-                        <Divider style={{margin: "0px"}}/>
-                        <RecomSlider/>
-                        <Divider style={{margin: "0px"}}/>
-                        <RecomSlider/>
-                        <Divider style={{margin: "0px"}}/>
-                        <RecomSlider/>
-                        <Divider style={{margin: "0px"}}/>
-                        <RecomSlider/>
-                    </div>
+                <Content>
+                    <BrowserRouter>
+                        <Routes>
+                            <Route path="/" element={<Discover/>}/>
+                            <Route path="/detail" element={<Details/>}/>
+                            <Route path="/profile" element={<Profile/>}/>
+                        </Routes>
+                    </BrowserRouter>
                 </Content>
             </Layout>
         </ConfigProvider>

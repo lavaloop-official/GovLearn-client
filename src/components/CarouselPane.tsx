@@ -11,7 +11,7 @@ function CarouselPane({text = "hello", description = descplaceholder, src = srcp
 
     return (
         <>
-            <div style={{background: "#D9D9D9", borderRadius: "20px", width: "100%", height: "400px"}}>
+            <div style={{background: "#D9D9D9", borderRadius: "20px", width: "100%", height: "400px", }}>
                 <Row style={{height: "100%", borderRadius: "20px"}}>
                     <Col span={8}>
                         <div style={{
