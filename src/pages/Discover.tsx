@@ -24,7 +24,8 @@ function Discover() {
                         </div>
                         <div>
                             <CarouselPane text="lalalalalalal das ist ein Weiterbildungsangebot"
-                                          src="https://www.langweiledich.net/wp-content/uploads/2018/03/die-skurrilsten-wtf-stock-photos_01.jpg"/>
+                                          src="https://www.langweiledich.net/wp-content/uploads/2018/03/die-skurrilsten-wtf-stock-photos_01.jpg"
+                            description="ja das ist die Beschreibung hallooooo. cooles angebot hier lalalalalalalla"/>
                         </div>
                         <div>
                             <CarouselPane text="2"/>

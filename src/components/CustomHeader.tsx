@@ -1,6 +1,9 @@
 import Search from "antd/es/input/Search";
-import {Avatar, Button, Dropdown, MenuProps, Typography} from "antd";
+import {Avatar, Dropdown, MenuProps, Space, Typography} from "antd";
 import {UserOutlined} from "@ant-design/icons";
+import {useLocation} from "react-router-dom";
+import {useEffect, useState} from "react";
+import SubHeader from "./SubHeader.tsx";
 
 const {Title} = Typography
 
@@ -42,7 +45,7 @@ const items: MenuProps['items'] = [
     {
         key: '4',
         label: (
-            <a target="_blank" rel="noopener noreferrer" href="https://www.luohanacademy.com">
+            <a href="/">
                 Ausloggen
             </a>
         ),
@@ -51,6 +54,18 @@ const items: MenuProps['items'] = [
 ];
 
 function CustomHeader() {
+    const [subHeader, setSubHeader] = useState(<div style={{height: "32px", width: "1px"}}/>)
+
+    const location = useLocation();
+
+    useEffect(() => {
+        if (location.pathname.includes("discover") || location.pathname.includes("detail") || location.pathname.includes("profile"))
+            setSubHeader(<SubHeader/>)
+        else
+            setSubHeader(<></>)
+    }, [location.pathname])
+
+
     return (
         <div style={{width: "100%", height: "100%"}}>
             <div style={{
@@ -69,7 +84,7 @@ function CustomHeader() {
                            minWidth: "100px",
                            color: "#3f3f3f"
                        }}>
-                    <a href="/" style={{color: "#212321"}}>
+                    <a href="/discover" style={{color: "#212321"}}>
                         Govlearn
                     </a>
                 </Title>
@@ -84,47 +99,7 @@ function CustomHeader() {
 
 
             </div>
-            <div style={{
-                width: "100%",
-                height: "32px",
-                borderTop: "1px solid #D9D9D9",
-                margin: "0 auto",
-                display: "flex",
-                justifyContent: "center"
-            }}>
-                <Button
-                    type="text"
-                    style={{
-                        margin: "0",
-                        borderRadius: "0px",
-                        maxWidth: "250px",
-                        width: "100%"
-                    }}>
-                    PlaceholderNav 1
-                </Button>
-                <Button
-                    type="text"
-                    href="/"
-                    style={{
-                        margin: "0",
-                        borderRadius: "0px",
-                        maxWidth: "250px",
-                        width: "100%"
-                    }}>
-                    Entdecken
-                </Button>
-                <Button
-                    type="text"
-                    href="/profile"
-                    style={{
-                        margin: "0",
-                        borderRadius: "0px",
-                        maxWidth: "250px",
-                        width: "100%"
-                    }}>
-                    Profil
-                </Button>
-            </div>
+            {subHeader}
         </div>
     );
 }
