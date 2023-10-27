@@ -20,7 +20,7 @@ function Discover() {
                                   boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
                               }}>
                         <div>
-                            <CarouselPane text="Bilden sie sich weiter jetzt hallo"/>
+                            <CarouselPane text="Bilden sie sich weiter jetzt hallo" src={undefined} description={undefined}/>
                         </div>
                         <div>
                             <CarouselPane text="lalalalalalal das ist ein Weiterbildungsangebot"
@@ -28,10 +28,10 @@ function Discover() {
                             description="ja das ist die Beschreibung hallooooo. cooles angebot hier lalalalalalalla"/>
                         </div>
                         <div>
-                            <CarouselPane text="2"/>
+                            <CarouselPane text="2" src={undefined} description={undefined}/>
                         </div>
                         <div>
-                            <CarouselPane/>
+                            <CarouselPane text={undefined} src={undefined} description={undefined}/>
                         </div>
                     </Carousel>
                 </div>
@@ -48,13 +48,13 @@ function Discover() {
                     <Divider style={{margin: "0px", maxWidth: "1100px"}}/>
                     <RecomSlider title="Lerne Scrum"/>
                     <Divider style={{margin: "0px"}}/>
-                    <RecomSlider/>
+                    <RecomSlider title={"Modellieren mit Icebricks"}/>
                     <Divider style={{margin: "0px"}}/>
-                    <RecomSlider/>
+                    <RecomSlider title={"Unlearning: Schaffe Platz für Neues"}/>
                     <Divider style={{margin: "0px"}}/>
-                    <RecomSlider/>
+                    <RecomSlider title={"So benutze ich Microsoft Teams"}/>
                     <Divider style={{margin: "0px"}}/>
-                    <RecomSlider/>
+                    <RecomSlider title={"Zeitmanagement: Grundlagen"}/>
                 </div>
             </div>
         </>
