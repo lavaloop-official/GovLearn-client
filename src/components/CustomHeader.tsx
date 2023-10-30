@@ -1,5 +1,5 @@
 import Search from "antd/es/input/Search";
-import {Avatar, Dropdown, MenuProps, Space, Typography} from "antd";
+import {Avatar, Dropdown, MenuProps, Typography} from "antd";
 import {UserOutlined} from "@ant-design/icons";
 import {useLocation} from "react-router-dom";
 import {useEffect, useState} from "react";

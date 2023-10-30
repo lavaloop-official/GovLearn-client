@@ -35,7 +35,6 @@ function App() {
                         <CustomHeader/>
                     </Header>
                     <Content>
-
                         <Routes>
                             <Route path="/" element={<Landing/>}/>
                             <Route path="/discover" element={<Discover/>}/>
@@ -43,7 +42,6 @@ function App() {
                             <Route path="/profile" element={<Profile/>}/>
                             <Route path="/register" element={<Registration/>}/>
                         </Routes>
-
                     </Content>
                 </Layout>
             </BrowserRouter>

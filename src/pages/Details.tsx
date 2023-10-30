@@ -3,7 +3,7 @@ import {useEffect} from "react";
 import {ArrowLeftShort} from "react-bootstrap-icons";
 import Recommendation from "../components/Recommendation.tsx";
 
-function Details({title = "Scrum lernen mit Jörg Becker"}: { title: string }) {
+function Details({title = "Scrum lernen mit Jörg Becker"}: { title?: string }) {
 
     useEffect(() => {
         document.title = "Details"
