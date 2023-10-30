@@ -41,16 +41,16 @@ function RecomSlider({title = "Empfehlung"}: { title: string }) {
                 <h1 style={{margin: "0 0 5px 0"}}>{title}</h1>
 
                 <Carousel responsive={responsive}>
-                    <Recommendation/>
+                    <Recommendation title={""} src={"https://image.stern.de/7690958/t/Qx/v3/w1440/r1.7778/-/stockfotos-aus-der-hoelle-01.jpg"} ribbon={""}/>
                     <Recommendation
-                        src={"https://image.stern.de/7690958/t/Qx/v3/w1440/r1.7778/-/stockfotos-aus-der-hoelle-01.jpg"}/>
-                    <Recommendation/>
+                        src={"https://image.stern.de/7690958/t/Qx/v3/w1440/r1.7778/-/stockfotos-aus-der-hoelle-01.jpg"} title={""} ribbon={""}/>
+                    <Recommendation title={""} src={"https://image.stern.de/7690958/t/Qx/v3/w1440/r1.7778/-/stockfotos-aus-der-hoelle-01.jpg"} ribbon={""}/>
                     <Recommendation
-                        src={"https://images.unsplash.com/photo-1549989476-69a92fa57c36?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60"}/>
-                    <Recommendation/>
-                    <Recommendation/>
-                    <Recommendation/>
-                    <Recommendation/>
+                        src={"https://images.unsplash.com/photo-1549989476-69a92fa57c36?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60"} title={""} ribbon={""}/>
+                    <Recommendation title={""} src={"https://image.stern.de/7690958/t/Qx/v3/w1440/r1.7778/-/stockfotos-aus-der-hoelle-01.jpg"} ribbon={""}/>
+                    <Recommendation title={""} src={"https://image.stern.de/7690958/t/Qx/v3/w1440/r1.7778/-/stockfotos-aus-der-hoelle-01.jpg"} ribbon={""}/>
+                    <Recommendation title={""} src={"https://image.stern.de/7690958/t/Qx/v3/w1440/r1.7778/-/stockfotos-aus-der-hoelle-01.jpg"} ribbon={""}/>
+                    <Recommendation title={""} src={"https://image.stern.de/7690958/t/Qx/v3/w1440/r1.7778/-/stockfotos-aus-der-hoelle-01.jpg"} ribbon={""}/>
                 </Carousel>
 
                 {/*<div style={{background: "#D9D9D9", borderRadius: "20px", padding: "10px"}}>

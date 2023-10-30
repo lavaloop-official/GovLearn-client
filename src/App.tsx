@@ -38,7 +38,7 @@ function App() {
                         <Routes>
                             <Route path="/" element={<Landing/>}/>
                             <Route path="/discover" element={<Discover/>}/>
-                            <Route path="/detail/*" element={<Details/>}/>
+                            <Route path="/detail/*" element={<Details title={''}/>}/>
                             <Route path="/profile" element={<Profile/>}/>
                             <Route path="/register" element={<Registration/>}/>
                         </Routes>
