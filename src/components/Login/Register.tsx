@@ -10,8 +10,7 @@ function Register({finished, loading, changeType}: { finished: any, loading: boo
                 initialValues={{remember: true}}
                 onFinish={finished}
                 size="large"
-                validateTrigger=""
-            >
+                validateTrigger="onSubmit">
                 <Form.Item
                     name="email"
                     rules={[{required: true, message: 'Bitte geben Sie Ihre E-mail ein!'}, {

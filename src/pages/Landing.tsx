@@ -1,26 +1,16 @@
 import {Button} from "antd";
-import {useState} from "react";
 import LoginModal from "../components/Login/LoginModal.tsx";
+import {useDispatch} from "react-redux";
+import {CHANGE_LOADING, CHANGE_OPEN, CHANGE_TYPE} from "../components/Login/actiontypes.ts";
 
 function Landing() {
 
-    //TODO: move state to somewhere else
-    const [open, setOpen] = useState(false);
-    const [loading, setLoading] = useState(false);
+    const dispatch = useDispatch()
 
-    const onFinish = (values: any) => {
-        setLoading(true)
-        console.log('Success:', values);
-        setTimeout(() => {
-            setLoading(false)
-            setOpen(false)
-        }, 3000)
-
-
-    };
-
-    const onClose = () => {
-        setOpen(false)
+    const openModal = (type: "login" | "register" | "forgot") => {
+        dispatch({type: CHANGE_LOADING, payload: false})
+        dispatch({type: CHANGE_TYPE, payload: type})
+        dispatch({type: CHANGE_OPEN, payload: true})
     }
 
 
@@ -28,12 +18,12 @@ function Landing() {
         <div>
             <h1>Landing</h1>
             <Button type="primary" onClick={() => {
-                setOpen(true)
+                openModal("login")
             }}>Einloggen</Button>
             <Button type="primary" onClick={() => {
-                setOpen(true)
+                openModal("register")
             }}>Registrieren</Button>
-            <LoginModal open={open} finished={onFinish} close={onClose} loading={loading}/>
+            <LoginModal/>
         </div>
     )
 }

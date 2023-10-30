@@ -10,8 +10,7 @@ function Login({finished, loading, changeType}: { finished: any, loading: boolea
                 initialValues={{remember: true}}
                 onFinish={finished}
                 size="large"
-                validateTrigger=""
-            >
+                validateTrigger="onSubmit">
                 <Form.Item
                     name="email"
                     rules={[{required: true, message: 'Bitte geben Sie Ihre E-mail ein!'}]}

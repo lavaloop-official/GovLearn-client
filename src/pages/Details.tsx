@@ -5,6 +5,9 @@ import Recommendation from "../components/Recommendation.tsx";
 
 function Details({title = "Scrum lernen mit Jörg Becker"}: { title?: string }) {
 
+    //TODO: skeleton loading
+    //TODO: API calls for content
+
     useEffect(() => {
         document.title = "Details"
     })

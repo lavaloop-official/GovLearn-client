@@ -10,7 +10,7 @@ function Forgot({finished, loading, changeType}: { finished: any, loading: boole
                 initialValues={{remember: true}}
                 onFinish={finished}
                 size="large"
-                validateTrigger=""
+                validateTrigger="onSubmit"
             >
                 Geben sie Ihre E-mail ein, um Ihr Passwort zurückzusetzen. Sie erhalten anschließend eine E-mail mit einem Link, um Ihr Passwort zurückzusetzen.
                 <Form.Item

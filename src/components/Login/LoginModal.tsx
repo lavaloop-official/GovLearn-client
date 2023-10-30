@@ -1,24 +1,36 @@
 import {Modal} from "antd";
-import {MouseEventHandler, useState} from "react";
 
 import './LoginModal.css'
 import Login from "./Login.tsx";
 import Register from "./Register.tsx";
 import Forgot from "./Forgot.tsx";
+import {useDispatch, useSelector} from "react-redux";
+import {CHANGE_LOADING, CHANGE_OPEN, CHANGE_TYPE} from "./actiontypes.ts";
 
-function LoginModal({open, finished, close, loading}: { open: boolean, close: MouseEventHandler<HTMLElement>, finished: any, loading: boolean}) {
+function LoginModal() {
 
-    //TODO: move state to somewhere else
-    const [type, setType] = useState<"login" | "register" | "forgot">("login")
+    const type = useSelector((state: any) => state.type as "login" | "register" | "forgot")
+    const open = useSelector((state: any) => state.open as boolean)
+    const loading = useSelector((state: any) => state.loading as boolean)
+    const dispatch = useDispatch()
+
+    const onFinish = (values: any) => {
+        dispatch({type: CHANGE_LOADING, payload: "login"})
+        console.log('Success:', values);
+        setTimeout(() => {
+            dispatch({type: CHANGE_LOADING, payload: "login"})
+            dispatch({type: CHANGE_OPEN, payload: false})
+        }, 3000)
+    };
 
     const getComponentForType = () => {
         switch (type) {
             case "login":
-                return <Login finished={finished} loading={loading} changeType={changeType}/>
+                return <Login finished={onFinish} loading={loading} changeType={changeType}/>
             case "register":
-                return <Register finished={finished} loading={loading} changeType={changeType}/>
+                return <Register finished={onFinish} loading={loading} changeType={changeType}/>
             case "forgot":
-                return <Forgot finished={finished} loading={loading} changeType={changeType}/>
+                return <Forgot finished={onFinish} loading={loading} changeType={changeType}/>
         }
     }
 
@@ -34,7 +46,11 @@ function LoginModal({open, finished, close, loading}: { open: boolean, close: Mo
     }
 
     const changeType = (type: "login" | "register" | "forgot") => {
-        setType(type)
+        dispatch({type: CHANGE_TYPE, payload: type})
+    }
+
+    const close = () => {
+        dispatch({type: CHANGE_OPEN, payload: false})
     }
 
     return (

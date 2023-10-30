@@ -1,9 +1,11 @@
 import Search from "antd/es/input/Search";
-import {Avatar, Dropdown, MenuProps, Typography} from "antd";
+import {Avatar, Button, Dropdown, MenuProps, Typography} from "antd";
 import {UserOutlined} from "@ant-design/icons";
 import {useLocation} from "react-router-dom";
 import {useEffect, useState} from "react";
 import SubHeader from "./SubHeader.tsx";
+import {useDispatch} from "react-redux";
+import {CHANGE_LOADING, CHANGE_OPEN, CHANGE_TYPE} from "./Login/actiontypes.ts";
 
 const {Title} = Typography
 
@@ -54,17 +56,32 @@ const items: MenuProps['items'] = [
 ];
 
 function CustomHeader() {
+    const dispatch = useDispatch()
+
     const [subHeader, setSubHeader] = useState(<div style={{height: "32px", width: "1px"}}/>)
+
+    //TODO: implement global state for logged in
+    const [loggedIn, setLoggedIn] = useState(false)
 
     const location = useLocation();
 
     useEffect(() => {
-        if (location.pathname.includes("discover") || location.pathname.includes("detail") || location.pathname.includes("profile"))
+        if (location.pathname.includes("discover") || location.pathname.includes("detail") || location.pathname.includes("profile")) {
             setSubHeader(<SubHeader/>)
-        else
+            setLoggedIn(false)
+        } else {
             setSubHeader(<></>)
+        }
     }, [location.pathname])
 
+    const openModal = () => {
+        dispatch({type: CHANGE_LOADING, payload: false})
+        dispatch({type: CHANGE_TYPE, payload: "login"})
+        dispatch({type: CHANGE_OPEN, payload: true})
+    }
+
+    //TODO: refactor avatar to component
+    //TODO: dont show search bar on landing page
 
     return (
         <div style={{width: "100%", height: "100%"}}>
@@ -89,13 +106,18 @@ function CustomHeader() {
                     </a>
                 </Title>
                 <Search placeholder="Kursangebote suchen" style={{maxWidth: "400px", margin: "auto"}} allowClear/>
-                <div style={{margin: "auto 0px auto auto", minWidth: "32px", lineHeight: "0px"}}>
-                    <Dropdown menu={{items}} placement="bottomRight" arrow={{pointAtCenter: true}} trigger={['click']}>
-                        <a onClick={(e) => e.preventDefault()}>
-                            <Avatar icon={<UserOutlined/>}/>
-                        </a>
-                    </Dropdown>
-                </div>
+                {loggedIn ?
+                    <div style={{margin: "auto 0px auto auto", minWidth: "32px", lineHeight: "0px"}}>
+                        <Dropdown menu={{items}} placement="bottomRight" arrow={{pointAtCenter: true}}
+                                  trigger={['click']}>
+                            <a onClick={(e) => e.preventDefault()}>
+                                <Avatar icon={<UserOutlined/>}/>
+                            </a>
+                        </Dropdown>
+                    </div>
+                    :
+                    <Button style={{margin: "auto 0px auto auto", minWidth: "32px"}} onClick={openModal}>Anmelden</Button>
+                }
 
 
             </div>
