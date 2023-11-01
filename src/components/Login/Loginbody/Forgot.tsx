@@ -1,5 +1,6 @@
 import {Button, Form, Input} from "antd";
 import {UserOutlined} from "@ant-design/icons";
+import {EMAIL_WRONG_FORMAT, ENTER_EMAIL, FORGOT_EXPLAIN_TEXT} from "../../../constants/de.ts";
 
 function Forgot({finished, loading, changeType}: { finished: any, loading: boolean, changeType: any }) {
     return (
@@ -12,15 +13,12 @@ function Forgot({finished, loading, changeType}: { finished: any, loading: boole
                 size="large"
                 validateTrigger="onSubmit"
             >
-                Geben sie Ihre E-mail ein, um Ihr Passwort zurückzusetzen. Sie erhalten anschließend eine E-mail mit einem Link, um Ihr Passwort zurückzusetzen.
+                {FORGOT_EXPLAIN_TEXT}
                 <Form.Item
                     name="email"
                     rules={[
-                        {required: true, message: 'Bitte geben Sie Ihre E-mail ein!'},
-                        {
-                            type: 'email',
-                            message: 'The input is not valid E-mail!',
-                        }
+                        {required: true, message: ENTER_EMAIL},
+                        {type: 'email', message: EMAIL_WRONG_FORMAT}
                     ]}
                 >
                     <Input prefix={<UserOutlined className="site-form-item-icon"/>} placeholder="E-mail"/>

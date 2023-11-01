@@ -1,7 +1,7 @@
 import './App.css'
 import {ConfigProvider, Layout} from "antd";
 import {Content, Header} from "antd/es/layout/layout";
-import CustomHeader from "./components/CustomHeader.tsx";
+import CustomHeader from "./components/Header/CustomHeader.tsx";
 import Discover from "./pages/Discover.tsx";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Details from "./pages/Details.tsx";
@@ -9,7 +9,7 @@ import Profile from "./pages/Profile.tsx";
 import Landing from "./pages/Landing.tsx";
 import Registration from "./pages/Registration.tsx";
 import {Provider} from "react-redux";
-import store from "./components/Login/store.ts";
+import loginModalStore from "./components/Login/Modalstate/loginModalStore.ts";
 
 function App() {
     //TODO: remove inline styles from components
@@ -25,7 +25,7 @@ function App() {
                 },
             }}
         >
-            <Provider store={store}>
+            <Provider store={loginModalStore}>
                 <BrowserRouter>
                     <Layout className="layout">
                         <Header style={{
@@ -42,7 +42,7 @@ function App() {
                         </Header>
                         <Content>
                             <Routes>
-                                <Route path="/" element={<Landing/>}/>
+                                <Route index element={<Landing/>}/>
                                 <Route path="/discover" element={<Discover/>}/>
                                 <Route path="/detail/*" element={<Details title={''}/>}/>
                                 <Route path="/profile" element={<Profile/>}/>

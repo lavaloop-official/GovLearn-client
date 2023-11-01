@@ -1,3 +1,0 @@
-export const CHANGE_OPEN = 'CHANGE_OPEN';
-export const CHANGE_TYPE = 'CHANGE_TYPE';
-export const CHANGE_LOADING = 'CHANGE_LOADING';

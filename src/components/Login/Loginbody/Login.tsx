@@ -1,7 +1,13 @@
 import {Button, Checkbox, Form, Input} from "antd";
 import {LockOutlined, UserOutlined} from "@ant-design/icons";
+import {LoginType} from "../Modalstate/actiontypes.ts";
+import {EMAIL_WRONG_FORMAT, ENTER_EMAIL, ENTER_PASSWORD} from "../../../constants/de.ts";
 
-function Login({finished, loading, changeType}: { finished: any, loading: boolean, changeType: any }) {
+function Login({finished, loading, changeType}: {
+    finished: any,
+    loading: boolean,
+    changeType: (a: LoginType) => void
+}) {
     return (
         <>
             <Form
@@ -13,13 +19,16 @@ function Login({finished, loading, changeType}: { finished: any, loading: boolea
                 validateTrigger="onSubmit">
                 <Form.Item
                     name="email"
-                    rules={[{required: true, message: 'Bitte geben Sie Ihre E-mail ein!'}]}
+                    rules={[
+                        {required: true, message: ENTER_EMAIL},
+                        {type: 'email', message: EMAIL_WRONG_FORMAT}
+                    ]}
                 >
                     <Input prefix={<UserOutlined className="site-form-item-icon"/>} placeholder="E-mail"/>
                 </Form.Item>
                 <Form.Item
                     name="password"
-                    rules={[{required: true, message: 'Bitte geben sie Ihr Passwort ein!'}]}
+                    rules={[{required: true, message: ENTER_PASSWORD}]}
                 >
                     <Input.Password
                         prefix={<LockOutlined className="site-form-item-icon"/>}

@@ -4,8 +4,7 @@ import {UserOutlined} from "@ant-design/icons";
 import {useLocation} from "react-router-dom";
 import {useEffect, useState} from "react";
 import SubHeader from "./SubHeader.tsx";
-import {useDispatch} from "react-redux";
-import {CHANGE_LOADING, CHANGE_OPEN, CHANGE_TYPE} from "./Login/actiontypes.ts";
+import openModal from "../Login/util.ts";
 
 const {Title} = Typography
 
@@ -13,7 +12,7 @@ const items: MenuProps['items'] = [
     {
         key: '1',
         label: (
-            <a rel="noopener noreferrer" href="/profile">
+            <a rel="noopener noreferrer" href="/src/pages/Profile">
                 Eingeloggt als:
                 <span style={{
                     textOverflow: "ellipsis",
@@ -56,7 +55,6 @@ const items: MenuProps['items'] = [
 ];
 
 function CustomHeader() {
-    const dispatch = useDispatch()
 
     const [subHeader, setSubHeader] = useState(<div style={{height: "32px", width: "1px"}}/>)
 
@@ -68,20 +66,16 @@ function CustomHeader() {
     useEffect(() => {
         if (location.pathname.includes("discover") || location.pathname.includes("detail") || location.pathname.includes("profile")) {
             setSubHeader(<SubHeader/>)
-            setLoggedIn(false)
+            setLoggedIn(true)
         } else {
             setSubHeader(<></>)
+            setLoggedIn(false)
         }
     }, [location.pathname])
 
-    const openModal = () => {
-        dispatch({type: CHANGE_LOADING, payload: false})
-        dispatch({type: CHANGE_TYPE, payload: "login"})
-        dispatch({type: CHANGE_OPEN, payload: true})
-    }
-
     //TODO: refactor avatar to component
     //TODO: dont show search bar on landing page
+    //TODO: placeholder for avatar/loginbutton so it doesnt jump around
 
     return (
         <div style={{width: "100%", height: "100%"}}>
@@ -101,11 +95,12 @@ function CustomHeader() {
                            minWidth: "100px",
                            color: "#3f3f3f"
                        }}>
-                    <a href="/discover" style={{color: "#212321"}}>
+                    <a href="/src/pages/Discover" style={{color: "#212321"}}>
                         Govlearn
                     </a>
                 </Title>
-                <Search placeholder="Kursangebote suchen" style={{maxWidth: "400px", margin: "auto"}} allowClear/>
+                <Search placeholder="Kursangebote suchen" size="large" style={{maxWidth: "400px", margin: "auto"}}
+                        allowClear/>
                 {loggedIn ?
                     <div style={{margin: "auto 0px auto auto", minWidth: "32px", lineHeight: "0px"}}>
                         <Dropdown menu={{items}} placement="bottomRight" arrow={{pointAtCenter: true}}
@@ -116,7 +111,8 @@ function CustomHeader() {
                         </Dropdown>
                     </div>
                     :
-                    <Button style={{margin: "auto 0px auto auto", minWidth: "32px"}} onClick={openModal}>Anmelden</Button>
+                    <Button type="primary" size="large" style={{margin: "auto 0px auto auto", minWidth: "32px"}}
+                            onClick={() => {openModal("login")}}>Anmelden</Button>
                 }
 
 

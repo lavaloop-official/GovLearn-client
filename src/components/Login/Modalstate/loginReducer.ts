@@ -1,10 +1,13 @@
-const intialState = {
+import {LoginActionType, LoginState} from "./actiontypes.ts";
+
+const intialState: LoginState = {
     open: false,
     type: 'login',
     loading: false
 }
 
-export default function loginReducer(state = intialState, action: any) {
+
+export default function loginReducer(state = intialState, action: { type: LoginActionType; payload: never }) {
     switch (action.type) {
         case 'CHANGE_OPEN':
             return {

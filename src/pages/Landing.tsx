@@ -1,17 +1,9 @@
 import {Button} from "antd";
 import LoginModal from "../components/Login/LoginModal.tsx";
-import {useDispatch} from "react-redux";
-import {CHANGE_LOADING, CHANGE_OPEN, CHANGE_TYPE} from "../components/Login/actiontypes.ts";
+import openModal from "../components/Login/util.ts";
 
 function Landing() {
 
-    const dispatch = useDispatch()
-
-    const openModal = (type: "login" | "register" | "forgot") => {
-        dispatch({type: CHANGE_LOADING, payload: false})
-        dispatch({type: CHANGE_TYPE, payload: type})
-        dispatch({type: CHANGE_OPEN, payload: true})
-    }
 
 
     return (

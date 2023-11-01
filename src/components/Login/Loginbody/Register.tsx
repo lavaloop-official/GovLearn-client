@@ -1,5 +1,7 @@
 import {Button, Checkbox, Form, Input} from "antd";
 import {LockOutlined, UserOutlined} from "@ant-design/icons";
+import {EMAIL_WRONG_FORMAT, ENTER_EMAIL, ENTER_PASSWORD, REENTER_PASSWORD} from "../../../constants/de.ts";
+
 
 function Register({finished, loading, changeType}: { finished: any, loading: boolean, changeType: any }) {
     return (
@@ -13,16 +15,16 @@ function Register({finished, loading, changeType}: { finished: any, loading: boo
                 validateTrigger="onSubmit">
                 <Form.Item
                     name="email"
-                    rules={[{required: true, message: 'Bitte geben Sie Ihre E-mail ein!'}, {
-                        type: 'email',
-                        message: 'The input is not valid E-mail!',
-                    }]}
+                    rules={[
+                        {required: true, message: ENTER_EMAIL},
+                        {type: 'email', message: EMAIL_WRONG_FORMAT}
+                    ]}
                 >
                     <Input prefix={<UserOutlined className="site-form-item-icon"/>} placeholder="E-mail"/>
                 </Form.Item>
                 <Form.Item
                     name="password"
-                    rules={[{required: true, message: 'Bitte geben sie Ihr Passwort ein!'}]}
+                    rules={[{required: true, message: ENTER_PASSWORD}]}
                     hasFeedback
                 >
                     <Input.Password
@@ -35,13 +37,13 @@ function Register({finished, loading, changeType}: { finished: any, loading: boo
                     name="password_repeat"
                     rules={[{
                         required: true,
-                        message: 'Bitte geben sie Ihr Passwort erneut ein!'
+                        message: REENTER_PASSWORD
                     }, ({getFieldValue}) => ({
                         validator(_, value) {
                             if (!value || getFieldValue('password') === value) {
                                 return Promise.resolve();
                             }
-                            return Promise.reject(new Error('The new password that you entered do not match!'));
+                            return Promise.reject(new Error('Die Passwörter stimmen nicht überein!'));
                         },
                     })]}
                     hasFeedback
