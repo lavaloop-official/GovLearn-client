@@ -9,7 +9,7 @@ import Profile from "./pages/Profile.tsx";
 import Landing from "./pages/Landing.tsx";
 import Registration from "./pages/Registration.tsx";
 import {Provider} from "react-redux";
-import loginModalStore from "./components/Login/Modalstate/loginModalStore.ts";
+import reduxStore from "./state/reduxStore.ts";
 
 function App() {
     //TODO: remove inline styles from components
@@ -25,7 +25,7 @@ function App() {
                 },
             }}
         >
-            <Provider store={loginModalStore}>
+            <Provider store={reduxStore}>
                 <BrowserRouter>
                     <Layout className="layout">
                         <Header style={{
