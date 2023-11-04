@@ -1,10 +1,10 @@
 import {Button, Checkbox, Form, Input} from "antd";
 import {LockOutlined, UserOutlined} from "@ant-design/icons";
-import {LoginType} from "../Modalstate/actiontypes.ts";
 import {EMAIL_WRONG_FORMAT, ENTER_EMAIL, ENTER_PASSWORD} from "../../../constants/de.ts";
+import {LoginType} from "../../../state/modalslice.ts";
 
 function Login({finished, loading, changeType}: {
-    finished: any,
+    finished: (values: { email: string, password: string, remember: boolean }) => void,
     loading: boolean,
     changeType: (a: LoginType) => void
 }) {

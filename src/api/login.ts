@@ -1,16 +1,40 @@
-import {LoginType} from "../components/Login/Modalstate/actiontypes.ts";
-import {INTERNAL_ERROR, LOGIN_ERROR, REGISTER_ERROR} from "../constants/de.ts";
 
-async function handleLogin(data: {values: object, type: LoginType}) {
-    const navigateTo = data.type === "login" ? "/discover" : "/register";
+import {INTERNAL_ERROR} from "../constants/de.ts";
+import {BACKEND_URL} from "../constants/backend.ts";
+import {LoginType} from "../state/modalslice.ts";
 
-    console.log(data);
-    await new Promise(resolve => setTimeout(resolve, 1500));
+async function handleLogin(data: { values: { email: string, password: string, remember: boolean }, type: LoginType }) {
+    const {type, values} = data;
+    const {remember, ...requestBody} = values;
+    const navigateTo = type === "login" ? "/discover" : "/register";
+    const endpoint = type === "login" ? "api/v1/users/auth-token" : "api/v1/users";
 
-    //TODO: implemtent API call to backend
+    //fetch the data from the backend
+    const response = await fetch(`${BACKEND_URL}${endpoint}`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(requestBody)
+    }).catch(() => {
+        throw new Error(INTERNAL_ERROR);
+    })
 
-    //return {worked: false, message: "Login failed!"};
-    return {worked: false, message: INTERNAL_ERROR, naviageTo: navigateTo};
+    //handle anything that is not a 200 response
+    if (!response.ok) {
+        //TODO: handle Error codes and send specific error messages
+        throw new Error(INTERNAL_ERROR);
+    }
+    const json = await response.json();
+
+    //TODO: remove
+    console.log(json);
+    console.log(remember);
+
+    //TODO: handle token
+
+
+    return navigateTo;
 }
 
 export default handleLogin;

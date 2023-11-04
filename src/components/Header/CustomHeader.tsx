@@ -4,7 +4,7 @@ import {UserOutlined} from "@ant-design/icons";
 import {useLocation} from "react-router-dom";
 import {useEffect, useState} from "react";
 import SubHeader from "./SubHeader.tsx";
-import openModal from "../Login/util.ts";
+import {openLoginModal} from "../../state/modalutil.ts";
 
 const {Title} = Typography
 
@@ -95,7 +95,7 @@ function CustomHeader() {
                            minWidth: "100px",
                            color: "#3f3f3f"
                        }}>
-                    <a href="/src/pages/Discover" style={{color: "#212321"}}>
+                    <a href="/discover" style={{color: "#212321"}}>
                         Govlearn
                     </a>
                 </Title>
@@ -112,7 +112,7 @@ function CustomHeader() {
                     </div>
                     :
                     <Button type="primary" size="large" style={{margin: "auto 0px auto auto", minWidth: "32px"}}
-                            onClick={() => {openModal("login")}}>Anmelden</Button>
+                            onClick={() => {openLoginModal("login")}}>Anmelden</Button>
                 }
 
 
