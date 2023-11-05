@@ -5,77 +5,79 @@ import {useLocation} from "react-router-dom";
 import {useEffect, useState} from "react";
 import SubHeader from "./SubHeader.tsx";
 import {openLoginModal} from "../../state/modalutil.ts";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "../../state/reduxStore.ts";
+import {clearAuthToken} from "../../state/authslice.ts";
 
 const {Title} = Typography
-
-const items: MenuProps['items'] = [
-    {
-        key: '1',
-        label: (
-            <a rel="noopener noreferrer" href="/src/pages/Profile">
-                Eingeloggt als:
-                <span style={{
-                    textOverflow: "ellipsis",
-                    overflow: "hidden",
-                    whiteSpace: "nowrap",
-                    maxWidth: "120px",
-                    display: "block",
-                }}>
-                    Max Mustermann
-                </span>
-
-            </a>
-        ),
-    },
-    {
-        key: '2',
-        label: (
-            <a target="_blank" rel="noopener noreferrer" href="https://www.aliyun.com">
-                Einstellungen
-            </a>
-        ),
-    },
-    {
-        key: '3',
-        label: (
-            <a target="_blank" rel="noopener noreferrer" href="https://www.aliyun.com">
-                Placeholder
-            </a>
-        ),
-    },
-    {
-        key: '4',
-        label: (
-            <a href="/">
-                Ausloggen
-            </a>
-        ),
-        danger: true,
-    },
-];
 
 function CustomHeader() {
 
     const [subHeader, setSubHeader] = useState(<div style={{height: "32px", width: "1px"}}/>)
 
     //TODO: implement global state for logged in
-    const [loggedIn, setLoggedIn] = useState(false)
+    const loggedIn = useSelector((state: RootState) => !!state.auth.authtoken)
+    const dispatch = useDispatch()
 
     const location = useLocation();
 
     useEffect(() => {
         if (location.pathname.includes("discover") || location.pathname.includes("detail") || location.pathname.includes("profile")) {
             setSubHeader(<SubHeader/>)
-            setLoggedIn(true)
         } else {
             setSubHeader(<></>)
-            setLoggedIn(false)
         }
     }, [location.pathname])
 
     //TODO: refactor avatar to component
     //TODO: dont show search bar on landing page
     //TODO: placeholder for avatar/loginbutton so it doesnt jump around
+
+    const items: MenuProps['items'] = [
+        {
+            key: '1',
+            label: (
+                <a rel="noopener noreferrer" href="profile">
+                    Eingeloggt als:
+                    <span style={{
+                        textOverflow: "ellipsis",
+                        overflow: "hidden",
+                        whiteSpace: "nowrap",
+                        maxWidth: "120px",
+                        display: "block",
+                    }}>
+                    Max Mustermann
+                </span>
+
+                </a>
+            ),
+        },
+        {
+            key: '2',
+            label: (
+                <a target="_blank" rel="noopener noreferrer" href="https://www.aliyun.com">
+                    Einstellungen
+                </a>
+            ),
+        },
+        {
+            key: '3',
+            label: (
+                <a target="_blank" rel="noopener noreferrer" href="https://www.aliyun.com">
+                    Placeholder
+                </a>
+            ),
+        },
+        {
+            key: '4',
+            label: (
+                <a onClick={() => {dispatch(clearAuthToken())}}>
+                    Ausloggen
+                </a>
+            ),
+            danger: true,
+        },
+    ];
 
     return (
         <div style={{width: "100%", height: "100%"}}>

@@ -1,12 +1,17 @@
-function Profile() {
-    /*
-    const [email, setEmail] = useState('not logged in')
+import {useEffect, useState} from "react";
+import {useSelector} from "react-redux";
+import {RootState} from "../state/reduxStore.ts";
+import {Skeleton} from "antd";
 
-    const token = useSelector((state) => state.auth.token as string)
+function Profile() {
+
+    const [email, setEmail] = useState('')
+
+    const token = useSelector((state: RootState) => state.auth.authtoken as string)
 
     useEffect(() => {
 
-        let response =  fetch('http://localhost:8080/api/v1/users', {
+        fetch('http://localhost:8080/api/v1/users', {
             method: 'GET',
             headers: new Headers({Authorization: `Bearer ${token}`})
         }).then(response => response.json()).then(data => {
@@ -14,11 +19,11 @@ function Profile() {
         })
 
     })
-    */
 
     return (
         <div>
             <h1>Profile</h1>
+            {email ? <p>{email}</p> : <Skeleton active />}
         </div>
     );
 }

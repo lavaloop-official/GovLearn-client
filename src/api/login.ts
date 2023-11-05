@@ -2,6 +2,8 @@
 import {INTERNAL_ERROR} from "../constants/de.ts";
 import {BACKEND_URL} from "../constants/backend.ts";
 import {LoginType} from "../state/modalslice.ts";
+import reduxStore from "../state/reduxStore.ts";
+import {setAuthToken} from "../state/authslice.ts";
 
 async function handleLogin(data: { values: { email: string, password: string, remember: boolean }, type: LoginType }) {
     const {type, values} = data;
@@ -32,7 +34,7 @@ async function handleLogin(data: { values: { email: string, password: string, re
     console.log(remember);
 
     //TODO: handle token
-
+    reduxStore.dispatch(setAuthToken(json.payload.token));
 
     return navigateTo;
 }
