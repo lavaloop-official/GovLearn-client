@@ -28,6 +28,7 @@ function LoginModal() {
         dispatch(changeLoading(true))
         try {
             const nav = await handleLogin(values)
+            dispatch(changeLoading(false))
             close()
             navigate(nav)
         } catch (e: unknown) {
