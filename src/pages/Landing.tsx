@@ -4,7 +4,7 @@ import {openLoginModal} from "../state/modalutil.ts";
 
 function Landing() {
 
-
+//TODO: only show login/register button if not logged in
 
     return (
         <div>

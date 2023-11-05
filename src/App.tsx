@@ -10,6 +10,7 @@ import Landing from "./pages/Landing.tsx";
 import Registration from "./pages/Registration.tsx";
 import {Provider} from "react-redux";
 import reduxStore from "./state/reduxStore.ts";
+import Protected from "./Protected.tsx";
 
 function App() {
     //TODO: remove inline styles from components
@@ -43,10 +44,10 @@ function App() {
                         <Content>
                             <Routes>
                                 <Route index element={<Landing/>}/>
-                                <Route path="/discover" element={<Discover/>}/>
-                                <Route path="/detail/*" element={<Details title={''}/>}/>
-                                <Route path="/profile" element={<Profile/>}/>
-                                <Route path="/register" element={<Registration/>}/>
+                                <Route path="/discover" element={<Protected><Discover/></Protected>}/>
+                                <Route path="/detail/*" element={<Protected><Details title={''}/></Protected>}/>
+                                <Route path="/profile" element={<Protected><Profile/></Protected>}/>
+                                <Route path="/register" element={<Protected><Registration/></Protected>}/>
                             </Routes>
                         </Content>
                     </Layout>
