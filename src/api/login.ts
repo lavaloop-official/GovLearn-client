@@ -33,7 +33,6 @@ async function handleLogin(data: { values: { email: string, password: string, re
     console.log(json);
     console.log(remember);
 
-    //TODO: handle token
     reduxStore.dispatch(setAuthToken(json.payload.token));
 
     return navigateTo;
