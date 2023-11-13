@@ -10,25 +10,29 @@ export const fetchWrapper = {
 
 function request(method) {
     return (url, body) => {
+        const fullurl = BACKEND_URL + url;
         const requestOptions = {
             method,
-            headers: authHeader(url),
+            headers: authHeader(fullurl),
         };
         if (body) {
             requestOptions.headers['Content-Type'] = 'application/json';
             requestOptions.body = JSON.stringify(body);
         }
-        return fetch(BACKEND_URL + url, requestOptions).then(handleResponse);
+        return fetch(fullurl, requestOptions).then(handleResponse);
     }
 }
-// helper functions
 
 function authHeader(url) {
     // return auth header with jwt if user is logged in and request is to the api url
     const token = authToken();
     const isLoggedIn = !!token;
     const isApiUrl = url.startsWith(BACKEND_URL);
+    if (isLoggedIn && isApiUrl) {
         return { Authorization: `Bearer ${token}` };
+    } else {
+        return {};
+    }
 }
 
 function authToken() {
