@@ -1,17 +1,29 @@
-import {Button, Col, Row} from "antd";
+import {Button, Col, Row, Skeleton} from "antd";
+import {useEffect, useState} from "react";
+import {fetchWrapper} from "../api/helper.ts";
+import './CarouselPane.css'
 
-const srcplaceholer: string = "https://image.stern.de/7690958/t/Qx/v3/w1440/r1.7778/-/stockfotos-aus-der-hoelle-01.jpg"
-const descplaceholder: string = "Detailed description of the course goes here and can be very long. It can also be very short."
+function CarouselPane({id}: { id?: number }) {
+    const [title, setTitle] = useState("")
+    const [desc, setDesc] = useState("")
+    const [src, setSrc] = useState("")
 
-function CarouselPane({text = "hello", description = descplaceholder, src = srcplaceholer}: {
-    text: string | undefined,
-    src: string | undefined,
-    description: string | undefined
-}) {
+    useEffect(() => {
+        if (!id)
+            return
+
+        fetchWrapper.get(`api/v1/courses/${id}`).then((res) => {
+            setTitle(res.payload.title)
+            setDesc(res.payload.description)
+            setSrc(res.payload.image)
+        })
+
+
+    }, [id]);
 
     return (
         <>
-            <div style={{background: "#D9D9D9", borderRadius: "20px", width: "100%", height: "400px", }}>
+            <div style={{background: "#D9D9D9", borderRadius: "20px", width: "100%", height: "400px",}}>
                 <Row style={{height: "100%", borderRadius: "20px"}}>
                     <Col span={8}>
                         <div style={{
@@ -23,21 +35,48 @@ function CarouselPane({text = "hello", description = descplaceholder, src = srcp
                             flexDirection: "column",
                             justifyContent: "flex-end",
                         }}>
-                            <h1 style={{wordWrap: "break-word"}}>{text}</h1>
-                            <h3 style={{wordWrap: "break-word"}}>{description}</h3>
-                            <Button type="primary" shape="round" style={{maxWidth: "150px"}}>Weiterlesen</Button>
+                            {
+                                (title != "" && desc != "") ?
+                                    <>
+                                        <h1 style={{wordWrap: "break-word"}}>{title}</h1>
+                                        <h3 style={{wordWrap: "break-word"}}>{desc}</h3>
+                                        <Button type="primary" shape="round"
+                                                style={{maxWidth: "150px"}}
+                                        href={`/detail/${id}`}>
+                                            Weiterlesen
+                                        </Button>
+                                    </>
+                                    : <Skeleton active/>
+                            }
+
 
                         </div>
 
                     </Col>
                     <Col span={16}>
                         <div style={{display: "flex", width: "100%", height: "100%"}}>
-                            <img src={src} style={{
-                                maxHeight: "400px",
-                                width: "100%",
-                                borderRadius: "0px 20px 20px 0px",
-                                objectFit: "cover"
-                            }}/>
+                            {
+                                src != "" ?
+                                    <img src={src} style={{
+                                        maxHeight: "400px",
+                                        width: "100%",
+                                        borderRadius: "0px 20px 20px 0px",
+                                        objectFit: "cover"
+                                    }}/>
+                                    : <div id="carouselpic" style={{
+                                        maxHeight: "400px",
+                                        width: "100%",
+                                        display: "flex",
+                                    }}>
+                                        <Skeleton.Image active style={{
+                                            borderRadius: "0px 20px 20px 0px",
+                                            width: "100%",
+                                            height: "100%",
+                                        }}/>
+                                    </div>
+
+                            }
+
 
                         </div>
 
