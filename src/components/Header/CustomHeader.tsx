@@ -8,6 +8,7 @@ import {openLoginModal} from "../../state/modalutil.ts";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../state/reduxStore.ts";
 import {clearAuthToken} from "../../state/authslice.ts";
+import {fetchWrapper} from "../../api/helper.ts";
 
 const {Title} = Typography
 
@@ -15,8 +16,8 @@ function CustomHeader() {
 
     const [subHeader, setSubHeader] = useState(<div style={{height: "32px", width: "1px"}}/>)
 
-    //TODO: implement global state for logged in
     const loggedIn = useSelector((state: RootState) => !!state.auth.authtoken)
+    const [name, setName] = useState("Max Mustermann")
     const dispatch = useDispatch()
 
     const location = useLocation();
@@ -27,6 +28,10 @@ function CustomHeader() {
         } else {
             setSubHeader(<></>)
         }
+        if (loggedIn)
+            fetchWrapper.get('api/v1/users').then(res => {
+                setName(res.payload.email)
+            })
     }, [location.pathname])
 
     //TODO: refactor avatar to component
@@ -46,7 +51,7 @@ function CustomHeader() {
                         maxWidth: "120px",
                         display: "block",
                     }}>
-                    Max Mustermann
+                    {name}
                 </span>
 
                 </a>
@@ -71,7 +76,9 @@ function CustomHeader() {
         {
             key: '4',
             label: (
-                <a onClick={() => {dispatch(clearAuthToken())}}>
+                <a onClick={() => {
+                    dispatch(clearAuthToken())
+                }}>
                     Ausloggen
                 </a>
             ),
@@ -114,7 +121,9 @@ function CustomHeader() {
                     </div>
                     :
                     <Button type="primary" size="large" style={{margin: "auto 0px auto auto", minWidth: "32px"}}
-                            onClick={() => {openLoginModal("login")}}>Anmelden</Button>
+                            onClick={() => {
+                                openLoginModal("login")
+                            }}>Anmelden</Button>
                 }
 
 
