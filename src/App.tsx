@@ -1,6 +1,6 @@
 import './App.css'
 import {ConfigProvider, Layout} from "antd";
-import {Content, Header} from "antd/es/layout/layout";
+import {Content, Footer, Header} from "antd/es/layout/layout";
 import CustomHeader from "./components/Header/CustomHeader.tsx";
 import Discover from "./pages/Discover.tsx";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
@@ -50,6 +50,7 @@ function App() {
                                 <Route path="/register" element={<Protected><Registration/></Protected>}/>
                             </Routes>
                         </Content>
+                        <Footer style={{ textAlign: 'center' }}>Govlearn  -  Made with ❤ in Münster</Footer>
                     </Layout>
                 </BrowserRouter>
             </Provider>
