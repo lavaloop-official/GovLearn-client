@@ -29,6 +29,21 @@ function CustomHeader() {
         }
     }, [location.pathname])
 
+    const [name, setName] = useState('')
+
+    const token = useSelector((state: RootState) => state.auth.authtoken as string)
+
+    useEffect(() => {
+
+        fetch('http://localhost:8080/api/v1/users', {
+            method: 'GET',
+            headers: new Headers({Authorization: `Bearer ${token}`})
+        }).then(response => response.json()).then(data => {
+            setName(data.payload.name)
+        })
+
+    })
+
     //TODO: refactor avatar to component
     //TODO: dont show search bar on landing page
     //TODO: placeholder for avatar/loginbutton so it doesnt jump around
@@ -46,7 +61,7 @@ function CustomHeader() {
                         maxWidth: "120px",
                         display: "block",
                     }}>
-                    Max Mustermann
+                    {name}
                 </span>
 
                 </a>

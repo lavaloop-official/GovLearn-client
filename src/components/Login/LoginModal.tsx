@@ -51,6 +51,7 @@ function LoginModal() {
      * @param values
      */
     const onRegister = async (values: {
+        name: string,
         email: string,
         password: string,
         password_repeat?: string,
