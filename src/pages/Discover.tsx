@@ -1,8 +1,28 @@
 import {Carousel, Divider} from "antd";
 import CarouselPane from "../components/CarouselPane.tsx";
 import RecomSlider from "../components/RecomSlider.tsx";
+import {useEffect, useState} from "react";
+import {fetchWrapper} from "../api/helper.ts";
 
 function Discover() {
+
+    const [featured, setFeatured] = useState<number[]>([])
+
+    useEffect(() => {
+        /*
+        fetchWrapper.get(`api/v1/recommendations`).then((res) => {
+            setFeatured(res.payload.featured)
+        })
+         */
+
+        //testing code
+        setTimeout(() => {
+            setFeatured([1, 2, 3])
+        }, 1000)
+
+    }, []);
+
+
     return (
         <>
             <div style={{
@@ -19,20 +39,10 @@ function Discover() {
                                   borderRadius: "20px",
                                   boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
                               }}>
-                        <div>
-                            <CarouselPane text="Bilden sie sich weiter jetzt hallo" src={undefined} description={undefined}/>
-                        </div>
-                        <div>
-                            <CarouselPane text="lalalalalalal das ist ein Weiterbildungsangebot"
-                                          src="https://www.langweiledich.net/wp-content/uploads/2018/03/die-skurrilsten-wtf-stock-photos_01.jpg"
-                            description="ja das ist die Beschreibung hallooooo. cooles angebot hier lalalalalalalla"/>
-                        </div>
-                        <div>
-                            <CarouselPane text="2" src={undefined} description={undefined}/>
-                        </div>
-                        <div>
-                            <CarouselPane text={undefined} src={undefined} description={undefined}/>
-                        </div>
+                        {
+                            featured.length == 0 ? <CarouselPane/> :
+                                featured.map((item: number) => <div key={item}><CarouselPane id={item}/></div>)
+                        }
                     </Carousel>
                 </div>
                 <div style={{
