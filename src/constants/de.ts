@@ -1,4 +1,5 @@
 export const ENTER_EMAIL = 'Bitte geben Sie Ihre E-mail ein!'
+export const ENTER_NAME = 'Bitte geben Sie Ihren Namen ein!'
 export const ENTER_PASSWORD = 'Bitte geben Sie Ihr Passwort ein!'
 export const REENTER_PASSWORD = 'Bitte geben Sie Ihr Passwort erneut ein!'
 

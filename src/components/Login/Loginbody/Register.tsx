@@ -1,6 +1,6 @@
 import {Button, Checkbox, Form, Input} from "antd";
 import {LockOutlined, UserOutlined} from "@ant-design/icons";
-import {EMAIL_WRONG_FORMAT, ENTER_EMAIL, ENTER_PASSWORD, REENTER_PASSWORD} from "../../../constants/de.ts";
+import {EMAIL_WRONG_FORMAT, ENTER_EMAIL, ENTER_PASSWORD, REENTER_PASSWORD, ENTER_NAME} from "../../../constants/de.ts";
 
 
 function Register({finished, loading, changeType}: { finished: any, loading: boolean, changeType: any }) {
@@ -13,6 +13,14 @@ function Register({finished, loading, changeType}: { finished: any, loading: boo
                 onFinish={finished}
                 size="large"
                 validateTrigger="onSubmit">
+                <Form.Item
+                    name="name"
+                    rules={[
+                        {required: true, message: ENTER_NAME},
+                    ]}
+                >
+                    <Input prefix={<UserOutlined className="site-form-item-icon"/>} placeholder="Name"/>
+                </Form.Item>
                 <Form.Item
                     name="email"
                     rules={[
