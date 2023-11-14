@@ -22,23 +22,17 @@ function CustomHeader() {
 
     const location = useLocation();
 
+    const [name, setName] = useState('')
+
     useEffect(() => {
         if (location.pathname.includes("discover") || location.pathname.includes("detail") || location.pathname.includes("profile")) {
             setSubHeader(<SubHeader/>)
         } else {
             setSubHeader(<></>)
         }
+        fetchWrapper.get('api/v1/users').then(res => setName(res.payload.name))
     }, [location.pathname])
 
-    const [name, setName] = useState('')
-
-    const token = useSelector((state: RootState) => state.auth.authtoken as string)
-
-    useEffect(() => {
-
-        fetchWrapper.get('api/v1/users').then(res => setName(res.payload.name))
-
-    })
 
     //TODO: refactor avatar to component
     //TODO: dont show search bar on landing page
