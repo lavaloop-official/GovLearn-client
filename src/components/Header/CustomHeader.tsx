@@ -8,6 +8,7 @@ import {openLoginModal} from "../../state/modalutil.ts";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../state/reduxStore.ts";
 import {clearAuthToken} from "../../state/authslice.ts";
+import {fetchWrapper} from "../../api/helper";
 
 const {Title} = Typography
 
@@ -35,12 +36,7 @@ function CustomHeader() {
 
     useEffect(() => {
 
-        fetch('http://localhost:8080/api/v1/users', {
-            method: 'GET',
-            headers: new Headers({Authorization: `Bearer ${token}`})
-        }).then(response => response.json()).then(data => {
-            setName(data.payload.name)
-        })
+        fetchWrapper.get('api/v1/users').then(res => setName(res.payload.name))
 
     })
 

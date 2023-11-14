@@ -6,6 +6,7 @@ import {Skeleton, Button, Modal, Switch, Input, Form} from "antd";
 import './Profile.css';
 import edit from '../assets/edit.png';
 import { EMAIL_WRONG_FORMAT, ENTER_EMAIL } from "../constants/de.ts";
+import {fetchWrapper} from "../api/helper";
 
 function Profile() {
 
@@ -15,15 +16,10 @@ function Profile() {
     const token = useSelector((state: RootState) => state.auth.authtoken as string)
 
     useEffect(() => {
-
-        fetch('http://localhost:8080/api/v1/users', {
-            method: 'GET',
-            headers: new Headers({Authorization: `Bearer ${token}`})
-        }).then(response => response.json()).then(data => {
-            setEmail(data.payload.email)
-            setName(data.payload.name)
+        fetchWrapper.get('api/v1/users').then(res => {
+            setEmail(res.payload.email) 
+            setName(res.payload.name)
         })
-
     })
 
         // E-Mail ändern
