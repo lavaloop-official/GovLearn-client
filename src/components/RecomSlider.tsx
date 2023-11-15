@@ -1,3 +1,4 @@
+import { Skeleton } from "antd";
 import Recommendation from "./Recommendation.tsx";
 
 import Carousel from 'react-multi-carousel';
@@ -27,7 +28,7 @@ const responsive = {
 
 };
 
-function RecomSlider({title = "Empfehlung"}: { title: string }) {
+function RecomSlider({title, data}: { title?: string, data?: number[] }) {
     return (
         <>
             <div id="slider" style={{
@@ -38,36 +39,21 @@ function RecomSlider({title = "Empfehlung"}: { title: string }) {
                 display: "flex",
                 flexDirection: "column",
             }}>
-                <h1 style={{margin: "0 0 5px 0"}}>{title}</h1>
+                {
+                    title ?
+                        <h1 style={{margin: "0 0 5px 0"}}>{title}</h1>
+                        : <Skeleton.Input active style={{margin: "0 0 5px 0"}}/>
+                }
 
-                <Carousel responsive={responsive}>
-                    <Recommendation title={""} src={"https://image.stern.de/7690958/t/Qx/v3/w1440/r1.7778/-/stockfotos-aus-der-hoelle-01.jpg"} ribbon={""}/>
-                    <Recommendation
-                        src={"https://image.stern.de/7690958/t/Qx/v3/w1440/r1.7778/-/stockfotos-aus-der-hoelle-01.jpg"} title={""} ribbon={""}/>
-                    <Recommendation title={"Scrum für Anfänger"} src={"https://image.stern.de/7690958/t/Qx/v3/w1440/r1.7778/-/stockfotos-aus-der-hoelle-01.jpg"} ribbon={""}/>
-                    <Recommendation
-                        src={"https://images.unsplash.com/photo-1549989476-69a92fa57c36?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60"} title={""} ribbon={""}/>
-                    <Recommendation title={""} src={"https://image.stern.de/7690958/t/Qx/v3/w1440/r1.7778/-/stockfotos-aus-der-hoelle-01.jpg"} ribbon={"Trending"}/>
-                    <Recommendation title={""} src={"https://image.stern.de/7690958/t/Qx/v3/w1440/r1.7778/-/stockfotos-aus-der-hoelle-01.jpg"} ribbon={""}/>
-                    <Recommendation title={""} src={"https://image.stern.de/7690958/t/Qx/v3/w1440/r1.7778/-/stockfotos-aus-der-hoelle-01.jpg"} ribbon={""}/>
-                    <Recommendation title={""} src={"https://image.stern.de/7690958/t/Qx/v3/w1440/r1.7778/-/stockfotos-aus-der-hoelle-01.jpg"} ribbon={""}/>
-                </Carousel>
-
-                {/*<div style={{background: "#D9D9D9", borderRadius: "20px", padding: "10px"}}>
+                <div style={{background: "#D9D9D9", borderRadius: "20px", padding: "10px"}}>
                     <Carousel responsive={responsive}>
-                        <Recommendation/>
-                        <Recommendation
-                            src={"https://image.stern.de/7690958/t/Qx/v3/w1440/r1.7778/-/stockfotos-aus-der-hoelle-01.jpg"}/>
-                        <Recommendation/>
-                        <Recommendation
-                            src={"https://images.unsplash.com/photo-1549989476-69a92fa57c36?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60"}/>
-                        <Recommendation/>
-                        <Recommendation/>
-                        <Recommendation/>
-                        <Recommendation/>
+                        {
+                            data ?
+                            data.map((item: number) => <div key={item}><Recommendation id={item}/></div>)
+                            : <Recommendation/>
+                        }
                     </Carousel>
                 </div>
-                */}
 
             </div>
         </>

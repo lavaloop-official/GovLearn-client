@@ -3,13 +3,15 @@ import {useEffect, useState} from "react";
 import {fetchWrapper} from "../api/helper.ts";
 import './Recommendation.css'
 
-function Recommendation({id}: { id: number }) {
+function Recommendation({id}: { id?: number }) {
 
     const [title, setTitle] = useState("")
     const [desc, setDesc] = useState("")
     const [src, setSrc] = useState("")
 
     useEffect(() => {
+        if (!id)
+            return
         /*
         fetchWrapper.get(`api/v1/courses/${id}`).then((res) => {
             setTitle(res.payload.title)

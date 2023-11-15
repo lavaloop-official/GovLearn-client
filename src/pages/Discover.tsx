@@ -7,6 +7,7 @@ import {fetchWrapper} from "../api/helper.ts";
 function Discover() {
 
     const [featured, setFeatured] = useState<number[]>([])
+    const [recommended, setRecommended] = useState<{ title: string, content: number[] }[]>([])
 
     useEffect(() => {
         /*
@@ -18,7 +19,11 @@ function Discover() {
         //testing code
         setTimeout(() => {
             setFeatured([1, 2, 3])
-        }, 1000)
+            setRecommended([{title: "Lerne Scrum", content: [1, 2, 3]}, {
+                title: "Modellieren mit Icebricks",
+                content: [1, 2, 3]
+            }])
+        }, Math.random() * 3000)
 
     }, []);
 
@@ -55,16 +60,11 @@ function Discover() {
                     width: "100%",
                     margin: "auto",
                 }}>
-                    <Divider style={{margin: "0px", maxWidth: "1100px"}}/>
-                    <RecomSlider title="Lerne Scrum"/>
-                    <Divider style={{margin: "0px"}}/>
-                    <RecomSlider title={"Modellieren mit Icebricks"}/>
-                    <Divider style={{margin: "0px"}}/>
-                    <RecomSlider title={"Unlearning: Schaffe Platz für Neues"}/>
-                    <Divider style={{margin: "0px"}}/>
-                    <RecomSlider title={"So benutze ich Microsoft Teams"}/>
-                    <Divider style={{margin: "0px"}}/>
-                    <RecomSlider title={"Zeitmanagement: Grundlagen"}/>
+                    {
+                        recommended.length == 0 ? <RecomSlider/> :
+                            recommended.map((item: { title: string, content: number[] }) =>
+                                <RecomSlider key={item.title} title={item.title} data={item.content}/>)
+                    }
                 </div>
             </div>
         </>

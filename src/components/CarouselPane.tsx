@@ -11,13 +11,19 @@ function CarouselPane({id}: { id?: number }) {
     useEffect(() => {
         if (!id)
             return
-
+        /*
         fetchWrapper.get(`api/v1/courses/${id}`).then((res) => {
             setTitle(res.payload.title)
             setDesc(res.payload.description)
             setSrc(res.payload.image)
         })
+        */
 
+        setTimeout(() => {
+            setTitle("Lerne Scrum")
+            setDesc("Scrum ist ein Framework für die agile Softwareentwicklung. Es wurde ursprünglich in der Softwaretechnik entwickelt, ist aber davon unabhängig. Scrum wird inzwischen in vielen Bereichen eingesetzt.")
+            setSrc("https://media.licdn.com/dms/image/C4D0DAQHDhV5Kpf9QtQ/learning-public-crop_288_512/0/1636550183863?e=1700679600&v=beta&t=NibEkRqX1fs5U9q68ktGfuRwtBprd2MVhMKr1qEK6K8")
+        }, Math.random() * 1000)
 
     }, [id]);
 
