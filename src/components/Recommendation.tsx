@@ -1,57 +1,71 @@
-import {Badge, Button} from "antd";
+import {Skeleton} from "antd";
+import {useEffect, useState} from "react";
+import {fetchWrapper} from "../api/helper.ts";
+import './Recommendation.css'
 
-const srcplaceholder: string = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR98LmXa4yE0U4qrQ69_L60a12hJ50QeT3KUg&usqp=CAU"
-const ribbonPlaceHolder: string = "Trending"
-const titlePlaceHolder: string = "Angebot"
+function Recommendation({id}: { id: number }) {
 
-function Recommendation(
-    {
-        title = titlePlaceHolder,
-        src = srcplaceholder,
-        ribbon = ribbonPlaceHolder
-    }: {
-        title: string,
-        src: string,
-        ribbon: string
-    }) {
+    const [title, setTitle] = useState("")
+    const [desc, setDesc] = useState("")
+    const [src, setSrc] = useState("")
 
-    const content =
-        <div style={{height: "120px"}}>
-            <img style={{
-                objectFit: "cover",
-                borderRadius: "20px",
-                width: "220px",
-                height: "100%",
-                userSelect: "none",
-                pointerEvents: "none"
-            }} src={src}/>
-            <div style={{position: "absolute", left: "0", bottom: "0"}}>
-                <Button type="link" shape="round" href="/detail" style={{maxWidth: "150px", display: "flex"}}>
-                    <h3 style={{
-                        margin: "0",
-                        alignSelf: "center",
-                        textOverflow: "ellipsis",
-                        overflow: "hidden",
-                        whiteSpace: "nowrap",
-                        maxWidth: "inherit"
-                    }}>{title}</h3></Button>
-            </div>
-        </div>
+    useEffect(() => {
+        /*
+        fetchWrapper.get(`api/v1/courses/${id}`).then((res) => {
+            setTitle(res.payload.title)
+            setDesc(res.payload.description)
+            setSrc(res.payload.image)
+        })
+        */
 
-    const component = ribbon ? <Badge.Ribbon text={ribbon}>{content}</Badge.Ribbon> : content
+        setTimeout(() => {
+            setTitle("Lerne Scrum")
+            setDesc("Scrum ist ein Framework für die agile Softwareentwicklung. Es wurde ursprünglich in der Softwaretechnik entwickelt, ist aber davon unabhängig. Scrum wird inzwischen in vielen Bereichen eingesetzt.")
+            setSrc("https://media.licdn.com/dms/image/C4D0DAQHDhV5Kpf9QtQ/learning-public-crop_288_512/0/1636550183863?e=1700679600&v=beta&t=NibEkRqX1fs5U9q68ktGfuRwtBprd2MVhMKr1qEK6K8")
+        }, Math.random() * 3000)
 
-    return (
-        <div style={{
-            maxWidth: "220px",
-            maxHeight: "120px",
+    }, [id]);
+
+    return (<>
+        <div id="recom" style={{
+            maxWidth: "240px",
+            maxHeight: "180px",
             width: "100%",
             height: "100%",
             borderRadius: "20px",
             display: "flex",
+            flexDirection: "column",
+            padding: "10px",
         }}>
-            {component}
+            <div id="recompic" style={{height: "120px"}}>
+                {
+                    src != "" ?
+                        <img style={{
+                            objectFit: "cover",
+                            borderRadius: "10px",
+                            width: "220px",
+                            height: "100%",
+                            userSelect: "none",
+                            pointerEvents: "none"
+                        }} src={src}/>
+                        : <Skeleton.Image style={{
+                            objectFit: "cover",
+                            borderRadius: "10px",
+                            width: "220px",
+                            height: "100%",
+                            userSelect: "none",
+                            pointerEvents: "none"
+                        }} active/>
+                }
+
+            </div>
+            {
+                title != "" ?
+                    <h3 style={{margin: "5px"}}>{title}</h3>
+                    : <Skeleton.Input active size="small" style={{margin: "5px"}}/>
+            }
         </div>
-    );
+    </>);
 }
 
 export default Recommendation;
