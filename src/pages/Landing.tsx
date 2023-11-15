@@ -1,23 +1,160 @@
-import {Button} from "antd";
+import "./Landing.css";
+import { Card, Flex, Typography } from "antd";
+import {
+  ReadOutlined,
+  UserOutlined,
+  PartitionOutlined
+} from "@ant-design/icons";
+import { openLoginModal } from "../state/modalutil.ts";
 import LoginModal from "../components/Login/LoginModal.tsx";
-import {openLoginModal} from "../state/modalutil.ts";
+import AnimatedButton from "../components/AnimatedButton.tsx";
 
 function Landing() {
+  const cardStyle: React.CSSProperties = {
+    width: 1440,
+  };
 
-//TODO: only show login/register button if not logged in
+  const attributeCardStyle: React.CSSProperties = {
+    width: 256,
+    height: 200,
+    backgroundColor: "cornflowerblue",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  };
 
-    return (
-        <div>
-            <h1>Landing</h1>
-            <Button type="primary" onClick={() => {
-                openLoginModal("login")
-            }}>Einloggen</Button>
-            <Button type="primary" onClick={() => {
-                openLoginModal("register")
-            }}>Registrieren</Button>
-            <LoginModal/>
-        </div>
-    )
+  const imgStyle: React.CSSProperties = {
+    display: "block",
+    width: 756,
+  };
+
+  const complementColor: React.CSSProperties = {
+    backgroundColor: "cornflowerblue",
+  };
+
+  return (
+    <div
+      style={{
+        zIndex: "1",
+        display: "flex",
+        justifyContent: "center",
+        flexDirection: "row",
+        gap: "10px",
+      }}
+    >
+      <Flex vertical justify="center">
+        <Card style={cardStyle} bodyStyle={{ padding: 0, overflow: "hidden" }}>
+          <Flex justify="space-between">
+            <img
+              alt="avatar"
+              src="https://images.pexels.com/photos/4065891/pexels-photo-4065891.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+              style={imgStyle}
+            />
+            <Flex
+              vertical
+              align="flex-start"
+              justify="space-between"
+              style={{ padding: 64 }}
+            >
+              <Typography.Title level={2}>
+                GovLearn - Deine Weiterbildungsangebotsplattform für den
+                öffentlichen Dienst
+              </Typography.Title>
+              <Typography.Title level={3}>
+                Entdecke Weiterbildungsangebote, die den öffentlichen Dienst
+                voranbringen.
+              </Typography.Title>
+              <AnimatedButton
+                onClick={() => {
+                  openLoginModal("register");
+                }}
+              >
+                Jetzt Loslegen!
+              </AnimatedButton>
+            </Flex>
+          </Flex>
+        </Card>
+
+        <Card style={cardStyle} bodyStyle={complementColor}>
+          <div className="flip-container">
+            <Flex justify="space-around">
+              <div className="flip-box">
+                <div className="flip-box-inner">
+                  <div className="flip-box-front">
+                    <Card style={attributeCardStyle}>
+                      <ReadOutlined
+                        style={{ fontSize: "64px", color: "white" }}
+                      />
+                      <p style={{ color: "white", fontSize: "large" }}>
+                        großes Angebot an Weiterbildungsangeboten
+                      </p>
+                    </Card>
+                  </div>
+                  <div className="flip-box-back">
+                    <Card style={attributeCardStyle}>
+                      <p style={{ color: "white", fontSize: "large" }}>
+                        Unser breites Spektrum an Weiterbildungsangeboten
+                        ermöglicht es dir, deine Fähigkeiten zu erweitern und
+                        beruflich voranzukommen.
+                      </p>
+                    </Card>
+                  </div>
+                </div>
+              </div>
+              <div className="flip-box">
+                <div className="flip-box-inner">
+                  <div className="flip-box-front">
+                    <Card style={attributeCardStyle}>
+                      <UserOutlined
+                        style={{ fontSize: "64px", color: "white" }}
+                      />
+                      <p style={{ color: "white", fontSize: "large" }}>
+                        Finde das Angebot das für dich am besten passt
+                      </p>
+                    </Card>
+                  </div>
+                  <div className="flip-box-back">
+                    <Card style={attributeCardStyle}>
+                      <p style={{ color: "white", fontSize: "large" }}>
+                        Unsere Plattform nutzt moderne Technologie, um dir
+                        gezielt Weiterbildungsangebote vorzuschlagen, die deinen
+                        Bedürfnissen entsprechen.
+                      </p>
+                    </Card>
+                  </div>
+                </div>
+              </div>
+              <div className="flip-box">
+                <div className="flip-box-inner">
+                  <div className="flip-box-front">
+                    <Card style={attributeCardStyle}>
+                      <PartitionOutlined
+                        style={{ fontSize: "64px", color: "white" }}
+                      />
+                      <p style={{ color: "white", fontSize: "large" }}>
+                        Ordne deinem Team Angebote zu
+                      </p>
+                    </Card>
+                  </div>
+                  <div className="flip-box-back">
+                    <Card style={attributeCardStyle}>
+                      <p style={{ color: "white", fontSize: "large" }}>
+                        Unsere Plattform ermöglicht es dir,
+                        Weiterbildungsangebote effizient an dein Team zuzuweisen
+                        und deren berufliche Entwicklung zu fördern.
+                      </p>
+                    </Card>
+                  </div>
+                </div>
+              </div>
+            </Flex>
+          </div>
+        </Card>
+      </Flex>
+      <LoginModal />
+    </div>
+  );
 }
 
-export default Landing
+export default Landing;
