@@ -108,23 +108,6 @@ function Landing() {
                         </Flex>
                     </div>
                 </Card>
-                <Card style={flexCardStyle} bodyStyle={{
-                    padding: 40,
-                    overflow: 'hidden',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                }}>
-
-                    <h3>Entdecke Weiterbildungsmöglichkeiten, die zu dir passen</h3>
-                    <Button type="primary" icon={<DoubleRightOutlined/>} size={'large'} onClick={() => {openLoginModal("register")}}>
-                        Loslegen
-                    </Button>
-
-                </Card>
-
-
             </Flex>
             <LoginModal/>
         </div>
