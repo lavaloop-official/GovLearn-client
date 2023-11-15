@@ -1,19 +1,17 @@
 import "./Landing.css";
-import { Button, Card, Flex, Typography } from "antd";
+import { Card, Flex, Typography } from "antd";
 import {
   ReadOutlined,
   UserOutlined,
-  PartitionOutlined,
-  ArrowRightOutlined,
+  PartitionOutlined
 } from "@ant-design/icons";
 import { openLoginModal } from "../state/modalutil.ts";
 import LoginModal from "../components/Login/LoginModal.tsx";
-import { useState } from "react";
 import AnimatedButton from "../components/AnimatedButton.tsx";
 
 function Landing() {
   const cardStyle: React.CSSProperties = {
-    width: 1360,
+    width: 1440,
   };
 
   const attributeCardStyle: React.CSSProperties = {
@@ -34,15 +32,6 @@ function Landing() {
   const complementColor: React.CSSProperties = {
     backgroundColor: "cornflowerblue",
   };
-
-  const flexStyle: React.CSSProperties = {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "row",
-  };
-
-  const flexCardStyle = { ...cardStyle, ...flexStyle };
 
   return (
     <div
