@@ -14,31 +14,52 @@ function Registration() {
         {
             content: <h1>Content 1</h1>,
             step: {
-                title: 'First',
+                title: 'IT- und Medienkompetenz',
                 description: 'First-content'
             }
         },
         {
             content: <h1>Content 2</h1>,
             step: {
-                title: 'Second',
+                title: 'Diversity Kompetenz',
                 description: 'Second-content'
             }
         },
         {
             content: <h1>Content 3</h1>,
             step: {
-                title: 'Third',
+                title: 'Ethische Kompetenz',
                 description: 'Third-content'
             }
         },
         {
-            content: <h1>Content 4</h1>,
+            content: <h1>Content 5</h1>,
             step: {
-                title: 'Last',
-                description: 'Last-content'
+                title: 'Persönliche Kompetenz',
+                description: 'Fourth-content'
             }
         },
+        {
+            content: <h1>Content 6</h1>,
+            step: {
+                title: 'Soziale Kompetenz',
+                description: 'Fifth-content'
+            }
+        },
+        {
+            content: <h1>Content 7</h1>,
+            step: {
+                title: 'Strategische Kompetenz',
+                description: 'Sixth-content'
+            }
+        },
+        {
+            content: <h1>Content 8</h1>,
+            step: {
+                title: 'Persönliche Einstellungen',
+                description: 'Datenschutz und Benachrichtigungen'
+            }
+        }
     ]
 
     const next = () => {
@@ -72,7 +93,7 @@ function Registration() {
         }}>
             <h1 style={{margin: "0", padding: "0 15px", textAlign: "center"}}>Registrierung</h1>
             <div style={{display: "flex", flexDirection: "row", maxWidth: "1100px", width: "100%"}}>
-                <Affix offsetTop={90} style={{width: "100%", maxWidth: "250px", maxHeight: "500px"}}>
+                <Affix offsetTop={90} style={{width: "100%", maxWidth: "300px", maxHeight: "500px"}}>
                     <Steps
                         style={{height: "500px"}}
                         onChange={onChange}
