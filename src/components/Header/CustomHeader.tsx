@@ -8,6 +8,7 @@ import {openLoginModal} from "../../state/modalutil.ts";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../state/reduxStore.ts";
 import {clearAuthToken} from "../../state/authslice.ts";
+import {fetchWrapper} from "../../api/helper";
 
 const {Title} = Typography
 
@@ -21,13 +22,17 @@ function CustomHeader() {
 
     const location = useLocation();
 
+    const [name, setName] = useState('')
+
     useEffect(() => {
         if (location.pathname.includes("discover") || location.pathname.includes("detail") || location.pathname.includes("profile")) {
             setSubHeader(<SubHeader/>)
         } else {
             setSubHeader(<></>)
         }
+        fetchWrapper.get('api/v1/users').then(res => setName(res.payload.name))
     }, [location.pathname])
+
 
     //TODO: refactor avatar to component
     //TODO: dont show search bar on landing page
@@ -46,7 +51,7 @@ function CustomHeader() {
                         maxWidth: "120px",
                         display: "block",
                     }}>
-                    Max Mustermann
+                    {name}
                 </span>
 
                 </a>
