@@ -3,6 +3,7 @@ import Recommendation from "./Recommendation.tsx";
 
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
+import Course from "../course.ts";
 
 const responsive = {
     desktop: {
@@ -28,7 +29,7 @@ const responsive = {
 
 };
 
-function RecomSlider({title, data}: { title?: string, data?: number[] }) {
+function RecomSlider({title, data}: { title?: string, data?: Course[] }) {
     return (
         <>
             <div id="slider" style={{
@@ -49,7 +50,7 @@ function RecomSlider({title, data}: { title?: string, data?: number[] }) {
                     <Carousel responsive={responsive}>
                         {
                             data ?
-                            data.map((item: number) => <div key={item}><Recommendation id={item}/></div>)
+                            data.map((item: Course) => <div key={item.id}><Recommendation obj={item}/></div>)
                             : <Recommendation/>
                         }
                     </Carousel>

@@ -1,31 +1,23 @@
-import {Carousel, Divider} from "antd";
+import {Carousel} from "antd";
 import CarouselPane from "../components/CarouselPane.tsx";
 import RecomSlider from "../components/RecomSlider.tsx";
 import {useEffect, useState} from "react";
 import {fetchWrapper} from "../api/helper.ts";
+import Course from "../course.ts";
 
 function Discover() {
 
-    const [featured, setFeatured] = useState<number[]>([])
-    const [recommended, setRecommended] = useState<{ title: string, content: number[] }[]>([])
+    const [featured, setFeatured] = useState<Course[]>([])
+    const [recommended, setRecommended] = useState<{category: string, items: Course[]}[]>([])
 
     useEffect(() => {
-        /*
-        fetchWrapper.get(`api/v1/recommendations`).then((res) => {
+        fetchWrapper.get(`api/v1/recommendations/bundle`).then((res) => {
             setFeatured(res.payload.featured)
+            setRecommended(res.payload.categorized)
+            console.log(res.payload)
         })
-         */
 
-        //testing code
-        setTimeout(() => {
-            setFeatured([1, 2, 3])
-            setRecommended([{title: "Lerne Scrum", content: [1, 2, 3]}, {
-                title: "Modellieren mit Icebricks",
-                content: [1, 2, 3]
-            }])
-        }, Math.random() * 3000)
-
-    }, []);
+    });
 
 
     return (
@@ -46,7 +38,7 @@ function Discover() {
                               }}>
                         {
                             featured.length == 0 ? <CarouselPane/> :
-                                featured.map((item: number) => <div key={item}><CarouselPane id={item}/></div>)
+                                featured.map((item: Course) => <div key={item.id}><CarouselPane obj={item}/></div>)
                         }
                     </Carousel>
                 </div>
@@ -62,8 +54,7 @@ function Discover() {
                 }}>
                     {
                         recommended.length == 0 ? <RecomSlider/> :
-                            recommended.map((item: { title: string, content: number[] }) =>
-                                <RecomSlider key={item.title} title={item.title} data={item.content}/>)
+                            recommended.map((item: {category: string, items: Course[]}) => <RecomSlider title={item.category} data={item.items}/>)
                     }
                 </div>
             </div>
