@@ -14,7 +14,6 @@ function Discover() {
         fetchWrapper.get(`api/v1/recommendations/bundle`).then((res) => {
             setFeatured(res.payload.featured)
             setRecommended(res.payload.categorized)
-            console.log(res.payload)
         })
     }, []);
 
