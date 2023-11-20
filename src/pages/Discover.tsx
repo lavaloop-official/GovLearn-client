@@ -16,8 +16,7 @@ function Discover() {
             setRecommended(res.payload.categorized)
             console.log(res.payload)
         })
-
-    });
+    }, []);
 
 
     return (
@@ -54,7 +53,7 @@ function Discover() {
                 }}>
                     {
                         recommended.length == 0 ? <RecomSlider/> :
-                            recommended.map((item: {category: string, items: Course[]}) => <RecomSlider title={item.category} data={item.items}/>)
+                            recommended.map((item: {category: string, items: Course[]}) => <div key={item.category}><RecomSlider title={item.category} data={item.items}/></div>)
                     }
                 </div>
             </div>
