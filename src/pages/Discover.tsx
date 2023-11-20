@@ -1,8 +1,23 @@
-import {Carousel, Divider} from "antd";
+import {Carousel} from "antd";
 import CarouselPane from "../components/CarouselPane.tsx";
 import RecomSlider from "../components/RecomSlider.tsx";
+import {useEffect, useState} from "react";
+import {fetchWrapper} from "../api/helper.ts";
+import Course from "../course.ts";
 
 function Discover() {
+
+    const [featured, setFeatured] = useState<Course[]>([])
+    const [recommended, setRecommended] = useState<{category: string, items: Course[]}[]>([])
+
+    useEffect(() => {
+        fetchWrapper.get(`api/v1/recommendations/bundle`).then((res) => {
+            setFeatured(res.payload.featured)
+            setRecommended(res.payload.categorized)
+        })
+    }, []);
+
+
     return (
         <>
             <div style={{
@@ -19,20 +34,10 @@ function Discover() {
                                   borderRadius: "20px",
                                   boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
                               }}>
-                        <div>
-                            <CarouselPane text="Bilden sie sich weiter jetzt hallo" src={undefined} description={undefined}/>
-                        </div>
-                        <div>
-                            <CarouselPane text="lalalalalalal das ist ein Weiterbildungsangebot"
-                                          src="https://www.langweiledich.net/wp-content/uploads/2018/03/die-skurrilsten-wtf-stock-photos_01.jpg"
-                            description="ja das ist die Beschreibung hallooooo. cooles angebot hier lalalalalalalla"/>
-                        </div>
-                        <div>
-                            <CarouselPane text="2" src={undefined} description={undefined}/>
-                        </div>
-                        <div>
-                            <CarouselPane text={undefined} src={undefined} description={undefined}/>
-                        </div>
+                        {
+                            featured.length == 0 ? <CarouselPane/> :
+                                featured.map((item: Course) => <div key={item.id}><CarouselPane obj={item}/></div>)
+                        }
                     </Carousel>
                 </div>
                 <div style={{
@@ -45,16 +50,10 @@ function Discover() {
                     width: "100%",
                     margin: "auto",
                 }}>
-                    <Divider style={{margin: "0px", maxWidth: "1100px"}}/>
-                    <RecomSlider title="Lerne Scrum"/>
-                    <Divider style={{margin: "0px"}}/>
-                    <RecomSlider title={"Modellieren mit Icebricks"}/>
-                    <Divider style={{margin: "0px"}}/>
-                    <RecomSlider title={"Unlearning: Schaffe Platz für Neues"}/>
-                    <Divider style={{margin: "0px"}}/>
-                    <RecomSlider title={"So benutze ich Microsoft Teams"}/>
-                    <Divider style={{margin: "0px"}}/>
-                    <RecomSlider title={"Zeitmanagement: Grundlagen"}/>
+                    {
+                        recommended.length == 0 ? <RecomSlider/> :
+                            recommended.map((item: {category: string, items: Course[]}) => <div key={item.category}><RecomSlider title={item.category} data={item.items}/></div>)
+                    }
                 </div>
             </div>
         </>

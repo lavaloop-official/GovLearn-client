@@ -1,57 +1,49 @@
-import {Badge, Button} from "antd";
+import {Skeleton} from "antd";
+import './Recommendation.css'
+import Course from "../course.ts";
 
-const srcplaceholder: string = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR98LmXa4yE0U4qrQ69_L60a12hJ50QeT3KUg&usqp=CAU"
-const ribbonPlaceHolder: string = "Trending"
-const titlePlaceHolder: string = "Angebot"
+function Recommendation({obj}: {obj?: Course}) {
 
-function Recommendation(
-    {
-        title = titlePlaceHolder,
-        src = srcplaceholder,
-        ribbon = ribbonPlaceHolder
-    }: {
-        title: string,
-        src: string,
-        ribbon: string
-    }) {
-
-    const content =
-        <div style={{height: "120px"}}>
-            <img style={{
-                objectFit: "cover",
-                borderRadius: "20px",
-                width: "220px",
-                height: "100%",
-                userSelect: "none",
-                pointerEvents: "none"
-            }} src={src}/>
-            <div style={{position: "absolute", left: "0", bottom: "0"}}>
-                <Button type="link" shape="round" href="/detail" style={{maxWidth: "150px", display: "flex"}}>
-                    <h3 style={{
-                        margin: "0",
-                        alignSelf: "center",
-                        textOverflow: "ellipsis",
-                        overflow: "hidden",
-                        whiteSpace: "nowrap",
-                        maxWidth: "inherit"
-                    }}>{title}</h3></Button>
-            </div>
-        </div>
-
-    const component = ribbon ? <Badge.Ribbon text={ribbon}>{content}</Badge.Ribbon> : content
-
-    return (
-        <div style={{
-            maxWidth: "220px",
-            maxHeight: "120px",
+    return (<>
+        <div id="recom" style={{
+            maxWidth: "240px",
+            maxHeight: "180px",
             width: "100%",
             height: "100%",
             borderRadius: "20px",
             display: "flex",
+            flexDirection: "column",
+            padding: "10px",
         }}>
-            {component}
+            <div id="recompic" style={{height: "120px"}}>
+                {
+                    obj ?
+                        <img style={{
+                            objectFit: "cover",
+                            borderRadius: "10px",
+                            width: "220px",
+                            height: "100%",
+                            userSelect: "none",
+                            pointerEvents: "none"
+                        }} src={obj.image}/>
+                        : <Skeleton.Image style={{
+                            objectFit: "cover",
+                            borderRadius: "10px",
+                            width: "220px",
+                            height: "100%",
+                            userSelect: "none",
+                            pointerEvents: "none"
+                        }} active/>
+                }
+
+            </div>
+            {
+                obj ?
+                    <a href={`/detail/${obj.id}`}><h3 style={{margin: "5px"}} >{obj.name}</h3></a>
+                    : <Skeleton.Input active size="small" style={{margin: "5px"}}/>
+            }
         </div>
-    );
+    </>);
 }
 
 export default Recommendation;

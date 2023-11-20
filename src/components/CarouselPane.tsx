@@ -1,17 +1,12 @@
-import {Button, Col, Row} from "antd";
+import {Button, Col, Row, Skeleton} from "antd";
+import './CarouselPane.css'
+import Course from "../course.ts";
 
-const srcplaceholer: string = "https://image.stern.de/7690958/t/Qx/v3/w1440/r1.7778/-/stockfotos-aus-der-hoelle-01.jpg"
-const descplaceholder: string = "Detailed description of the course goes here and can be very long. It can also be very short."
-
-function CarouselPane({text = "hello", description = descplaceholder, src = srcplaceholer}: {
-    text: string | undefined,
-    src: string | undefined,
-    description: string | undefined
-}) {
+function CarouselPane({obj}: {obj?: Course}) {
 
     return (
         <>
-            <div style={{background: "#D9D9D9", borderRadius: "20px", width: "100%", height: "400px", }}>
+            <div style={{background: "#D9D9D9", borderRadius: "20px", width: "100%", height: "400px",}}>
                 <Row style={{height: "100%", borderRadius: "20px"}}>
                     <Col span={8}>
                         <div style={{
@@ -23,21 +18,48 @@ function CarouselPane({text = "hello", description = descplaceholder, src = srcp
                             flexDirection: "column",
                             justifyContent: "flex-end",
                         }}>
-                            <h1 style={{wordWrap: "break-word"}}>{text}</h1>
-                            <h3 style={{wordWrap: "break-word"}}>{description}</h3>
-                            <Button type="primary" shape="round" style={{maxWidth: "150px"}}>Weiterlesen</Button>
+                            {
+                                (obj) ?
+                                    <>
+                                        <h1 style={{wordWrap: "break-word"}}>{obj.name}</h1>
+                                        <h3 style={{wordWrap: "break-word"}}>{obj.description}</h3>
+                                        <Button type="primary" shape="round"
+                                                style={{maxWidth: "150px"}}
+                                        href={`/detail/${obj.id}`}>
+                                            Weiterlesen
+                                        </Button>
+                                    </>
+                                    : <Skeleton active/>
+                            }
+
 
                         </div>
 
                     </Col>
                     <Col span={16}>
                         <div style={{display: "flex", width: "100%", height: "100%"}}>
-                            <img src={src} style={{
-                                maxHeight: "400px",
-                                width: "100%",
-                                borderRadius: "0px 20px 20px 0px",
-                                objectFit: "cover"
-                            }}/>
+                            {
+                                obj ?
+                                    <img src={obj.image} style={{
+                                        maxHeight: "400px",
+                                        width: "100%",
+                                        borderRadius: "0px 20px 20px 0px",
+                                        objectFit: "cover"
+                                    }}/>
+                                    : <div id="carouselpic" style={{
+                                        maxHeight: "400px",
+                                        width: "100%",
+                                        display: "flex",
+                                    }}>
+                                        <Skeleton.Image active style={{
+                                            borderRadius: "0px 20px 20px 0px",
+                                            width: "100%",
+                                            height: "100%",
+                                        }}/>
+                                    </div>
+
+                            }
+
 
                         </div>
 
