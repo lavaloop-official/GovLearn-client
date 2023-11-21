@@ -1,124 +1,455 @@
-import {Affix, Button, Card, Flex} from "antd";
-import {useEffect} from "react";
-import {ArrowLeftShort, ArrowRightShort} from "react-bootstrap-icons";
+import { Affix, Button, Card, Flex, Form, Image, Input, Rate, Select, Tag } from "antd";
+import { PlusOutlined, EditOutlined } from "@ant-design/icons";
+import { useEffect, useState } from "react";
+import { ArrowLeftShort } from "react-bootstrap-icons";
 import Recommendation from "../components/Recommendation.tsx";
 import Feedback from "../components/Feedback.tsx";
+import { fetchWrapper } from "../api/helper.ts";
+import Modal from "antd/es/modal/Modal";
+import './Details.css';
 
-function Details({title = "Scrum lernen mit Jörg Becker"}: { title?: string }) {
+function Details() {
+  const [course, setCourse] = useState({
+    id: null,
+    name: "",
+    image: null,
+    description: null,
+    createdAt: null,
+    providor: null,
+    instructor: null,
+    certificate: null,
+    skilllevel: null,
+    durationInHours: null,
+    format: null,
+    startDate: null,
+    costFree: null,
+    domainSpecific: null
+  });
 
-    //TODO: skeleton loading
-    //TODO: API calls for content
+  const [feedback, setFeedback] = useState<{
+    feedbackId: number,
+    title: string | null,
+    description: string | null,
+    rating: number,
+    courseId: number,
+    userId: number,
+  }[]>([]);
+  const [courseTags, setCourseTags] = useState<string[]>([]); // Use an array to store multiple tags
+  const [tags, setTags] = useState<{ id: number, name: string }[]>([]); // Use an array to store multiple tags
+  const [selectedValue, setSelectedValue] = useState<string | null>(null);
+  const defaultImageSrc = "https://st4.depositphotos.com/13194036/31587/i/450/depositphotos_315873928-stock-photo-selective-focus-happy-businessman-glasses.jpg"
+  const [isTagModalOpen, setIsTagModalOpen] = useState(false);
+  const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
+  const [form] = Form.useForm();
+  //const [requiredMark, setRequiredMarkType] = useState<RequiredMark>('optional');
 
-    useEffect(() => {
-        document.title = "Details"
-    })
 
-    return (
-        <>
-            <div style={{display: "flex", flexDirection: "row", justifyContent: "center"}}>
-                <div style={{maxWidth: "1200px", width: "100%"}}>
-                    <div style={{
-                        width: "100%",
-                        margin: "auto",
-                        padding: "10px",
-                        display: "flex",
-                        flexDirection: "row"
-                    }}>
-                        <Button type="primary" href="/discover"
-                                style={{
-                                    height: "fit-content",
-                                    width: "fit-content",
-                                    padding: "0",
-                                    lineHeight: "0px",
-                                    alignSelf: "center"
-                                }}
-                                icon={<ArrowLeftShort size={40}/>}/>
-                        <h1 style={{margin: "0", padding: "0 15px"}}>{title}</h1>
-                    </div>
-                    <div style={{display: "flex", flexDirection: "row"}}>
-                        <div style={{
-                            maxWidth: "1200px",
-                            width: "100%",
-                            margin: "auto",
-                            padding: "10px",
-                            display: "flex",
-                         flexDirection: "column"
-                        }}>
-                            <div style={{
-                                height: "100%",
-                                width: "100%",
-                                background: "#d9d9d9",
-                                borderRadius: "20px",
-                                boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
-                                display: "flex"
-                            }}>
+  useEffect(() => {
+    const courseId = window.location.pathname.split('/').pop();
+    fetchWrapper.get(`api/v1/tags/courses/${courseId}`).then((res) => {
+      // Assuming res.payload is an array of tag objects with a 'name' property
+      const tagNames = res.payload.map((tag: { name: string }) => tag.name);
+      setCourseTags(tagNames);
+    });
+    fetchWrapper.get(`api/v1/courses/${courseId}`).then((res) => {
+      setCourse(res.payload);
+    });
+    fetchWrapper.get(`api/v1/tags`).then((res) => {
+      // Assuming res.payload is an array of tag objects with a 'name' property
+      const tags = res.payload.map((tag: { id: number; name: string; }) => (
+        {
+          id: tag.id,
+          name: tag.name
+        }
+      ))
+      setTags(tags);
+    });
+    fetchWrapper.get(`api/v1/feedback/course/${courseId}`).then((res) => {
+      const feedback = res.payload.map((feedback: {
+        feedbackId: number;
+        title: string | null;
+        description: string | null;
+        rating: number;
+        courseId: number;
+        userId: number;
+      }) => (
+        {
+          feedbackId: feedback.feedbackId,
+          title: feedback.title,
+          description: feedback.description,
+          rating: feedback.rating,
+          courseId: feedback.courseId,
+          userId: feedback.userId
+        }
+      ))
+      setFeedback(feedback);
+    });
+    document.title = course.name;
+  }, []);
 
-        <img
-            src="https://st4.depositphotos.com/13194036/31587/i/450/depositphotos_315873928-stock-photo-selective-focus-happy-businessman-glasses.jpg"
-            alt=""
+  const showTagModal = () => {
+    setIsTagModalOpen(true);
+  };
+
+  const findTagIdByName = (tagName: string | null) => {
+    const foundTag = tags.find((tag) => tag.name === tagName);
+    return foundTag ? foundTag.id : null;
+  };
+
+
+  const requestBody = {
+    courseId: course.id,
+    tagId: findTagIdByName(selectedValue),
+  };
+
+  const handleTagOk = () => {
+    setIsTagModalOpen(false);
+    if (findTagIdByName(selectedValue) != null) {
+      fetchWrapper.post(`api/v1/tags/courses`).then((res) => {
+        body: requestBody
+      }).then((res) => {
+        // Handle the response
+        console.log(res);
+      })
+        .catch((error) => {
+          // Handle errors
+          console.error(error);;
+        })
+    };
+  }
+
+  const handleTagCancel = () => {
+    setIsTagModalOpen(false);
+  };
+
+  const handleTagChange = (value: string | null) => {
+    setSelectedValue(value);
+  };
+
+  const getOptions = () => {
+    return tags.map((tag) => ({
+      value: tag.name,
+      label: tag.name,
+      disabled: courseTags.includes(tag.name),
+    }));
+  };
+
+  const onSearch = (value: string) => {
+    console.log('search:', value);
+  };
+
+  const filterOption = (input: string, option?: { label: string; value: string }) =>
+    (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
+
+  const showFeedbackModal = () => {
+    setIsFeedbackModalOpen(true);
+  };
+
+  const handleFeedbackOk = () => {
+    setIsFeedbackModalOpen(false);
+  };
+
+  const handleFeedbackCancel = () => {
+    setIsFeedbackModalOpen(false);
+  };
+
+  return (
+    <>
+      <Flex
+        style={{
+          justifyContent: "center"
+        }}>
+        <div style={{ maxWidth: "1200px", width: "100%" }}>
+          <Flex
+            gap="small"
             style={{
-                width: "100%", // Set the width to 100% to fill the container
-                height: "100%", // Set the height to 100% to fill the container
-                objectFit: "cover", // Maintain the aspect ratio and cover the container
-                borderRadius: "20px", // Match the borderRadius of the container
+              width: "100%",
+              margin: "auto",
+              padding: "10px",
             }}
-        />
-    
-    <div style={{display: "flex", flexDirection: "column", width: "150px", padding: "5px"}}>
-        <Card style={{ height: "100%" }}><p>Infos test</p></Card>
-        <Button type="primary" icon={<ArrowRightShort size={12}/>}>Zum Angebot</Button>
-    </div>
-    
-                            </div>
-                            <Card style={{margin: "5px"}}>
-                            <div style={{display: "flex", flexDirection: "row"}}>
-                                <img width="200px" object-fit="contain" src="https://www.wi.uni-muenster.de/sites/all/public/photos/46644531-becker-150x200.jpg" alt="" />
-                                <div style={{ padding: "10px" }}>
-                                    <h3>Jörg Becker</h3>
-                                <p>Jörg Becker absolvierte sein Studium der Betriebswirtschaftslehre an der Universität des Saarlandes. Er schloss sein Studium im Jahr 1982 als Diplom-Kaufmann ab. Von 1980 bis 1981 studierte er zudem Betriebs- und Volkswirtschaftslehre an der University of Michigan in Ann Arbor, USA. Im Jahr 1987 promovierte Becker an der Wirtschaftswissenschaftlichen Fakultät der Universität des Saarlandes mit einer Dissertation zum Thema „Architektur eines EDV-Systems zur Materialflusssteuerung“. Seine Habilitation erfolgte im Jahr 1990 mit dem Thema „Die Integration in CIM-Systemen  Notwendigkeit und Realisierungsmöglichkeiten der EDV-gestützten Verbindung betrieblicher Bereiche“</p>
-                                </div>
-                                
-                                </div>
-                                </Card>
-                                <div>
-                                    <Feedback title={"Das ist Scrum!"} ribbon=""/>
-                                 
-                                </div>
+          >
+            <Button
+              type="primary"
+              href="/discover"
+              style={{
+                height: "fit-content",
+                width: "fit-content",
+                padding: "0",
+                lineHeight: "0px",
+                alignSelf: "center",
+              }}
+              icon={<ArrowLeftShort size={40} />}
+            />
+            <h1 style={{ margin: "0", padding: "0 15px" }}>{course.name}</h1>
+          </Flex>
+          <Flex>
+            <Flex vertical className="course-main"
+              style={{
+                maxWidth: "1200px",
+                width: "100%",
+                margin: "auto",
+                padding: "10px",
+              }}
+            >
+              <div
+                style={{
+                  height: "100%",
+                  width: "100%",
+                  background: "#d9d9d9",
+                  borderRadius: "20px",
+                  boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
+                  display: "flex",
+                }}
+              >
+                {course.image ? (
+                  <img
+                    src={course.image}
+                    alt=""
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      borderRadius: "20px",
+                    }}
+                  />
+                ) : (
+                  <img
+                    src={defaultImageSrc}
+                    alt=""
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      borderRadius: "20px",
+                    }}
+                  />
+                )}
 
+                <Flex className="course-sidebar" vertical gap="middle"
+                  style={{
+                    width: "200px",
+                    padding: "5px",
+                  }}
+                >
+                  <Card style={{ height: "100%" }} >
+                    <div className="course-details" style={{
+                      padding: "2px"
+                    }}>
+                      {course.durationInHours && (
+                        <div className="course-attribute">
+                          <p className="attribute-label">Länge:</p>
+                          <p className="attribute-value">{course.durationInHours}</p>
                         </div>
-                        <Affix offsetTop={90}>
-                            <div style={{width: "100%", padding: "10px", display: "flex"}}>
-                                <div style={{
-                                    background: "#d9d9d9",
-                                    borderRadius: "20px",
-                                    boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    padding: "10px",
-                                    gap: "10px"
-                                }}>
-                                    <h2 style={{
-                                        padding: "10px",
-                                        lineHeight: "0",
-                                        textAlign: "center"
-                                    }}>Empfehlungen</h2>
-                                    <Recommendation title={"ja so hier"}
-                                                    src={"https://images.ctfassets.net/hrltx12pl8hq/3AnnkVqrlhrqb9hjlMBzKX/693a8e5d40b4b6c55a7673ca4c807eef/Girl-Stock?fit=fill&w=600&h=338"}
-                                                    ribbon={"Hot"}/>
-                                    <Recommendation title={"ja so hier"}
-                                                    src={"https://images.ctfassets.net/hrltx12pl8hq/3AnnkVqrlhrqb9hjlMBzKX/693a8e5d40b4b6c55a7673ca4c807eef/Girl-Stock?fit=fill&w=600&h=338"}
-                                                    ribbon={"Hot"}/>
-                                    <Recommendation title={"ja so hier"}
-                                                    src={"https://images.ctfassets.net/hrltx12pl8hq/3AnnkVqrlhrqb9hjlMBzKX/693a8e5d40b4b6c55a7673ca4c807eef/Girl-Stock?fit=fill&w=600&h=338"}
-                                                    ribbon={"Hot"}/>
-                                </div>
-                            </div>
-                        </Affix>
+                      )}
+                      {course.skilllevel && (
+                        <div className="course-attribute">
+                          <p className="attribute-label">Schwierigkeit:</p>
+                          <p className="attribute-value">{course.skilllevel}</p>
+                        </div>
+                      )}
+                      {course.format && (
+                        <div className="course-attribute">
+                          <p className="attribute-label">Format:</p>
+                          <p className="attribute-value">{course.format}</p>
+                        </div>
+                      )}
+                      {course.startDate && (
+                        <div className="course-attribute">
+                          <p className="attribute-label">Start:</p>
+                          <p className="attribute-value">{new Date(course.startDate).toLocaleDateString('DE')}</p>
+                        </div>
+                      )}
+                      {course.domainSpecific && (
+                        <div className="course-attribute">
+                          <p className="attribute-label">Verwaltungsbezogen:</p>
+                          <p className="attribute-value">{course.domainSpecific}</p>
+                        </div>
+                      )}
                     </div>
+                  </Card>
+                  <Button style={{ margin: "5px" }} type="primary" size="large">
+                    Zum Angebot
+                  </Button>
+                </Flex>
+              </div>
+              {tags.length > 0 ? (
+                <ul>
+                  {courseTags.map((tag, index) => (
+                    <Tag key={index} color="cornflowerblue" style={{ fontWeight: "bolder", padding: "1px" }} >{tag}</Tag>
+                  ))}
+                  <Button size="small" shape="circle" onClick={showTagModal} icon={<PlusOutlined />} />
+                </ul>
+              ) : (
+                <p>Keine Tags vorhanden</p>
+              )}
+              <Modal title="Tag hinzufügen" open={isTagModalOpen} onOk={handleTagOk} onCancel={handleTagCancel}>
+                <label>
+                  <Select
+                    showSearch
+                    //defaultValue=""
+                    style={{ width: 120 }}
+                    onSearch={onSearch}
+                    filterOption={filterOption}
+                    onChange={handleTagChange}
+                    options={getOptions()}
+                  />
+                </label>
+              </Modal>
+              <div
+                style={{
+                  background: "#d9d9d9",
+                  borderRadius: "20px",
+                  boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
+                  marginBottom: "5px"
+                }}
+              >
+                <Flex style={{ justifyContent: "space-between", width: "100%" }}>
+                  <Card style={{ margin: "5px", width: "70%" }}>
+                    <p style={{ fontWeight: "bold" }}>Beschreibung</p>
+                    {course.description ? (
+                      <p>{course.description}</p>
+                    ) : (
+                      <p>keine Beschreibung vorhanden.</p>
+                    )}
+                  </Card>
+                  <Card style={{ margin: "5px", width: "30%" }}>
+                    <Flex justify="space-evenly">
+                      <Image
+                        style={{ borderRadius: '50%', width: '100px', height: '100px' }}
+                        // TODO: Bilder von Instructor einfügen
+                        src="https://img.myloview.de/sticker/default-profile-picture-avatar-photo-placeholder-vector-illustration-700-205664584.jpg"
+                        alt="Bild konnte nicht geladen werden"
+                      />
+                      <div>
+                        {
+                          course.instructor ? (
+                            <h3>{course.instructor}</h3>
+                          ) : (
+                            <h3>Unbekannt</h3>
+                          )
+                        }
+                      </div>
+                    </Flex>
+                    <p>keine Beschreibung vorhanden.</p> {/* TODO: Kurs für instructor-Beschreibung überarbeiten */}
+                  </Card>
+                </Flex>
+              </div>
+              <div
+                style={{
+                  background: "#d9d9d9",
+                  borderRadius: "20px",
+                  boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
+                  display: "flex",
+                }}
+              >
+                <Flex style={{ justifyContent: "space-between", width: "100%" }}>
+                  <Card style={{ margin: "5px", width: "30%" }}>
+                    <p>4.3 Durchschnittsbewertung</p>
+                    <Rate disabled defaultValue={4.3} />
+                  </Card>
+                  <Card className="author" style={{ margin: "5px", width: "70%" }}>
+                    <Flex vertical gap="middle" justify="space-around" align="center">
+                      <p style={{ fontWeight: "bold" }}>Füge eine Bewertung hinzu!</p>
+                      <Button type="primary" icon={<EditOutlined />} onClick={showFeedbackModal}>Bewertung abgeben</Button>
+                    </Flex>
+                  </Card>
+                </Flex>
+              </div>
+              <Modal title="Deine Bewertung" open={isFeedbackModalOpen} onOk={handleFeedbackOk} onCancel={handleFeedbackCancel}>
+                <br />
+                <div style={{
+                  background: "#FFFFFF",
+                  borderRadius: "20px",
+                  display: "inline-block",
+                  padding: "5px",
+                  marginBottom: "5px"
+                }}>
+                  <Rate />
                 </div>
-            </div>
-        </>
-    );
+                <Form
+                  form={form}
+                  layout="vertical"
+                >
+                  <Form.Item
+                  >
+                    <Input placeholder="Titel (optional)" />
+                  </Form.Item>
+                  <Form.Item
+                  >
+                    <Input placeholder="Text (optional)" />
+                  </Form.Item>
+                </Form>
+              </Modal>
+              <div
+                style={{
+                  background: "#d9d9d9",
+                  borderRadius: "20px",
+                  boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
+                }}
+              >
+                <Flex vertical gap="small" className="course-feedback" style={{ margin: "5px" }}>
+                  {feedback.length > 0 ? (
+                    feedback.map((feedbackItem) => (
+                      <Feedback title={feedbackItem.title} description={feedbackItem.description} rating={feedbackItem.rating} userName={"Platzhalter"} /*TODO: userName verwenden */></Feedback>
+                    ))
+                  ) : (
+                    <Card style={{ justifyContent: "center" }}>keine Bewertungen vorhanden.</Card>
+                  )}
+                </Flex>
+              </div>
+            </Flex>
+            <Affix offsetTop={90}>
+              <div style={{ width: "100%", padding: "10px", display: "flex" }}>
+                <div
+                  style={{
+                    background: "#d9d9d9",
+                    borderRadius: "20px",
+                    boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
+                    display: "flex",
+                    flexDirection: "column",
+                    padding: "10px",
+                    gap: "10px",
+                  }}
+                >
+                  <h2
+                    style={{
+                      padding: "10px",
+                      lineHeight: "0",
+                      textAlign: "center",
+                    }}
+                  >
+                    Empfehlungen
+                  </h2>
+                  <Recommendation
+                    title={"ja so hier"}
+                    src={
+                      "https://images.ctfassets.net/hrltx12pl8hq/3AnnkVqrlhrqb9hjlMBzKX/693a8e5d40b4b6c55a7673ca4c807eef/Girl-Stock?fit=fill&w=600&h=338"
+                    }
+                    ribbon={"Hot"}
+                  />
+                  <Recommendation
+                    title={"ja so hier"}
+                    src={
+                      "https://images.ctfassets.net/hrltx12pl8hq/3AnnkVqrlhrqb9hjlMBzKX/693a8e5d40b4b6c55a7673ca4c807eef/Girl-Stock?fit=fill&w=600&h=338"
+                    }
+                    ribbon={"Hot"}
+                  />
+                  <Recommendation
+                    title={"ja so hier"}
+                    src={
+                      "https://images.ctfassets.net/hrltx12pl8hq/3AnnkVqrlhrqb9hjlMBzKX/693a8e5d40b4b6c55a7673ca4c807eef/Girl-Stock?fit=fill&w=600&h=338"
+                    }
+                    ribbon={"Hot"}
+                  />
+                </div>
+              </div>
+            </Affix>
+          </Flex >
+        </div >
+      </Flex >
+    </>
+  );
 }
+
 
 export default Details;
