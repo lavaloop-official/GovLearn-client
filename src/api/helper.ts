@@ -18,7 +18,7 @@ export const fetchWrapper = {
 };
 
 function request(method: string) {
-    return async (url: string, body?: never) => {
+    return async (url: string, body?: object) => {
         const fullurl = BACKEND_URL + url;
 
         const response = await fetch(fullurl, {
@@ -54,7 +54,7 @@ function authToken() {
 async function handleResponse(response: Response | undefined) {
     if (!response)
         return handleError(new Error("No response"))
-    
+
     return response.text().then(text => {
         const data = text && JSON.parse(text);
 
