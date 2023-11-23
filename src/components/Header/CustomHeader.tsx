@@ -1,7 +1,7 @@
-import Search from "antd/es/input/Search";
-import {Avatar, Button, Dropdown, MenuProps, Typography} from "antd";
+import Search, { SearchProps } from "antd/es/input/Search";
+import {Avatar, Button, Dropdown, MenuProps, Select, Space, Typography} from "antd";
 import {UserOutlined} from "@ant-design/icons";
-import {useLocation} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import SubHeader from "./SubHeader.tsx";
 import {openLoginModal} from "../../state/modalutil.ts";
@@ -9,10 +9,26 @@ import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../state/reduxStore.ts";
 import {clearAuthToken} from "../../state/authslice.ts";
 import {fetchWrapper} from "../../api/helper";
+import Searching from "../../pages/Searching.tsx";
 
 const {Title} = Typography
 
 function CustomHeader() {
+
+    const navigate = useNavigate();
+
+    const onSearch: SearchProps['onSearch'] = (value, _e, info) => {console.log(info?.source, value), navigate("/searching")};
+
+    const options = [
+        {
+          value: 'zhejiang',
+          label: 'Zhejiang',
+        },
+        {
+          value: 'jiangsu',
+          label: 'Jiangsu',
+        },
+      ];
 
     const [subHeader, setSubHeader] = useState(<div style={{height: "32px", width: "1px"}}/>)
 
@@ -25,7 +41,7 @@ function CustomHeader() {
     const [name, setName] = useState('')
 
     useEffect(() => {
-        if (location.pathname.includes("discover") || location.pathname.includes("detail") || location.pathname.includes("profile")) {
+        if (location.pathname.includes("discover") || location.pathname.includes("detail") || location.pathname.includes("profile") || location.pathname.includes("searching")) {
             setSubHeader(<SubHeader/>)
         } else {
             setSubHeader(<></>)
@@ -106,8 +122,14 @@ function CustomHeader() {
                         Govlearn
                     </a>
                 </Title>
-                <Search placeholder="Kursangebote suchen" size="large" style={{maxWidth: "400px", margin: "auto"}}
-                        allowClear/>
+                {loggedIn ?
+                    <Space.Compact size="large" style={{margin: "auto"}}>
+                        <Select defaultValue="Zhejiang" options={options} />
+                        <Search placeholder="Kursangebote suchen" size="large" style={{maxWidth: "400px"}}
+                        allowClear onSearch={onSearch}/>
+                    </Space.Compact>
+                    :<div></div>
+                }
                 {loggedIn ?
                     <div style={{margin: "auto 0px auto auto", minWidth: "32px", lineHeight: "0px"}}>
                         <Dropdown menu={{items}} placement="bottomRight" arrow={{pointAtCenter: true}}
