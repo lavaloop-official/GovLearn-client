@@ -6,8 +6,8 @@ function SearchComponent({obj}: {obj?: Course}) {
     // TODO: Integrate Rating
     return (
         <a href="/detail" style={{textDecoration:"none", color:"inherit"}}>
-            <div style={{background:"grey", width:"1000px", borderRadius:"0.5rem", marginTop:"1rem", boxShadow:"0px 0px 2px 1px lightgrey", display:"flex"}}>
-            <div style={{background:"black", width:"10rem", height:"10rem", boxShadow:"2px", color:"black", margin:"0.3rem", borderRadius:"0.5rem", flex:"0 0 10rem"}}>
+            <div style={{background:"lightgrey", width:"1000px", borderRadius:"0.5rem", marginTop:"1rem", boxShadow:"0px 0px 2px 1px grey", display:"flex"}}>
+            <div style={{background:"grey", width:"10rem", height:"10rem", boxShadow:"2px", color:"black", margin:"0.3rem", borderRadius:"0.2rem", flex:"0 0 10rem"}}>
                 {
                     obj ?
                         <img src={obj.image} style={{width:"100%", height:"100%", objectFit:"cover", borderRadius:"0.2rem"}}/>
