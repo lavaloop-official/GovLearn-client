@@ -49,7 +49,7 @@ function App() {
                                 <Route path="/detail/*" element={<Protected><Details title={''}/></Protected>}/>
                                 <Route path="/profile" element={<Protected><Profile/></Protected>}/>
                                 <Route path="/register" element={<Protected><Registration/></Protected>}/>
-                                <Route path="/search/*" element={<Protected><Searching/></Protected>}/>
+                                <Route path="/searching/:searchString?" element={<Protected><Searching/></Protected>}/>
                             </Routes>
                         </Content>
                         <Footer style={{ textAlign: 'center' }}>Govlearn  -  Made with ❤ in Münster</Footer>
