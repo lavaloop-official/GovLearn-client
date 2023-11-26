@@ -10,7 +10,7 @@ function SearchComponent({obj}: {obj?: Course}) {
             <div style={{background:"black", width:"10rem", height:"10rem", boxShadow:"2px", color:"black", margin:"0.3rem", borderRadius:"0.5rem", flex:"0 0 10rem"}}>
                 {
                     obj ?
-                        <img src={obj.image} style={{width:"100%", height:"100%", objectFit:"cover", borderRadius:"0.5rem"}}/>
+                        <img src={obj.image} style={{width:"100%", height:"100%", objectFit:"cover", borderRadius:"0.2rem"}}/>
                         : <Skeleton.Image style={{
                             objectFit: "contain",
                             width:"100%",
