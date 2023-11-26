@@ -1,5 +1,5 @@
 import Search, { SearchProps } from "antd/es/input/Search";
-import {Avatar, Button, Dropdown, MenuProps, Select, Space, TreeSelect, Typography} from "antd";
+import {Avatar, Button, Dropdown, Form, MenuProps, Select, Space, TreeSelect, Typography, message} from "antd";
 import {UserOutlined} from "@ant-design/icons";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
@@ -11,6 +11,7 @@ import {clearAuthToken} from "../../state/authslice.ts";
 import {fetchWrapper} from "../../api/helper";
 import categoryBlue from "../../assets/categoryBlue.png"
 import Searching from "../../pages/Searching.tsx";
+import { ENTER_NAME, SEARCH_ERROR } from "../../constants/de.ts";
 
 const {Title} = Typography
 
@@ -22,7 +23,10 @@ function CustomHeader() {
         navigate(`/searching/${searchString}`);
       };
 
-    const onSearch: SearchProps['onSearch'] = (value, _e, info) => {console.log(info?.source, value), handleSearch(value)};
+    const onSearch: SearchProps['onSearch'] = (value, _e, info) => {
+        if(value !== "")
+            console.log(info?.source, value), handleSearch(value)
+    };
 
     const [filterBtn, setFilterBtn] = useState(false)
 
@@ -188,7 +192,20 @@ function CustomHeader() {
                     <Space.Compact size="large" direction="vertical" style={{marginTop:"8px", marginBottom:"8px"}}>
                         <Space.Compact size="large" style={{margin: "auto"}} >
                             <Button onClick={onFilterBtn}><img src={categoryBlue} style={{width:"20px", marginLeft:"-5px", marginRight:"-5px", marginBottom:"-2px"}} /></Button>
-                            <Search placeholder="Kursangebote suchen" size="large" style={{maxWidth: "400px"}}allowClear onSearch={onSearch}/>
+                            <Form
+                                initialValues={{remember: false}}
+                                size="large"
+                                validateTrigger="onSearch"
+                                >
+                                <Form.Item
+                                    name="search"
+                                    rules={[
+                                        {required: true, message: SEARCH_ERROR},
+                                    ]}
+                                >
+                                <Search placeholder="Kursangebote suchen" size="large" style={{maxWidth: "400px"}}allowClear onSearch={onSearch} autoComplete="off"/>
+                                </Form.Item>
+                            </Form>
                         </Space.Compact>
                     {filterBtn ?
                         <TreeSelect {...tProps} style={{position:"relative", zIndex:"1"}}/>
