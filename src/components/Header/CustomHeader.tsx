@@ -26,6 +26,8 @@ function CustomHeader() {
     const onSearch: SearchProps['onSearch'] = (value, _e, info) => {
         if(value !== "")
             console.log(info?.source, value), handleSearch(value)
+        else
+            message.error("Bitte geben Sie einen Suchbegriff ein!")
     };
 
     const [filterBtn, setFilterBtn] = useState(false)
@@ -192,20 +194,7 @@ function CustomHeader() {
                     <Space.Compact size="large" direction="vertical" style={{marginTop:"8px", marginBottom:"8px"}}>
                         <Space.Compact size="large" style={{margin: "auto"}} >
                             <Button onClick={onFilterBtn}><img src={categoryBlue} style={{width:"20px", marginLeft:"-5px", marginRight:"-5px", marginBottom:"-2px"}} /></Button>
-                            <Form
-                                initialValues={{remember: false}}
-                                size="large"
-                                validateTrigger="onSearch"
-                                >
-                                <Form.Item
-                                    name="search"
-                                    rules={[
-                                        {required: true, message: SEARCH_ERROR},
-                                    ]}
-                                >
-                                <Search placeholder="Kursangebote suchen" size="large" style={{maxWidth: "400px"}}allowClear onSearch={onSearch} autoComplete="off"/>
-                                </Form.Item>
-                            </Form>
+                            <Search placeholder="Kursangebote suchen" size="large" style={{maxWidth: "400px"}}allowClear onSearch={onSearch} autoComplete="off"/>
                         </Space.Compact>
                     {filterBtn ?
                         <TreeSelect {...tProps} style={{position:"relative", zIndex:"1"}}/>
