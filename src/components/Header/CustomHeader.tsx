@@ -1,5 +1,5 @@
 import Search, { SearchProps } from "antd/es/input/Search";
-import {Avatar, Button, Dropdown, MenuProps, Select, Space, Typography} from "antd";
+import {Avatar, Button, Dropdown, MenuProps, Select, Space, TreeSelect, Typography} from "antd";
 import {UserOutlined} from "@ant-design/icons";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
@@ -9,6 +9,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../state/reduxStore.ts";
 import {clearAuthToken} from "../../state/authslice.ts";
 import {fetchWrapper} from "../../api/helper";
+import categoryBlue from "../../assets/categoryBlue.png"
 import Searching from "../../pages/Searching.tsx";
 
 const {Title} = Typography
@@ -23,16 +24,73 @@ function CustomHeader() {
 
     const onSearch: SearchProps['onSearch'] = (value, _e, info) => {console.log(info?.source, value), handleSearch(value)};
 
-    const options = [
-        {
-          value: 'zhejiang',
-          label: 'Zhejiang',
-        },
-        {
-          value: 'jiangsu',
-          label: 'Jiangsu',
-        },
-      ];
+    const [filterBtn, setFilterBtn] = useState(false)
+
+    const onFilterBtn = () => {
+        if (filterBtn == true)
+            setFilterBtn(false)
+        else
+            setFilterBtn(true)
+    }
+
+
+    const { SHOW_PARENT } = TreeSelect;
+
+    const treeData = [
+      {
+        title: 'Node1',
+        value: '0-0',
+        key: '0-0',
+        children: [
+          {
+            title: 'Child Node1',
+            value: '0-0-0',
+            key: '0-0-0',
+          },
+        ],
+      },
+      {
+        title: 'Node2',
+        value: '0-1',
+        key: '0-1',
+        children: [
+          {
+            title: 'Child Node3',
+            value: '0-1-0',
+            key: '0-1-0',
+          },
+          {
+            title: 'Child Node4',
+            value: '0-1-1',
+            key: '0-1-1',
+          },
+          {
+            title: 'Child Node5',
+            value: '0-1-2',
+            key: '0-1-2',
+          },
+        ],
+      },
+    ];
+
+    const [value, setValue] = useState(['0-0-0']);
+
+    const onChange = (newValue: string[]) => {
+      console.log('onChange ', newValue);
+      setValue(newValue);
+    };
+  
+    const tProps = {
+      treeData,
+      value,
+      onChange,
+      treeCheckable: true,
+      showCheckedStrategy: SHOW_PARENT,
+      placeholder: 'Please select',
+      style: {
+        width: '100%',
+      },
+    };
 
     const [subHeader, setSubHeader] = useState(<div style={{height: "32px", width: "1px"}}/>)
 
@@ -110,7 +168,7 @@ function CustomHeader() {
                 margin: "0 auto",
                 maxWidth: "1200px",
                 width: "100%",
-                height: "56px",
+                height:"56px",
                 display: "flex",
                 verticalAlign: "middle",
                 gap: "10px",
@@ -127,10 +185,15 @@ function CustomHeader() {
                     </a>
                 </Title>
                 {loggedIn ?
-                    <Space.Compact size="large" style={{margin: "auto"}}>
-                        <Select defaultValue="Zhejiang" options={options} />
-                        <Search placeholder="Kursangebote suchen" size="large" style={{maxWidth: "400px"}}
-                        allowClear onSearch={onSearch}/>
+                    <Space.Compact size="large" direction="vertical" style={{marginTop:"8px", marginBottom:"8px"}}>
+                        <Space.Compact size="large" style={{margin: "auto"}} >
+                            <Button onClick={onFilterBtn}><img src={categoryBlue} style={{width:"20px", marginLeft:"-5px", marginRight:"-5px", marginBottom:"-2px"}} /></Button>
+                            <Search placeholder="Kursangebote suchen" size="large" style={{maxWidth: "400px"}}allowClear onSearch={onSearch}/>
+                        </Space.Compact>
+                    {filterBtn ?
+                        <TreeSelect {...tProps} style={{position:"relative", zIndex:"1"}}/>
+                        : <div></div>
+                    }
                     </Space.Compact>
                     :<div></div>
                 }
