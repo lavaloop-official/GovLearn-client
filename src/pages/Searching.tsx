@@ -25,7 +25,7 @@ function Searching() {
 
             Promise.all(coursePromises).then(setCourseFeedbacks);
         });
-    }, [searchStr]);
+    });
 
     return (
         <div style={{display:"flex", width:"100%", justifyContent:"center", flexDirection:"row", flexWrap:"wrap"}}>
