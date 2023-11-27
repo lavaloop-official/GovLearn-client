@@ -1,39 +1,33 @@
-import {Affix, Button, Card, Flex, Form, Image, Input, Rate, Select, Tag} from "antd";
-import {PlusOutlined, EditOutlined} from "@ant-design/icons";
+import {Affix, Button, Card, Flex, Form, Image, Input, Rate} from "antd";
+import {EditOutlined} from "@ant-design/icons";
 import {useEffect, useState} from "react";
 import {ArrowLeftShort} from "react-bootstrap-icons";
 import Recommendation from "../components/Recommendation.tsx";
-import Feedback from "../components/Feedback.tsx";
+import Feedback from "../components/Detail/Feedback.tsx";
 import {fetchWrapper} from "../api/helper.ts";
 import Modal from "antd/es/modal/Modal";
 import './Details.css';
+import {Course, Review} from "../interfaces.ts";
 
 function Details() {
-    const [course, setCourse] = useState({
-        id: null,
+    const [course, setCourse] = useState<Course>({
+        id: undefined,
         name: "",
-        image: null,
-        description: null,
-        createdAt: null,
-        provider: null,
-        instructor: null,
-        certificate: null,
-        skilllevel: null,
-        durationInHours: null,
-        format: null,
-        startDate: null,
-        costFree: null,
-        domainSpecific: null
+        image: undefined,
+        description: undefined,
+        createdAt: undefined,
+        provider: undefined,
+        instructor: undefined,
+        certificate: undefined,
+        skilllevel: undefined,
+        durationInHours: undefined,
+        format: undefined,
+        startDate: undefined,
+        costFree: undefined,
+        domainSpecific: undefined
     });
 
-    const [feedback, setFeedback] = useState<{
-        feedbackId: number,
-        title: string | null,
-        description: string | null,
-        rating: number,
-        courseId: number,
-        userId: number,
-    }[]>([]);
+    const [feedback, setFeedback] = useState<Review[]>([]);
     const [courseTags, setCourseTags] = useState<string[]>([]); // Use an array to store multiple tags
     const [tags, setTags] = useState<{
         id: number,
@@ -74,24 +68,7 @@ function Details() {
             setTags(tags);
         });
         fetchWrapper.get(`api/v1/feedback/course/${courseId}`).then((res) => {
-            const feedback = res.payload.map((feedback: {
-                feedbackId: number;
-                title: string | null;
-                description: string | null;
-                rating: number;
-                courseId: number;
-                userId: number;
-            }) => (
-                {
-                    feedbackId: feedback.feedbackId,
-                    title: feedback.title,
-                    description: feedback.description,
-                    rating: feedback.rating,
-                    courseId: feedback.courseId,
-                    userId: feedback.userId
-                }
-            ))
-            setFeedback(feedback);
+            setFeedback(res.payload);
         });
     }, []);
 
@@ -411,12 +388,10 @@ function Details() {
                                     boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
                                 }}
                             >
-                                <Flex vertical gap="small" className="course-feedback" style={{margin: "5px"}}>
+                                <Flex vertical gap="small" className="course-feedback" style={{margin: "5px", borderRadius: "15px"}}>
                                     {feedback.length > 0 ? (
                                         feedback.map((feedbackItem) => (
-                                            <Feedback title={feedbackItem.title} description={feedbackItem.description}
-                                                      rating={feedbackItem.rating}
-                                                      userName={"Platzhalter"} /*TODO: userName verwenden */></Feedback>
+                                            <Feedback review={feedbackItem}/*TODO: userName verwenden */></Feedback>
                                         ))
                                     ) : (
                                         <Card className="antcard" style={{justifyContent: "center"}}>keine Bewertungen

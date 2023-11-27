@@ -3,12 +3,12 @@ import CarouselPane from "../components/CarouselPane.tsx";
 import RecomSlider from "../components/RecomSlider.tsx";
 import {useEffect, useState} from "react";
 import {fetchWrapper} from "../api/helper.ts";
-import Course from "../course.ts";
+import {Course} from "../interfaces.ts";
 
 function Discover() {
 
     const [featured, setFeatured] = useState<Course[]>([])
-    const [recommended, setRecommended] = useState<{category: string, items: Course[]}[]>([])
+    const [recommended, setRecommended] = useState<{ category: string, items: Course[] }[]>([])
 
     useEffect(() => {
         fetchWrapper.get(`api/v1/recommendations/bundle`).then((res) => {
@@ -52,7 +52,8 @@ function Discover() {
                 }}>
                     {
                         recommended.length == 0 ? <RecomSlider/> :
-                            recommended.map((item: {category: string, items: Course[]}) => <div key={item.category}><RecomSlider title={item.category} data={item.items}/></div>)
+                            recommended.map((item: { category: string, items: Course[] }) => <div key={item.category}>
+                                <RecomSlider title={item.category} data={item.items}/></div>)
                     }
                 </div>
             </div>

@@ -1,6 +1,6 @@
 import {Skeleton} from "antd";
 import './Recommendation.css'
-import Course from "../course.ts";
+import {Course} from "../interfaces.ts";
 
 function Recommendation({obj}: {obj?: Course}) {
 

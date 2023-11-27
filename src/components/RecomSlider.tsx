@@ -3,7 +3,7 @@ import Recommendation from "./Recommendation.tsx";
 
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
-import Course from "../course.ts";
+import {Course} from "../interfaces.ts";
 
 const responsive = {
     desktop: {

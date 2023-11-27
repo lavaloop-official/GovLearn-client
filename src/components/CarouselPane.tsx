@@ -1,6 +1,6 @@
 import {Button, Col, Row, Skeleton} from "antd";
 import './CarouselPane.css'
-import Course from "../course.ts";
+import {Course} from "../interfaces.ts";
 
 function CarouselPane({obj}: {obj?: Course}) {
 
