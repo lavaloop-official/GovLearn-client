@@ -46,7 +46,7 @@ function App() {
                             <Routes>
                                 <Route index element={<Landing/>}/>
                                 <Route path="/discover" element={<Protected><Discover/></Protected>}/>
-                                <Route path="/detail/*" element={<Protected><Details title={''}/></Protected>}/>
+                                <Route path="/detail/*" element={<Protected><Details/></Protected>}/>
                                 <Route path="/profile" element={<Protected><Profile/></Protected>}/>
                                 <Route path="/register" element={<Protected><Registration/></Protected>}/>
                                 <Route path="/searching/:searchString?" element={<Protected><Searching/></Protected>}/>
