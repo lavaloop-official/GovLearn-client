@@ -1,5 +1,4 @@
 import {Affix, Button, Card, Flex, Form, Image, Input, Rate} from "antd";
-import {EditOutlined} from "@ant-design/icons";
 import {useEffect, useState} from "react";
 import {ArrowLeftShort} from "react-bootstrap-icons";
 import Recommendation from "../components/Recommendation.tsx";
@@ -8,6 +7,7 @@ import {fetchWrapper} from "../api/helper.ts";
 import Modal from "antd/es/modal/Modal";
 import './Details.css';
 import {Course, Review} from "../interfaces.ts";
+import ReviewComp from "../components/Detail/ReviewComp.tsx";
 
 function Details() {
     const [course, setCourse] = useState<Course>({
@@ -67,7 +67,7 @@ function Details() {
             ))
             setTags(tags);
         });
-        fetchWrapper.get(`api/v1/feedback/course/${courseId}`).then((res) => {
+        fetchWrapper.get(`api/v1/feedback/course/${courseId}/limit/100/offset/0`).then((res) => {
             setFeedback(res.payload);
         });
     }, []);
@@ -346,13 +346,7 @@ function Details() {
                                         <p>4.3 Durchschnittsbewertung</p>
                                         <Rate disabled defaultValue={4.3}/>
                                     </Card>
-                                    <Card className="antcard author" style={{margin: "5px", width: "70%"}}>
-                                        <Flex vertical gap="middle" justify="space-around" align="center">
-                                            <p style={{fontWeight: "bold"}}>Füge eine Bewertung hinzu!</p>
-                                            <Button type="primary" icon={<EditOutlined/>} onClick={showFeedbackModal}>Bewertung
-                                                abgeben</Button>
-                                        </Flex>
-                                    </Card>
+                                    <ReviewComp id={course.id}></ReviewComp>
                                 </Flex>
                             </div>
                             <Modal title="Deine Bewertung" open={isFeedbackModalOpen} onOk={handleFeedbackOk}
