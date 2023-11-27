@@ -287,6 +287,7 @@ function Details() {
                                     </Button>
                                 </Flex>
                             </div>
+                            {/*
                             {tags.length > 0 ? (
                                 <ul>
                                     {courseTags.map((tag, index) => (
@@ -312,12 +313,14 @@ function Details() {
                                     />
                                 </label>
                             </Modal>
+                            */}
                             <div
                                 style={{
                                     background: "#d9d9d9",
                                     borderRadius: "20px",
                                     boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
-                                    marginBottom: "5px"
+                                    marginBottom: "5px",
+                                    marginTop: "5px"
                                 }}
                             >
                                 <Flex style={{justifyContent: "space-between", width: "100%"}}>
