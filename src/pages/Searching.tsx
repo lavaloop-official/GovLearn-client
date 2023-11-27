@@ -11,6 +11,8 @@ function Searching() {
     //TODO: How to input from searchbar
     const [courses, setCourses] = useState<Course[]>([])
 
+    // const [feedbackrate, setFeedbackrate] = useState<number[]>([])
+
     const searchStr = location.pathname.split('/').pop();
 
     useEffect(() => {
@@ -18,6 +20,18 @@ function Searching() {
             setCourses(res.payload)
         })
     })
+
+    const [feedbackrate, setFeedbackrate] = useState(0.0)
+
+    function wrapper(courseID: number) : number{
+        fetchWrapper.get('api/v1/feedback/average/course/' + courseID).then((res) => {
+            setFeedbackrate(res.payload)
+        }).catch((error) => {
+            console.error(error)
+            return(0.0)
+        })
+        return feedbackrate;
+    }
 
     return (
         <div style={{display:"flex", width:"100%", justifyContent:"center", flexDirection:"row", flexWrap:"wrap"}}>
@@ -31,7 +45,7 @@ function Searching() {
             <div>
             {
                 courses ?
-                    courses.map((item: Course) => <div key={item.id}><SearchComponent obj={item}/></div>)
+                    courses.map((item: Course) => <div key={item.id}><SearchComponent obj={item} feedbackrate={wrapper(item.id)}/></div>)
                     : <SearchComponent/>
             }
             </div>

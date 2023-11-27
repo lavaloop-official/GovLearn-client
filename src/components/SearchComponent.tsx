@@ -1,7 +1,9 @@
 import {Rate, Skeleton} from "antd";
 import Course from "../course.ts";
+import { useEffect, useState } from "react";
+import { fetchWrapper } from "../api/helper.ts";
 
-function SearchComponent({obj}: {obj?: Course}) {
+function SearchComponent({obj, feedbackrate}: {obj?: Course, feedbackrate?: number}) {
 
     // TODO: Integrate Rating
     return (
@@ -29,7 +31,7 @@ function SearchComponent({obj}: {obj?: Course}) {
                     </div>
                     {
                         obj ?
-                        <Rate allowHalf disabled defaultValue={3.5} />
+                        <Rate allowHalf disabled defaultValue={feedbackrate} />
                         : <Skeleton.Input active/>
                     }
                 </div>
