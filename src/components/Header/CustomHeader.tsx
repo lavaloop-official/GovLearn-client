@@ -21,7 +21,6 @@ function CustomHeader() {
 
     const handleSearch = (searchString: string) => {
         navigate(`/searching/${searchString}`);
-        navigate(0);
       };
 
     const onSearch: SearchProps['onSearch'] = (value, _e, info) => {

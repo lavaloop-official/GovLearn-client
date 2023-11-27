@@ -2,6 +2,7 @@ import {useEffect, useState} from "react";
 import SearchComponent from "../components/SearchComponent.tsx";
 import Course from "../course.ts";
 import { fetchWrapper } from "../api/helper.ts";
+import { useNavigate } from "react-router-dom";
 
 function Searching() {
 
@@ -11,6 +12,8 @@ function Searching() {
     const [courseFeedbacks, setCourseFeedbacks] = useState<{course: Course, feedback: number}[]>([]);
 
     const searchStr = location.pathname.split('/').pop();
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetchWrapper.get('api/v1/filter/'+ searchStr).then((res) => {
@@ -25,7 +28,7 @@ function Searching() {
 
             Promise.all(coursePromises).then(setCourseFeedbacks);
         });
-    }, [searchStr]);
+    }, [searchStr, navigate]);
 
     return (
         <div style={{display:"flex", width:"100%", justifyContent:"center", flexDirection:"row", flexWrap:"wrap"}}>
