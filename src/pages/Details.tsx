@@ -27,6 +27,8 @@ function Details() {
         domainSpecific: undefined
     });
 
+    const [averageRating, setAverageRating] = useState<number>(0);
+
     const [feedback, setFeedback] = useState<Review[]>([]);
     const [courseTags, setCourseTags] = useState<string[]>([]); // Use an array to store multiple tags
     const [tags, setTags] = useState<{
@@ -69,6 +71,10 @@ function Details() {
         });
         fetchWrapper.get(`api/v1/feedback/course/${courseId}/limit/100/offset/0`).then((res) => {
             setFeedback(res.payload);
+        });
+        fetchWrapper.get(`api/v1/feedback/average/course/${courseId}`).then((res) => {
+            console.log(res.payload);
+            setAverageRating(res.payload);
         });
     }, []);
 
@@ -343,8 +349,8 @@ function Details() {
                             >
                                 <Flex style={{justifyContent: "space-between", width: "100%"}}>
                                     <Card className="antcard" style={{margin: "5px", width: "30%"}}>
-                                        <p>4.3 Durchschnittsbewertung</p>
-                                        <Rate disabled defaultValue={4.3}/>
+                                        <p>Durchschnittsbewertung</p>
+                                        <Rate disabled value={averageRating} />
                                     </Card>
                                     <ReviewComp id={course.id}></ReviewComp>
                                 </Flex>
