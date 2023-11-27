@@ -1,37 +1,31 @@
-import {Skeleton} from "antd";
 import {useEffect, useState} from "react";
 import SearchComponent from "../components/SearchComponent.tsx";
 import Course from "../course.ts";
 import { fetchWrapper } from "../api/helper.ts";
-import { useParams } from "react-router-dom";
 
 function Searching() {
 
     //TODO: How to fetch courses?
     //TODO: How to input from searchbar
-    const [courses, setCourses] = useState<Course[]>([])
 
-    // const [feedbackrate, setFeedbackrate] = useState<number[]>([])
+    const [courseFeedbacks, setCourseFeedbacks] = useState<{course: Course, feedback: number}[]>([]);
 
     const searchStr = location.pathname.split('/').pop();
 
     useEffect(() => {
         fetchWrapper.get('api/v1/filter/'+ searchStr).then((res) => {
-            setCourses(res.payload)
-        })
-    })
+            const coursePromises = res.payload.map((course: Course) => {
+                return fetchWrapper.get('api/v1/feedback/average/course/' + course.id)
+                    .then((res) => ({course, feedback: res.payload}))
+                    .catch((error) => {
+                        console.error(error);
+                        return {course, feedback: 0.0};
+                    });
+            });
 
-    const [feedbackrate, setFeedbackrate] = useState(0.0)
-
-    function wrapper(courseID: number) : number{
-        fetchWrapper.get('api/v1/feedback/average/course/' + courseID).then((res) => {
-            setFeedbackrate(res.payload)
-        }).catch((error) => {
-            console.error(error)
-            return(0.0)
-        })
-        return feedbackrate;
-    }
+            Promise.all(coursePromises).then(setCourseFeedbacks);
+        });
+    }, [searchStr]);
 
     return (
         <div style={{display:"flex", width:"100%", justifyContent:"center", flexDirection:"row", flexWrap:"wrap"}}>
@@ -44,8 +38,8 @@ function Searching() {
             </div>
             <div>
             {
-                courses ?
-                    courses.map((item: Course) => <div key={item.id}><SearchComponent obj={item} feedbackrate={wrapper(item.id)}/></div>)
+                courseFeedbacks ?
+                    courseFeedbacks.map((item: any) => <div key={item.course.id}><SearchComponent obj={item.course} feedbackrate={item.feedback}/></div>)
                     : <SearchComponent/>
             }
             </div>
