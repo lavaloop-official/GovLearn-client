@@ -1,10 +1,9 @@
-import {Affix, Button, Card, Flex, Form, Image, Input, Rate} from "antd";
+import {Affix, Button, Card, Flex, Image, Rate} from "antd";
 import {useEffect, useState} from "react";
 import {ArrowLeftShort} from "react-bootstrap-icons";
 import Recommendation from "../components/Recommendation.tsx";
 import Feedback from "../components/Detail/Feedback.tsx";
 import {fetchWrapper} from "../api/helper.ts";
-import Modal from "antd/es/modal/Modal";
 import './Details.css';
 import {Course, Review} from "../interfaces.ts";
 import ReviewComp from "../components/Detail/ReviewComp.tsx";
@@ -28,33 +27,26 @@ function Details() {
     });
 
     const [averageRating, setAverageRating] = useState<number>(0);
-
     const [feedback, setFeedback] = useState<Review[]>([]);
-    const [courseTags, setCourseTags] = useState<string[]>([]); // Use an array to store multiple tags
-    const [tags, setTags] = useState<{
-        id: number,
-        name: string
-    }[]>([]); // Use an array to store multiple tags
-    const [selectedValue, setSelectedValue] = useState<string | null>(null);
     const defaultImageSrc = "https://st4.depositphotos.com/13194036/31587/i/450/depositphotos_315873928-stock-photo-selective-focus-happy-businessman-glasses.jpg"
-    const [isTagModalOpen, setIsTagModalOpen] = useState(false);
-    const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
-    const [form] = Form.useForm();
+
+    //currently unused:
     //const [requiredMark, setRequiredMarkType] = useState<RequiredMark>('optional');
+    //const [selectedValue, setSelectedValue] = useState<string | null>(null);
+    //const [isTagModalOpen, setIsTagModalOpen] = useState(false);
+    //const [courseTags, setCourseTags] = useState<string[]>([]);
+    //const [tags, setTags] = useState<{id: number, name: string}[]>([]);
 
 
     useEffect(() => {
         const courseId = window.location.pathname.split('/').pop();
+        /* currently unused:
         fetchWrapper.get(`api/v1/tags/courses/${courseId}`).then((res) => {
             // Assuming res.payload is an array of tag objects with a 'name' property
             const tagNames = res.payload.map((tag: {
                 name: string
             }) => tag.name);
             setCourseTags(tagNames);
-        });
-        fetchWrapper.get(`api/v1/courses/${courseId}`).then((res) => {
-            setCourse(res.payload);
-            document.title = res.payload.name;
         });
         fetchWrapper.get(`api/v1/tags`).then((res) => {
             // Assuming res.payload is an array of tag objects with a 'name' property
@@ -69,14 +61,20 @@ function Details() {
             ))
             setTags(tags);
         });
+        */
+        fetchWrapper.get(`api/v1/courses/${courseId}`).then((res) => {
+            setCourse(res.payload);
+            document.title = res.payload.name;
+        });
         fetchWrapper.get(`api/v1/feedback/course/${courseId}/limit/100/offset/0`).then((res) => {
             setFeedback(res.payload);
         });
         fetchWrapper.get(`api/v1/feedback/average/course/${courseId}`).then((res) => {
-            console.log(res.payload);
             setAverageRating(res.payload);
         });
     }, []);
+
+    /* currently unused:
 
     const showTagModal = () => {
         setIsTagModalOpen(true);
@@ -87,32 +85,23 @@ function Details() {
         return foundTag ? foundTag.id : null;
     };
 
-    /*
-        const requestBody = {
-            courseId: course.id,
-            tagId: findTagIdByName(selectedValue),
-        };
-
-     */
+    const requestBody = {
+        courseId: course.id,
+        tagId: findTagIdByName(selectedValue),
+    };
 
     const handleTagOk = () => {
         setIsTagModalOpen(false);
-        /*
         if (findTagIdByName(selectedValue) != null) {
-            fetchWrapper.post(`api/v1/tags/courses`).then((res) => {
-                body: requestBody
-            }).then((res) => {
+            fetchWrapper.post(`api/v1/tags/courses`, requestBody).then((res) => {
                 // Handle the response
                 console.log(res);
             })
                 .catch((error) => {
                     // Handle errors
                     console.error(error);
-                    ;
                 })
         }
-        ;
-        */
     }
 
     const handleTagCancel = () => {
@@ -140,28 +129,7 @@ function Details() {
         value: string
     }) =>
         (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
-
-    const showFeedbackModal = () => {
-        setIsFeedbackModalOpen(true);
-    };
-
-    const handleFeedbackOk = () => {
-        setIsFeedbackModalOpen(false);
-        //TODO: Richtige Daten aus Formular verwenden
-        const feedback = {
-            "title": "Super Kurs!",
-            "description": "Ein super Weiterbildungsangebot! Es hat mir sehr geholfen und ich kann es nur weiterempfehlen!",
-            "rating": 3,
-            "courseID": course.id,
-        }
-        fetchWrapper.post(`api/v1/feedback`, feedback).then((res) => {
-            console.log(res);
-        })
-    };
-
-    const handleFeedbackCancel = () => {
-        setIsFeedbackModalOpen(false);
-    };
+    */
 
     return (
         <>
@@ -270,7 +238,7 @@ function Details() {
                                     </Button>
                                 </Flex>
                             </div>
-                            {/*
+                            {/* currently unused:
                             {tags.length > 0 ? (
                                 <ul>
                                     {courseTags.map((tag, index) => (
@@ -349,38 +317,12 @@ function Details() {
                             >
                                 <Flex style={{justifyContent: "space-between", width: "100%"}}>
                                     <Card className="antcard" style={{margin: "5px", width: "30%"}}>
-                                        <p>Durchschnittsbewertung</p>
-                                        <Rate disabled value={averageRating} />
+                                        <p style={{fontWeight: "bold"}}>Durchschnittsbewertung</p>
+                                        <Rate disabled value={averageRating}/>
                                     </Card>
                                     <ReviewComp id={course.id}></ReviewComp>
                                 </Flex>
                             </div>
-                            <Modal title="Deine Bewertung" open={isFeedbackModalOpen} onOk={handleFeedbackOk}
-                                   onCancel={handleFeedbackCancel}>
-                                <br/>
-                                <div style={{
-                                    background: "#FFFFFF",
-                                    borderRadius: "20px",
-                                    display: "inline-block",
-                                    padding: "5px",
-                                    marginBottom: "5px"
-                                }}>
-                                    <Rate/>
-                                </div>
-                                <Form
-                                    form={form}
-                                    layout="vertical"
-                                >
-                                    <Form.Item
-                                    >
-                                        <Input placeholder="Titel (optional)"/>
-                                    </Form.Item>
-                                    <Form.Item
-                                    >
-                                        <Input placeholder="Text (optional)"/>
-                                    </Form.Item>
-                                </Form>
-                            </Modal>
                             <div
                                 style={{
                                     background: "#d9d9d9",
@@ -388,7 +330,8 @@ function Details() {
                                     boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
                                 }}
                             >
-                                <Flex vertical gap="small" className="course-feedback" style={{margin: "5px", borderRadius: "15px"}}>
+                                <Flex vertical gap="small" className="course-feedback"
+                                      style={{margin: "5px", borderRadius: "15px"}}>
                                     {feedback.length > 0 ? (
                                         feedback.map((feedbackItem) => (
                                             <Feedback review={feedbackItem}/*TODO: userName verwenden */></Feedback>

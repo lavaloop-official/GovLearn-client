@@ -1,56 +1,46 @@
 import {Button, Card, Flex, Form, Input, Rate} from "antd";
-import {EditOutlined} from "@ant-design/icons";
+import {EditOutlined, DeleteOutlined} from "@ant-design/icons";
 import {useEffect, useState} from "react";
 import {fetchWrapper} from "../../api/helper.ts";
 import TextArea from "antd/es/input/TextArea";
 
+/**
+ * Component to display and edit a review
+ * @param id ID of the course to display the review for
+ */
 function ReviewComp({id}: { id?: number }) {
 
-    const [review, setReview] = useState<{ title: string, description: string, rating: number }>()
+    const [review, setReview] = useState<{ title: string, description: string, rating: number, id: number }>()
     const [editing, setEditing] = useState<boolean>(false)
-    const [feedbackID, setFeedbackID] = useState<number>()
 
     useEffect(() => {
         if (!id)
             return
         fetchWrapper.get(`api/v1/feedback/course/${id}`).then((res) => {
-            console.log(res);
             if (res.payload.length != 0) {
                 const feedback = res.payload[0]
-                setFeedbackID(feedback.feedbackID)
-                setReview({title: feedback.title, description: feedback.description, rating: feedback.rating})
+                setReview({title: feedback.title, description: feedback.description, rating: feedback.rating, id: feedback.feedbackID})
             }
         })
     }, [id]);
 
-    const sendFeedback = async (values: object | undefined) => {
-        console.log(feedbackID)
-        if (!feedbackID)
+    const onFinish = async (values: { rating: number, title: string, description: string }) => {
+        if (!review)
             await fetchWrapper.post(`api/v1/feedback`, {...values, courseID: id})
         else
-            await fetchWrapper.put(`api/v1/feedback`, {...values, feedbackID: feedbackID})
-        fetchWrapper.get(`api/v1/feedback/course/${id}`).then((res) => {
+            await fetchWrapper.put(`api/v1/feedback`, {...values, feedbackID: review.id})
+        await fetchWrapper.get(`api/v1/feedback/course/${id}`).then((res) => {
             if (res.payload.length != 0) {
-                setFeedbackID(res.payload[0].feedbackID)
+                const feedback = res.payload[0]
+                setReview({title: feedback.title, description: feedback.description, rating: feedback.rating, id: feedback.feedbackID})
             }
         })
-    };
-
-    const onFinish = (values: { rating: number, title: string, description: string }) => {
-        console.log('Success:', values);
-        setReview({
-            rating: values.rating,
-            title: values.title,
-            description: values.description,
-        })
-        sendFeedback(values).then(() => setEditing(false))
-
+        setEditing(false)
     };
 
     const deleteReview = () => {
+        fetchWrapper.delete(`api/v1/feedback/${review?.id}`)
         setReview(undefined)
-        fetchWrapper.delete(`api/v1/feedback/${feedbackID}`)
-        setFeedbackID(undefined)
     }
 
     const content = () => {
@@ -83,13 +73,13 @@ function ReviewComp({id}: { id?: number }) {
             if (review) {
                 return (
                     <>
+                        <h3>Ihre Bewertung:</h3>
                         <p style={{fontWeight: "bold"}}>{review.title}</p>
-                        <Button type="primary" icon={<EditOutlined/>} onClick={() => setEditing(true)}>
-                            Ihre Bewertung ändern
-                        </Button>
-                        <Button type="primary" icon={<EditOutlined/>} onClick={() => deleteReview()}>
-                            Ihre Bewertung löschen
-                        </Button>
+                        <p>{review.description}</p>
+                        <div style={{display: "flex", flexDirection: "row", gap: "10px", position: "absolute", top: "40px", right: "10px"}}>
+                            <Button icon={<EditOutlined/>} onClick={() => setEditing(true)}/>
+                            <Button danger icon={<DeleteOutlined/>} onClick={() => deleteReview()}/>
+                        </div>
                     </>
 
                 )
