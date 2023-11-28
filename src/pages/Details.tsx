@@ -187,7 +187,8 @@ function Details() {
                                         height: "100%",
                                         objectFit: "cover",
                                         borderRadius: "20px",
-                                        padding: "5px"
+                                        padding: "5px",
+                                        maxWidth: "725px"
                                     }}
                                 />
 
@@ -199,7 +200,8 @@ function Details() {
                                 >
                                     <Card className="antcard" style={{height: "100%"}}>
                                         <div className="course-details" style={{
-                                            padding: "2px"
+                                            padding: "2px",
+                                            maxWidth: "190px"
                                         }}>
                                             {course.durationInHours && (
                                                 <div className="course-attribute">
@@ -334,7 +336,7 @@ function Details() {
                                       style={{margin: "5px", borderRadius: "15px"}}>
                                     {feedback.length > 0 ? (
                                         feedback.map((feedbackItem) => (
-                                            <Feedback review={feedbackItem}/*TODO: userName verwenden */></Feedback>
+                                            <Feedback review={feedbackItem}></Feedback>
                                         ))
                                     ) : (
                                         <Card className="antcard" style={{justifyContent: "center"}}>keine Bewertungen
