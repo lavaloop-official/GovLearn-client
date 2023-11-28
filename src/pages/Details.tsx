@@ -1,4 +1,4 @@
-import {Affix, Button, Card, Flex, Image, Rate} from "antd";
+import {Affix, Button, Card, Flex, Image, Rate, Skeleton} from "antd";
 import {useEffect, useState} from "react";
 import {ArrowLeftShort} from "react-bootstrap-icons";
 import Recommendation from "../components/Recommendation.tsx";
@@ -180,18 +180,39 @@ function Details() {
                                     display: "flex",
                                 }}
                             >
-                                <img
-                                    src={course.image ? course.image : defaultImageSrc}
-                                    alt=""
-                                    style={{
-                                        width: "100%",
-                                        height: "100%",
-                                        objectFit: "cover",
-                                        borderRadius: "20px",
-                                        padding: "5px",
-                                        maxWidth: "725px"
-                                    }}
-                                />
+                                {
+                                    course.image ? (
+                                        <img
+                                            src={course.image ? course.image : defaultImageSrc}
+                                            alt=""
+                                            style={{
+                                                width: "100%",
+                                                height: "100%",
+                                                objectFit: "cover",
+                                                borderRadius: "20px",
+                                                padding: "5px",
+                                                maxWidth: "725px",
+                                                minHeight: "400px"
+                                            }}
+                                        />
+                                    ) : (
+                                        <div id="detailpic" style={{
+                                            padding: "5px",
+                                            maxWidth: "725px",
+                                            maxHeight: "400px",
+                                            width: "100%",
+                                            height: "400px",
+                                            display: "flex",
+                                        }}>
+                                            <Skeleton.Image active style={{
+                                                borderRadius: "15px",
+                                                width: "100%",
+                                                height: "100%",
+                                            }}/>
+                                        </div>
+                                    )
+                                }
+
 
                                 <Flex className="course-sidebar" vertical gap="middle"
                                       style={{
