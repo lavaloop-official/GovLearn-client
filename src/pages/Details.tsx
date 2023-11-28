@@ -258,7 +258,7 @@ function Details() {
                                         </div>
                                     </Card>
                                     <Button style={{margin: "5px", borderRadius: "15px"}} type="primary" size="large"
-                                            href={course.link}>
+                                            href={course.link ? course.link : undefined}>
                                         Zum Angebot
                                     </Button>
                                 </Flex>
