@@ -19,7 +19,12 @@ function ReviewComp({id}: { id?: number }) {
         fetchWrapper.get(`api/v1/feedback/course/${id}`).then((res) => {
             if (res.payload.length != 0) {
                 const feedback = res.payload[0]
-                setReview({title: feedback.title, description: feedback.description, rating: feedback.rating, id: feedback.feedbackID})
+                setReview({
+                    title: feedback.title,
+                    description: feedback.description,
+                    rating: feedback.rating,
+                    id: feedback.feedbackID
+                })
             }
         })
     }, [id]);
@@ -32,7 +37,12 @@ function ReviewComp({id}: { id?: number }) {
         await fetchWrapper.get(`api/v1/feedback/course/${id}`).then((res) => {
             if (res.payload.length != 0) {
                 const feedback = res.payload[0]
-                setReview({title: feedback.title, description: feedback.description, rating: feedback.rating, id: feedback.feedbackID})
+                setReview({
+                    title: feedback.title,
+                    description: feedback.description,
+                    rating: feedback.rating,
+                    id: feedback.feedbackID
+                })
             }
         })
         setEditing(false)
@@ -74,9 +84,17 @@ function ReviewComp({id}: { id?: number }) {
                 return (
                     <>
                         <h3>Ihre Bewertung:</h3>
+                        <Rate disabled value={review.rating}/>
                         <p style={{fontWeight: "bold"}}>{review.title}</p>
                         <p>{review.description}</p>
-                        <div style={{display: "flex", flexDirection: "row", gap: "10px", position: "absolute", top: "40px", right: "10px"}}>
+                        <div style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            gap: "10px",
+                            position: "absolute",
+                            top: "40px",
+                            right: "10px"
+                        }}>
                             <Button icon={<EditOutlined/>} onClick={() => setEditing(true)}/>
                             <Button danger icon={<DeleteOutlined/>} onClick={() => deleteReview()}/>
                         </div>
