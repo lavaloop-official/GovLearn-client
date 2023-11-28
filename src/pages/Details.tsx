@@ -338,7 +338,7 @@ function Details() {
                                       style={{margin: "5px", borderRadius: "15px"}}>
                                     {feedback.length > 0 ? (
                                         feedback.map((feedbackItem) => (
-                                            <Feedback review={feedbackItem}></Feedback>
+                                            <Feedback review={feedbackItem} key={feedbackItem.feedbackID}></Feedback>
                                         ))
                                     ) : (
                                         <Card className="antcard" style={{justifyContent: "center"}}>keine Bewertungen
