@@ -22,4 +22,5 @@ export interface Review {
     "rating": number | undefined,
     "courseID": number | undefined,
     "userID": number | undefined,
+    "username": string | undefined,
 }

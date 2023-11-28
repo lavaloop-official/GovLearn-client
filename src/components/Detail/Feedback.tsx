@@ -8,7 +8,7 @@ function Feedback({review}: { review: Review }) {
                 <div style={{height: "120px"}}>
                     <Flex style={{width: "75%"}}>
                         <Flex vertical gap="small" style={{minWidth: "140px"}}>
-                            <p style={{fontWeight: "bold"}}> {review.userID} (ID nur als placeholder)</p>
+                            <p style={{fontWeight: "bold"}}> {review.username}</p>
                             <Rate disabled value={review.rating}/>
                         </Flex>
                         <hr/>
