@@ -23,7 +23,8 @@ function Details() {
         format: undefined,
         startDate: undefined,
         costFree: undefined,
-        domainSpecific: undefined
+        domainSpecific: undefined,
+        link: undefined,
     });
 
     const [averageRating, setAverageRating] = useState<number>(0);
@@ -235,7 +236,8 @@ function Details() {
                                             )}
                                         </div>
                                     </Card>
-                                    <Button style={{margin: "5px", borderRadius: "15px"}} type="primary" size="large">
+                                    <Button style={{margin: "5px", borderRadius: "15px"}} type="primary" size="large"
+                                            href={course.link}>
                                         Zum Angebot
                                     </Button>
                                 </Flex>

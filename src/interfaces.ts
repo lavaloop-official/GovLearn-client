@@ -12,7 +12,8 @@ export interface Course {
     "format": string | undefined,
     "startDate": string | undefined,
     "costFree": boolean | undefined,
-    "domainSpecific": boolean | undefined
+    "domainSpecific": boolean | undefined,
+    "link": string | undefined
 }
 
 export interface Review {
