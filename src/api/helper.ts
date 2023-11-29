@@ -70,3 +70,8 @@ function handleError(error: any) {
     console.log(error)
     return undefined;
 }
+
+export function changeBookmarkStatus(id: number, status: boolean) {
+    //TODO: add implementation
+    //should put to /api/bookmark with the id and status
+}

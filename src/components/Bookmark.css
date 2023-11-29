@@ -1,0 +1,12 @@
+#bookmark_outer {
+    display: flex;
+    height: 32px;
+    width: 32px;
+}
+
+#bookmark_inner {
+    margin: auto;
+    scale: 150%;
+    line-height: 0px;
+    color: #747779;
+}

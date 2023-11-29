@@ -1,8 +1,17 @@
 import {Button, Col, Row, Skeleton} from "antd";
 import './CarouselPane.css'
 import {Course} from "../interfaces.ts";
+import Bookmark from "./Bookmark.tsx";
+import {changeBookmarkStatus} from "../api/helper.ts";
 
-function CarouselPane({obj}: {obj?: Course}) {
+function CarouselPane({obj}: { obj?: Course }) {
+
+    const handleBookmark = () => {
+        if (!obj || !obj.id)
+            return
+        changeBookmarkStatus(obj.id, true)
+        console.log("Bookmark clicked")
+    }
 
     return (
         <>
@@ -23,16 +32,17 @@ function CarouselPane({obj}: {obj?: Course}) {
                                     <>
                                         <h1 style={{wordWrap: "break-word"}}>{obj.name}</h1>
                                         <h3 style={{wordWrap: "break-word"}}>{obj.description}</h3>
-                                        <Button type="primary" shape="round"
-                                                style={{maxWidth: "150px"}}
-                                        href={`/detail/${obj.id}`}>
-                                            Weiterlesen
-                                        </Button>
+                                        <div style={{display: "flex", flexDirection: "row", width: "100%"}}>
+                                            <Button type="primary" shape="round"
+                                                    style={{maxWidth: "130px", width: "100%"}}
+                                                    href={`/detail/${obj.id}`}>
+                                                Weiterlesen
+                                            </Button>
+                                            <Bookmark bookmark={true} click={handleBookmark}/>
+                                        </div>
                                     </>
                                     : <Skeleton active/>
                             }
-
-
                         </div>
 
                     </Col>
