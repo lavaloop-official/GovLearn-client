@@ -74,4 +74,14 @@ function handleError(error: any) {
 export function changeBookmarkStatus(id: number, status: boolean) {
     //TODO: add implementation
     //should put to /api/bookmark with the id and status
+    console.log(`bookmark status of ${id} changed to ${status}`)
+}
+
+export async function getBookmarks(): Promise<number[]> {
+    //TODO: add implementation
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve([1, 2, 3, 4, 5]);
+        }, 500);
+    });
 }
