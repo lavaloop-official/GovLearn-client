@@ -16,7 +16,7 @@ function Bookmark({id, style}: { id: number, style?: React.CSSProperties }) {
 
     return (
         <Button id="bookmark_outer" type="text" onClick={onclick} shape="circle" style={style} icon={
-            marked ? <StarFilled id="bookmark_inner"/> : <StarOutlined id="bookmark_inner"/>
+            marked ? <StarFilled className="bookmark_inner filled"/> : <StarOutlined className="bookmark_inner outlined"/>
         }>
         </Button>
     );
