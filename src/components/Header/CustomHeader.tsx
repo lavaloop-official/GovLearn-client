@@ -1,5 +1,5 @@
 import Search, { SearchProps } from "antd/es/input/Search";
-import {Avatar, Button, Dropdown, Form, MenuProps, Select, Space, TreeSelect, Typography, message} from "antd";
+import {Avatar, Button, Dropdown, MenuProps, Space, TreeSelect, Typography, message} from "antd";
 import {UserOutlined} from "@ant-design/icons";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
@@ -10,8 +10,6 @@ import {RootState} from "../../state/reduxStore.ts";
 import {clearAuthToken} from "../../state/authslice.ts";
 import {fetchWrapper} from "../../api/helper";
 import categoryBlue from "../../assets/categoryBlue.png"
-import Searching from "../../pages/Searching.tsx";
-import { ENTER_NAME, SEARCH_ERROR } from "../../constants/de.ts";
 
 const {Title} = Typography
 
@@ -109,7 +107,7 @@ function CustomHeader() {
     const [name, setName] = useState('')
 
     useEffect(() => {
-        if (location.pathname.includes("discover") || location.pathname.includes("detail") || location.pathname.includes("profile") || location.pathname.includes("searching")) {
+        if (location.pathname.includes("discover") || location.pathname.includes("detail") || location.pathname.includes("profile") || location.pathname.includes("searching") || location.pathname.includes("bookmarks")) {
             setSubHeader(<SubHeader/>)
         } else {
             setSubHeader(<></>)
