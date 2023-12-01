@@ -29,11 +29,7 @@ async function handleLogin(data: { values: { email: string, password: string, re
     }
     const json = await response.json();
 
-    //TODO: remove
-    console.log(json);
-    console.log(remember);
-
-    reduxStore.dispatch(setAuthToken(json.payload.token));
+    reduxStore.dispatch(setAuthToken({token: json.payload.token, remember: remember}));
 
     return navigateTo;
 }
