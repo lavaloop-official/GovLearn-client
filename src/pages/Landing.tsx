@@ -68,8 +68,9 @@ function Landing() {
                                 öffentlichen Dienst
                             </Typography.Title>
                             <Typography.Title level={3}>
-                                Entdecke Weiterbildungsangebote, die den öffentlichen Dienst
-                                voranbringen.
+                                {loggedIn ? "Willkommen zurück, setze deine Weiterbildung fort." :
+                                    "Entdecke Weiterbildungsangebote, die den öffentlichen Dienst voranbringen."}
+
                             </Typography.Title>
                             <AnimatedButton
                                 onClick={() => {
@@ -80,7 +81,7 @@ function Landing() {
                                     openLoginModal("register");
                                 }}
                             >
-                                Jetzt Loslegen!
+                                {loggedIn ? "Fortsetzen" : "Jetzt Loslegen!"}
                             </AnimatedButton>
                         </Flex>
                     </Flex>
