@@ -1,11 +1,12 @@
 import {Rate, Skeleton} from "antd";
 import {Course} from "../interfaces.ts";
+import Bookmark from "./Bookmark.tsx";
 
 function SearchComponent({obj, feedbackrate}: { obj?: Course, feedbackrate?: number }) {
 
     // TODO: Integrate Rating
     return (
-        <a href="/detail" style={{textDecoration: "none", color: "inherit"}}>
+        <div style={{textDecoration: "none", color: "inherit"}}>
             <div style={{
                 width: "1000px",
                 background: "#D9D9D9",
@@ -14,6 +15,8 @@ function SearchComponent({obj, feedbackrate}: { obj?: Course, feedbackrate?: num
                 display: "flex"
             }}>
                 <div style={{
+                    display: "flex",
+                    position: "relative",
                     width: "10rem",
                     height: "10rem",
                     boxShadow: "2px",
@@ -21,6 +24,7 @@ function SearchComponent({obj, feedbackrate}: { obj?: Course, feedbackrate?: num
                     margin: "10px",
                     flex: "0 0 10rem"
                 }}>
+                    {obj?.id ? <Bookmark id={obj.id} style={{position: "absolute", top: "5px", right: "5px"}}/> : <></>}
                     {
                         obj ?
                             <img src={obj.image} style={{
@@ -43,13 +47,15 @@ function SearchComponent({obj, feedbackrate}: { obj?: Course, feedbackrate?: num
                 <div style={{width: "100%", marginLeft: "0.3rem", marginRight: "1.3rem", height: "100%"}}>
                     <div
                         style={{display: "flex", justifyContent: "space-between", width: "100%", alignItems: "center"}}>
-                        <div>
-                            {
-                                obj ?
-                                    <h2 style={{maxWidth: "750px"}}>{obj.name}</h2>
-                                    : <Skeleton.Input active/>
-                            }
-                        </div>
+                        <a className="courselink" href={obj?.id ? `/detail/${obj.id}` : undefined}>
+                            <div>
+                                {
+                                    obj ?
+                                        <h2 style={{maxWidth: "750px"}}>{obj.name}</h2>
+                                        : <Skeleton.Input active/>
+                                }
+                            </div>
+                        </a>
                         {
                             obj ?
                                 <Rate allowHalf disabled defaultValue={feedbackrate}/>
@@ -65,7 +71,7 @@ function SearchComponent({obj, feedbackrate}: { obj?: Course, feedbackrate?: num
                     </div>
                 </div>
             </div>
-        </a>
+        </div>
     );
 }
 

@@ -42,7 +42,7 @@ function Recommendation({obj}: { obj?: Course }) {
             </div>
             {
                 obj ?
-                    <a href={`/detail/${obj.id}`}><h3 style={{margin: "5px"}}>{obj.name}</h3></a>
+                    <a className="courselink" href={`/detail/${obj.id}`}><h3 style={{margin: "5px"}}>{obj.name}</h3></a>
                     : <Skeleton.Input active size="small" style={{margin: "5px"}}/>
             }
         </div>
