@@ -27,6 +27,8 @@ function Details() {
         link: undefined,
     });
 
+
+    const [relatedCourses, setRelatedCourses] = useState<Course[]>([]);
     const [averageRating, setAverageRating] = useState<number>(0);
     const [feedback, setFeedback] = useState<Review[]>([]);
     const defaultImageSrc = "https://st4.depositphotos.com/13194036/31587/i/450/depositphotos_315873928-stock-photo-selective-focus-happy-businessman-glasses.jpg"
@@ -72,6 +74,10 @@ function Details() {
         });
         fetchWrapper.get(`api/v1/feedback/average/course/${courseId}`).then((res) => {
             setAverageRating(res.payload);
+        });
+        fetchWrapper.get(`api/v1/similar-courses/${courseId}/`).then((res) => {
+            const filtered = res.payload.slice(0, 3);
+            setRelatedCourses(filtered);
         });
     }, []);
 
@@ -390,9 +396,17 @@ function Details() {
                                     >
                                         Empfehlungen
                                     </h2>
-                                    {/* //TODO: get recommendations from backend */}
-                                    <Recommendation/>
-                                    <Recommendation/>
+                                    {relatedCourses.length > 0 ?
+                                        relatedCourses.map((course) => (
+                                            <Recommendation obj={course} key={course.id}/>
+                                        )) :
+                                            <>
+                                                <Recommendation/>
+                                                <Recommendation/>
+                                                <Recommendation/>
+                                            </>
+                                    }
+
                                 </div>
                             </div>
                         </Affix>
