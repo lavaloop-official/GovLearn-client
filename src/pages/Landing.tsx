@@ -11,6 +11,7 @@ import AnimatedButton from "../components/AnimatedButton.tsx";
 import {RootState} from "../state/reduxStore.ts";
 import {useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
+import {WELCOME, WELCOME_BACK} from "../constants/de.ts";
 
 function Landing() {
     const loggedIn = useSelector((state: RootState) => !!state.auth.authtoken);
@@ -68,8 +69,9 @@ function Landing() {
                                 öffentlichen Dienst
                             </Typography.Title>
                             <Typography.Title level={3}>
-                                Entdecke Weiterbildungsangebote, die den öffentlichen Dienst
-                                voranbringen.
+                                {loggedIn ? WELCOME_BACK :
+                                    WELCOME}
+
                             </Typography.Title>
                             <AnimatedButton
                                 onClick={() => {
@@ -80,7 +82,7 @@ function Landing() {
                                     openLoginModal("register");
                                 }}
                             >
-                                Jetzt Loslegen!
+                                {loggedIn ? "Fortsetzen" : "Jetzt Loslegen!"}
                             </AnimatedButton>
                         </Flex>
                     </Flex>
