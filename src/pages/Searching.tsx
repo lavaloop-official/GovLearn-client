@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import SearchComponent from "../components/SearchComponent.tsx";
 import {Course} from "../interfaces.ts";
 import {fetchWrapper} from "../api/helper.ts";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 
 function Searching() {
 
@@ -13,10 +13,14 @@ function Searching() {
 
     const searchStr = location.pathname.split('/').pop();
 
+    const loc = useLocation();
+
+
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetchWrapper.get('api/v1/filter/' + searchStr).then((res) => {
+        const categoryIDs = loc.state?.categoryIDs;
+        fetchWrapper.post('api/v1/filter/' + searchStr, categoryIDs).then((res) => {
             const coursePromises = res.payload.map((course: Course) => {
                 return fetchWrapper.get('api/v1/feedback/average/course/' + course.id)
                     .then((res) => ({course, feedback: res.payload}))
@@ -28,7 +32,7 @@ function Searching() {
 
             Promise.all(coursePromises).then(setCourseFeedbacks);
         });
-    }, [searchStr, navigate]);
+    }, [searchStr, navigate, loc.state]);
 
     return (
         <div style={{display: "flex", width: "100%", justifyContent: "center", flexDirection: "row", flexWrap: "wrap"}}>

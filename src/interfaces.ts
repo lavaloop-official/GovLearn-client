@@ -25,3 +25,15 @@ export interface Review {
     "userID": number | undefined,
     "username": string | undefined,
 }
+
+export interface Category {
+    "categoryID": number | undefined,
+    "name": string | undefined,
+}
+
+export interface TreeInterface {
+    "title": string | undefined,
+    "value": string | undefined,
+    "key": string | undefined,
+    "children": Array<TreeInterface> |undefined
+}
