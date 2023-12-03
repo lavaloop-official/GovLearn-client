@@ -1,11 +1,19 @@
 import {Rate, Skeleton} from "antd";
 import {Course} from "../interfaces.ts";
+import { useNavigate } from "react-router-dom";
 
 function SearchComponent({obj, feedbackrate}: { obj?: Course, feedbackrate?: number }) {
 
-    // TODO: Integrate Rating
+    const navigate = useNavigate();
+    
+    const handleDetail = () => {
+        navigate(`/detail/${obj?.id}`);
+      };
+
+
+
     return (
-        <a href="/detail" style={{textDecoration: "none", color: "inherit"}}>
+        <a onClick={handleDetail} style={{textDecoration: "none", color: "inherit"}}>
             <div style={{
                 width: "1000px",
                 background: "#D9D9D9",
