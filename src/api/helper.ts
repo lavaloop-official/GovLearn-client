@@ -1,6 +1,5 @@
 import {BACKEND_URL} from "../constants/backend";
-import reduxStore from "../state/reduxStore";
-import {clearAuthToken} from "../state/authslice.ts";
+import {getToken} from "./auth.ts";
 
 //TODO: add proper error handling
 
@@ -19,12 +18,16 @@ export const fetchWrapper = {
 };
 
 function request(method: string) {
-    return async (url: string, body?: object) => {
+    return async (url: string, body?: object, needsAuth: boolean = true) => {
         const fullurl = BACKEND_URL + url;
+
+        const headers = generateHeader(fullurl, method)
+        if (needsAuth && !headers.has("Authorization"))
+            return handleError(new Error("No auth token"))
 
         const response = await fetch(fullurl, {
                 method,
-                headers: generateHeader(fullurl, method),
+                headers: headers,
                 body: body ? JSON.stringify(body) : null
             }
         ).catch(
@@ -40,16 +43,12 @@ function request(method: string) {
 
 function generateHeader(url: string, method: string) {
     const header: HeadersInit = new Headers()
-    if (authToken() && url.startsWith(BACKEND_URL))
-        header.set("Authorization", "Bearer " + authToken())
+    if (getToken() && url.startsWith(BACKEND_URL))
+        header.set("Authorization", "Bearer " + getToken())
     if (method !== "GET")
         header.set("Content-Type", "application/json")
 
     return header
-}
-
-function authToken() {
-    return reduxStore.getState().auth.authtoken;
 }
 
 async function handleResponse(response: Response | undefined) {
@@ -58,11 +57,6 @@ async function handleResponse(response: Response | undefined) {
 
     return response.text().then(text => {
         const data = text && JSON.parse(text);
-
-        if (response.status === 403) {
-            // auto logout if 403 response returned from api
-            reduxStore.dispatch(clearAuthToken());
-        }
 
         if (!response.ok) {
             return undefined;
@@ -77,17 +71,3 @@ function handleError(error: any) {
     return undefined;
 }
 
-export function changeBookmarkStatus(id: number, status: boolean) {
-    //TODO: add implementation
-    //should put to /api/bookmark with the id and status
-    console.log(`bookmark status of ${id} changed to ${status}`)
-}
-
-export async function getBookmarks(): Promise<number[]> {
-    //TODO: add implementation
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve([1, 2, 3, 4, 5]);
-        }, 500);
-    });
-}
