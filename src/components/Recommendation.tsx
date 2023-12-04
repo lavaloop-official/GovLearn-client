@@ -15,6 +15,7 @@ function Recommendation({obj}: { obj?: Course }) {
             display: "flex",
             flexDirection: "column",
             padding: "10px",
+            position: "relative"
         }}>
             <div id="recompic" style={{height: "120px"}}>
                 {
@@ -37,7 +38,7 @@ function Recommendation({obj}: { obj?: Course }) {
                         }} active/>
                 }
                 {obj && obj.id ?
-                        <Bookmark id={obj.id} style={{position: "absolute", top: "10px", right: "2px"}}/>
+                        <Bookmark id={obj.id} style={{position: "absolute", top: "10px", right: "10px"}}/>
                     : <></>}
             </div>
             {
