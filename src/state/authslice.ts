@@ -1,16 +1,19 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 const intialState = {
-    authtoken: JSON.parse(localStorage.getItem("authtoken") || "null"),
+    authtoken: retrieveAuthToken(),
 }
 
 const authSlice = createSlice({
     name: 'auth',
     initialState: intialState,
     reducers: {
-        setAuthToken: (state, action: PayloadAction<string>) => {
-            state.authtoken = action.payload
-            localStorage.setItem("authtoken", JSON.stringify(action.payload))
+        setAuthToken: (state, action: PayloadAction<{ token: string, remember: boolean }>) => {
+            state.authtoken = action.payload.token
+            if (action.payload.remember)
+                localStorage.setItem("authtoken", JSON.stringify(action.payload.token))
+            else
+                sessionStorage.setItem("authtoken", JSON.stringify(action.payload.token))
         },
         clearAuthToken: (state) => {
             state.authtoken = null
@@ -18,6 +21,16 @@ const authSlice = createSlice({
         }
     }
 })
+
+function retrieveAuthToken() {
+    const local = localStorage.getItem("authtoken")
+    const session = sessionStorage.getItem("authtoken")
+    if (local)
+        return JSON.parse(local)
+    if (session)
+        return JSON.parse(session)
+    return null
+}
 
 export const {
     setAuthToken,

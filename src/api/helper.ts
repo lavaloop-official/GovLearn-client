@@ -1,5 +1,6 @@
 import {BACKEND_URL} from "../constants/backend";
 import reduxStore from "../state/reduxStore";
+import {clearAuthToken} from "../state/authslice.ts";
 
 //TODO: add proper error handling
 
@@ -57,6 +58,11 @@ async function handleResponse(response: Response | undefined) {
 
     return response.text().then(text => {
         const data = text && JSON.parse(text);
+
+        if (response.status === 403) {
+            // auto logout if 403 response returned from api
+            reduxStore.dispatch(clearAuthToken());
+        }
 
         if (!response.ok) {
             return undefined;
