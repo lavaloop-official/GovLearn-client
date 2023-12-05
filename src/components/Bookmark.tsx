@@ -1,10 +1,10 @@
-import {StarFilled, StarOutlined} from "@ant-design/icons";
 import "./Bookmark.css";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../state/reduxStore.ts";
 import {changeBookmark} from "../state/bookmarkslice.ts";
 import React from "react";
 import {Button} from "antd";
+import {BookmarkFill, BookmarkPlus} from "react-bootstrap-icons";
 
 function Bookmark({id, style}: { id: number, style?: React.CSSProperties }) {
 
@@ -16,7 +16,8 @@ function Bookmark({id, style}: { id: number, style?: React.CSSProperties }) {
 
     return (
         <Button id="bookmark_outer" type="text" onClick={onclick} shape="circle" style={style} icon={
-            marked ? <StarFilled className="bookmark_inner filled"/> : <StarOutlined className="bookmark_inner outlined"/>
+            marked ? <BookmarkFill className="bookmark_inner filled"/> :
+                <BookmarkPlus className="bookmark_inner outlined"/>
         }>
         </Button>
     );
