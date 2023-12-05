@@ -41,7 +41,7 @@ function Searching() {
                 {
                     searchStr ?
                         <h1 style={{margin: "0 0 5px 0"}}>{searchStr}</h1>
-                        : <h1 style={{margin: "0 0 5px 0"}}>Bitte geben Sie einen Suchbegriff ein!</h1>
+                        : <h1 style={{margin: "0 0 5px 0"}}>Alle unsere Kursangebote!</h1>
                 }
             </div>
             <div>

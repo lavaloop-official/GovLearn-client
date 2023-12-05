@@ -27,10 +27,7 @@ function CustomHeader() {
       };
 
     const onSearch: SearchProps['onSearch'] = (value, _e, info) => {
-        if(value !== "")
-            console.log(info?.source, value), handleSearch(value)
-        else
-            message.error("Bitte geben Sie einen Suchbegriff ein!")
+        console.log(info?.source, value), handleSearch(value);
     };
 
     const [filterBtn, setFilterBtn] = useState(false)
