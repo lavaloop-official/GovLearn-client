@@ -1,5 +1,5 @@
 import Search, { SearchProps } from "antd/es/input/Search";
-import {Avatar, Button, Dropdown, Form, MenuProps, Select, Space, Tree, TreeSelect, Typography, message} from "antd";
+import {Avatar, Button, Dropdown, MenuProps, Space, TreeSelect, Typography, message} from "antd";
 import {UserOutlined} from "@ant-design/icons";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
@@ -9,23 +9,21 @@ import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../state/reduxStore.ts";
 import {clearAuthToken} from "../../state/authslice.ts";
 import {fetchWrapper} from "../../api/helper";
-import categoryBlue from "../../assets/categoryBlue.png"
-import Searching from "../../pages/Searching.tsx";
-import { ENTER_NAME, SEARCH_ERROR } from "../../constants/de.ts";
-import { Category, TreeInterface } from "../../interfaces.ts";
+import categoryBlue from "../../assets/categoryBlue.png";
+import { Category, Tag } from "../../interfaces.ts";
 
 const {Title} = Typography
 
 function CustomHeader() {
 
-    const [categories, setCategories] = useState<{category: Category}[]>([]);
-
-    const [categoryIDs, setCategoryIDs] = useState<number[]>([]);
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [tags, setTags] = useState<Tag[]>([]);
+    const [tagIDs, setTagIDs] = useState<number[]>([]);
 
     const navigate = useNavigate();
 
     const handleSearch = (searchString: string) => {
-        navigate(`/searching/${searchString}`, { state: { categoryIDs:  categoryIDs}, replace: true });
+        navigate(`/searching/${searchString}`, { state: {tagIDs: tagIDs}, replace: true });
       };
 
     const onSearch: SearchProps['onSearch'] = (value, _e, info) => {
@@ -46,53 +44,32 @@ function CustomHeader() {
 
 
     const { SHOW_PARENT } = TreeSelect;
-
-    const treeData = [
-      {
-        title: 'Lerne Scrum',
-        value: 'Lerne Scrum',
-        key: '1',
-        children: [],
-      },
-      {
-        title: 'Category 2',
-        value: 'Category 2',
-        key: '2',
-        children: [],
-      },
-      {
-        title: 'E-Government',
-        value: 'E-Government',
-        key: '3',
-        children: [],
-      },
-      {
-        title: 'Category 4',
-        value: 'Category 4',
-        key: '4',
-        children: [],
-      },
-      {
-        title: 'Category 5',
-        value: 'Category 5',
-        key: '5',
-        children: [],
-      },
-    ];
-
-    // let treeData2!: Array<TreeInterface>;
+    const [treeData, setTreeData] = useState<any[]>([]);
 
     const [value, setValue] = useState<string[]>([]);
 
     const onChange = (newValue: string[]) => {
       console.log('onChange ', newValue);
       setValue(newValue);
-      const keyList = [];
+      const keyListTags:number[] = [];
       for (let index = 0; index < newValue.length; index++) {
         const key = Number(treeData.find(item => item.value === newValue[index])?.key);
-        keyList.push(key)
+        if(isNaN(key)){
+            const tag = Number(tags.find(item => item.name === newValue[index])?.id);
+            keyListTags.push(tag)
+        }
+        else{
+            for (let index = 0; index < tags.length; index++) {
+                const tagID = Number(tags[index].id);
+                if (tags[index].categoryID == key && !keyListTags.includes(tagID))
+                {
+                    keyListTags.push(tagID);
+                }
+            }
+        }
       }
-      setCategoryIDs(keyList);
+      setTagIDs(keyListTags);
+      console.log(tagIDs);
     };
   
     const tProps = {
@@ -101,7 +78,7 @@ function CustomHeader() {
       onChange,
       treeCheckable: true,
       showCheckedStrategy: SHOW_PARENT,
-      placeholder: 'Please select',
+      placeholder: 'Bitte wählen Sie einen Filter',
       style: {
         width: '100%',
       },
@@ -124,18 +101,26 @@ function CustomHeader() {
             setSubHeader(<></>)
         }
         fetchWrapper.get('api/v1/users').then(res => setName(res.payload.name))
-        // TODO: fetch existing categories and show them in a tree
-        // fetchWrapper.get('api/v1/category/').then(res => setCategories(res.payload))
-        // console.log(categories.length)
-        // for (let index = 0; index < categories.length; index++) {
-        //     let tree!: TreeInterface
-        //     tree.title = categories[index].category.name
-        //     tree.key = String(categories[index].category.categoryID)
-        //     tree.value = "0-" + String(index)
-        //     treeData2.push(tree)
-        // }
+        fetchWrapper.get('api/v1/tags').then(res => setTags(res.payload))
+        fetchWrapper.get('api/v1/category').then(res => setCategories(res.payload))
+        updateTreeDataWithCategories(categories, tags);
     }, [location.pathname])
 
+    const updateTreeDataWithCategories = (categories: Category[], tags: Tag[]) => {
+        const updatedTreeData = categories.map((category) => ({
+          title: category.name,
+          value: category.name,
+          key: category.id,
+          children: tags
+            .filter((tag) => tag.categoryID === category.id)
+            .map((tag) => ({
+              title: tag.name,
+              value: tag.name,
+              key: tag.id,
+          })),
+        }));
+        setTreeData(updatedTreeData);
+      };
 
     //TODO: refactor avatar to component
     //TODO: dont show search bar on landing page

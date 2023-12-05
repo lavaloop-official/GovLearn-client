@@ -27,8 +27,15 @@ export interface Review {
 }
 
 export interface Category {
-    "categoryID": number | undefined,
+    "id": number | undefined,
     "name": string | undefined,
+}
+
+export interface Tag {
+    "id": number | undefined,
+    "name": string | undefined,
+    "categoryID": number | undefined,
+    "category": string | undefined,
 }
 
 export interface TreeInterface {

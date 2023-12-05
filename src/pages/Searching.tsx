@@ -19,8 +19,9 @@ function Searching() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const categoryIDs = loc.state?.categoryIDs;
-        fetchWrapper.post('api/v1/filter/' + searchStr, categoryIDs).then((res) => {
+        const tagIDs = loc.state?.tagIDs;
+        console.log(tagIDs)
+        fetchWrapper.post('api/v1/filter/' + searchStr, tagIDs).then((res) => {
             const coursePromises = res.payload.map((course: Course) => {
                 return fetchWrapper.get('api/v1/feedback/average/course/' + course.id)
                     .then((res) => ({course, feedback: res.payload}))
