@@ -12,6 +12,7 @@ import Searching from "./pages/Searching.tsx";
 import {Provider} from "react-redux";
 import reduxStore from "./state/reduxStore.ts";
 import Protected from "./Protected.tsx";
+import Bookmarks from "./pages/Bookmarks.tsx";
 
 function App() {
     //TODO: remove inline styles from components
@@ -49,6 +50,7 @@ function App() {
                                 <Route path="/detail/*" element={<Protected><Details/></Protected>}/>
                                 <Route path="/profile" element={<Protected><Profile/></Protected>}/>
                                 <Route path="/register" element={<Protected><Registration/></Protected>}/>
+                                <Route path="/bookmarks" element={<Protected><Bookmarks/></Protected>}/>
                                 <Route path="/searching/:searchString?" element={<Protected><Searching/></Protected>}/>
                             </Routes>
                         </Content>

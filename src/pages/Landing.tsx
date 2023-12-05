@@ -14,7 +14,7 @@ import {useNavigate} from "react-router-dom";
 import {WELCOME, WELCOME_BACK} from "../constants/de.ts";
 
 function Landing() {
-    const loggedIn = useSelector((state: RootState) => !!state.auth.authtoken);
+    const loggedIn = useSelector((state: RootState) => !!state.auth.auth);
     const navigate = useNavigate();
 
     const cardStyle: React.CSSProperties = {

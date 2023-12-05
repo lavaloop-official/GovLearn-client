@@ -7,6 +7,7 @@ import {fetchWrapper} from "../api/helper.ts";
 import './Details.css';
 import {Course, Review} from "../interfaces.ts";
 import ReviewComp from "../components/Detail/ReviewComp.tsx";
+import Bookmark from "../components/Bookmark.tsx";
 
 function Details() {
     const [course, setCourse] = useState<Course>({
@@ -227,9 +228,10 @@ function Details() {
                                       }}
                                 >
                                     <Card className="antcard" style={{height: "100%"}}>
+                                        { course.id ? <Bookmark id={course.id} style={{position: "absolute", top: "10px", right: "10px"}}/> : <></>}
                                         <div className="course-details" style={{
                                             padding: "2px",
-                                            maxWidth: "190px"
+                                            maxWidth: "190px",
                                         }}>
                                             {course.durationInHours && (
                                                 <div className="course-attribute">

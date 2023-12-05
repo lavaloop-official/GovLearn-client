@@ -1,7 +1,5 @@
 import {useEffect, useState} from "react";
-import {useSelector} from "react-redux";
-import {RootState} from "../state/reduxStore.ts";
-import {LockOutlined, UserOutlined} from "@ant-design/icons";
+import {UserOutlined} from "@ant-design/icons";
 import {Skeleton, Button, Modal, Switch, Input, Form} from "antd";
 import './Profile.css';
 import edit from '../assets/edit.png';
@@ -12,8 +10,6 @@ function Profile() {
 
     const [email, setEmail] = useState('')
     const [name, setName] = useState('')
-
-    const token = useSelector((state: RootState) => state.auth.authtoken as string)
 
     useEffect(() => {
         fetchWrapper.get('api/v1/users').then(res => {

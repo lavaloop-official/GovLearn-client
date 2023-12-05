@@ -1,8 +1,9 @@
 import {Skeleton} from "antd";
 import './Recommendation.css'
 import {Course} from "../interfaces.ts";
+import Bookmark from "./Bookmark.tsx";
 
-function Recommendation({obj}: {obj?: Course}) {
+function Recommendation({obj}: { obj?: Course }) {
 
     return (<>
         <div id="recom" style={{
@@ -14,6 +15,7 @@ function Recommendation({obj}: {obj?: Course}) {
             display: "flex",
             flexDirection: "column",
             padding: "10px",
+            position: "relative"
         }}>
             <div id="recompic" style={{height: "120px"}}>
                 {
@@ -35,11 +37,13 @@ function Recommendation({obj}: {obj?: Course}) {
                             pointerEvents: "none"
                         }} active/>
                 }
-
+                {obj && obj.id ?
+                        <Bookmark id={obj.id} style={{position: "absolute", top: "10px", right: "10px"}}/>
+                    : <></>}
             </div>
             {
                 obj ?
-                    <a href={`/detail/${obj.id}`}><h3 style={{margin: "5px"}} >{obj.name}</h3></a>
+                    <a className="courselink" href={`/detail/${obj.id}`}><h3 style={{margin: "5px"}}>{obj.name}</h3></a>
                     : <Skeleton.Input active size="small" style={{margin: "5px"}}/>
             }
         </div>
