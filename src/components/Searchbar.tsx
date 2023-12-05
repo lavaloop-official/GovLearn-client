@@ -77,6 +77,8 @@ function Searchbar() {
         const tags = fetchWrapper.get('api/v1/tags').then(res => res.payload)
         const categories = fetchWrapper.get('api/v1/category').then(res => res.payload)
         Promise.all([tags, categories]).then(([tags, categories]) => {
+            setTags(tags);
+            setCategories(categories);
             updateTreeDataWithCategories(categories, tags);
         });
     }, [location.pathname])
