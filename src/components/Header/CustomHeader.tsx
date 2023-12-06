@@ -4,9 +4,11 @@ import {useLocation} from "react-router-dom";
 import {useEffect, useState} from "react";
 import SubHeader from "./SubHeader.tsx";
 import {openLoginModal} from "../../state/modalutil.ts";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {RootState} from "../../state/reduxStore.ts";
-import {clearAuthToken} from "../../state/authslice.ts";
+import {fetchWrapper} from "../../api/helper";
+import categoryBlue from "../../assets/categoryBlue.png"
+import {clearToken} from "../../api/auth.ts";
 import Searchbar from "../Searchbar.tsx";
 
 const {Title} = Typography
@@ -16,20 +18,22 @@ function CustomHeader() {
     const [subHeader, setSubHeader] = useState(<div style={{height: "32px", width: "1px"}}/>)
 
     //TODO: implement global state for logged in
-    const loggedIn = useSelector((state: RootState) => !!state.auth.authtoken)
-    const dispatch = useDispatch()
+    const loggedIn = useSelector((state: RootState) => state.auth.auth)
 
     const location = useLocation();
 
     const [name, setName] = useState('')
 
     useEffect(() => {
-        if (location.pathname.includes("discover") || location.pathname.includes("detail") || location.pathname.includes("profile") || location.pathname.includes("searching")) {
+        if (location.pathname.includes("discover") || location.pathname.includes("detail") || location.pathname.includes("profile") || location.pathname.includes("searching") || location.pathname.includes("bookmarks")) {
             setSubHeader(<SubHeader/>)
         } else {
             setSubHeader(<></>)
         }
+        if (loggedIn)
+            fetchWrapper.get('api/v1/users').then(res => setName(res.payload.name))
     }, [location.pathname])
+
 
     //TODO: refactor avatar to component
     //TODO: dont show search bar on landing page
@@ -73,7 +77,9 @@ function CustomHeader() {
         {
             key: '4',
             label: (
-                <a onClick={() => {dispatch(clearAuthToken())}}>
+                <a onClick={() => {
+                    clearToken()
+                }}>
                     Ausloggen
                 </a>
             ),
@@ -87,7 +93,7 @@ function CustomHeader() {
                 margin: "0 auto",
                 maxWidth: "1200px",
                 width: "100%",
-                height:"56px",
+                height: "56px",
                 display: "flex",
                 verticalAlign: "middle",
                 gap: "10px",
@@ -118,7 +124,9 @@ function CustomHeader() {
                     </div>
                     :
                     <Button type="primary" size="large" style={{margin: "auto 0px auto auto", minWidth: "32px"}}
-                            onClick={() => {openLoginModal("login")}}>Anmelden</Button>
+                            onClick={() => {
+                                openLoginModal("login")
+                            }}>Anmelden</Button>
                 }
 
 

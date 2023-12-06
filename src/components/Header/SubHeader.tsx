@@ -28,14 +28,15 @@ function SubHeader() {
         }}>
             <Button
                 type="text"
+                href="/bookmarks"
                 style={{
                     margin: "0",
                     borderRadius: "0px",
                     maxWidth: "250px",
                     width: "100%",
-                    ...styleSelected("placeholder")
+                    ...styleSelected("bookmarks")
                 }}>
-                PlaceholderNav 1
+                Markierte Kurse
             </Button>
             <Button
                 type="text"
