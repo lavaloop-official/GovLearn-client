@@ -31,7 +31,7 @@ export interface Category {
     "name": string | undefined,
 }
 
-export interface Tag {
+export interface Coursetag {
     "id": number | undefined,
     "name": string | undefined,
     "categoryID": number | undefined,

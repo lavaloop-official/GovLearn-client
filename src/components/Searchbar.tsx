@@ -1,100 +1,91 @@
 import Search, {SearchProps} from "antd/es/input/Search";
-import {Button, Space, TreeSelect} from "antd";
+import {Button, Popover, Space, Tag, Tree} from "antd";
 import {useLocation, useNavigate} from "react-router-dom";
-import {useEffect, useState} from "react";
+import {Key, useEffect, useState} from "react";
 import {fetchWrapper} from "../api/helper";
 import categoryBlue from "../assets/categoryBlue.png";
-import {Category, Tag} from "../interfaces.ts";
+import {Category, Coursetag} from "../interfaces.ts";
+import './Searchbar.css';
 
 function Searchbar() {
 
+    const [selectedTags, setSelectedTags] = useState<number[]>([]);
+    const [treeData, setTreeData] = useState<object[]>([]);
+    const [showTags, setShowTags] = useState<string[]>([]);
+
     const [categories, setCategories] = useState<Category[]>([]);
-    const [tags, setTags] = useState<Tag[]>([]);
-    const [tagIDs, setTagIDs] = useState<number[]>([]);
+    const [tags, setTags] = useState<Coursetag[]>([]);
 
     const navigate = useNavigate();
-
     const location = useLocation();
 
-    const handleSearch = (searchString: string) => {
-        navigate(`/searching/${searchString}`, {state: {tagIDs: tagIDs}, replace: true});
+    const onSearch: SearchProps['onSearch'] = (value) => {
+        navigate(`/searching/${value}`, {state: {tagIDs: selectedTags}, replace: true});
     };
 
-    const onSearch: SearchProps['onSearch'] = (value, _e, info) => {
-        console.log(info?.source, value), handleSearch(value);
-    };
-
-    const [filterBtn, setFilterBtn] = useState(false)
-
-    const onFilterBtn = () => {
-        if (filterBtn == true)
-            setFilterBtn(false)
-        else
-            setFilterBtn(true)
+    const onSelect = (checked: { checked: Key[]; halfChecked: Key[]; } | Key[]) => {
+        console.log('onSelect ', checked);
+        if (Array.isArray(checked)){
+            const taglist = checked
+                .filter((e) => e.toString().includes("-"))
+                .map((e) => e.toString().split("-")[1])
+                .map((e) => Number(e));
+            setSelectedTags(taglist);
+        }
+        updateShowTags(checked);
     }
 
-
-    const {SHOW_PARENT} = TreeSelect;
-    const [treeData, setTreeData] = useState<any[]>([]);
-
-    const [value, setValue] = useState<string[]>([]);
-
-    const onChange = (newValue: string[]) => {
-        console.log('onChange ', newValue);
-        setValue(newValue);
-        const keyListTags: number[] = [];
-        for (let index = 0; index < newValue.length; index++) {
-            const key = Number(treeData.find(item => item.value === newValue[index])?.key);
-            if (isNaN(key)) {
-                const tag = Number(tags.find(item => item.name === newValue[index])?.id);
-                keyListTags.push(tag)
-            } else {
-                for (let index = 0; index < tags.length; index++) {
-                    const tagID = Number(tags[index].id);
-                    if (tags[index].categoryID == key && !keyListTags.includes(tagID)) {
-                        keyListTags.push(tagID);
-                    }
-                }
-            }
+    const updateShowTags = (checked: { checked: Key[]; halfChecked: Key[]; } | Key[]) => {
+        if (Array.isArray(checked)){
+            const taglist = checked
+                .filter((e) => e.toString().includes("-"))
+                .map((e) => e.toString())
+            const catlist = checked
+                .filter((e) => !e.toString().includes("-"))
+                .map((e) => e.toString())
+            const filteredTags = taglist.filter((e) => !catlist.includes(e.split("-")[0]))
+            const tagNames = filteredTags.map((e) => tags.find((tag) => tag.id === Number(e.split("-")[1]) && tag.categoryID === Number(e.split("-")[0]))?.name)
+            const catNames = catlist.map((e) => categories.find((cat) => cat.id === Number(e))?.name)
+            setShowTags([...tagNames, ...catNames] as string[])
         }
-        setTagIDs(keyListTags);
-        console.log(tagIDs);
-    };
+    }
 
     const tProps = {
         treeData,
-        value,
-        onChange,
-        treeCheckable: true,
-        showCheckedStrategy: SHOW_PARENT,
-        placeholder: 'Bitte wählen Sie einen Filter',
-        style: {
-            width: '100%',
-        },
+        onCheck: onSelect
     };
+
+    const popContent = (
+        <>
+            <div style={{maxWidth: "250px"}}>
+                {showTags.length != 0 ? showTags.map((tag) => (<Tag key={tag} >{tag}</Tag>)) : <Tag>Keine Filter ausgewählt</Tag>}
+            </div>
+            <Tree checkable {...tProps}/>
+        </>
+
+    )
 
     useEffect(() => {
         const tags = fetchWrapper.get('api/v1/tags').then(res => res.payload)
         const categories = fetchWrapper.get('api/v1/category').then(res => res.payload)
         Promise.all([tags, categories]).then(([tags, categories]) => {
-            setTags(tags);
-            setCategories(categories);
             updateTreeDataWithCategories(categories, tags);
+            setCategories(categories);
+            setTags(tags);
         });
     }, [location.pathname])
 
-    const updateTreeDataWithCategories = (categories: Category[], tags: Tag[]) => {
+    const updateTreeDataWithCategories = (categories: Category[], tags: Coursetag[]) => {
         const updatedTreeData = categories.map((category) => ({
             title: category.name,
-            value: category.name,
             key: category.id,
             children: tags
                 .filter((tag) => tag.categoryID === category.id)
-                .map((tag) => ({
+                .map((tag) => (tag.id && category.id) ? {
                     title: tag.name,
-                    value: tag.name,
-                    key: tag.id,
-                })),
+                    key: category.id + "-" + tag.id,
+                    id: tag.id,
+                } : undefined),
         }));
         setTreeData(updatedTreeData);
     };
@@ -102,19 +93,19 @@ function Searchbar() {
     return (
         <Space.Compact size="large" direction="vertical" style={{marginTop: "8px", marginBottom: "8px"}}>
             <Space.Compact size="large" style={{margin: "auto"}}>
-                <Button onClick={onFilterBtn}><img src={categoryBlue} style={{
-                    width: "20px",
-                    marginLeft: "-5px",
-                    marginRight: "-5px",
-                    marginBottom: "-2px"
-                }}/></Button>
+                <Popover placement="bottomLeft" title={"Nach Kategorie Filtern"} arrow={false} trigger="click" content={popContent}>
+                    <Button>
+                        <img src={categoryBlue} style={{
+                            width: "20px",
+                            marginLeft: "-5px",
+                            marginRight: "-5px",
+                            marginBottom: "-2px"
+                        }}/>
+                    </Button>
+                </Popover>
                 <Search placeholder="Kursangebote suchen" size="large" style={{maxWidth: "400px"}} allowClear
                         onSearch={onSearch} autoComplete="off"/>
             </Space.Compact>
-            {filterBtn ?
-                <TreeSelect {...tProps} style={{position: "relative", zIndex: "1"}}/>
-                : <div></div>
-            }
         </Space.Compact>
     );
 }
