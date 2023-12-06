@@ -36,3 +36,7 @@ hr {
     width: 100%;
     height: 100%;
 }
+
+.course-sidebar .ant-card-body{
+    padding: 24px 16px 16px;
+}
