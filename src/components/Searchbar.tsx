@@ -24,7 +24,6 @@ function Searchbar() {
     };
 
     const onSelect = (checked: { checked: Key[]; halfChecked: Key[]; } | Key[]) => {
-        console.log('onSelect ', checked);
         if (Array.isArray(checked)){
             const taglist = checked
                 .filter((e) => e.toString().includes("-"))
