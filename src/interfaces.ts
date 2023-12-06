@@ -25,3 +25,22 @@ export interface Review {
     "userID": number | undefined,
     "username": string | undefined,
 }
+
+export interface Category {
+    "id": number | undefined,
+    "name": string | undefined,
+}
+
+export interface Coursetag {
+    "id": number | undefined,
+    "name": string | undefined,
+    "categoryID": number | undefined,
+    "category": string | undefined,
+}
+
+export interface TreeInterface {
+    "title": string | undefined,
+    "value": string | undefined,
+    "key": string | undefined,
+    "children": Array<TreeInterface> |undefined
+}
