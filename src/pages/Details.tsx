@@ -28,44 +28,14 @@ function Details() {
         link: undefined,
     });
 
-
     const [relatedCourses, setRelatedCourses] = useState<Course[]>([]);
     const [averageRating, setAverageRating] = useState<number>(0);
     const [feedback, setFeedback] = useState<Review[]>([]);
     const defaultImageSrc = "https://st4.depositphotos.com/13194036/31587/i/450/depositphotos_315873928-stock-photo-selective-focus-happy-businessman-glasses.jpg"
 
-    //currently unused:
-    //const [requiredMark, setRequiredMarkType] = useState<RequiredMark>('optional');
-    //const [selectedValue, setSelectedValue] = useState<string | null>(null);
-    //const [isTagModalOpen, setIsTagModalOpen] = useState(false);
-    //const [courseTags, setCourseTags] = useState<string[]>([]);
-    //const [tags, setTags] = useState<{id: number, name: string}[]>([]);
-
-
     useEffect(() => {
         const courseId = window.location.pathname.split('/').pop();
-        /* currently unused:
-        fetchWrapper.get(`api/v1/tags/courses/${courseId}`).then((res) => {
-            // Assuming res.payload is an array of tag objects with a 'name' property
-            const tagNames = res.payload.map((tag: {
-                name: string
-            }) => tag.name);
-            setCourseTags(tagNames);
-        });
-        fetchWrapper.get(`api/v1/tags`).then((res) => {
-            // Assuming res.payload is an array of tag objects with a 'name' property
-            const tags = res.payload.map((tag: {
-                id: number;
-                name: string;
-            }) => (
-                {
-                    id: tag.id,
-                    name: tag.name
-                }
-            ))
-            setTags(tags);
-        });
-        */
+
         fetchWrapper.get(`api/v1/courses/${courseId}`).then((res) => {
             setCourse(res.payload);
             document.title = res.payload.name;
@@ -82,62 +52,20 @@ function Details() {
         });
     }, []);
 
-    /* currently unused:
-
-    const showTagModal = () => {
-        setIsTagModalOpen(true);
-    };
-
-    const findTagIdByName = (tagName: string | null) => {
-        const foundTag = tags.find((tag) => tag.name === tagName);
-        return foundTag ? foundTag.id : null;
-    };
-
-    const requestBody = {
-        courseId: course.id,
-        tagId: findTagIdByName(selectedValue),
-    };
-
-    const handleTagOk = () => {
-        setIsTagModalOpen(false);
-        if (findTagIdByName(selectedValue) != null) {
-            fetchWrapper.post(`api/v1/tags/courses`, requestBody).then((res) => {
-                // Handle the response
-                console.log(res);
-            })
-                .catch((error) => {
-                    // Handle errors
-                    console.error(error);
-                })
+    const translateFormat = (format: string) => {
+        switch (format) {
+            case "Praesenz":
+                return "Präsenz";
+            case "OnlineLive":
+                return "Online Live-Veranstaltung";
+            case "OnlineSelbstorganisiert":
+                return "Online Selbstorganisiert";
+            case "Hybrid":
+                return "Hybridveranstaltung";
+            default:
+                return "Unbekannt";
         }
     }
-
-    const handleTagCancel = () => {
-        setIsTagModalOpen(false);
-    };
-
-    const handleTagChange = (value: string | null) => {
-        setSelectedValue(value);
-    };
-
-    const getOptions = () => {
-        return tags.map((tag) => ({
-            value: tag.name,
-            label: tag.name,
-            disabled: courseTags.includes(tag.name),
-        }));
-    };
-
-    const onSearch = (value: string) => {
-        console.log('search:', value);
-    };
-
-    const filterOption = (input: string, option?: {
-        label: string;
-        value: string
-    }) =>
-        (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
-    */
 
     return (
         <>
@@ -185,6 +113,7 @@ function Details() {
                                     borderRadius: "20px",
                                     boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
                                     display: "flex",
+                                    maxWidth: "1200px",
                                 }}
                             >
                                 {
@@ -198,7 +127,7 @@ function Details() {
                                                 objectFit: "cover",
                                                 borderRadius: "20px",
                                                 padding: "5px",
-                                                maxWidth: "725px",
+                                                maxWidth: "700px",
                                                 minHeight: "400px"
                                             }}
                                         />
@@ -223,15 +152,18 @@ function Details() {
 
                                 <Flex className="course-sidebar" vertical gap="middle"
                                       style={{
-                                          width: "200px",
+                                          maxWidth: "200px",
+                                          width: "100%",
                                           padding: "5px",
                                       }}
                                 >
                                     <Card className="antcard" style={{height: "100%"}}>
-                                        { course.id ? <Bookmark id={course.id} style={{position: "absolute", top: "10px", right: "10px"}}/> : <></>}
+                                        {course.id ? <Bookmark id={course.id}
+                                                               style={{position: "absolute", top: "10px", right: "10px"}}/> : <></>}
                                         <div className="course-details" style={{
-                                            padding: "2px",
+                                            padding: "0px",
                                             maxWidth: "190px",
+                                            wordWrap: "break-word",
                                         }}>
                                             {course.durationInHours && (
                                                 <div className="course-attribute">
@@ -248,7 +180,7 @@ function Details() {
                                             {course.format && (
                                                 <div className="course-attribute">
                                                     <p className="attribute-label">Format:</p>
-                                                    <p className="attribute-value">{course.format}</p>
+                                                    <p className="attribute-value">{translateFormat(course.format)}</p>
                                                 </div>
                                             )}
                                             {course.startDate && (
@@ -260,7 +192,7 @@ function Details() {
                                             {course.domainSpecific && (
                                                 <div className="course-attribute">
                                                     <p className="attribute-label">Verwaltungsbezogen:</p>
-                                                    <p className="attribute-value">{course.domainSpecific}</p>
+                                                    <p className="attribute-value">{course.domainSpecific ? "Ja" : "Nein"}</p>
                                                 </div>
                                             )}
                                         </div>
@@ -271,33 +203,6 @@ function Details() {
                                     </Button>
                                 </Flex>
                             </div>
-                            {/* currently unused:
-                            {tags.length > 0 ? (
-                                <ul>
-                                    {courseTags.map((tag, index) => (
-                                        <Tag key={index} color="cornflowerblue"
-                                             style={{fontWeight: "bolder", padding: "1px"}}>{tag}</Tag>
-                                    ))}
-                                    <Button size="small" shape="circle" onClick={showTagModal} icon={<PlusOutlined/>}/>
-                                </ul>
-                            ) : (
-                                <p>Keine Tags vorhanden</p>
-                            )}
-                            <Modal title="Tag hinzufügen" open={isTagModalOpen} onOk={handleTagOk}
-                                   onCancel={handleTagCancel}>
-                                <label>
-                                    <Select
-                                        showSearch
-                                        //defaultValue=""
-                                        style={{width: 120}}
-                                        onSearch={onSearch}
-                                        filterOption={filterOption}
-                                        onChange={handleTagChange}
-                                        options={getOptions()}
-                                    />
-                                </label>
-                            </Modal>
-                            */}
                             <div
                                 style={{
                                     background: "#d9d9d9",
@@ -402,11 +307,11 @@ function Details() {
                                         relatedCourses.map((course) => (
                                             <Recommendation obj={course} key={course.id}/>
                                         )) :
-                                            <>
-                                                <Recommendation/>
-                                                <Recommendation/>
-                                                <Recommendation/>
-                                            </>
+                                        <>
+                                            <Recommendation/>
+                                            <Recommendation/>
+                                            <Recommendation/>
+                                        </>
                                     }
 
                                 </div>

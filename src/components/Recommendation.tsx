@@ -1,4 +1,4 @@
-import {Skeleton} from "antd";
+import {Skeleton, Typography} from "antd";
 import './Recommendation.css'
 import {Course} from "../interfaces.ts";
 import Bookmark from "./Bookmark.tsx";
@@ -8,7 +8,7 @@ function Recommendation({obj}: { obj?: Course }) {
     return (<>
         <div id="recom" style={{
             maxWidth: "240px",
-            maxHeight: "180px",
+            maxHeight: "185px",
             width: "100%",
             height: "100%",
             borderRadius: "20px",
@@ -38,12 +38,16 @@ function Recommendation({obj}: { obj?: Course }) {
                         }} active/>
                 }
                 {obj && obj.id ?
-                        <Bookmark id={obj.id} style={{position: "absolute", top: "10px", right: "10px"}}/>
+                    <Bookmark id={obj.id} style={{position: "absolute", top: "10px", right: "10px"}}/>
                     : <></>}
             </div>
             {
                 obj ?
-                    <a className="courselink" href={`/detail/${obj.id}`}><h3 style={{margin: "5px"}}>{obj.name}</h3></a>
+                    <a className="courselink" href={`/detail/${obj.id}`} title={obj.name}>
+                        <Typography.Title level={5} ellipsis={{rows: 2}} style={{margin: "5px", fontWeight: "bold"}}>
+                            {obj.name}
+                        </Typography.Title>
+                    </a>
                     : <Skeleton.Input active size="small" style={{margin: "5px"}}/>
             }
         </div>
