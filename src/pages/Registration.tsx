@@ -1,10 +1,17 @@
 import {Affix, Button, Steps} from "antd";
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
+import CircleSelect from "../components/CircleSelect/CircleSelect.tsx";
 
 function Registration() {
 
 
+    const slice =
+        <svg height={600} width={600} style={{margin: "auto"}} className="pieSelect">
+            <g transform={`translate(${600 / 2},${600 / 2})`}>
+                <CircleSelect/>
+            </g>
+        </svg>
 
     const navigate = useNavigate();
 
@@ -12,7 +19,7 @@ function Registration() {
 
     const content = [
         {
-            content: <h1>Content 1</h1>,
+            content: slice,
             step: {
                 title: 'IT- und Medienkompetenz',
                 description: 'First-content'

@@ -1,3 +1,7 @@
 body {
     margin: 0;
 }
+
+.pieSelect path:hover {
+    filter: contrast(1.3);
+}
