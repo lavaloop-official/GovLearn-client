@@ -1,0 +1,19 @@
+#bookmark_outer {
+    display: flex;
+    height: 32px;
+    width: 32px;
+    justify-content: center;
+    align-items: center;
+}
+
+.bookmark_inner {
+    scale: 150%;
+}
+
+.filled {
+    color: #747779;
+}
+
+.outlined {
+    color: #747779;;
+}

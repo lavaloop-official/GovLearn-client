@@ -1,0 +1,42 @@
+/* Apply styling to the course details */
+.course-details {
+    padding: 16px;
+}
+
+/* Style the attribute labels */
+.attribute-label {
+    font-weight: bold;
+    margin-bottom: 0px;
+}
+
+/* Style the attribute values */
+.attribute-value {
+    margin-top: 0px;
+    margin-bottom: 16px;
+}
+
+/* Additional styling for specific attributes if needed */
+.course-attribute .attribute-label {
+    color: #333333a2; /* Blue color for labels */
+}
+
+.course-attribute .attribute-value {
+    color: #333; /* Dark color for values */
+}
+
+hr {
+    margin: 15px;
+}
+
+.antcard {
+    border-radius: 15px;
+}
+
+#detailpic > div {
+    width: 100%;
+    height: 100%;
+}
+
+.course-sidebar .ant-card-body{
+    padding: 24px 16px 16px;
+}

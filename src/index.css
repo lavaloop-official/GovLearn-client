@@ -13,3 +13,11 @@
 .login-form-button {
     width: 100%;
 }
+
+a.courselink {
+    color: #424242;
+}
+
+a.courselink:hover {
+    color: #8f8f8f;
+}

@@ -11,3 +11,9 @@ export const LOGIN_ERROR = 'Die eingegebenen Anmeldedaten sind nicht korrekt!'
 export const REGISTER_ERROR = 'Es besteht bereits ein Konto mit dieser E-mail Adresse!'
 
 export const INTERNAL_ERROR = 'Es ist etwas schief gelaufen! Bitte versuchen Sie es später erneut!'
+
+export const SEARCH_ERROR = 'Bitte geben Sie einen Suchbegriff ein!'
+
+export const WELCOME_BACK = 'Willkommen zurück, setze deine Weiterbildung fort.'
+
+export const WELCOME = 'Entdecke Weiterbildungsangebote, die dich weiterbringen.'

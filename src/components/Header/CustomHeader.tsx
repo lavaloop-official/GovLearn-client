@@ -1,14 +1,15 @@
-import Search from "antd/es/input/Search";
 import {Avatar, Button, Dropdown, MenuProps, Typography} from "antd";
 import {UserOutlined} from "@ant-design/icons";
 import {useLocation} from "react-router-dom";
 import {useEffect, useState} from "react";
 import SubHeader from "./SubHeader.tsx";
 import {openLoginModal} from "../../state/modalutil.ts";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {RootState} from "../../state/reduxStore.ts";
-import {clearAuthToken} from "../../state/authslice.ts";
 import {fetchWrapper} from "../../api/helper";
+import categoryBlue from "../../assets/categoryBlue.png"
+import {clearToken} from "../../api/auth.ts";
+import Searchbar from "../Searchbar.tsx";
 
 const {Title} = Typography
 
@@ -17,20 +18,20 @@ function CustomHeader() {
     const [subHeader, setSubHeader] = useState(<div style={{height: "32px", width: "1px"}}/>)
 
     //TODO: implement global state for logged in
-    const loggedIn = useSelector((state: RootState) => !!state.auth.authtoken)
-    const dispatch = useDispatch()
+    const loggedIn = useSelector((state: RootState) => state.auth.auth)
 
     const location = useLocation();
 
     const [name, setName] = useState('')
 
     useEffect(() => {
-        if (location.pathname.includes("discover") || location.pathname.includes("detail") || location.pathname.includes("profile")) {
+        if (location.pathname.includes("discover") || location.pathname.includes("detail") || location.pathname.includes("profile") || location.pathname.includes("searching") || location.pathname.includes("bookmarks")) {
             setSubHeader(<SubHeader/>)
         } else {
             setSubHeader(<></>)
         }
-        fetchWrapper.get('api/v1/users').then(res => setName(res.payload.name))
+        if (loggedIn)
+            fetchWrapper.get('api/v1/users').then(res => setName(res.payload.name))
     }, [location.pathname])
 
 
@@ -76,7 +77,9 @@ function CustomHeader() {
         {
             key: '4',
             label: (
-                <a onClick={() => {dispatch(clearAuthToken())}}>
+                <a onClick={() => {
+                    clearToken()
+                }}>
                     Ausloggen
                 </a>
             ),
@@ -106,8 +109,10 @@ function CustomHeader() {
                         Govlearn
                     </a>
                 </Title>
-                <Search placeholder="Kursangebote suchen" size="large" style={{maxWidth: "400px", margin: "auto"}}
-                        allowClear/>
+                {loggedIn ?
+                    <Searchbar></Searchbar>
+                    :<div></div>
+                }
                 {loggedIn ?
                     <div style={{margin: "auto 0px auto auto", minWidth: "32px", lineHeight: "0px"}}>
                         <Dropdown menu={{items}} placement="bottomRight" arrow={{pointAtCenter: true}}
@@ -119,7 +124,9 @@ function CustomHeader() {
                     </div>
                     :
                     <Button type="primary" size="large" style={{margin: "auto 0px auto auto", minWidth: "32px"}}
-                            onClick={() => {openLoginModal("login")}}>Anmelden</Button>
+                            onClick={() => {
+                                openLoginModal("login")
+                            }}>Anmelden</Button>
                 }
 
 

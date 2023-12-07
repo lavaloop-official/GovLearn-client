@@ -1,5 +1,5 @@
 import {BACKEND_URL} from "../constants/backend";
-import reduxStore from "../state/reduxStore";
+import {getToken} from "./auth.ts";
 
 //TODO: add proper error handling
 
@@ -18,12 +18,16 @@ export const fetchWrapper = {
 };
 
 function request(method: string) {
-    return async (url: string, body?: never) => {
+    return async (url: string, body?: object, needsAuth: boolean = true) => {
         const fullurl = BACKEND_URL + url;
+
+        const headers = generateHeader(fullurl, method)
+        if (needsAuth && !headers.has("Authorization"))
+            return handleError(new Error("No auth token"))
 
         const response = await fetch(fullurl, {
                 method,
-                headers: generateHeader(fullurl, method),
+                headers: headers,
                 body: body ? JSON.stringify(body) : null
             }
         ).catch(
@@ -39,22 +43,18 @@ function request(method: string) {
 
 function generateHeader(url: string, method: string) {
     const header: HeadersInit = new Headers()
-    if (authToken() && url.startsWith(BACKEND_URL))
-        header.set("Authorization", "Bearer " + authToken())
+    if (getToken() && url.startsWith(BACKEND_URL))
+        header.set("Authorization", "Bearer " + getToken())
     if (method !== "GET")
         header.set("Content-Type", "application/json")
 
     return header
 }
 
-function authToken() {
-    return reduxStore.getState().auth.authtoken;
-}
-
 async function handleResponse(response: Response | undefined) {
     if (!response)
         return handleError(new Error("No response"))
-    
+
     return response.text().then(text => {
         const data = text && JSON.parse(text);
 
@@ -70,3 +70,4 @@ function handleError(error: any) {
     console.log(error)
     return undefined;
 }
+

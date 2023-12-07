@@ -8,9 +8,11 @@ import Details from "./pages/Details.tsx";
 import Profile from "./pages/Profile.tsx";
 import Landing from "./pages/Landing.tsx";
 import Registration from "./pages/Registration.tsx";
+import Searching from "./pages/Searching.tsx";
 import {Provider} from "react-redux";
 import reduxStore from "./state/reduxStore.ts";
 import Protected from "./Protected.tsx";
+import Bookmarks from "./pages/Bookmarks.tsx";
 
 function App() {
     //TODO: remove inline styles from components
@@ -45,9 +47,11 @@ function App() {
                             <Routes>
                                 <Route index element={<Landing/>}/>
                                 <Route path="/discover" element={<Protected><Discover/></Protected>}/>
-                                <Route path="/detail/*" element={<Protected><Details title={''}/></Protected>}/>
+                                <Route path="/detail/*" element={<Protected><Details/></Protected>}/>
                                 <Route path="/profile" element={<Protected><Profile/></Protected>}/>
                                 <Route path="/register" element={<Protected><Registration/></Protected>}/>
+                                <Route path="/bookmarks" element={<Protected><Bookmarks/></Protected>}/>
+                                <Route path="/searching/:searchString?" element={<Protected><Searching/></Protected>}/>
                             </Routes>
                         </Content>
                         <Footer style={{ textAlign: 'center' }}>Govlearn  -  Made with ❤ in Münster</Footer>

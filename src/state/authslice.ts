@@ -1,27 +1,26 @@
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {createSlice} from "@reduxjs/toolkit";
+import {getToken} from "../api/auth.ts";
 
 const intialState = {
-    authtoken: JSON.parse(localStorage.getItem("authtoken") || "null"),
+    auth: !!getToken(),
 }
 
 const authSlice = createSlice({
     name: 'auth',
     initialState: intialState,
     reducers: {
-        setAuthToken: (state, action: PayloadAction<string>) => {
-            state.authtoken = action.payload
-            localStorage.setItem("authtoken", JSON.stringify(action.payload))
+        setAuth: (state) => {
+            state.auth = true
         },
-        clearAuthToken: (state) => {
-            state.authtoken = null
-            localStorage.removeItem("authtoken")
+        clearAuth: (state) => {
+            state.auth = false
         }
     }
 })
 
 export const {
-    setAuthToken,
-    clearAuthToken
+    setAuth,
+    clearAuth
 } = authSlice.actions
 
 export default authSlice.reducer
