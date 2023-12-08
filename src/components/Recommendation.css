@@ -2,3 +2,11 @@
     width: 100%;
     height: 100%;
 }
+
+.courselink > .ant-typography {
+    color: #424242;
+}
+
+.courselink > .ant-typography:hover {
+    color: #8f8f8f
+}
