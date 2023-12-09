@@ -52,6 +52,10 @@ function Details() {
         });
     }, []);
 
+    const onClickBackBtn = () => {
+        history.back();
+    }
+
     const translateFormat = (format: string) => {
         switch (format) {
             case "Praesenz":
@@ -84,7 +88,7 @@ function Details() {
                     >
                         <Button
                             type="primary"
-                            href="/discover"
+                            onClick={onClickBackBtn}
                             style={{
                                 height: "fit-content",
                                 width: "fit-content",
