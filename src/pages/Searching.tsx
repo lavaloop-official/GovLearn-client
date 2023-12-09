@@ -3,12 +3,29 @@ import SearchComponent from "../components/SearchComponent.tsx";
 import {Course} from "../interfaces.ts";
 import {fetchWrapper} from "../api/helper.ts";
 import {useLocation, useNavigate} from "react-router-dom";
-import {Button, Card, Checkbox, DatePicker, DatePickerProps, Divider, Space} from 'antd';
+import {Button, Card, Checkbox, DatePicker, DatePickerProps, Divider, Select, Slider, Space} from 'antd';
 import type { CheckboxValueType } from 'antd/es/checkbox/Group';
-import type { CheckboxChangeEvent } from 'antd/es/checkbox';
+import type { SelectProps } from 'antd';
+import { SliderMarks } from "antd/es/slider/index";
+import SearchOptions from "../components/SearchOptions.tsx";
 
 function Searching() {
     // Options
+    const options: SelectProps['options'] = [];
+
+    for (let i = 0; i < 100000; i++) {
+        const value = `${i.toString(36)}${i}`;
+        options.push({
+            label: value,
+            value,
+            disabled: i === 10,
+        });
+    }
+
+    const handleChange = (value: string[]) => {
+        console.log(`selected ${value}`);
+    };
+
     const CheckboxGroupWissensbezug = Checkbox.Group;
 
     const onChangeWissensbezug = (checkedValues: CheckboxValueType[]) => {
@@ -32,6 +49,12 @@ function Searching() {
     const onChangeKompetenzstufe = (checkedValues: CheckboxValueType[]) => {
         console.log('checked = ', checkedValues);
     };
+
+    const dauer: SliderMarks = {
+        0: '<10 Min.',
+        50: '1 Std.',
+        100: '8+Std.'
+      };
 
     const CheckboxGroupFormat = Checkbox.Group;
 
@@ -91,65 +114,7 @@ function Searching() {
             </div>
             <div style={{display: "flex", width: "100%", justifyContent: "center", flexDirection: "row", flexWrap: "wrap"}}>
                 <div style={{margin:"1rem"}}>
-                    <Card title="Optionen" size="small" style={{minWidth:"250px", borderRadius:"20px"}}>
-                        <p>Anbieter</p>
-                        <Divider/>
-                        <p>Wissensbezug</p>
-                            <CheckboxGroupWissensbezug onChange={onChangeWissensbezug}>
-                                <Space direction="vertical">
-                                    <Checkbox value="Theorie">Theorie</Checkbox>
-                                    <Checkbox value="Praxis">Praxis</Checkbox>
-                                </Space>
-                            </CheckboxGroupWissensbezug>
-                        <Divider/>
-                        <p>Verwaltungsspezifisch</p>
-                            <CheckboxGroupVerwaltungsspezifisch onChange={onChangeVerwaltungsspezifisch}>
-                                <Space direction="vertical">
-                                    <Checkbox value="Verwaltungsspezifisch">Verwaltungsspezifisch</Checkbox>
-                                </Space>
-                            </CheckboxGroupVerwaltungsspezifisch>
-                        <Divider/>
-                        <p>Zertifikat</p>
-                            <CheckboxGroupZertifikat onChange={onChangeZertifikat}>
-                                <Space direction="vertical">
-                                    <Checkbox value="Zertifikat">Zertifikat</Checkbox>
-                                </Space>
-                            </CheckboxGroupZertifikat>
-                        <Divider/>
-                        <p>Kompetenzstufe</p>
-                            <CheckboxGroupKompetenzstufe onChange={onChangeKompetenzstufe}>
-                                <Space direction="vertical">
-                                    <Checkbox value="Einsteiger">Einsteiger</Checkbox>
-                                    <Checkbox value="Fortgeschritten">Fortgeschritten</Checkbox>
-                                    <Checkbox value="Experte">Experte</Checkbox>
-                                </Space>
-                            </CheckboxGroupKompetenzstufe>
-                        <Divider/>
-                        <p>Dauer</p>
-                        <Divider/>
-                        <p>Format</p>
-                            <CheckboxGroupFormat onChange={onChangeFormat}>
-                                <Space direction="vertical">
-                                    <Checkbox value="Live-Online">Live-Online</Checkbox>
-                                    <Checkbox value="Präsenz">Präsenz</Checkbox>
-                                    <Checkbox value="Hybrid">Hybrid</Checkbox>
-                                    <Checkbox value="Selbstorganisiert">Selbstorganisiert</Checkbox>
-                                </Space>
-                            </CheckboxGroupFormat>
-                        <Divider/>
-                        <p>Startdatum</p>
-                            <DatePicker onChange={onChangeStartdatum} placeholder="Datum"/>
-                        <Divider/>
-                        <p>Kosten</p>
-                            <CheckboxGroupKosten onChange={onChangeKosten}>
-                                <Space direction="vertical">
-                                    <Checkbox value="Kostenlos">Kostenlos</Checkbox>
-                                    <Checkbox value="Kostenpflichtig">Kostenpflichtig</Checkbox>
-                                </Space>
-                            </CheckboxGroupKosten>
-                        <Divider/>
-                        <p>Sonstiges</p>
-                    </Card>
+                    <SearchOptions></SearchOptions>
                 </div>
                 <div style={{flex:"1", maxWidth:"1000px", marginRight:"1rem"}}>
                 {
