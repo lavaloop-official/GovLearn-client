@@ -3,74 +3,10 @@ import SearchComponent from "../components/SearchComponent.tsx";
 import {Course} from "../interfaces.ts";
 import {fetchWrapper} from "../api/helper.ts";
 import {useLocation, useNavigate} from "react-router-dom";
-import {Button, Card, Checkbox, DatePicker, DatePickerProps, Divider, Select, Slider, Space} from 'antd';
-import type { CheckboxValueType } from 'antd/es/checkbox/Group';
-import type { SelectProps } from 'antd';
-import { SliderMarks } from "antd/es/slider/index";
+import {Button} from 'antd';
 import SearchOptions from "../components/SearchOptions.tsx";
 
 function Searching() {
-    // Options
-    const options: SelectProps['options'] = [];
-
-    for (let i = 0; i < 100000; i++) {
-        const value = `${i.toString(36)}${i}`;
-        options.push({
-            label: value,
-            value,
-            disabled: i === 10,
-        });
-    }
-
-    const handleChange = (value: string[]) => {
-        console.log(`selected ${value}`);
-    };
-
-    const CheckboxGroupWissensbezug = Checkbox.Group;
-
-    const onChangeWissensbezug = (checkedValues: CheckboxValueType[]) => {
-        console.log('checked = ', checkedValues);
-      };
-
-    const CheckboxGroupVerwaltungsspezifisch = Checkbox.Group;
-
-    const onChangeVerwaltungsspezifisch = (checkedValues: CheckboxValueType[]) => {
-        console.log('checked = ', checkedValues);
-    };
-
-    const CheckboxGroupZertifikat = Checkbox.Group;
-
-    const onChangeZertifikat = (checkedValues: CheckboxValueType[]) => {
-        console.log('checked = ', checkedValues);
-    };
-
-    const CheckboxGroupKompetenzstufe = Checkbox.Group;
-
-    const onChangeKompetenzstufe = (checkedValues: CheckboxValueType[]) => {
-        console.log('checked = ', checkedValues);
-    };
-
-    const dauer: SliderMarks = {
-        0: '<10 Min.',
-        50: '1 Std.',
-        100: '8+Std.'
-      };
-
-    const CheckboxGroupFormat = Checkbox.Group;
-
-    const onChangeFormat = (checkedValues: CheckboxValueType[]) => {
-        console.log('checked = ', checkedValues);
-    };
-
-    const onChangeStartdatum: DatePickerProps['onChange'] = (date, dateString) => {
-        console.log(date, dateString);
-      };
-
-    const CheckboxGroupKosten = Checkbox.Group;
-
-    const onChangeKosten = (checkedValues: CheckboxValueType[]) => {
-        console.log('checked = ', checkedValues);
-    };
       
     const loc = useLocation();
 
