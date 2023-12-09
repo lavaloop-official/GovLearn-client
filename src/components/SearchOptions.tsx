@@ -1,7 +1,7 @@
 import {Card, Checkbox, DatePicker, DatePickerProps, Divider, Select, Slider, Space} from 'antd';
 import type { CheckboxValueType } from 'antd/es/checkbox/Group';
 import type { SelectProps } from 'antd';
-import { SliderMarks } from "antd/es/slider/index";
+import { SliderMarks, SliderTooltipProps } from "antd/es/slider/index";
 
 function SearchOptions() {
     // Options
@@ -48,6 +48,11 @@ function SearchOptions() {
         0: '<10 Min.',
         50: '1 Std.',
         100: '8+Std.'
+      };
+
+    const tooltip: SliderTooltipProps = {
+        open: false
+        // Vielleicht formatter benutzen?
       };
 
     const CheckboxGroupFormat = Checkbox.Group;
@@ -111,7 +116,7 @@ function SearchOptions() {
                 </CheckboxGroupKompetenzstufe>
             <Divider/>
             <p>Dauer</p>
-            <Slider range marks={dauer} step={null} defaultValue={[0,100]} style={{marginLeft:"20px", marginRight:"20px"}}/>
+            <Slider range marks={dauer} tooltip={tooltip} step={null} defaultValue={[0,100]} style={{marginLeft:"20px", marginRight:"20px"}}/>
             <Divider/>
             <p>Format</p>
                 <CheckboxGroupFormat onChange={onChangeFormat}>
