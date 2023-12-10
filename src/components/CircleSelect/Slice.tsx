@@ -1,20 +1,17 @@
 import {useState} from "react";
 import * as d3 from "d3";
 
-function Slice(props: { radius: number; slice: d3.PieArcDatum<number | {valueOf(): number}>; sliceColor: string; }) {
-    const arccount = 4;
+function Slice({radius, slice, sliceColor, arcCount}: { radius: number, slice: d3.PieArcDatum<number>, sliceColor: string, arcCount: number }) {
 
-    const {radius, slice, sliceColor} = props;
-
-    const [modifier, setModifier] = useState<number[]>(new Array(arccount).fill(0));
+    const [modifier, setModifier] = useState<number[]>(new Array(arcCount).fill(0));
     const onMouseOver = (level: number) => {
-        const newModifier = new Array(arccount).fill(0);
+        const newModifier = new Array(arcCount).fill(0);
         newModifier[level] = 0.08;
         setModifier(newModifier);
     };
 
     const onMouseOut = () => {
-        setModifier(new Array(arccount).fill(0));
+        setModifier(new Array(arcCount).fill(0));
     };
 
     const onMouseDown = () => {
@@ -25,7 +22,7 @@ function Slice(props: { radius: number; slice: d3.PieArcDatum<number | {valueOf(
         const arcs = [];
         const selected = modifier.findIndex((e) => e != 0);
 
-        for (let i = 0; i < arccount; i++) {
+        for (let i = 0; i < arcCount; i++) {
             const inner = i * 0.5 + 0.71;
             const outer = inner + 0.48;
             arcs.push(d3
