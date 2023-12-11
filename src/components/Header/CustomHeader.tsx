@@ -9,6 +9,7 @@ import {RootState} from "../../state/reduxStore.ts";
 import {fetchWrapper} from "../../api/helper";
 import {clearToken} from "../../api/auth.ts";
 import Searchbar from "../Searchbar.tsx";
+import './CustomHeader.css'
 
 const {Title} = Typography
 
@@ -32,11 +33,6 @@ function CustomHeader() {
         if (loggedIn)
             fetchWrapper.get('api/v1/users').then(res => setName(res.payload.name))
     }, [location.pathname])
-
-
-    //TODO: refactor avatar to component
-    //TODO: dont show search bar on landing page
-    //TODO: placeholder for avatar/loginbutton so it doesnt jump around
 
     const items: MenuProps['items'] = [
         {
@@ -88,36 +84,23 @@ function CustomHeader() {
 
     return (
         <div style={{width: "100%", height: "100%"}}>
-            <Row style={{
-                margin: "0 auto",
-                maxWidth: "1200px",
-                width: "100%",
-                height: "56px",
-                display: "flex",
-                verticalAlign: "middle",
-            }}>
-                <Col span={8} style={{display: "flex", height: "56px"}}>
-                    <Title level={3}
-                           style={{
-                               margin: "auto auto auto 10px",
-                               minWidth: "100px",
-                               color: "#3f3f3f"
-                           }}>
+            <Row>
+                <Col span={8}>
+                    <Title level={3}>
                         <a href="/discover" style={{color: "#212321"}}>
                             Govlearn
                         </a>
                     </Title>
                 </Col>
-                <Col span={8} style={{display: "flex", height: "56px"}}>
+                <Col span={8}>
                     {loggedIn ?
                         <Searchbar/>
                         : <></>
                     }
                 </Col>
-
-                <Col span={8} style={{display: "flex", height: "56px"}}>
+                <Col span={8}>
                     {loggedIn ?
-                        <div style={{margin: "auto 10px auto auto", minWidth: "32px", lineHeight: "0px"}}>
+                        <div className="avatar">
                             <Dropdown menu={{items}} placement="bottomRight" arrow={{pointAtCenter: true}}
                                       trigger={['click']}>
                                 <a onClick={(e) => e.preventDefault()}>
@@ -126,14 +109,11 @@ function CustomHeader() {
                             </Dropdown>
                         </div>
                         :
-                        <Button type="primary" size="large" style={{margin: "auto 0px auto auto", minWidth: "32px"}}
-                                onClick={() => {
-                                    openLoginModal("login")
-                                }}>Anmelden</Button>
+                        <Button className="loginbtn" type="primary" size="large" onClick={() => {
+                            openLoginModal("login")
+                        }}>Anmelden</Button>
                     }
                 </Col>
-
-
             </Row>
             {subHeader}
         </div>
