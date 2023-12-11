@@ -1,4 +1,4 @@
-import {Avatar, Button, Dropdown, MenuProps, Typography} from "antd";
+import {Avatar, Button, Col, Dropdown, MenuProps, Row, Typography} from "antd";
 import {UserOutlined} from "@ant-design/icons";
 import {useLocation} from "react-router-dom";
 import {useEffect, useState} from "react";
@@ -7,7 +7,6 @@ import {openLoginModal} from "../../state/modalutil.ts";
 import {useSelector} from "react-redux";
 import {RootState} from "../../state/reduxStore.ts";
 import {fetchWrapper} from "../../api/helper";
-import categoryBlue from "../../assets/categoryBlue.png"
 import {clearToken} from "../../api/auth.ts";
 import Searchbar from "../Searchbar.tsx";
 
@@ -89,48 +88,53 @@ function CustomHeader() {
 
     return (
         <div style={{width: "100%", height: "100%"}}>
-            <div style={{
+            <Row style={{
                 margin: "0 auto",
                 maxWidth: "1200px",
                 width: "100%",
                 height: "56px",
                 display: "flex",
                 verticalAlign: "middle",
-                gap: "10px",
-                padding: "0px 10px",
             }}>
-                <Title level={3}
-                       style={{
-                           margin: "auto auto auto 0px",
-                           minWidth: "100px",
-                           color: "#3f3f3f"
-                       }}>
-                    <a href="/discover" style={{color: "#212321"}}>
-                        Govlearn
-                    </a>
-                </Title>
-                {loggedIn ?
-                    <Searchbar></Searchbar>
-                    :<div></div>
-                }
-                {loggedIn ?
-                    <div style={{margin: "auto 0px auto auto", minWidth: "32px", lineHeight: "0px"}}>
-                        <Dropdown menu={{items}} placement="bottomRight" arrow={{pointAtCenter: true}}
-                                  trigger={['click']}>
-                            <a onClick={(e) => e.preventDefault()}>
-                                <Avatar icon={<UserOutlined/>}/>
-                            </a>
-                        </Dropdown>
-                    </div>
-                    :
-                    <Button type="primary" size="large" style={{margin: "auto 0px auto auto", minWidth: "32px"}}
-                            onClick={() => {
-                                openLoginModal("login")
-                            }}>Anmelden</Button>
-                }
+                <Col span={8} style={{display: "flex", height: "56px"}}>
+                    <Title level={3}
+                           style={{
+                               margin: "auto auto auto 10px",
+                               minWidth: "100px",
+                               color: "#3f3f3f"
+                           }}>
+                        <a href="/discover" style={{color: "#212321"}}>
+                            Govlearn
+                        </a>
+                    </Title>
+                </Col>
+                <Col span={8} style={{display: "flex", height: "56px"}}>
+                    {loggedIn ?
+                        <Searchbar/>
+                        : <></>
+                    }
+                </Col>
+
+                <Col span={8} style={{display: "flex", height: "56px"}}>
+                    {loggedIn ?
+                        <div style={{margin: "auto 10px auto auto", minWidth: "32px", lineHeight: "0px"}}>
+                            <Dropdown menu={{items}} placement="bottomRight" arrow={{pointAtCenter: true}}
+                                      trigger={['click']}>
+                                <a onClick={(e) => e.preventDefault()}>
+                                    <Avatar icon={<UserOutlined/>}/>
+                                </a>
+                            </Dropdown>
+                        </div>
+                        :
+                        <Button type="primary" size="large" style={{margin: "auto 0px auto auto", minWidth: "32px"}}
+                                onClick={() => {
+                                    openLoginModal("login")
+                                }}>Anmelden</Button>
+                    }
+                </Col>
 
 
-            </div>
+            </Row>
             {subHeader}
         </div>
     );
