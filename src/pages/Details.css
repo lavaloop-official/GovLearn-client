@@ -1,6 +1,8 @@
 /* Apply styling to the course details */
 .course-details {
-    padding: 16px;
+    padding: 0px;
+    max-width: 190px;
+    word-wrap: break-word;
 }
 
 /* Style the attribute labels */
@@ -37,6 +39,18 @@ hr {
     height: 100%;
 }
 
+.course-sidebar {
+    max-width: 200px;
+    width: 100%;
+    padding: 5px;
+}
+
 .course-sidebar .ant-card-body{
     padding: 24px 16px 16px;
+}
+
+.course-sidebar #bookmark_outer {
+    position: absolute;
+    top: 10px;
+    right: 10px;
 }

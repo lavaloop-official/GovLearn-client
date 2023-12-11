@@ -150,21 +150,10 @@ function Details() {
                                 }
 
 
-                                <Flex className="course-sidebar" vertical gap="middle"
-                                      style={{
-                                          maxWidth: "200px",
-                                          width: "100%",
-                                          padding: "5px",
-                                      }}
-                                >
+                                <Flex className="course-sidebar" vertical gap="middle">
                                     <Card className="antcard" style={{height: "100%"}}>
-                                        {course.id ? <Bookmark id={course.id}
-                                                               style={{position: "absolute", top: "10px", right: "10px"}}/> : <></>}
-                                        <div className="course-details" style={{
-                                            padding: "0px",
-                                            maxWidth: "190px",
-                                            wordWrap: "break-word",
-                                        }}>
+                                        {course.id ? <Bookmark id={course.id}/> : <></>}
+                                        <div className="course-details">
                                             {course.durationInHours && (
                                                 <div className="course-attribute">
                                                     <p className="attribute-label">Länge:</p>
