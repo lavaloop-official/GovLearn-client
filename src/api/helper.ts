@@ -32,7 +32,7 @@ function request(method: string) {
             }
         ).catch(
             (error) => {
-                console.log("error")
+                console.log(error)
                 return handleError(error)
             }
         )
