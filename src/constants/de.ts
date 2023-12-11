@@ -17,3 +17,5 @@ export const SEARCH_ERROR = 'Bitte geben Sie einen Suchbegriff ein!'
 export const WELCOME_BACK = 'Willkommen zurück, setze deine Weiterbildung fort.'
 
 export const WELCOME = 'Entdecke Weiterbildungsangebote, die dich weiterbringen.'
+
+export const NO_BOOKMARKS = 'Sie haben keine Kurse markiert!'
