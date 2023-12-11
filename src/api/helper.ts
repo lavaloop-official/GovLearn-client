@@ -1,5 +1,5 @@
 import {BACKEND_URL} from "../constants/backend";
-import {getToken} from "./auth.ts";
+import {clearToken, getToken} from "./auth.ts";
 
 //TODO: add proper error handling
 
@@ -35,8 +35,7 @@ function request(method: string) {
                 console.log(error)
                 return handleError(error)
             }
-        );
-
+        )
         return handleResponse(response);
     }
 }
@@ -56,18 +55,32 @@ async function handleResponse(response: Response | undefined) {
         return handleError(new Error("No response"))
 
     return response.text().then(text => {
-        const data = text && JSON.parse(text);
-
         if (!response.ok) {
-            return undefined;
+            return handleErrorCode(response)
         }
-
-        return data;
+        return text && JSON.parse(text);
     });
 }
 
+function handleErrorCode(response: Response) {
+    switch (response.status) {
+        case 401:
+            if (!response.url.endsWith("bookmarks"))
+                clearToken();
+            break;
+        case 403:
+            return handleError(new Error("Forbidden"))
+        case 404:
+            return handleError(new Error("Not found"))
+        case 500:
+            return handleError(new Error("Internal server error"))
+        default:
+            return handleError(new Error("Unknown error"))
+    }
+}
+
 function handleError(error: any) {
-    console.log(error)
+    console.error(error)
     return undefined;
 }
 
