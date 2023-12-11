@@ -30,7 +30,7 @@ function App() {
         >
             <Provider store={reduxStore}>
                 <BrowserRouter>
-                    <Layout className="layout">
+                    <Layout className="layout" style={{ minHeight: "100vh" }}>
                         <Header style={{
                             display: 'flex',
                             background: "inherit",
