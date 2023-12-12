@@ -3,8 +3,9 @@ import type { CheckboxValueType } from 'antd/es/checkbox/Group';
 import type { SelectProps } from 'antd';
 import { SliderMarks, SliderTooltipProps } from "antd/es/slider/index";
 import { CourseFilterWsTo, Format, Skilllevel } from '../interfaces';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { fetchWrapper } from '../api/helper';
 
 interface SearchOptionsProps {
     
@@ -32,7 +33,7 @@ const SearchOptions: React.FC<SearchOptionsProps> = ({onVariableChange}) => {
         onVariableChange(courseFilter);
     }
 
-    const [Anbieter, setAnbieter] = useState<string[]>();
+    const [Anbieter, setAnbieter] = useState<string[]>([]);
     const [Wissensbezug, setWissensbezug] = useState<string[]>();
     const [Verwaltungsspezifisch, setVerwaltungsspezifisch] = useState<boolean>();
     const [Zertifikat, setZertifikat] = useState<boolean>();
@@ -43,16 +44,17 @@ const SearchOptions: React.FC<SearchOptionsProps> = ({onVariableChange}) => {
     const [Kosten, setKosten] = useState<boolean>(false);
     const [Sonstiges, setSonstiges] = useState<string[]>();
     // Options
-    const options: SelectProps['options'] = [];
 
-    for (let i = 0; i < 100000; i++) {
-        const value = `${i.toString(36)}${i}`;
-        options.push({
-            label: value,
-            value,
-            disabled: i === 10,
-        });
-    }
+    const [options, setOptions] = useState<SelectProps['options']>([]);
+
+    // for (let i = 0; i < 100000; i++) {
+    //     const value = `${i.toString(36)}${i}`;
+    //     options.push({
+    //         label: value,
+    //         value,
+    //         disabled: i === 10,
+    //     });
+    // }
 
     const handleChange = (value: string[]) => {
         console.log(`selected ${value}`);
@@ -180,6 +182,21 @@ const SearchOptions: React.FC<SearchOptionsProps> = ({onVariableChange}) => {
         }
         setKosten(value);
     };
+
+    useEffect(() => {
+        fetchWrapper.get('api/v1/courses/providers').then(res => {
+            let options:SelectProps['options']=[]
+            for (let i = 0; i < res.payload.length; i++) {
+                let value = String(res.payload[i]);
+                options.push({
+                    label: value,
+                    value,
+                    disabled: false,
+                });
+            }
+            setOptions(options)
+        });
+    }, options);
 
     return (
         <Card title="Optionen" size="small" style={{minWidth:"250px", borderRadius:"20px", position:"sticky", top:"-500px"}}>
