@@ -1,8 +1,9 @@
-import {Button, Card, Checkbox, DatePicker, DatePickerProps, Divider, Form, Select, Slider, Space} from 'antd';
+import {Card, Checkbox, DatePicker, DatePickerProps, Divider, Select, Slider, Space} from 'antd';
 import type { CheckboxValueType } from 'antd/es/checkbox/Group';
 import type { SelectProps } from 'antd';
 import { SliderMarks, SliderTooltipProps } from "antd/es/slider/index";
-import { CourseFilterWsTo, Format, Skilllevel } from '../interfaces';
+import { CourseFilterWsTo} from '../interfaces';
+import {Format, Skilllevel} from '../Enum';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { fetchWrapper } from '../api/helper';
@@ -43,18 +44,8 @@ const SearchOptions: React.FC<SearchOptionsProps> = ({onVariableChange}) => {
     const [Dauer, setDauer] = useState<string[]>();
     const [Kosten, setKosten] = useState<boolean>(false);
     const [Sonstiges, setSonstiges] = useState<string[]>();
-    // Options
 
     const [options, setOptions] = useState<SelectProps['options']>([]);
-
-    // for (let i = 0; i < 100000; i++) {
-    //     const value = `${i.toString(36)}${i}`;
-    //     options.push({
-    //         label: value,
-    //         value,
-    //         disabled: i === 10,
-    //     });
-    // }
 
     const handleChange = (value: string[]) => {
         console.log(`selected ${value}`);

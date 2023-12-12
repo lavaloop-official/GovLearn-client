@@ -1,3 +1,5 @@
+import { Format, Skilllevel } from "./Enum"
+
 export interface Course {
     "id": number | undefined,
     "name": string | undefined,
@@ -50,17 +52,4 @@ export interface CourseFilterWsTo {
     "Startdatum": Date | undefined,
     "Kosten": boolean | undefined,
     "Sonstiges": Array<string> | undefined
-}
-
-export enum Skilllevel{
-    Anfaenger,
-    Fortgeschritten,
-    Experte
-}
-
-export enum Format{
-    Praesenz,
-    OnlineLive,
-    OnlineSelbstorganisiert,
-    Hybrid
 }
