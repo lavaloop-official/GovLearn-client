@@ -28,8 +28,8 @@ function Searching() {
 
     // Define the callback function
     const handleVariableChange = (variable: CourseFilterWsTo):void => {
-    setCourseFilter(variable);
-      console.log(courseFilter)
+        setCourseFilter(variable);
+        console.log(courseFilter)
     };
 
     const [courseFeedbacks, setCourseFeedbacks] = useState<{ course: Course, feedback: number }[]>([]);

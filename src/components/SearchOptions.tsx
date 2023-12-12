@@ -58,7 +58,7 @@ const SearchOptions: React.FC<SearchOptionsProps> = ({onVariableChange}) => {
 
     const handleChange = (value: string[]) => {
         console.log(`selected ${value}`);
-        setAnbieter(value)
+        setAnbieter(value);
     };
 
     const CheckboxGroupWissensbezug = Checkbox.Group;
@@ -184,6 +184,10 @@ const SearchOptions: React.FC<SearchOptionsProps> = ({onVariableChange}) => {
     };
 
     useEffect(() => {
+        buildCourseFilterWsTo();
+    }, [Anbieter, Wissensbezug, Verwaltungsspezifisch, Zertifikat, Kompetenzstufen, Formate, Startdatum, Dauer, Kosten, Sonstiges])
+
+    useEffect(() => {
         fetchWrapper.get('api/v1/courses/providers').then(res => {
             let options:SelectProps['options']=[]
             for (let i = 0; i < res.payload.length; i++) {
@@ -266,7 +270,6 @@ const SearchOptions: React.FC<SearchOptionsProps> = ({onVariableChange}) => {
                 </CheckboxGroupKosten>
             <Divider/>
             <p>Sonstiges</p>
-            <Button onClick={buildCourseFilterWsTo}>Apply Filter</Button>
             </Card>
     );
 }
