@@ -38,9 +38,29 @@ export interface Coursetag {
     "category": string | undefined,
 }
 
-export interface TreeInterface {
-    "title": string | undefined,
-    "value": string | undefined,
-    "key": string | undefined,
-    "children": Array<TreeInterface> |undefined
+export interface CourseFilterWsTo {
+    "tagIDs": Array<number> | undefined,
+    "Anbieter": Array<string> | undefined,
+    "Wissensbezug": Array<string> | undefined,
+    "Verwaltungsspezifisch": boolean | undefined,
+    "Zertifikat": boolean | undefined,
+    "Kompetenzstufe": Array<Skilllevel> | undefined,
+    "Dauer": Array<string> | undefined,
+    "Format": Array<Format> | undefined,
+    "Startdatum": Date | undefined,
+    "Kosten": boolean | undefined,
+    "Sonstiges": Array<string> | undefined
+}
+
+export enum Skilllevel{
+    Anfaenger,
+    Fortgeschritten,
+    Experte
+}
+
+export enum Format{
+    Praesenz,
+    OnlineLive,
+    OnlineSelbstorganisiert,
+    Hybrid
 }

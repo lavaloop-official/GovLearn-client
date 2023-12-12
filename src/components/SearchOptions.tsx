@@ -1,9 +1,47 @@
-import {Card, Checkbox, DatePicker, DatePickerProps, Divider, Select, Slider, Space} from 'antd';
+import {Button, Card, Checkbox, DatePicker, DatePickerProps, Divider, Form, Select, Slider, Space} from 'antd';
 import type { CheckboxValueType } from 'antd/es/checkbox/Group';
 import type { SelectProps } from 'antd';
 import { SliderMarks, SliderTooltipProps } from "antd/es/slider/index";
+import { CourseFilterWsTo, Format, Skilllevel } from '../interfaces';
+import { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
-function SearchOptions() {
+interface SearchOptionsProps {
+    
+    onVariableChange: (variable: CourseFilterWsTo) => void;
+  }
+
+const SearchOptions: React.FC<SearchOptionsProps> = ({onVariableChange}) => {
+
+    const loc = useLocation();
+
+    const buildCourseFilterWsTo = () => {
+        let courseFilter: CourseFilterWsTo = {
+            tagIDs: loc.state?.tagIDs,
+            Anbieter: Anbieter,
+            Wissensbezug: Wissensbezug,
+            Verwaltungsspezifisch: Verwaltungsspezifisch,
+            Zertifikat: Zertifikat,
+            Kompetenzstufe: Kompetenzstufen,
+            Format: Formate,
+            Startdatum: Startdatum,
+            Dauer: Dauer,
+            Kosten: Kosten,
+            Sonstiges: []
+        }
+        onVariableChange(courseFilter);
+    }
+
+    const [Anbieter, setAnbieter] = useState<string[]>();
+    const [Wissensbezug, setWissensbezug] = useState<string[]>();
+    const [Verwaltungsspezifisch, setVerwaltungsspezifisch] = useState<boolean>();
+    const [Zertifikat, setZertifikat] = useState<boolean>();
+    const [Kompetenzstufen, setKompetenzstufen] = useState<Skilllevel[]>([Skilllevel.Anfaenger, Skilllevel.Fortgeschritten, Skilllevel.Experte]);
+    const [Formate, setFormat] = useState<Format[]>([Format.OnlineLive, Format.Praesenz, Format.Hybrid, Format.OnlineSelbstorganisiert]);
+    const [Startdatum, setStartdatum] = useState<Date>();
+    const [Dauer, setDauer] = useState<string[]>();
+    const [Kosten, setKosten] = useState<boolean>(false);
+    const [Sonstiges, setSonstiges] = useState<string[]>();
     // Options
     const options: SelectProps['options'] = [];
 
@@ -18,30 +56,60 @@ function SearchOptions() {
 
     const handleChange = (value: string[]) => {
         console.log(`selected ${value}`);
+        setAnbieter(value)
     };
 
     const CheckboxGroupWissensbezug = Checkbox.Group;
 
     const onChangeWissensbezug = (checkedValues: CheckboxValueType[]) => {
         console.log('checked = ', checkedValues);
+        let array:string[]=[]
+        for (let index = 0; index < checkedValues.length; index++) {
+            array[index]=String(checkedValues[index]);
+        }
+        setWissensbezug(array);
       };
 
     const CheckboxGroupVerwaltungsspezifisch = Checkbox.Group;
 
     const onChangeVerwaltungsspezifisch = (checkedValues: CheckboxValueType[]) => {
         console.log('checked = ', checkedValues);
+        let value = false
+        if (String(checkedValues[0]) == "Einsteiger"){
+            value = true
+        }
+        setVerwaltungsspezifisch(value);
     };
 
     const CheckboxGroupZertifikat = Checkbox.Group;
 
     const onChangeZertifikat = (checkedValues: CheckboxValueType[]) => {
         console.log('checked = ', checkedValues);
+        let value = false
+        if (String(checkedValues[0]) == "Zertifikat"){
+            value = true
+        }
+        setZertifikat(value);
     };
 
     const CheckboxGroupKompetenzstufe = Checkbox.Group;
 
     const onChangeKompetenzstufe = (checkedValues: CheckboxValueType[]) => {
         console.log('checked = ', checkedValues);
+        let array:Skilllevel[]=[]
+        for (let index = 0; index < checkedValues.length; index++) {
+            let value = String(checkedValues[index]);
+            if (value == "Einsteiger"){
+                array[index]=0
+            }
+            else if (value == "Fortgeschritten"){
+                array[index]=1
+            }
+            else if (value == "Experte"){
+                array[index]=2
+            }
+        }
+        setKompetenzstufen(array);
     };
 
     const dauer: SliderMarks = {
@@ -55,20 +123,62 @@ function SearchOptions() {
         // Vielleicht formatter benutzen?
       };
 
+    const onChangeDauer = (checkedValues: CheckboxValueType[]) => {
+        console.log('checked = ', checkedValues);
+        let array:string[]=[]
+        for (let index = 0; index < checkedValues.length; index++) {
+            let value = Number(checkedValues[index]);
+            if (value == 0){
+                array[index]="<10 Min."
+            }
+            else if (value == 50){
+                array[index]="1 Std."
+            }
+            else if (value == 100){
+                array[index]="8+Std."
+            }
+        }
+        setDauer(array);
+    };
+
+
     const CheckboxGroupFormat = Checkbox.Group;
 
     const onChangeFormat = (checkedValues: CheckboxValueType[]) => {
         console.log('checked = ', checkedValues);
+        let array:Format[]=[]
+        for (let index = 0; index < checkedValues.length; index++) {
+            let value = String(checkedValues[index]);
+            if (value == "Live-Online"){
+                array[index]=0
+            }
+            else if (value == "Präsenz"){
+                array[index]=1
+            }
+            else if (value == "Hybrid"){
+                array[index]=2
+            }
+            else if (value == "Selbstorganisiert"){
+                array[index]=3
+            }
+        }
+        setFormat(array);
     };
 
     const onChangeStartdatum: DatePickerProps['onChange'] = (date, dateString) => {
         console.log(date, dateString);
+        setStartdatum(date?.toDate)
       };
 
     const CheckboxGroupKosten = Checkbox.Group;
 
     const onChangeKosten = (checkedValues: CheckboxValueType[]) => {
         console.log('checked = ', checkedValues);
+        let value = false
+        if (String(checkedValues[0]) == "Kostenlos"){
+            value = true
+        }
+        setKosten(value);
     };
 
     return (
@@ -116,7 +226,7 @@ function SearchOptions() {
                 </CheckboxGroupKompetenzstufe>
             <Divider/>
             <p>Dauer</p>
-            <Slider range marks={dauer} tooltip={tooltip} step={null} defaultValue={[0,100]} style={{marginLeft:"20px", marginRight:"20px"}}/>
+            <Slider range marks={dauer} onChange={onChangeDauer} tooltip={tooltip} step={null} defaultValue={[0,100]} style={{marginLeft:"20px", marginRight:"20px"}}/>
             <Divider/>
             <p>Format</p>
                 <CheckboxGroupFormat onChange={onChangeFormat}>
@@ -135,11 +245,11 @@ function SearchOptions() {
                 <CheckboxGroupKosten onChange={onChangeKosten}>
                     <Space direction="vertical">
                         <Checkbox value="Kostenlos">Kostenlos</Checkbox>
-                        <Checkbox value="Kostenpflichtig">Kostenpflichtig</Checkbox>
                     </Space>
                 </CheckboxGroupKosten>
             <Divider/>
             <p>Sonstiges</p>
+            <Button onClick={buildCourseFilterWsTo}>Apply Filter</Button>
             </Card>
     );
 }
