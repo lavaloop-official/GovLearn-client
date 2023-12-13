@@ -1,6 +1,6 @@
 import {Avatar, Button, Dropdown, MenuProps, Typography} from "antd";
 import {UserOutlined} from "@ant-design/icons";
-import {useLocation} from "react-router-dom";
+import {useLocation, useNavigate, useNavigation} from "react-router-dom";
 import {useEffect, useState} from "react";
 import SubHeader from "./SubHeader.tsx";
 import {openLoginModal} from "../../state/modalutil.ts";
@@ -10,6 +10,7 @@ import {fetchWrapper} from "../../api/helper";
 import categoryBlue from "../../assets/categoryBlue.png"
 import {clearToken} from "../../api/auth.ts";
 import Searchbar from "../Searchbar.tsx";
+import { BookmarkFill } from "react-bootstrap-icons";
 
 const {Title} = Typography
 
@@ -21,11 +22,12 @@ function CustomHeader() {
     const loggedIn = useSelector((state: RootState) => state.auth.auth)
 
     const location = useLocation();
+    const navigate = useNavigate();
 
     const [name, setName] = useState('')
 
     useEffect(() => {
-        if (location.pathname.includes("discover") || location.pathname.includes("detail") || location.pathname.includes("profile") || location.pathname.includes("searching") || location.pathname.includes("bookmarks")) {
+        if (location.pathname.includes("discover") || location.pathname.includes("detail") || location.pathname.includes("profile") || location.pathname.includes("searching") || location.pathname.includes("bookmarks") || location.pathname.includes("groups")){
             setSubHeader(<SubHeader/>)
         } else {
             setSubHeader(<></>)
@@ -34,6 +36,9 @@ function CustomHeader() {
             fetchWrapper.get('api/v1/users').then(res => setName(res.payload.name))
     }, [location.pathname])
 
+    const openBookmarks = () => {
+        navigate('/bookmarks');
+    }
 
     //TODO: refactor avatar to component
     //TODO: dont show search bar on landing page
@@ -114,13 +119,18 @@ function CustomHeader() {
                     :<div></div>
                 }
                 {loggedIn ?
-                    <div style={{margin: "auto 0px auto auto", minWidth: "32px", lineHeight: "0px"}}>
-                        <Dropdown menu={{items}} placement="bottomRight" arrow={{pointAtCenter: true}}
-                                  trigger={['click']}>
-                            <a onClick={(e) => e.preventDefault()}>
-                                <Avatar icon={<UserOutlined/>}/>
-                            </a>
-                        </Dropdown>
+                    <div style={{margin: "auto 0px auto auto", minWidth: "60px", lineHeight: "0px", display: "flex", justifyContent:"right", alignItems:"center"}}>
+                        <Button style={{marginRight:"15px", width:"32px", height:"32px"}} shape="circle">
+                            <BookmarkFill className="bookmark_inner filled" onClick={openBookmarks} style={{height:"12px"}}/>
+                        </Button>
+                        <div>
+                            <Dropdown menu={{items}} placement="bottomRight" arrow={{pointAtCenter: true}}
+                                    trigger={['click']}>
+                                <a onClick={(e) => e.preventDefault()}>
+                                    <Avatar icon={<UserOutlined/>}/>
+                                </a>
+                            </Dropdown>
+                        </div>
                     </div>
                     :
                     <Button type="primary" size="large" style={{margin: "auto 0px auto auto", minWidth: "32px"}}

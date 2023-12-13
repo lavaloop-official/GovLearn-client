@@ -28,15 +28,15 @@ function SubHeader() {
         }}>
             <Button
                 type="text"
-                href="/bookmarks"
+                href="/groups"
                 style={{
                     margin: "0",
                     borderRadius: "0px",
                     maxWidth: "250px",
                     width: "100%",
-                    ...styleSelected("bookmarks")
+                    ...styleSelected("groups")
                 }}>
-                Markierte Kurse
+                Gruppen
             </Button>
             <Button
                 type="text"
