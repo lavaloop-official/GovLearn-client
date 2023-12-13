@@ -7,7 +7,6 @@ import {openLoginModal} from "../../state/modalutil.ts";
 import {useSelector} from "react-redux";
 import {RootState} from "../../state/reduxStore.ts";
 import {fetchWrapper} from "../../api/helper";
-import categoryBlue from "../../assets/categoryBlue.png"
 import {clearToken} from "../../api/auth.ts";
 import Searchbar from "../Searchbar.tsx";
 
@@ -109,7 +108,7 @@ function CustomHeader() {
                         Govlearn
                     </a>
                 </Title>
-                {loggedIn ?
+                {loggedIn && !location.pathname.includes("searching") ?
                     <Searchbar></Searchbar>
                     :<div></div>
                 }

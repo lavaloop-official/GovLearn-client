@@ -26,10 +26,11 @@ function Details() {
         costFree: undefined,
         domainSpecific: undefined,
         link: undefined,
+        ratingAverage: undefined,
+        ratingAmount: undefined,
     });
 
     const [relatedCourses, setRelatedCourses] = useState<Course[]>([]);
-    const [averageRating, setAverageRating] = useState<number>(0);
     const [feedback, setFeedback] = useState<Review[]>([]);
     const defaultImageSrc = "https://st4.depositphotos.com/13194036/31587/i/450/depositphotos_315873928-stock-photo-selective-focus-happy-businessman-glasses.jpg"
 
@@ -43,14 +44,15 @@ function Details() {
         fetchWrapper.get(`api/v1/feedback/course/${courseId}/limit/100/offset/0`).then((res) => {
             setFeedback(res.payload);
         });
-        fetchWrapper.get(`api/v1/feedback/average/course/${courseId}`).then((res) => {
-            setAverageRating(res.payload);
-        });
         fetchWrapper.get(`api/v1/similar-courses/${courseId}/`).then((res) => {
             const filtered = res.payload.slice(0, 3);
             setRelatedCourses(filtered);
         });
     }, []);
+
+    const onClickBackBtn = () => {
+        history.back();
+    }
 
     const translateFormat = (format: string) => {
         switch (format) {
@@ -84,7 +86,7 @@ function Details() {
                     >
                         <Button
                             type="primary"
-                            href="/discover"
+                            onClick={onClickBackBtn}
                             style={{
                                 height: "fit-content",
                                 width: "fit-content",
@@ -256,7 +258,7 @@ function Details() {
                                 <Flex style={{justifyContent: "space-between", width: "100%"}}>
                                     <Card className="antcard" style={{margin: "5px", width: "30%"}}>
                                         <p style={{fontWeight: "bold"}}>Durchschnittsbewertung</p>
-                                        <Rate disabled value={averageRating}/>
+                                        <Rate disabled value={course.ratingAverage}/>
                                     </Card>
                                     <ReviewComp id={course.id}></ReviewComp>
                                 </Flex>
