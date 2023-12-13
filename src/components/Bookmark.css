@@ -1,9 +1,13 @@
-#bookmark_outer {
+.bookmark_outer {
     display: flex;
     height: 32px;
     width: 32px;
     justify-content: center;
     align-items: center;
+}
+
+.bookmark_outer * {
+    pointer-events: none;
 }
 
 .bookmark_inner {

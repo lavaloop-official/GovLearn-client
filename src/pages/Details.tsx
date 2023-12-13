@@ -8,8 +8,12 @@ import './Details.css';
 import {Course, Review} from "../interfaces.ts";
 import ReviewComp from "../components/Detail/ReviewComp.tsx";
 import Bookmark from "../components/Bookmark.tsx";
+import {useNavigate} from "react-router-dom";
 
 function Details() {
+
+    const navigate = useNavigate();
+
     const [course, setCourse] = useState<Course>({
         id: undefined,
         name: "",
@@ -50,7 +54,7 @@ function Details() {
             const filtered = res.payload.slice(0, 3);
             setRelatedCourses(filtered);
         });
-    }, []);
+    }, [navigate]);
 
     const translateFormat = (format: string) => {
         switch (format) {

@@ -2,22 +2,22 @@ import {Skeleton, Typography} from "antd";
 import './Recommendation.css'
 import {Course} from "../interfaces.ts";
 import Bookmark from "./Bookmark.tsx";
+import {useNavigate} from "react-router-dom";
 
 function Recommendation({obj}: { obj?: Course }) {
 
-    return (<>
-        <div id="recom" style={{
-            maxWidth: "240px",
-            maxHeight: "185px",
-            width: "100%",
-            height: "100%",
-            borderRadius: "20px",
-            display: "flex",
-            flexDirection: "column",
-            padding: "10px",
-            position: "relative"
-        }}>
-            <div id="recompic" style={{height: "120px"}}>
+    const navigate = useNavigate();
+
+    const handleClick = (event: any) => {
+        if (event.target.className && event.target.className.includes("bookmark_outer"))
+            return;
+        if (obj && obj.id)
+            navigate(`/detail/${obj.id}`, {state: {obj: obj}});
+    }
+
+    return (<a>
+        <div id="recom" onClick={handleClick}>
+            <div id="recompic">
                 {
                     obj ?
                         <img style={{
@@ -28,7 +28,7 @@ function Recommendation({obj}: { obj?: Course }) {
                             userSelect: "none",
                             pointerEvents: "none"
                         }} src={obj.image}/>
-                        : <Skeleton.Image style={{
+                        : <Skeleton.Image className="" style={{
                             objectFit: "cover",
                             borderRadius: "10px",
                             width: "220px",
@@ -43,15 +43,16 @@ function Recommendation({obj}: { obj?: Course }) {
             </div>
             {
                 obj ?
-                    <a className="courselink" href={`/detail/${obj.id}`} title={obj.name}>
-                        <Typography.Title level={5} ellipsis={{rows: 2}} style={{margin: "5px", fontWeight: "bold"}}>
+                    <a className="courselink" title={obj.name}>
+                        <Typography.Title className="coursename" level={5} ellipsis={{rows: 2}}
+                                          style={{margin: "5px", fontWeight: "bold"}}>
                             {obj.name}
                         </Typography.Title>
                     </a>
                     : <Skeleton.Input active size="small" style={{margin: "5px"}}/>
             }
         </div>
-    </>);
+    </a>);
 }
 
 export default Recommendation;

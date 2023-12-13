@@ -1,0 +1,22 @@
+.searchouter {
+    background:#D9D9D9;
+    border-radius:20px;
+    margin-top:1rem;
+    display:flex;
+}
+
+.searchinner {
+    display:flex;
+    position:relative;
+    width:10rem;
+    height:10rem;
+    color:black;
+    margin:10px;
+    flex:0 0 10rem;
+}
+
+.searchouter:hover {
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    transition: all 0.15s ease-in-out 0s;
+}
+
