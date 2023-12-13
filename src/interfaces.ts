@@ -15,7 +15,9 @@ export interface Course {
     "startDate": string | undefined,
     "costFree": boolean | undefined,
     "domainSpecific": boolean | undefined,
-    "link": string | undefined
+    "link": string | undefined,
+    "ratingAverage": number | undefined,
+    "ratingAmount": number | undefined,
 }
 
 export interface Review {
@@ -42,14 +44,14 @@ export interface Coursetag {
 
 export interface CourseFilterWsTo {
     "tagIDs": Array<number> | undefined,
-    "Anbieter": Array<string> | undefined,
-    "Wissensbezug": Array<string> | undefined,
-    "Verwaltungsspezifisch": boolean | undefined,
-    "Zertifikat": boolean | undefined,
-    "Kompetenzstufe": Array<Skilllevel> | undefined,
-    "Dauer": Array<string> | undefined,
-    "Format": Array<Format> | undefined,
-    "Startdatum": Date | undefined,
-    "Kosten": boolean | undefined,
-    "Sonstiges": Array<string> | undefined
+    "anbieter": Array<string> | undefined,
+    "wissensbezug": Array<string> | undefined,
+    "verwaltungsspezifisch": boolean | undefined,
+    "zertifikat": boolean | undefined,
+    "kompetenzstufe": Array<Skilllevel> | undefined,
+    "dauer": Array<string> | undefined,
+    "format": Array<Format> | undefined,
+    "startdatum": Date | undefined,
+    "kosten": boolean | undefined,
+    "sonstiges": Array<string> | undefined
 }

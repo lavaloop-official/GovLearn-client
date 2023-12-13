@@ -2,7 +2,7 @@ import {Rate, Skeleton} from "antd";
 import {Course} from "../interfaces.ts";
 import Bookmark from "./Bookmark.tsx";
 
-function SearchComponent({obj, feedbackrate}: { obj?: Course, feedbackrate?: number }) {
+function SearchComponent({obj}: { obj?: Course}) {
 
     // TODO: Integrate Rating
     return (
@@ -56,7 +56,7 @@ function SearchComponent({obj, feedbackrate}: { obj?: Course, feedbackrate?: num
                     </a>
                     {
                         obj ?
-                            <Rate allowHalf disabled defaultValue={feedbackrate}/>
+                            <Rate allowHalf disabled defaultValue={obj.ratingAverage}/>
                             : <Skeleton.Input active/>
                     }
                 </div>
