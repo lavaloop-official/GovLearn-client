@@ -20,7 +20,7 @@ function Searchbar() {
     const location = useLocation();
 
     const onSearch: SearchProps['onSearch'] = (value) => {
-        navigate(`/searching/${value}`, {state: {tagIDs: selectedTags}, replace: true});
+        navigate('/searching', {state: {tagIDs: selectedTags, searchStr: value}});
     };
 
     const onSelect = (checked: { checked: Key[]; halfChecked: Key[]; } | Key[]) => {
