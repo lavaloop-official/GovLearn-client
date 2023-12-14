@@ -7,7 +7,10 @@ import {useEffect, useState} from 'react';
 import {fetchWrapper} from '../api/helper';
 import './SearchOptions.css';
 
-function SearchOptions({onFilterChange}: { onFilterChange: (variable: object) => void }) {
+function SearchOptions({onFilterChange, initialTags}: {
+    onFilterChange: (variable: object) => void,
+    initialTags: string[]
+}) {
 
     const [options, setOptions] = useState<SelectProps['options']>([]);
     const [tags, setTags] = useState<Coursetag[]>([]);
@@ -38,29 +41,33 @@ function SearchOptions({onFilterChange}: { onFilterChange: (variable: object) =>
     const updateTreeDataWithCategories = (categories: Category[], tags: Coursetag[]) => {
         const updatedTreeData = categories.map((category) => ({
             title: category.name,
-            value: category.id,
+            value: String(category.id),
+            key: String(category.id),
             children: tags
                 .filter((tag) => tag.categoryID === category.id)
                 .map((tag) => ({
                     title: tag.name,
                     value: `${tag.categoryID}-${tag.id}`,
+                    key: `${tag.categoryID}-${tag.id}`,
                 })),
         }));
+
         setTreeData(updatedTreeData);
     };
 
-    const handleCategoryChange = (value: string | number[]) => {
+    const handleCategoryChange = (value: string[]) => {
+        console.log(value)
         const selectedTags = []
         for (const val of value) {
-            if (typeof val === "string") {
+            if (val.includes("-")) {
                 const tag = val.split("-")[1]
                 selectedTags.push(Number(tag))
-            }
-            if (typeof val === "number") {
-                const selected = tags.filter(e => e.categoryID === val).map(e => e.id)
+            } else {
+                const selected = tags.filter(e => e.categoryID === Number(val)).map(e => e.id)
                 selectedTags.push(...selected)
             }
         }
+        console.log(selectedTags)
         onFilterChange({tagIDs: selectedTags});
     }
 
@@ -150,6 +157,7 @@ function SearchOptions({onFilterChange}: { onFilterChange: (variable: object) =>
                 treeData={treeData}
                 maxTagCount={'responsive'}
                 onChange={handleCategoryChange}
+                defaultValue={initialTags}
             />
             <Divider/>
 

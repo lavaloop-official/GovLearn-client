@@ -68,7 +68,7 @@ function Searching() {
                 flexWrap: "wrap"
             }}>
                 <div style={{margin: "1rem"}}>
-                    <SearchOptions onFilterChange={onFilterChange}/>
+                    <SearchOptions initialTags={location.state?.tagsforselect ?? []} onFilterChange={onFilterChange}/>
                 </div>
                 <div style={{flex: "1", maxWidth: "1000px", marginRight: "1rem"}}>
                     {
