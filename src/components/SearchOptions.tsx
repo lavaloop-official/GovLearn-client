@@ -1,18 +1,17 @@
-import {Card, Checkbox, DatePicker, DatePickerProps, Divider, Select, Slider} from 'antd';
+import {Card, Checkbox, DatePicker, DatePickerProps, Divider, Select, Slider, TreeSelect} from 'antd';
 import type {CheckboxValueType} from 'antd/es/checkbox/Group';
 import type {SelectProps} from 'antd';
-import {SliderMarks, SliderTooltipProps} from "antd/es/slider/index";
-import {CourseFilterWsTo} from '../interfaces';
+import {SliderMarks, SliderTooltipProps} from "antd/es/slider";
+import {Category, Coursetag} from '../interfaces';
 import {useEffect, useState} from 'react';
 import {fetchWrapper} from '../api/helper';
 import './SearchOptions.css';
 
-function SearchOptions({courseFilter, onFilterChange}: {
-    courseFilter: CourseFilterWsTo,
-    onFilterChange: (variable: object) => void
-}) {
+function SearchOptions({onFilterChange}: { onFilterChange: (variable: object) => void }) {
 
     const [options, setOptions] = useState<SelectProps['options']>([]);
+    const [tags, setTags] = useState<Coursetag[]>([]);
+    const [treeData, setTreeData] = useState<object[]>([]);
 
     useEffect(() => {
         fetchWrapper.get('api/v1/courses/providers').then(res => {
@@ -27,10 +26,45 @@ function SearchOptions({courseFilter, onFilterChange}: {
             }
             setOptions(options)
         });
+
+        const tags = fetchWrapper.get('api/v1/tags').then(res => res.payload)
+        const categories = fetchWrapper.get('api/v1/category').then(res => res.payload)
+        Promise.all([tags, categories]).then(([tags, categories]) => {
+            updateTreeDataWithCategories(categories, tags);
+            setTags(tags)
+        });
     }, []);
 
+    const updateTreeDataWithCategories = (categories: Category[], tags: Coursetag[]) => {
+        const updatedTreeData = categories.map((category) => ({
+            title: category.name,
+            value: category.id,
+            children: tags
+                .filter((tag) => tag.categoryID === category.id)
+                .map((tag) => ({
+                    title: tag.name,
+                    value: `${tag.categoryID}-${tag.id}`,
+                })),
+        }));
+        setTreeData(updatedTreeData);
+    };
+
+    const handleCategoryChange = (value: string | number[]) => {
+        const selectedTags = []
+        for (const val of value) {
+            if (typeof val === "string") {
+                const tag = val.split("-")[1]
+                selectedTags.push(Number(tag))
+            }
+            if (typeof val === "number") {
+                const selected = tags.filter(e => e.categoryID === val).map(e => e.id)
+                selectedTags.push(...selected)
+            }
+        }
+        onFilterChange({tagIDs: selectedTags});
+    }
+
     const handleSelectChange = (value: string[]) => {
-        console.log(`selected ${value}`);
         onFilterChange({anbieter: value});
     };
 
@@ -107,6 +141,18 @@ function SearchOptions({courseFilter, onFilterChange}: {
         <Card className="searchfilter" title="Optionen" size="small"
               style={{minWidth: "250px", borderRadius: "20px", position: "sticky", top: "-500px"}}>
 
+            <p>Kategorie</p>
+            <TreeSelect
+                treeCheckable={true}
+                showCheckedStrategy={TreeSelect.SHOW_PARENT}
+                style={{width: '100%'}}
+                placeholder="Kategorie auswählen..."
+                treeData={treeData}
+                maxTagCount={'responsive'}
+                onChange={handleCategoryChange}
+            />
+            <Divider/>
+
             <p>Anbieter</p>
             <Select
                 mode="multiple"
@@ -118,31 +164,40 @@ function SearchOptions({courseFilter, onFilterChange}: {
                 maxTagCount={'responsive'}
             />
             <Divider/>
+
             <p>Wissensbezug</p>
             <Checkbox.Group onChange={onChangeWissensbezug} options={optionsWissensbezug}/>
             <Divider/>
+
             <p>Verwaltungsspezifisch</p>
             <Checkbox.Group onChange={onChangeVerwaltungsspezifisch} options={optionsVerwaltungsspezifisch}/>
             <Divider/>
+
             <p>Zertifikat</p>
             <Checkbox.Group onChange={onChangeZertifikat} options={optionsZertifikat}/>
             <Divider/>
+
             <p>Kompetenzstufe</p>
             <Checkbox.Group onChange={onChangeKompetenzstufe} options={optionsKompetenzstufe}/>
             <Divider/>
+
             <p>Dauer</p>
             <Slider range marks={dauer} onChange={onChangeDauer} tooltip={tooltip} step={null} defaultValue={[0, 100]}
                     style={{marginLeft: "20px", marginRight: "20px"}}/>
             <Divider/>
+
             <p>Format</p>
             <Checkbox.Group onChange={onChangeFormat} options={optionsFormat}/>
             <Divider/>
+
             <p>Startdatum</p>
             <DatePicker onChange={onChangeStartdatum} placeholder="Datum"/>
             <Divider/>
+
             <p>Kosten</p>
             <Checkbox.Group onChange={onChangeKosten} options={optionsKosten}/>
             <Divider/>
+
             <p>Sonstiges</p>
         </Card>
     );
