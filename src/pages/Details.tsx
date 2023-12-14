@@ -192,7 +192,7 @@ function Details() {
                                             {course.certificate && (
                                                 <div className="course-attribute">
                                                     <p className="attribute-label">Zertifizierung:</p>
-                                                    <p className="attribute-value">{course.costFree ? 'vorhanden' : 'nicht vorhanden'}</p>
+                                                    <p className="attribute-value">{course.certificate ? 'vorhanden' : 'nicht vorhanden'}</p>
                                                 </div>
                                             )}
                                             {course.costFree && (
