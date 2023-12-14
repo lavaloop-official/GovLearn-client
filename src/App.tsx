@@ -13,6 +13,7 @@ import {Provider} from "react-redux";
 import reduxStore from "./state/reduxStore.ts";
 import Protected from "./Protected.tsx";
 import Bookmarks from "./pages/Bookmarks.tsx";
+import NotFound from "./pages/NotFound.tsx";
 
 function App() {
     //TODO: remove inline styles from components
@@ -52,6 +53,7 @@ function App() {
                                 <Route path="/register" element={<Protected><Registration/></Protected>}/>
                                 <Route path="/bookmarks" element={<Protected><Bookmarks/></Protected>}/>
                                 <Route path="/searching/:searchString?" element={<Protected><Searching/></Protected>}/>
+                                <Route path="*" element={<NotFound/>}/>
                             </Routes>
                         </Content>
                         <Footer style={{ textAlign: 'center' }}>Govlearn  -  Made with ❤ in Münster</Footer>
