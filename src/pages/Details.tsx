@@ -41,7 +41,7 @@ function Details() {
             setCourse(res.payload);
             document.title = res.payload.name;
         });
-        fetchWrapper.get(`api/v1/feedback/course/${courseId}/limit/100/offset/0`).then((res) => {
+        fetchWrapper.get(`api/v1/feedback/course/${courseId}/limit/${1}/offset/${5}`).then((res) => {
             setFeedback(res.payload);
         });
         fetchWrapper.get(`api/v1/similar-courses/${courseId}/`).then((res) => {
@@ -67,6 +67,13 @@ function Details() {
             default:
                 return "Unbekannt";
         }
+    }
+
+    const loadFeedback = () => {
+        const courseId = window.location.pathname.split('/').pop();
+        fetchWrapper.get(`api/v1/feedback/course/${courseId}/limit/6/offset/${feedback.length}`).then((res) => {
+            setFeedback([...feedback, ...res.payload]);
+        });
     }
 
     return (
@@ -280,6 +287,7 @@ function Details() {
                                         <Card className="antcard" style={{justifyContent: "center"}}>keine Bewertungen
                                             vorhanden.</Card>
                                     )}
+                                    <Button type="primary" onClick={loadFeedback}>mehr Laden</Button>
                                 </Flex>
                             </div>
                         </Flex>
