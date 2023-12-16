@@ -21,9 +21,10 @@
     flex-direction: column;
     padding: 10px;
     position: relative;
+    transition: box-shadow 0.3s ease-in-out 0s;
 }
 
 #recom:hover {
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-    transition: all 0.15s ease-in-out 0s;
+    transition: box-shadow 0.15s ease-in-out 0s;
 }

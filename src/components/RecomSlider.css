@@ -1,0 +1,26 @@
+.slider:after {
+    display: none;
+    content: '';
+    position: absolute;
+    right: 0;
+    margin-left: -40px;
+    width: 40px;
+    height: 100%;
+    top: 0px;
+    background: linear-gradient(to right, rgba(240, 244, 245, 0), rgba(240, 244, 245, 1));
+}
+
+.showmore {
+    position: absolute;
+    bottom: 88px;
+    scale: 1.5;
+    opacity: 70%;
+}
+
+.showmore.right {
+    right: 20px;
+}
+
+.showmore.left {
+    left: 20px;
+}
