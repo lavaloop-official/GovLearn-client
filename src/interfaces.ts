@@ -8,7 +8,7 @@ export interface Course {
     "createdAt": string | undefined,
     "provider": string | undefined,
     "instructor": string | undefined,
-    "certificate": string | undefined,
+    "certificate": string | boolean | undefined,
     "skilllevel": string | undefined,
     "durationInHours": string | undefined,
     "format": string | undefined,
