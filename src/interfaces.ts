@@ -55,3 +55,9 @@ export interface CourseFilterWsTo {
     "kosten": boolean | undefined,
     "sonstiges": Array<string> | undefined
 }
+
+export interface Group {
+    "id": number | undefined,
+    "name": string | undefined,
+    "description": string | undefined,
+}

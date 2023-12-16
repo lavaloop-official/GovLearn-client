@@ -2,16 +2,18 @@ import { Avatar, Button, Divider } from "antd";
 import GroupmemberCourses from "./GroupmemberCourses";
 import "./GroupmemberCourses.css"
 import { UserOutlined } from "@ant-design/icons";
+import { Group } from "../../interfaces";
+import { useEffect } from "react";
 
-function Groupadmin() {
+function Groupadmin({currentGroup}:{currentGroup:Group}) {
 
     return (
         <div style={{background:"lightgrey", flex:"1", margin:"10px", borderRadius:"10px", display:"flex", flexDirection:"column", minWidth:"280px"}}>
             <div style={{margin:"0px 10px 0px 10px"}}>
-                <h1>Gruppentitel - Admin</h1>
+                <h1>{currentGroup.name}</h1>
             </div>
             <div style={{margin:"0px 10px 0px 10px"}}>
-                <p>Gruppenbeschreibung</p>
+                <p>{currentGroup.description}</p>
             </div>
             <div style={{margin:"0px 10px 0px 10px", display:"flex", flexDirection:"column"}}>
                 <h3>Gruppenmitglieder</h3>
