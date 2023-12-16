@@ -1,6 +1,6 @@
 import { Avatar, Button, Divider } from "antd";
 import GroupmemberCourses from "./GroupmemberCourses";
-import "../components/GroupmemberCourses.css"
+import "./GroupmemberCourses.css"
 import { UserOutlined } from "@ant-design/icons";
 
 function Groupadmin() {

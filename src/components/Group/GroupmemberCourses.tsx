@@ -1,5 +1,5 @@
 import { Button, Divider } from "antd";
-import Recommendation from "./Recommendation";
+import Recommendation from "../Recommendation";
 import "./GroupmemberCourses.css"
 
 function Groupadmin({name} : { name?: string}) {
