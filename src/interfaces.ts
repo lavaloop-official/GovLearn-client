@@ -61,3 +61,8 @@ export interface Group {
     "name": string | undefined,
     "description": string | undefined,
 }
+
+export interface Groupmember {
+    "id": number | undefined,
+    "name": string | undefined,
+}

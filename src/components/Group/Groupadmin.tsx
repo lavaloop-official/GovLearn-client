@@ -1,11 +1,17 @@
-import { Avatar, Button, Divider } from "antd";
+import { Avatar, Badge, Button, Divider } from "antd";
 import GroupmemberCourses from "./GroupmemberCourses";
 import "./GroupmemberCourses.css"
-import { UserOutlined } from "@ant-design/icons";
-import { Group } from "../../interfaces";
-import { useEffect } from "react";
+import { Group, Groupmember } from "../../interfaces";
+import { useEffect, useState } from "react";
+import { PersonDashFill } from "react-bootstrap-icons";
 
 function Groupadmin({currentGroup}:{currentGroup:Group}) {
+
+    const [groupmember, setGroupmember] = useState<Groupmember[]>([{id:1, name:"Testuser"}, {id:2, name:"Testuser2"}]);
+
+    // useEffect(() => {
+    //     //fetch groupmember
+    // }, [groupmember])
 
     return (
         <div style={{background:"lightgrey", flex:"1", margin:"10px", borderRadius:"10px", display:"flex", flexDirection:"column", minWidth:"280px"}}>
@@ -19,12 +25,15 @@ function Groupadmin({currentGroup}:{currentGroup:Group}) {
                 <h3>Gruppenmitglieder</h3>
                 <div style={{overflow:"scroll", borderRadius:"10px"}} className="scrollbar">
                     <div style={{background:"grey", borderRadius:"10px", height:"100px", display:"flex", flexDirection:"row", alignItems:"center", gap:"10px", paddingLeft:"10px", paddingRight:"10px", width:"fit-content"}} className="scrollbar">
-                        <Avatar icon={<UserOutlined />} size={75}/>
-                        <Avatar icon={<UserOutlined />} size={75}/>
-                        <Avatar icon={<UserOutlined />} size={75}/>
-                        <Avatar icon={<UserOutlined />} size={75}/>
-                        <Avatar icon={<UserOutlined />} size={75}/>
-                        <Avatar icon={<UserOutlined />} size={75}/>
+                        {
+                            groupmember ?
+                                groupmember.map((groupmember: Groupmember) => 
+                                    <div>
+                                        <Avatar size={75}>{groupmember.name}</Avatar>
+                                        <Button style={{bottom:"20px", right:"20px", width:"fit-content", height:"fit-content", color:"white"}} type="text" shape="circle" icon={<PersonDashFill style={{width:"25px", height:"25px"}}/>}></Button>
+                                    </div>)
+                                : <div/>
+                        }
                     </div>
                 </div>
             </div>
