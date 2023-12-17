@@ -35,27 +35,7 @@ function AddCourse(Props: ToggleProps) {
     const [loading, setLoading] = useState(false);
     const [imageUrl, setImageUrl] = useState<string>();
     const [page, setPage] = useState(0);
-    const [newCourse, setNewCourse] = useState<Course>(
-        {
-            id: 0,
-            name: "",
-            description: "",
-            startDate: "",
-            durationInHours: "",
-            costFree: false,
-            domainSpecific: false,
-            format: "",
-            skilllevel: "",
-            certificate: false,
-            link: "",
-            image: "",
-            createdAt: "",
-            provider: "",
-            instructor: "",
-            ratingAverage: 0,
-            ratingAmount: 0
-        }
-    );
+    const [newCourse, setNewCourse] = useState<Course>();
     const [categories, setCategories] = useState<Category[]>([]);
     const [tags, setTags] = useState<Coursetag[]>([]);
     const [selectedTags, setSelectedTags] = useState<Coursetag[]>([]);
@@ -151,16 +131,22 @@ function AddCourse(Props: ToggleProps) {
     }
 
     const uploadCourse: React.MouseEventHandler<HTMLButtonElement> = (event) => {
-        fetchWrapper.post('api/v1/courses', newCourse).then((res) => {
-            if (res.success) {
-                const course = res.payload;
-                console.log(course);
-                if (course) {
-                    selectedTags.forEach((tag) => {
-                        fetchWrapper.post('api/v1/tags/courses', { courseId: course.id, tagId: tag.id });
-                    })
-                }
-            }
+        fetchWrapper.post('api/v1/courses',{
+            name: newCourse?.name || "",
+            image: newCourse?.image || "",
+            description: newCourse?.description || "",
+            createdAt: new Date(),
+            //globalen User-Namen einfügen
+            provider: "Test",
+            instructor: "Test",
+            certificate: newCourse?.certificate || false,
+            skilllevel: newCourse?.skilllevel || "",
+            durationInHours: newCourse?.durationInHours || "",
+            format: newCourse?.format || "",
+            startDate: newCourse?.startDate || new Date(),
+            costFree: newCourse?.costFree || false,
+            domainSpecific: newCourse?.domainSpecific || false,
+            link: newCourse?.link || "",
         })
         Props.ClickHandler(event);
     }
@@ -326,7 +312,7 @@ function AddCourse(Props: ToggleProps) {
                                         {
                                             selectedTags.map((tag) => {
                                                 return (
-                                                    <Tag style={{ background: "cornflowerblue", color: "white", padding: "3px", border: "1px solid blue", fontWeight: "bold" }}>{tag.name}</Tag>
+                                                    <Tag key={tag.id} style={{ background: "cornflowerblue", color: "white", padding: "3px", border: "1px solid blue", fontWeight: "bold" }}>{tag.name}</Tag>
                                                 )
                                             })
                                         }
