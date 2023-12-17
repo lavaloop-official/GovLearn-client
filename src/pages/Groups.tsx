@@ -9,6 +9,9 @@ import TextArea from "antd/es/input/TextArea";
 function Groups() {
     const [openAdmin, setOpenAdmin] = useState<boolean>(true);
 
+    const [newGroupTitle, setNewGroupTitle] = useState<string>();
+    const [newGroupDescription, setNewGroupDescription] = useState<string>();
+
     const [groups, setGroups] = useState<Group[]>([
         { id: 1, name: "Gruppe 1", description: "Beschreibung 1" },
         { id: 2, name: "Gruppe 2", description: "Beschreibung 2" },
@@ -57,13 +60,25 @@ function Groups() {
     };
   
     const handleCreateGroupModalOK = () => {
-        //setGroups(groups => ({...groups, ...newGroup}))
+        const newGroup: Group = {id:10, name:newGroupTitle, description:newGroupDescription}
+        setGroups([...groups, newGroup])
+        setCurrentGroup(newGroup);
+        console.log(groups)
+        handleCancel();
         setIsModalOpen(false);
     };
   
     const handleCreateGroupModalCancel = () => {
       setIsModalOpen(false);
     };
+
+    const updateCreateGroupTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setNewGroupTitle(e.target.value);
+    }
+
+    const updateCreateGroupDescription = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        setNewGroupDescription(e.target.value);
+    }
 
     return (
         <div style={{display:"flex", justifyContent:"center", marginLeft:"25px", marginRight:"25px"}}>
@@ -97,13 +112,12 @@ function Groups() {
                             </Button>,
                             ]}
                         >
-                            <p>Some contents...</p>
                         </Modal>
                         <Modal title="Gruppe erstellen" open={isCreateGroupModalOpen} onOk={handleCreateGroupModalOK} onCancel={handleCreateGroupModalCancel}>
                             <h3>Gruppenname</h3>
-                            <Input placeholder="Basic usage" />
+                            <Input placeholder="Geben Sie einen Gruppennamen ein..." onChange={updateCreateGroupTitle}/>
                             <h3>Gruppenbeschreibung</h3>
-                            <TextArea rows={4} />
+                            <TextArea rows={4} onChange={updateCreateGroupDescription}/>
                         </Modal>
                     </div>
                     <div style={{margin:"5px",background:"grey", borderRadius:"5px", height:"fit-content"}}>
