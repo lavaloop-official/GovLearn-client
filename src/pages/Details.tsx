@@ -31,6 +31,8 @@ function Details() {
     });
 
     const [relatedCourses, setRelatedCourses] = useState<Course[]>([]);
+    const [limit, setLimit] = useState<number>(10);
+    const [offset, setOffset] = useState<number>(0);
     const [feedback, setFeedback] = useState<Review[]>([]);
 
     useEffect(() => {
@@ -40,7 +42,7 @@ function Details() {
             setCourse(res.payload);
             document.title = res.payload.name;
         });
-        fetchWrapper.get(`api/v1/feedback/course/${courseId}/limit/${1}/offset/${5}`).then((res) => {
+        fetchWrapper.get(`api/v1/feedback/course/${courseId}?limit=${limit}&offset=${offset}`).then((res) => {
             setFeedback(res.payload);
         });
         fetchWrapper.get(`api/v1/similar-courses/${courseId}/`).then((res) => {
