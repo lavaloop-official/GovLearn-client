@@ -29,23 +29,23 @@ function Dashboard() {
             flexDirection: "column",
             gap: "10px"
         }}>
-                {mode === "view" ?
-                    <div style={{ maxWidth: "1200px", minHeight: "860px", margin: "auto", width: "100%", padding: "10px 10px" }}>
-                        <Flex justify="space-between" align="center">
-                            <h1>Meine Kurse</h1>
-                            <Button type="primary" icon={<FileAddOutlined />} onClick={() => { setMode("add") }}>
-                                Angebot hinzufügen
-                            </Button>
-                        </Flex>
-                        {providedCourses.map((course) => <div key={course.id}><SearchComponent obj={course} editable={true} /></div>)}
-                    </div>
-                    : mode === "add" ?
-                        <AddCourse ClickHandler={onCancelAdd} />
-                        : mode === "edit" ?
-                            <div>
-                                <h1>test</h1>
-                            </div>
-                            : <></>}
+            {mode === "view" ?
+                <div style={{ maxWidth: "1200px", minHeight: "860px", margin: "auto", width: "100%", padding: "10px 10px" }}>
+                    <Flex justify="space-between" align="center">
+                        <h1>Meine Kurse</h1>
+                        <Button type="primary" icon={<FileAddOutlined />} onClick={() => { setMode("add") }}>
+                            Angebot hinzufügen
+                        </Button>
+                    </Flex>
+                    {providedCourses.map((course) => <div key={course.id}><SearchComponent obj={course} editable={true} /></div>)}
+                </div>
+                : mode === "add" ?
+                    <AddCourse ClickHandler={onCancelAdd} />
+                    : mode === "edit" ?
+                        <div>
+                            <h1>test</h1>
+                        </div>
+                        : <></>}
         </div>
     );
 }

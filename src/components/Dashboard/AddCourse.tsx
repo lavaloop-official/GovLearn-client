@@ -35,7 +35,27 @@ function AddCourse(Props: ToggleProps) {
     const [loading, setLoading] = useState(false);
     const [imageUrl, setImageUrl] = useState<string>();
     const [page, setPage] = useState(0);
-    const [newCourse, setNewCourse] = useState<Course>();
+    const [newCourse, setNewCourse] = useState<Course>(
+        {
+            id: 0,
+            name: "",
+            description: "",
+            startDate: "",
+            durationInHours: "",
+            costFree: false,
+            domainSpecific: false,
+            format: "",
+            skilllevel: "",
+            certificate: false,
+            link: "",
+            image: "",
+            createdAt: "",
+            provider: "",
+            instructor: "",
+            ratingAverage: 0,
+            ratingAmount: 0
+        }
+    );
     const [categories, setCategories] = useState<Category[]>([]);
     const [tags, setTags] = useState<Coursetag[]>([]);
     const [selectedTags, setSelectedTags] = useState<Coursetag[]>([]);
@@ -130,6 +150,21 @@ function AddCourse(Props: ToggleProps) {
         setPage(page - 1);
     }
 
+    const uploadCourse: React.MouseEventHandler<HTMLButtonElement> = (event) => {
+        fetchWrapper.post('api/v1/courses', newCourse).then((res) => {
+            if (res.success) {
+                const course = res.payload;
+                console.log(course);
+                if (course) {
+                    selectedTags.forEach((tag) => {
+                        fetchWrapper.post('api/v1/tags/courses', { courseId: course.id, tagId: tag.id });
+                    })
+                }
+            }
+        })
+        Props.ClickHandler(event);
+    }
+
     return (
         <div style={{ maxWidth: "1200px", minHeight: "860px", margin: "auto", width: "100%", padding: "10px 10px" }}>
             <Steps
@@ -158,7 +193,7 @@ function AddCourse(Props: ToggleProps) {
                     maxWidth: "1200px",
                 }}
             >
-                <Flex vertical justify="center">
+                <Flex vertical justify="center" >
                     {page === 0 ?
                         <Form
                             name="basic"
@@ -184,23 +219,22 @@ function AddCourse(Props: ToggleProps) {
                                     {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
                                 </Upload>
                             </Form.Item>
-                            <Flex>
-                                <Form.Item name="image" label="Bild-Url">
-                                    <Input width={"100px"} onChange={(event) => {
-                                        setNewCourse(
-                                            { ...newCourse!, image: event.target.value }
-                                        )
-                                    }} />
-                                </Form.Item>
-                                {
-                                    newCourse?.image ? <Image src={newCourse?.image} /> : <></>
-                                }
+
+                            <Form.Item name="image" label="Bild-Url">
+                                <Input defaultValue={newCourse?.image} width={"100px"} onChange={(event) => {
+                                    setNewCourse(
+                                        { ...newCourse!, image: event.target.value }
+                                    )
+                                }} />
+                            </Form.Item>
+                            <Flex justify="center">
+                                {newCourse?.image ? <Image src={newCourse?.image} style={{ margin: "5px 0px 15px", border: "1px solid black", borderRadius: "25px" }} /> : <></>}
                             </Flex>
                             <Form.Item name="name" label="Name">
-                                <Input width={"100px"} onChange={setCourseName} />
+                                <Input defaultValue={newCourse?.name} width={"100px"} onChange={setCourseName} />
                             </Form.Item>
                             <Form.Item name="description" label="Beschreibung">
-                                <TextArea onChange={setCourseDescription} />
+                                <TextArea defaultValue={newCourse?.description} onChange={setCourseDescription} />
                             </Form.Item>
                             <h4>Details</h4>
                             <hr />
@@ -208,16 +242,17 @@ function AddCourse(Props: ToggleProps) {
                                 <DatePicker onChange={setCourseStartDate} />
                             </Form.Item>
                             <Form.Item name="duration" label="Dauer" >
-                                <InputNumber addonAfter="Stunden" onChange={setCourseDuration} />
+                                <InputNumber defaultValue={newCourse?.durationInHours} addonAfter="Stunden" onChange={setCourseDuration} />
                             </Form.Item>
                             <Form.Item name="price" label="Kostenfrei">
-                                <Checkbox onChange={setCoursePrice}></Checkbox>;
+                                <Checkbox defaultChecked={newCourse?.costFree} onChange={setCoursePrice}></Checkbox>;
                             </Form.Item>
                             <Form.Item name="domainspecific" label="Verwaltungsbezogen">
-                                <Checkbox onChange={setCourseDomainspecific}></Checkbox>;
+                                <Checkbox defaultChecked={newCourse?.domainSpecific} onChange={setCourseDomainspecific}></Checkbox>;
                             </Form.Item>
                             <Form.Item name="format" label="Format">
                                 <Select
+                                    defaultValue={newCourse?.format}
                                     style={{ width: 120 }}
                                     onChange={setCourseFormat}
                                     options={[
@@ -230,6 +265,7 @@ function AddCourse(Props: ToggleProps) {
                             </Form.Item>
                             <Form.Item name="skilllevel" label="Schwierigkeit">
                                 <Select
+                                    defaultValue={newCourse?.skilllevel}
                                     style={{ width: 120 }}
                                     onChange={setCourseSkilllevel}
                                     options={[
@@ -240,12 +276,11 @@ function AddCourse(Props: ToggleProps) {
                                 />
                             </Form.Item>
                             <Form.Item name="certificate" label="Zertifikat">
-                                <Checkbox onChange={setCourseCertificate}></Checkbox>;
-                            </Form.Item>
+                                <Checkbox defaultChecked={typeof newCourse?.certificate === 'boolean' ? newCourse.certificate : false} onChange={setCourseCertificate}></Checkbox>;                            </Form.Item>
                             <h4>Links</h4>
                             <hr />
                             <Form.Item name="website" label="Website">
-                                <Input width={"100px"} onChange={setCourseLink} />
+                                <Input defaultValue={newCourse?.link} width={"100px"} onChange={setCourseLink} />
                             </Form.Item>
                         </Form> : page === 1 ?
                             <div>
@@ -258,7 +293,7 @@ function AddCourse(Props: ToggleProps) {
                                             return (
                                                 <div key={category.id}>
                                                     <h4>{category.name}</h4>
-                                                    <Flex wrap="wrap" style={{ gap: "10px" }}>
+                                                    <Flex wrap="wrap" gap={"10px"}>
                                                         {
                                                             tags.filter((tag) => tag.categoryID === category.id).map((tag) => {
                                                                 return (
@@ -281,12 +316,22 @@ function AddCourse(Props: ToggleProps) {
                                 </Flex>
                             </div>
                             : page === 2 ?
-                                <div>
+                                <Flex vertical justify="center" gap={"2px"}>
+
                                     <h2>Vorschau: neues Weiterbildungsangebot</h2>
                                     {
                                         newCourse && <CourseInfo course={newCourse} />
                                     }
-                                </div>
+                                    <Flex>
+                                        {
+                                            selectedTags.map((tag) => {
+                                                return (
+                                                    <Tag style={{ background: "cornflowerblue", color: "white", padding: "3px", border: "1px solid blue", fontWeight: "bold" }}>{tag.name}</Tag>
+                                                )
+                                            })
+                                        }
+                                    </Flex>
+                                </Flex>
                                 : <></>
                     }
                 </Flex>
@@ -303,7 +348,7 @@ function AddCourse(Props: ToggleProps) {
                         : page === 2 ?
                             <Flex justify="space-between" style={{ margin: "15px" }}>
                                 <Button onClick={lastPage}>Zurück</Button>
-                                <Button type="primary" onClick={nextPage}>Abschließen</Button>
+                                <Button type="primary" onClick={uploadCourse}>Abschließen</Button>
                             </Flex>
                             : <></>
                 }
