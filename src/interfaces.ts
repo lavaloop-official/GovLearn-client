@@ -52,6 +52,6 @@ export interface CourseFilterWsTo {
     "dauer": Array<string> | undefined,
     "format": Array<Format> | undefined,
     "startdatum": Date | undefined,
-    "kosten": boolean | undefined,
+    "kostenlos": boolean | undefined,
     "sonstiges": Array<string> | undefined
 }
