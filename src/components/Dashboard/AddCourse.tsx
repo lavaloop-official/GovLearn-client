@@ -29,6 +29,7 @@ const beforeUpload = (file: RcFile) => {
 
 interface ToggleProps {
     ClickHandler: (event: React.MouseEvent<HTMLButtonElement>) => void
+    /*addTagsToNewCourse: (newCourse: Course, tags: Coursetag[]) => void*/
 }
 
 function AddCourse(Props: ToggleProps) {
@@ -147,8 +148,10 @@ function AddCourse(Props: ToggleProps) {
             costFree: newCourse?.costFree || false,
             domainSpecific: newCourse?.domainSpecific || false,
             link: newCourse?.link || "",
+        }).then(() => {
+            Props.ClickHandler(event);    
         })
-        Props.ClickHandler(event);
+        
     }
 
     return (
@@ -187,8 +190,8 @@ function AddCourse(Props: ToggleProps) {
                             wrapperCol={{ span: 16 }}
                             style={{ maxWidth: 600 }}
                             initialValues={{ remember: true }}
-                            /*onFinish={onFinish}
-                            onFinishFailed={onFinishFailed}*/
+                            //onFinish={Props.ClickHandler}
+                            //onFinishFailed={onFinishFailed}
                             autoComplete="off">
                             <h4>Allgemeines</h4>
                             <hr />
@@ -206,7 +209,7 @@ function AddCourse(Props: ToggleProps) {
                                 </Upload>
                             </Form.Item>
 
-                            <Form.Item name="image" label="Bild-Url">
+                            <Form.Item name="image" label="Bild-Url" rules={[{required: true}]}>
                                 <Input defaultValue={newCourse?.image} width={"100px"} onChange={(event) => {
                                     setNewCourse(
                                         { ...newCourse!, image: event.target.value }
@@ -216,10 +219,10 @@ function AddCourse(Props: ToggleProps) {
                             <Flex justify="center">
                                 {newCourse?.image ? <Image src={newCourse?.image} style={{ margin: "5px 0px 15px", border: "1px solid black", borderRadius: "25px" }} /> : <></>}
                             </Flex>
-                            <Form.Item name="name" label="Name">
+                            <Form.Item name="name" label="Name" rules={[{required: true}]}>
                                 <Input defaultValue={newCourse?.name} width={"100px"} onChange={setCourseName} />
                             </Form.Item>
-                            <Form.Item name="description" label="Beschreibung">
+                            <Form.Item name="description" label="Beschreibung" rules={[{required: true}]}>
                                 <TextArea defaultValue={newCourse?.description} onChange={setCourseDescription} />
                             </Form.Item>
                             <h4>Details</h4>
@@ -236,7 +239,7 @@ function AddCourse(Props: ToggleProps) {
                             <Form.Item name="domainspecific" label="Verwaltungsbezogen">
                                 <Checkbox defaultChecked={newCourse?.domainSpecific} onChange={setCourseDomainspecific}></Checkbox>;
                             </Form.Item>
-                            <Form.Item name="format" label="Format">
+                            <Form.Item name="format" label="Format" rules={[{required: true}]}>
                                 <Select
                                     defaultValue={newCourse?.format}
                                     style={{ width: 120 }}
@@ -249,7 +252,7 @@ function AddCourse(Props: ToggleProps) {
                                     ]}
                                 />
                             </Form.Item>
-                            <Form.Item name="skilllevel" label="Schwierigkeit">
+                            <Form.Item name="skilllevel" label="Schwierigkeit" rules={[{required: true}]}>
                                 <Select
                                     defaultValue={newCourse?.skilllevel}
                                     style={{ width: 120 }}
