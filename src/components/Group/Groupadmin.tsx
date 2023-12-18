@@ -1,17 +1,23 @@
-import { Avatar, Badge, Button, Divider } from "antd";
+import {Badge, Button, Divider } from "antd";
 import GroupmemberCourses from "./GroupmemberCourses";
 import "./GroupmemberCourses.css"
 import { Group, Groupmember } from "../../interfaces";
 import { useEffect, useState } from "react";
 import { PersonDashFill } from "react-bootstrap-icons";
+import Groupuser from "./Groupuser";
 
 function Groupadmin({currentGroup}:{currentGroup:Group}) {
 
     const [groupmember, setGroupmember] = useState<Groupmember[]>([{id:1, name:"Testuser"}, {id:2, name:"Testuser2"}]);
 
-    // useEffect(() => {
-    //     //fetch groupmember
-    // }, [groupmember])
+    const removeUserFromGroup = (groupmem: Groupmember) => {
+        setGroupmember(groupmember.filter(e => e.id !== groupmem.id));
+        //update database
+    }
+
+    useEffect(() => {
+        //fetch groupmember
+    }, [groupmember])
 
     return (
         <div style={{background:"lightgrey", flex:"1", margin:"10px", borderRadius:"10px", display:"flex", flexDirection:"column", minWidth:"280px"}}>
@@ -24,14 +30,11 @@ function Groupadmin({currentGroup}:{currentGroup:Group}) {
             <div style={{margin:"0px 10px 0px 10px", display:"flex", flexDirection:"column"}}>
                 <h3>Gruppenmitglieder</h3>
                 <div style={{overflow:"scroll", borderRadius:"10px"}} className="scrollbar">
-                    <div style={{background:"grey", borderRadius:"10px", height:"100px", display:"flex", flexDirection:"row", alignItems:"center", gap:"10px", paddingLeft:"10px", paddingRight:"10px", width:"fit-content"}} className="scrollbar">
+                    <div style={{background:"grey", borderRadius:"10px", height:"100px", display:"flex", flexDirection:"row", alignItems:"center", gap:"5px", paddingLeft:"10px", paddingRight:"10px", width:"fit-content"}} className="scrollbar">
                         {
                             groupmember ?
                                 groupmember.map((groupmember: Groupmember) => 
-                                    <div>
-                                        <Avatar size={75}>{groupmember.name}</Avatar>
-                                        <Button style={{bottom:"20px", right:"20px", width:"fit-content", height:"fit-content", color:"white"}} type="text" shape="circle" icon={<PersonDashFill style={{width:"25px", height:"25px"}}/>}></Button>
-                                    </div>)
+                                    <Groupuser groupmember={groupmember} removeUserFromGroup={removeUserFromGroup}/>)
                                 : <div/>
                         }
                     </div>
@@ -45,7 +48,12 @@ function Groupadmin({currentGroup}:{currentGroup:Group}) {
                 </div>
                 <Divider/>
             </div>
-            <GroupmemberCourses name="Gruppenmitglied xyz - Kurse"></GroupmemberCourses>
+            {
+                groupmember ?
+                    groupmember.map((groupmember: Groupmember) => 
+                        <GroupmemberCourses groupmember={groupmember}/>)
+                    : <div/>
+            }
         </div>
     )
 }
