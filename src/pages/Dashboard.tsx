@@ -11,7 +11,7 @@ function Dashboard() {
     // TODO: implement edit of SearchComponent
     const [mode, setMode] = useState<"view" | "edit" | "add">("view")
     const [providedCourses, setProvidedCourses] = useState<Course[]>([])
-    const [newCourseWithTags, setNewCourseWithTags] = useState<{ Course: Course, Coursetag: Coursetag[] }>()
+    //const [newCourseWithTags, setNewCourseWithTags] = useState<{ Course: Course, Coursetag: Coursetag[] }>()
     useEffect(() => {
         fetchWrapper.get("api/v1/providers/courses").then((res) => {
             setProvidedCourses(res.payload)
@@ -78,6 +78,7 @@ function Dashboard() {
                     {providedCourses.map((course) => <div key={course.id}><SearchComponent obj={course} editable={true} /></div>)}
                 </div>
                 : mode === "add" ?
+                    //<Flex
                     <AddCourse ClickHandler={toViewMode} /*addTagsToNewCourse={addTagsToNewCourse}*/ />
                     : mode === "edit" ?
                         <div>

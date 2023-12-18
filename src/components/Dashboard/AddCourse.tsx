@@ -29,7 +29,7 @@ const beforeUpload = (file: RcFile) => {
 
 interface ToggleProps {
     ClickHandler: (event: React.MouseEvent<HTMLButtonElement>) => void
-    /*addTagsToNewCourse: (newCourse: Course, tags: Coursetag[]) => void*/
+    //addTagsToNewCourse: (newCourse: Course, tags: Coursetag[]) => void
 }
 
 function AddCourse(Props: ToggleProps) {
@@ -149,7 +149,8 @@ function AddCourse(Props: ToggleProps) {
             domainSpecific: newCourse?.domainSpecific || false,
             link: newCourse?.link || "",
         }).then(() => {
-            Props.ClickHandler(event);    
+            Props.ClickHandler(event);
+            //Props.addTagsToNewCourse(newCourse!, selectedTags);    
         })
         
     }
@@ -182,7 +183,7 @@ function AddCourse(Props: ToggleProps) {
                     maxWidth: "1200px",
                 }}
             >
-                <Flex vertical justify="center" >
+                <Flex vertical justify="center" style={{margin: "auto"}} >
                     {page === 0 ?
                         <Form
                             name="basic"

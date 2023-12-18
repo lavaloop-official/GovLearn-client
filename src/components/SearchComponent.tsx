@@ -4,7 +4,7 @@ import Bookmark from "./Bookmark.tsx";
 import { ExclamationCircleFilled } from "@ant-design/icons";
 import { fetchWrapper } from "../api/helper.ts";
 
-function SearchComponent({obj, editable}: { obj?: Course, editable?: boolean}) {
+function SearchComponent({obj, editable = false}: { obj?: Course, editable?: boolean}) {
     const { confirm } = Modal;
     
     function handleEdit() {
