@@ -2,11 +2,14 @@ import {Badge, Button, Divider } from "antd";
 import GroupmemberCourses from "./GroupmemberCourses";
 import "./GroupmemberCourses.css"
 import { Group, Groupmember } from "../../interfaces";
-import { useEffect, useState } from "react";
-import { PersonDashFill } from "react-bootstrap-icons";
+import { createRef, useEffect, useState } from "react";
+import { Plus } from "react-bootstrap-icons";
 import Groupuser from "./Groupuser";
+import InviteGroupmember from "./InviteGroupmember";
 
 function Groupadmin({currentGroup}:{currentGroup:Group}) {
+
+    const inviteGroupmemberModal = createRef();
 
     const [groupmember, setGroupmember] = useState<Groupmember[]>([{id:1, name:"Testuser"}, {id:2, name:"Testuser2"}]);
 
@@ -27,6 +30,7 @@ function Groupadmin({currentGroup}:{currentGroup:Group}) {
             <div style={{margin:"0px 10px 0px 10px"}}>
                 <p>{currentGroup.description}</p>
             </div>
+            <InviteGroupmember ref={inviteGroupmemberModal}></InviteGroupmember>
             <div style={{margin:"0px 10px 0px 10px", display:"flex", flexDirection:"column"}}>
                 <h3>Gruppenmitglieder</h3>
                 <div style={{overflow:"scroll", borderRadius:"10px"}} className="scrollbar">
@@ -37,6 +41,7 @@ function Groupadmin({currentGroup}:{currentGroup:Group}) {
                                     <Groupuser groupmember={groupmember} removeUserFromGroup={removeUserFromGroup}/>)
                                 : <div/>
                         }
+                        <Button onClick={() => inviteGroupmemberModal?.current?.openDialog()} style={{height:"fit-content", width:"fit-content"}} icon={<Plus style={{color:"white", height:"100%", width:"50px", marginRight:"15px", marginLeft:"15px"}}/>} type="text"/>
                     </div>
                 </div>
             </div>
