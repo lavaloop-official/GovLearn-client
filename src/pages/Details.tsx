@@ -31,9 +31,10 @@ function Details() {
     });
 
     const [relatedCourses, setRelatedCourses] = useState<Course[]>([]);
-    const [limit, setLimit] = useState<number>(10);
+    const [limit, setLimit] = useState<number>(5);
     const [offset, setOffset] = useState<number>(0);
     const [feedback, setFeedback] = useState<Review[]>([]);
+    const [noFeebackLeft, setNoFeedbackLeft] = useState<boolean>(false);
 
     useEffect(() => {
         const courseId = window.location.pathname.split('/').pop();
@@ -44,6 +45,10 @@ function Details() {
         });
         fetchWrapper.get(`api/v1/feedback/course/${courseId}?limit=${limit}&offset=${offset}`).then((res) => {
             setFeedback(res.payload);
+            setOffset(offset + limit);
+            if (res.payload.length < limit) {
+                setNoFeedbackLeft(true);
+            }
         });
         fetchWrapper.get(`api/v1/similar-courses/${courseId}/`).then((res) => {
             const filtered = res.payload.slice(0, 3);
@@ -57,9 +62,14 @@ function Details() {
 
     const loadFeedback = () => {
         const courseId = window.location.pathname.split('/').pop();
-        fetchWrapper.get(`api/v1/feedback/course/${courseId}/limit/6/offset/${feedback.length}`).then((res) => {
+        fetchWrapper.get(`api/v1/feedback/course/${courseId}?limit/${limit}&offset/${offset}`).then((res) => {
             setFeedback([...feedback, ...res.payload]);
+            setOffset(offset + limit);
+            if (res.payload.length < limit) {
+                setNoFeedbackLeft(true);
+            }
         });
+        
     }
 
     return (
@@ -135,7 +145,7 @@ function Details() {
                                         <Card className="antcard" style={{ justifyContent: "center" }}>keine Bewertungen
                                             vorhanden.</Card>
                                     )}
-                                    <Button type="primary" onClick={loadFeedback}>mehr Laden</Button>
+                                    { !noFeebackLeft && <Button type="primary" onClick={loadFeedback}>mehr Laden</Button> }
                                 </Flex>
                             </div>
                         </Flex>
