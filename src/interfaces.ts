@@ -8,7 +8,7 @@ export interface Course {
     "createdAt": string | undefined,
     "provider": string | undefined,
     "instructor": string | undefined,
-    "certificate": string | undefined,
+    "certificate": string | boolean | undefined,
     "skilllevel": string | undefined,
     "durationInHours": string | undefined,
     "format": string | undefined,
@@ -52,6 +52,6 @@ export interface CourseFilterWsTo {
     "dauer": Array<string> | undefined,
     "format": Array<Format> | undefined,
     "startdatum": Date | undefined,
-    "kosten": boolean | undefined,
+    "kostenlos": boolean | undefined,
     "sonstiges": Array<string> | undefined
 }
