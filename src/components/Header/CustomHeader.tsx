@@ -65,8 +65,8 @@ function CustomHeader() {
         {
             key: '2',
             label: (
-                <a target="_blank" rel="noopener noreferrer" href="https://www.aliyun.com">
-                    Einstellungen
+                <a rel="noopener noreferrer" href="/dashboard">
+                    Weiterbildungsangebote verwalten
                 </a>
             ),
         },
@@ -74,7 +74,7 @@ function CustomHeader() {
             key: '3',
             label: (
                 <a target="_blank" rel="noopener noreferrer" href="https://www.aliyun.com">
-                    Placeholder
+                    Einstellungen
                 </a>
             ),
         },

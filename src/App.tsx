@@ -14,6 +14,7 @@ import reduxStore from "./state/reduxStore.ts";
 import Protected from "./Protected.tsx";
 import Bookmarks from "./pages/Bookmarks.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import Dashboard from "./pages/Dashboard.tsx";
 import Groups from "./pages/Groups.tsx";
 
 function App() {
@@ -55,6 +56,7 @@ function App() {
                                 <Route path="/bookmarks" element={<Protected><Bookmarks/></Protected>}/>
                                 <Route path="/searching/:searchString?" element={<Protected><Searching/></Protected>}/>
                                 <Route path="*" element={<NotFound/>}/>
+                                <Route path="/dashboard" element={<Protected><Dashboard/></Protected>}/>
                                 <Route path="/groups" element={<Protected><Groups/></Protected>}/>
                             </Routes>
                         </Content>

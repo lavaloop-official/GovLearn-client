@@ -26,7 +26,7 @@ function Searching() {
         format: [],
         startdatum: undefined,
         dauer: [],
-        kosten: false,
+        kostenlos: false,
         sonstiges: []
     });
 
@@ -40,17 +40,19 @@ function Searching() {
     };
 
     const handlePagination = () => {
-        setOffset(offset => offset + limit)
+        const newOffset = offset + limit;
+        setOffset(newOffset)
+        fetchWrapper.post('api/v1/filter/limit/' + limit + '/offset/' + newOffset + '/' + searchStr, courseFilter).then((res) => {
+            setCourses(courses => [...courses, ...res.payload]);
+        });
     }
 
     useEffect(() => {
-        fetchWrapper.post('api/v1/filter/limit/' + limit + '/offset/' + offset + '/' + searchStr, courseFilter).then((res) => {
-            if (offset === 0)
-                setCourses(res.payload);
-            else
-                setCourses([...courses, ...res.payload]);
+        setOffset(0);
+        fetchWrapper.post('api/v1/filter/limit/' + limit + '/offset/' + 0 + '/' + searchStr, courseFilter).then((res) => {
+            setCourses(res.payload);
         });
-    }, [limit, offset, searchStr, courseFilter]);
+    }, [searchStr, courseFilter]);
 
     return (
         <div style={{display: "flex", width: "100%", justifyContent: "center", flexDirection: "row", flexWrap: "wrap"}}>
@@ -66,7 +68,7 @@ function Searching() {
                 flexWrap: "wrap"
             }}>
                 <div style={{margin: "1rem"}}>
-                    <SearchOptions courseFilter={courseFilter} onFilterChange={onFilterChange}/>
+                    <SearchOptions initialTags={location.state?.tagsforselect ?? []} onFilterChange={onFilterChange}/>
                 </div>
                 <div style={{flex: "1", maxWidth: "1000px", marginRight: "1rem"}}>
                     {
