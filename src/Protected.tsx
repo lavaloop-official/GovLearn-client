@@ -5,9 +5,10 @@ import {Navigate} from "react-router-dom";
 
 const Protected = ({ children }: {children: ReactNode}) => {
     const auth = useSelector((state: RootState) => !!state.auth.auth)
+    const reason = useSelector((state: RootState) => state.auth.reason)
     //TODO: show reason for redirect
     if (!auth) {
-        return <Navigate to={"/"} replace/>;
+        return <Navigate to={"/"} state={{reason}} replace/>;
     }
     return (
         <>

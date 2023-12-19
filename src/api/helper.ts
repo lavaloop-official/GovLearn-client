@@ -64,12 +64,12 @@ async function handleResponse(response: Response | undefined) {
 
 function handleErrorCode(response: Response) {
     switch (response.status) {
-        case 401:
-            if (!response.url.endsWith("bookmarks"))
-                clearToken();
-            break;
         case 403:
-            return handleError(new Error("Forbidden"))
+            if (!response.url.endsWith("bookmarks"))
+                clearToken("401");
+            break;
+        case 401:
+            return handleError(new Error("Unauthorized"))
         case 404:
             return handleError(new Error("Not found"))
         case 500:

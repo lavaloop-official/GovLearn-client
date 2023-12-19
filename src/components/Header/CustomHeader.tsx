@@ -77,7 +77,7 @@ function CustomHeader() {
             key: '4',
             label: (
                 <a onClick={() => {
-                    clearToken()
+                    clearToken("logout")
                 }}>
                     Ausloggen
                 </a>
