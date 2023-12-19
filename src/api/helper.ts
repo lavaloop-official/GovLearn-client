@@ -66,7 +66,7 @@ function handleErrorCode(response: Response) {
     switch (response.status) {
         case 401:
             if (!response.url.endsWith("bookmarks"))
-                clearToken();
+                clearToken("401");
             break;
         case 403:
             return handleError(new Error("Forbidden"))
