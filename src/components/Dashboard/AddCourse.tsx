@@ -148,9 +148,16 @@ function AddCourse(Props: ToggleProps) {
             costFree: newCourse?.costFree || false,
             domainSpecific: newCourse?.domainSpecific || false,
             link: newCourse?.link || "",
+        }).then((res) => {
+                const course = res.payload;
+                selectedTags.forEach((tag) => {
+                    fetchWrapper.post('api/v1/tags/courses', {
+                        courseId: course.id,
+                        tagId: tag.id,
+                    })
+                })              
         }).then(() => {
-            Props.ClickHandler(event);
-            //Props.addTagsToNewCourse(newCourse!, selectedTags);    
+            Props.ClickHandler(event);    
         })
         
     }
@@ -185,7 +192,7 @@ function AddCourse(Props: ToggleProps) {
             >
                 <Flex vertical justify="center" style={{margin: "auto"}} >
                     {page === 0 ?
-                        <Form
+                        <Form 
                             name="basic"
                             labelCol={{ span: 8 }}
                             wrapperCol={{ span: 16 }}

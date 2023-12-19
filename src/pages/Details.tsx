@@ -62,7 +62,7 @@ function Details() {
 
     const loadFeedback = () => {
         const courseId = window.location.pathname.split('/').pop();
-        fetchWrapper.get(`api/v1/feedback/course/${courseId}?limit/${limit}&offset/${offset}`).then((res) => {
+        fetchWrapper.get(`api/v1/feedback/course/${courseId}?limit=${limit}&offset=${offset}`).then((res) => {
             setFeedback([...feedback, ...res.payload]);
             setOffset(offset + limit);
             if (res.payload.length < limit) {
