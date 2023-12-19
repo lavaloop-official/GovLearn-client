@@ -122,18 +122,18 @@ function AddCourse(Props: ToggleProps) {
         </div>
     );
 
-    // Prüfen ob mindestens ein Tag ausgewählt wurde
+    // Prüfen ob mindestens ein Tag und maximal vier ausgewählt wurden
     const nextPageAndTestTags: () => void = () => {
-        if (selectedTags.length > 0) {
+        if (selectedTags.length > 0 && selectedTags.length < 5 ) {
             setPage(page + 1);
         } else {
-            message.error('Bitte wähle mindestens einen Tag aus.');
+            message.error('Bitte wähle zwischen einem und vier Tags.');
         }
     }
 
     // Prüfen ob alle Pflichtfelder ausgefüllt sind
     const nextPageAndTestForm: () => void = () => {
-        if (newCourse?.name && newCourse?.description && newCourse?.format && newCourse?.skilllevel && newCourse?.image) {
+        if (newCourse?.name && newCourse?.description && newCourse?.format && newCourse?.skilllevel && newCourse?.image && newCourse?.link) {
             setPage(page + 1);
         } else {
             message.error('Bitte fülle alle Pflichtfelder aus.');
@@ -203,13 +203,13 @@ function AddCourse(Props: ToggleProps) {
                     maxWidth: "1200px",
                 }}
             >
-                <Flex vertical justify="center" style={{ margin: "auto" }} >
+                <Flex justify="center" >
                     {page === 0 ?
                         <Form
                             name="basic"
                             labelCol={{ span: 8 }}
                             wrapperCol={{ span: 16 }}
-                            style={{ maxWidth: 600 }}
+                            style={{ minWidth: 600, maxWidth: 900 }}
                             initialValues={{ remember: true }}
                             autoComplete="off">
                             <h4>Allgemeines</h4>
@@ -287,8 +287,8 @@ function AddCourse(Props: ToggleProps) {
                                 <Checkbox defaultChecked={typeof newCourse?.certificate === 'boolean' ? newCourse.certificate : false} onChange={setCourseCertificate}></Checkbox>;                            </Form.Item>
                             <h4>Links</h4>
                             <hr />
-                            <Form.Item name="website" label="Website">
-                                <Input defaultValue={newCourse?.link} width={"100px"} onChange={setCourseLink} />
+                            <Form.Item initialValue={newCourse?.link} name="website" label="Website" rules={[{required: true}]}>
+                                <Input width={"100px"} onChange={setCourseLink} />
                             </Form.Item>
                         </Form> : page === 1 ?
                             <div>
@@ -324,7 +324,7 @@ function AddCourse(Props: ToggleProps) {
                                 </Flex>
                             </div>
                             : page === 2 ?
-                                <Flex vertical justify="center" gap={"2px"}>
+                                <Flex vertical justify="center" gap={"2px"} style={{minWidth: "900px"}}>
 
                                     <h2>Vorschau: neues Weiterbildungsangebot</h2>
                                     {
