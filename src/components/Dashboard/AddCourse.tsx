@@ -29,7 +29,6 @@ const beforeUpload = (file: RcFile) => {
 
 interface ToggleProps {
     ClickHandler: (event: React.MouseEvent<HTMLButtonElement>) => void
-    //addTagsToNewCourse: (newCourse: Course, tags: Coursetag[]) => void
 }
 
 function AddCourse(Props: ToggleProps) {
@@ -50,13 +49,13 @@ function AddCourse(Props: ToggleProps) {
         });
     }, [])
 
+    //TODO: add Image attribute to Course to store images in database
     const setCourseImage: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
         if (info.file.status === 'uploading') {
             setLoading(true);
             return;
         }
         if (info.file.status === 'done') {
-            // Get this url from response in real world.
             getBase64(info.file.originFileObj as RcFile, (url) => {
                 setLoading(false);
                 setImageUrl(url);
@@ -123,8 +122,22 @@ function AddCourse(Props: ToggleProps) {
         </div>
     );
 
-    const nextPage: () => void = () => {
-        setPage(page + 1);
+    // Prüfen ob mindestens ein Tag ausgewählt wurde
+    const nextPageAndTestTags: () => void = () => {
+        if (selectedTags.length > 0) {
+            setPage(page + 1);
+        } else {
+            message.error('Bitte wähle mindestens einen Tag aus.');
+        }
+    }
+
+    // Prüfen ob alle Pflichtfelder ausgefüllt sind
+    const nextPageAndTestForm: () => void = () => {
+        if (newCourse?.name && newCourse?.description && newCourse?.format && newCourse?.skilllevel && newCourse?.image) {
+            setPage(page + 1);
+        } else {
+            message.error('Bitte fülle alle Pflichtfelder aus.');
+        }
     }
 
     const lastPage: () => void = () => {
@@ -132,7 +145,7 @@ function AddCourse(Props: ToggleProps) {
     }
 
     const uploadCourse: React.MouseEventHandler<HTMLButtonElement> = (event) => {
-        fetchWrapper.post('api/v1/courses',{
+        fetchWrapper.post('api/v1/courses', {
             name: newCourse?.name || "",
             image: newCourse?.image || "",
             description: newCourse?.description || "",
@@ -149,17 +162,17 @@ function AddCourse(Props: ToggleProps) {
             domainSpecific: newCourse?.domainSpecific || false,
             link: newCourse?.link || "",
         }).then((res) => {
-                const course = res.payload;
-                selectedTags.forEach((tag) => {
-                    fetchWrapper.post('api/v1/tags/courses', {
-                        courseId: course.id,
-                        tagId: tag.id,
-                    })
-                })              
+            const course = res.payload;
+            selectedTags.forEach((tag) => {
+                fetchWrapper.post('api/v1/tags/courses', {
+                    courseId: course.id,
+                    tagId: tag.id,
+                })
+            })
         }).then(() => {
-            Props.ClickHandler(event);    
+            Props.ClickHandler(event);
         })
-        
+
     }
 
     return (
@@ -190,16 +203,14 @@ function AddCourse(Props: ToggleProps) {
                     maxWidth: "1200px",
                 }}
             >
-                <Flex vertical justify="center" style={{margin: "auto"}} >
+                <Flex vertical justify="center" style={{ margin: "auto" }} >
                     {page === 0 ?
-                        <Form 
+                        <Form
                             name="basic"
                             labelCol={{ span: 8 }}
                             wrapperCol={{ span: 16 }}
                             style={{ maxWidth: 600 }}
                             initialValues={{ remember: true }}
-                            //onFinish={Props.ClickHandler}
-                            //onFinishFailed={onFinishFailed}
                             autoComplete="off">
                             <h4>Allgemeines</h4>
                             <hr />
@@ -211,27 +222,29 @@ function AddCourse(Props: ToggleProps) {
                                     showUploadList={false}
                                     action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
                                     beforeUpload={beforeUpload}
-                                //onChange={setCourseImage}
+                                    onChange={setCourseImage}
                                 >
                                     {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
                                 </Upload>
                             </Form.Item>
 
-                            <Form.Item name="image" label="Bild-Url" rules={[{required: true}]}>
-                                <Input defaultValue={newCourse?.image} width={"100px"} onChange={(event) => {
-                                    setNewCourse(
-                                        { ...newCourse!, image: event.target.value }
-                                    )
-                                }} />
+                            {!imageUrl && <>
+                                <Form.Item name="image" label="Bild-Url" rules={[{ required: true }]}>
+                                    <Input defaultValue={newCourse?.image} width={"100px"} onChange={(event) => {
+                                        setNewCourse(
+                                            { ...newCourse!, image: event.target.value }
+                                        )
+                                    }} />
+                                </Form.Item>
+                                <Flex justify="center">
+                                    {newCourse?.image ? <Image src={newCourse?.image} style={{ margin: "5px 0px 15px", border: "1px solid black", borderRadius: "25px" }} /> : <></>}
+                                </Flex>
+                            </>}
+                            <Form.Item initialValue={newCourse?.name} name="name" label="Name" rules={[{ required: true }]}>
+                                <Input width={"100px"} onChange={setCourseName} />
                             </Form.Item>
-                            <Flex justify="center">
-                                {newCourse?.image ? <Image src={newCourse?.image} style={{ margin: "5px 0px 15px", border: "1px solid black", borderRadius: "25px" }} /> : <></>}
-                            </Flex>
-                            <Form.Item name="name" label="Name" rules={[{required: true}]}>
-                                <Input defaultValue={newCourse?.name} width={"100px"} onChange={setCourseName} />
-                            </Form.Item>
-                            <Form.Item name="description" label="Beschreibung" rules={[{required: true}]}>
-                                <TextArea defaultValue={newCourse?.description} onChange={setCourseDescription} />
+                            <Form.Item initialValue={newCourse?.description} name="description" label="Beschreibung" rules={[{ required: true }]}>
+                                <TextArea onChange={setCourseDescription} />
                             </Form.Item>
                             <h4>Details</h4>
                             <hr />
@@ -247,9 +260,8 @@ function AddCourse(Props: ToggleProps) {
                             <Form.Item name="domainspecific" label="Verwaltungsbezogen">
                                 <Checkbox defaultChecked={newCourse?.domainSpecific} onChange={setCourseDomainspecific}></Checkbox>;
                             </Form.Item>
-                            <Form.Item name="format" label="Format" rules={[{required: true}]}>
+                            <Form.Item initialValue={newCourse?.format} name="format" label="Format" rules={[{ required: true }]}>
                                 <Select
-                                    defaultValue={newCourse?.format}
                                     style={{ width: 120 }}
                                     onChange={setCourseFormat}
                                     options={[
@@ -260,9 +272,8 @@ function AddCourse(Props: ToggleProps) {
                                     ]}
                                 />
                             </Form.Item>
-                            <Form.Item name="skilllevel" label="Schwierigkeit" rules={[{required: true}]}>
+                            <Form.Item initialValue={newCourse?.skilllevel} name="skilllevel" label="Schwierigkeit" rules={[{ required: true, message: 'Please input your username!' }]}>
                                 <Select
-                                    defaultValue={newCourse?.skilllevel}
                                     style={{ width: 120 }}
                                     onChange={setCourseSkilllevel}
                                     options={[
@@ -335,12 +346,12 @@ function AddCourse(Props: ToggleProps) {
                 {page === 0 ?
                     <Flex justify="space-between" style={{ margin: "15px" }}>
                         <Button onClick={Props.ClickHandler}>Abbrechen</Button>
-                        <Button onClick={nextPage}>Weiter</Button>
+                        <Button onClick={nextPageAndTestForm} htmlType="submit">Weiter</Button>
                     </Flex>
                     : page === 1 ?
                         <Flex justify="space-between" style={{ margin: "15px" }}>
                             <Button onClick={lastPage}>Zurück</Button>
-                            <Button onClick={nextPage}>Weiter</Button>
+                            <Button onClick={nextPageAndTestTags}>Weiter</Button>
                         </Flex>
                         : page === 2 ?
                             <Flex justify="space-between" style={{ margin: "15px" }}>

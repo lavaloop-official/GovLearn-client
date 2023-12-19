@@ -2,8 +2,8 @@ import react, { useEffect, useState } from "react";
 import { fetchWrapper } from "../api/helper";
 import { Course, Coursetag } from "../interfaces";
 import SearchComponent from "../components/SearchComponent";
-import { Button, Flex, Steps } from "antd";
-import { FileAddOutlined } from "@ant-design/icons";
+import { Button, Flex, Modal, Steps } from "antd";
+import { ExclamationCircleFilled, FileAddOutlined } from "@ant-design/icons";
 import AddCourse from "../components/Dashboard/AddCourse";
 
 function Dashboard() {
@@ -11,6 +11,8 @@ function Dashboard() {
     // TODO: implement edit of SearchComponent
     const [mode, setMode] = useState<"view" | "edit" | "add">("view")
     const [providedCourses, setProvidedCourses] = useState<Course[]>([])
+    const { confirm } = Modal;
+    
     useEffect(() => {
         fetchWrapper.get("api/v1/providers/courses").then((res) => {
             setProvidedCourses(res.payload)
@@ -20,6 +22,26 @@ function Dashboard() {
     const toViewMode = () => {
         setMode("view");
     }
+
+    function handleDelete(id: number | undefined) {
+        confirm({
+            title: 'Bist du dir sicher diesen Kurs zu löschen?',
+            icon: <ExclamationCircleFilled />,
+            content: 'Dieser Kurs wird unwiderruflich gelöscht.',
+            okText: 'Ja',
+            okType: 'danger',
+            cancelText: 'Nein',
+            onOk() {
+              fetchWrapper.delete('api/v1/courses/' + id).then((res) => {
+                if (res) {
+                    console.log("deleted")
+                    setProvidedCourses(providedCourses.filter((course) => course.id !== id))
+                }
+              });
+            }
+          });
+    }
+    
     return (
         <div style={{
             zIndex: "1",
@@ -36,7 +58,9 @@ function Dashboard() {
                             Angebot hinzufügen
                         </Button>
                     </Flex>
-                    {providedCourses.map((course) => <div key={course.id}><SearchComponent obj={course} editable={true} /*TODO: delete durch parent mitgeben*//></div>)}
+                    {providedCourses.length > 0 ? providedCourses.map((course) => <div key={course.id}><SearchComponent obj={course} editable={true} onDelete={handleDelete} /*TODO: delete durch parent mitgeben*//></div>)
+                        : <h2 style={{ textAlign: "center" }}>Du hast noch keine Kurse hinzugefügt.</h2>
+                    }
                 </div>
                 : mode === "add" ?
                     <AddCourse ClickHandler={toViewMode} />
