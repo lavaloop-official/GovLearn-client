@@ -26,7 +26,7 @@ function Searching() {
         format: [],
         startdatum: undefined,
         dauer: [],
-        kosten: false,
+        kostenlos: false,
         sonstiges: []
     });
 
