@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import MyGroups from "../components/Group/MyGroups.tsx";
 import { Group } from "../interfaces.ts";
 import TextArea from "antd/es/input/TextArea";
+import GroupInvitation from "../components/Group/GroupInvitation.tsx";
 
 function Groups() {
     const [openAdmin, setOpenAdmin] = useState<boolean>(true);
@@ -29,6 +30,21 @@ function Groups() {
         { name: "Mitglied 1", role: "Admin", Image: "https://www.w3schools.com/howto/img_avatar.png" },
         { name: "Mitglied 2", role: "Member", Image: "https://www.w3schools.com/howto/img_avatar.png" },
     ]); // TODO: Mitglieder in return einbinden
+
+    const [groupInvitations, setGroupInvitations] = useState<Group[]>([
+        { id: 1, name: "Gruppe 1 with a very large name", description: "Beschreibung 1" },
+        { id: 2, name: "Gruppe 2 - Test", description: "Beschreibung 2" },
+    ]);
+
+    const acceptInvitation = (group: Group) => {
+        setGroupInvitations(groupInvitations.filter(e => e.id !== group.id));
+        setGroups([...groups, group]);
+        setCurrentGroup(group);
+    }
+
+    const denyInvitation = (group: Group) => {
+        setGroupInvitations(groupInvitations.filter(e => e.id !== group.id));
+    }
 
     useEffect(() => {
         setCurrentGroup(groups[0]);
@@ -120,8 +136,15 @@ function Groups() {
                             <TextArea rows={4} onChange={updateCreateGroupDescription}/>
                         </Modal>
                     </div>
-                    <div style={{margin:"5px",background:"grey", borderRadius:"5px", height:"fit-content"}}>
+                    <div>
                         <h3 style={{textAlign:"center"}}>Einladungen</h3>
+                        <div style={{display:"flex", flexDirection:"column", gap:"5px"}}>
+                        {
+                            groupInvitations ?
+                                groupInvitations.map((group: Group) => <GroupInvitation group={group} acceptInvitation={acceptInvitation} denyInvitation={denyInvitation}/>)
+                                : <div/>
+                        }
+                        </div>
                     </div>
                 </div>
                 <Groupadmin currentGroup={currentGroup}/>
