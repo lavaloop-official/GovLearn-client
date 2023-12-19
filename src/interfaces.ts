@@ -60,9 +60,11 @@ export interface Group {
     "id": number | undefined,
     "name": string | undefined,
     "description": string | undefined,
+    "admin": boolean | undefined,
 }
 
 export interface Groupmember {
     "id": number | undefined,
     "name": string | undefined,
+    "admin": boolean | undefined,
 }

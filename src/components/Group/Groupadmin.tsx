@@ -11,7 +11,7 @@ function Groupadmin({currentGroup}:{currentGroup:Group}) {
 
     const inviteGroupmemberModal = createRef();
 
-    const [groupmember, setGroupmember] = useState<Groupmember[]>([{id:1, name:"Testuser"}, {id:2, name:"Testuser2"}]);
+    const [groupmember, setGroupmember] = useState<Groupmember[]>([{id:1, name:"Testuser", admin:true}, {id:2, name:"Testuser2", admin:false}]);
 
     const removeUserFromGroup = (groupmem: Groupmember) => {
         setGroupmember(groupmember.filter(e => e.id !== groupmem.id));
@@ -34,11 +34,11 @@ function Groupadmin({currentGroup}:{currentGroup:Group}) {
             <div style={{margin:"0px 10px 0px 10px", display:"flex", flexDirection:"column"}}>
                 <h3>Gruppenmitglieder</h3>
                 <div style={{overflow:"scroll", borderRadius:"10px"}} className="scrollbar">
-                    <div style={{background:"grey", borderRadius:"10px", height:"100px", display:"flex", flexDirection:"row", alignItems:"center", gap:"5px", paddingLeft:"10px", paddingRight:"10px", width:"fit-content"}} className="scrollbar">
+                    <div style={{background:"grey", borderRadius:"10px", height:"100px", display:"flex", flexDirection:"row", alignItems:"center", gap:"0px", paddingLeft:"10px", paddingRight:"10px", width:"fit-content"}} className="scrollbar">
                         {
                             groupmember ?
                                 groupmember.map((groupmember: Groupmember) => 
-                                    <Groupuser groupmember={groupmember} removeUserFromGroup={removeUserFromGroup}/>)
+                                    <Groupuser admin={true} groupmember={groupmember} removeUserFromGroup={removeUserFromGroup}/>)
                                 : <div/>
                         }
                         <Button onClick={() => inviteGroupmemberModal?.current?.openDialog()} style={{height:"fit-content", width:"fit-content"}} icon={<Plus style={{color:"white", height:"100%", width:"50px", marginRight:"15px", marginLeft:"15px"}}/>} type="text"/>

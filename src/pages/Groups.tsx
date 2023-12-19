@@ -8,14 +8,13 @@ import TextArea from "antd/es/input/TextArea";
 import GroupInvitation from "../components/Group/GroupInvitation.tsx";
 
 function Groups() {
-    const [openAdmin, setOpenAdmin] = useState<boolean>(true);
 
     const [newGroupTitle, setNewGroupTitle] = useState<string>();
     const [newGroupDescription, setNewGroupDescription] = useState<string>();
 
     const [groups, setGroups] = useState<Group[]>([
-        { id: 1, name: "Gruppe 1", description: "Beschreibung 1" },
-        { id: 2, name: "Gruppe 2", description: "Beschreibung 2" },
+        { id: 1, name: "Gruppe 1", description: "Beschreibung 1", admin: false },
+        { id: 2, name: "Gruppe 2", description: "Beschreibung 2", admin: true },
     ]);
 
     const [currentGroup, setCurrentGroup] = useState<Group>(
@@ -23,6 +22,7 @@ function Groups() {
             id: undefined,
             name: "",
             description: "",
+            admin: undefined,
         }
     );
     
@@ -32,8 +32,8 @@ function Groups() {
     ]); // TODO: Mitglieder in return einbinden
 
     const [groupInvitations, setGroupInvitations] = useState<Group[]>([
-        { id: 1, name: "Gruppe 1 with a very large name", description: "Beschreibung 1" },
-        { id: 2, name: "Gruppe 2 - Test", description: "Beschreibung 2" },
+        { id: 1, name: "Gruppe 1 with a very large name", description: "Beschreibung 1", admin:false },
+        { id: 2, name: "Gruppe 2 - Test", description: "Beschreibung 2" , admin:false},
     ]);
 
     const acceptInvitation = (group: Group) => {
@@ -76,7 +76,7 @@ function Groups() {
     };
   
     const handleCreateGroupModalOK = () => {
-        const newGroup: Group = {id:10, name:newGroupTitle, description:newGroupDescription}
+        const newGroup: Group = {id:10, name:newGroupTitle, description:newGroupDescription, admin:true}
         setGroups([...groups, newGroup])
         setCurrentGroup(newGroup);
         console.log(groups)
@@ -147,7 +147,12 @@ function Groups() {
                         </div>
                     </div>
                 </div>
-                <Groupadmin currentGroup={currentGroup}/>
+                {
+                    currentGroup.admin ?
+                        <Groupadmin currentGroup={currentGroup}/>
+                        : <Groupmember currentGroup={currentGroup}/>
+                }
+                
             </div>
         </div>
     )
