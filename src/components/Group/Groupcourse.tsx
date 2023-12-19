@@ -6,16 +6,20 @@ import { useEffect, useState } from "react";
 import { DashSquare} from "react-bootstrap-icons";
 import Recommendation from "../Recommendation";
 
-function Groupcourse({course, removeCourseFromUser}:{course: Course ,removeCourseFromUser: (course: Course) => void}) {
+function Groupcourse({course, admin, removeCourseFromUser}:{course: Course, admin:Boolean ,removeCourseFromUser?: (course: Course) => void}) {
 
     const onRemoveCourseFromUser=()=>{
-        removeCourseFromUser(course)
+        removeCourseFromUser!(course)
     }
 
     return (
         <div style={{height:"fit-content", display:"flex", flexDirection:"row"}}>
             <Recommendation obj={course}/>
-            <Button style={{top:"95px", right:"43px", color:"white"}} type="text" icon={<DashSquare style={{width:"25px", height:"25px"}}/>} onClick={onRemoveCourseFromUser}></Button>
+            {
+                admin?
+                    <Button style={{top:"95px", right:"43px", color:"white"}} type="text" icon={<DashSquare style={{width:"25px", height:"25px"}}/>} onClick={onRemoveCourseFromUser}></Button>
+                    :<div/>
+            } 
         </div>
     )
 

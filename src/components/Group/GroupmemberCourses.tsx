@@ -7,7 +7,7 @@ import { createRef, useEffect, useState } from "react";
 import Groupcourse from "./Groupcourse";
 import AddCourse from "./AddCourse";
 
-function GroupmemberCourses({groupmember} : { groupmember: Groupmember}) {
+function GroupmemberCourses({groupmember, admin} : { groupmember: Groupmember, admin:Boolean}) {
 
     const addCourseModal = createRef();
 
@@ -38,7 +38,7 @@ function GroupmemberCourses({groupmember} : { groupmember: Groupmember}) {
                 <div style={{display:"flex", flexDirection:"row", overflow:"scroll", height:"100%", alignItems:"center"}} className="scrollbar">
                     {
                         courses?
-                            courses.map((course: Course) => <Groupcourse course={course} removeCourseFromUser={removeCourseFromUser}/>)
+                            courses.map((course: Course) => <Groupcourse course={course} admin={admin} removeCourseFromUser={removeCourseFromUser}/>)
                             : <div/>
                     }
                     <Button onClick={() => addCourseModal?.current?.openDialog()} style={{height:"fit-content", width:"fit-content", marginRight:"15px", marginLeft:"15px"}} icon={<Plus style={{color:"white", height:"100%", width:"75px"}}/>} type="text"/>

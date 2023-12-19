@@ -56,7 +56,7 @@ function Groupadmin({currentGroup}:{currentGroup:Group}) {
             {
                 groupmember ?
                     groupmember.map((groupmember: Groupmember) => 
-                        <GroupmemberCourses groupmember={groupmember}/>)
+                        <GroupmemberCourses groupmember={groupmember} admin={true}/>)
                     : <div/>
             }
         </div>
