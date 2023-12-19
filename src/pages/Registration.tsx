@@ -6,12 +6,7 @@ import CircleSelect from "../components/CircleSelect/CircleSelect.tsx";
 function Registration() {
 
 
-    const slice =
-        <svg height={600} width={600} style={{margin: "auto"}} className="pieSelect">
-            <g transform={`translate(${600 / 2},${600 / 2})`}>
-                <CircleSelect/>
-            </g>
-        </svg>
+    const slice = <CircleSelect/>
 
     const navigate = useNavigate();
 
