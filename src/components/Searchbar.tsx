@@ -16,11 +16,13 @@ function Searchbar() {
     const [categories, setCategories] = useState<Category[]>([]);
     const [tags, setTags] = useState<Coursetag[]>([]);
 
+    const [tagsforselect, setTagsforselect] = useState<string[]>([]);
+
     const navigate = useNavigate();
     const location = useLocation();
 
     const onSearch: SearchProps['onSearch'] = (value) => {
-        navigate(`/searching/${value}`, {state: {tagIDs: selectedTags}, replace: true});
+        navigate('/searching', {state: {tagIDs: selectedTags, tagsforselect: tagsforselect, searchStr: value}});
     };
 
     const onSelect = (checked: { checked: Key[]; halfChecked: Key[]; } | Key[]) => {
@@ -30,6 +32,7 @@ function Searchbar() {
                 .map((e) => e.toString().split("-")[1])
                 .map((e) => Number(e));
             setSelectedTags(taglist);
+            setTagsforselect(checked.filter((e) => e.toString().includes("-")).map((e) => e.toString()))
         }
         updateShowTags(checked);
     }
@@ -60,6 +63,7 @@ function Searchbar() {
                 {showTags.length != 0 ? showTags.map((tag) => (<Tag key={tag} >{tag}</Tag>)) : <Tag>Keine Filter ausgewählt</Tag>}
             </div>
             <Tree checkable {...tProps}/>
+            <a onClick={() => onSearch("")}>Weitere Filter</a>
         </>
 
     )

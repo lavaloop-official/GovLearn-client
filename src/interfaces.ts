@@ -1,3 +1,5 @@
+import { Format, Skilllevel } from "./Enum"
+
 export interface Course {
     "id": number | undefined,
     "name": string | undefined,
@@ -6,14 +8,16 @@ export interface Course {
     "createdAt": string | undefined,
     "provider": string | undefined,
     "instructor": string | undefined,
-    "certificate": string | undefined,
+    "certificate": string | boolean | undefined,
     "skilllevel": string | undefined,
     "durationInHours": string | undefined,
     "format": string | undefined,
     "startDate": string | undefined,
     "costFree": boolean | undefined,
     "domainSpecific": boolean | undefined,
-    "link": string | undefined
+    "link": string | undefined,
+    "ratingAverage": number | undefined,
+    "ratingAmount": number | undefined,
 }
 
 export interface Review {
@@ -38,9 +42,16 @@ export interface Coursetag {
     "category": string | undefined,
 }
 
-export interface TreeInterface {
-    "title": string | undefined,
-    "value": string | undefined,
-    "key": string | undefined,
-    "children": Array<TreeInterface> |undefined
+export interface CourseFilterWsTo {
+    "tagIDs": Array<number> | undefined,
+    "anbieter": Array<string> | undefined,
+    "wissensbezug": Array<string> | undefined,
+    "verwaltungsspezifisch": boolean | undefined,
+    "zertifikat": boolean | undefined,
+    "kompetenzstufe": Array<Skilllevel> | undefined,
+    "dauer": Array<string> | undefined,
+    "format": Array<Format> | undefined,
+    "startdatum": Date | undefined,
+    "kostenlos": boolean | undefined,
+    "sonstiges": Array<string> | undefined
 }

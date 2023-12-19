@@ -7,7 +7,6 @@ import {openLoginModal} from "../../state/modalutil.ts";
 import {useSelector} from "react-redux";
 import {RootState} from "../../state/reduxStore.ts";
 import {fetchWrapper} from "../../api/helper";
-import categoryBlue from "../../assets/categoryBlue.png"
 import {clearToken} from "../../api/auth.ts";
 import Searchbar from "../Searchbar.tsx";
 
@@ -61,8 +60,8 @@ function CustomHeader() {
         {
             key: '2',
             label: (
-                <a target="_blank" rel="noopener noreferrer" href="https://www.aliyun.com">
-                    Einstellungen
+                <a rel="noopener noreferrer" href="/dashboard">
+                    Weiterbildungsangebote verwalten
                 </a>
             ),
         },
@@ -70,7 +69,7 @@ function CustomHeader() {
             key: '3',
             label: (
                 <a target="_blank" rel="noopener noreferrer" href="https://www.aliyun.com">
-                    Placeholder
+                    Einstellungen
                 </a>
             ),
         },
@@ -78,7 +77,7 @@ function CustomHeader() {
             key: '4',
             label: (
                 <a onClick={() => {
-                    clearToken()
+                    clearToken("logout")
                 }}>
                     Ausloggen
                 </a>
@@ -109,7 +108,7 @@ function CustomHeader() {
                         Govlearn
                     </a>
                 </Title>
-                {loggedIn ?
+                {loggedIn && !location.pathname.includes("searching") ?
                     <Searchbar></Searchbar>
                     :<div></div>
                 }
