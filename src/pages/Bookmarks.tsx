@@ -4,6 +4,9 @@ import {fetchWrapper} from "../api/helper.ts";
 import SearchComponent from "../components/SearchComponent.tsx";
 import {useSelector} from "react-redux";
 import {RootState} from "../state/reduxStore.ts";
+import {Empty} from "antd";
+import {NO_BOOKMARKS} from "../constants/de.ts";
+import './Bookmarks.css';
 
 function Bookmarks() {
 
@@ -17,20 +20,16 @@ function Bookmarks() {
         })
     }, []);
 
-
+    const getActiveBookmarks = () => {
+        return bookmarks.filter((e) => bookmarkedIDs.includes(e.id as number)).map((course) => <div key={course.id}>
+            <SearchComponent obj={course}/></div>)
+    }
 
     return (
-        <div style={{
-            zIndex: "1",
-            display: "flex",
-            justifyContent: "center",
-            flexDirection: "column",
-            gap: "10px"
-        }}>
-            <div style={{maxWidth: "1200px", margin: "auto", width: "100%", padding: "10px 10px"}}>
-                <h1>Bookmarks</h1>
-                {bookmarks.filter((e) => bookmarkedIDs.includes(e.id as number)).map((course) => <div key={course.id}><SearchComponent obj={course}/></div>)}
-            </div>
+        <div className="bookmark_body">
+            <h1>Bookmarks</h1>
+            {getActiveBookmarks().length == 0 ? <Empty description={NO_BOOKMARKS}/> :
+                getActiveBookmarks()}
         </div>
     );
 

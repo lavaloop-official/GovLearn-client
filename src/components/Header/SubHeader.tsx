@@ -18,22 +18,11 @@ function SubHeader() {
     }
 
     return (
-        <div style={{
-            width: "100%",
-            height: "32px",
-            borderTop: "1px solid #D9D9D9",
-            margin: "0 auto",
-            display: "flex",
-            justifyContent: "center"
-        }}>
+        <div className="subHeader">
             <Button
                 type="text"
                 href="/bookmarks"
                 style={{
-                    margin: "0",
-                    borderRadius: "0px",
-                    maxWidth: "250px",
-                    width: "100%",
                     ...styleSelected("bookmarks")
                 }}>
                 Markierte Kurse
@@ -42,10 +31,6 @@ function SubHeader() {
                 type="text"
                 href="/discover"
                 style={{
-                    margin: "0",
-                    borderRadius: "0px",
-                    maxWidth: "250px",
-                    width: "100%",
                     ...styleSelected("discover")
                 }}>
                 Entdecken
@@ -54,10 +39,6 @@ function SubHeader() {
                 type="text"
                 href="/profile"
                 style={{
-                    margin: "0",
-                    borderRadius: "0px",
-                    maxWidth: "250px",
-                    width: "100%",
                     ...styleSelected("profile")
                 }}>
                 Profil

@@ -1,4 +1,4 @@
-import {Avatar, Button, Dropdown, MenuProps, Typography} from "antd";
+import {Avatar, Button, Col, Dropdown, MenuProps, Row, Typography} from "antd";
 import {UserOutlined} from "@ant-design/icons";
 import {useLocation} from "react-router-dom";
 import {useEffect, useState} from "react";
@@ -9,6 +9,7 @@ import {RootState} from "../../state/reduxStore.ts";
 import {fetchWrapper} from "../../api/helper";
 import {clearToken} from "../../api/auth.ts";
 import Searchbar from "../Searchbar.tsx";
+import './CustomHeader.css'
 
 const {Title} = Typography
 
@@ -32,11 +33,6 @@ function CustomHeader() {
         if (loggedIn)
             fetchWrapper.get('api/v1/users').then(res => setName(res.payload.name))
     }, [location.pathname])
-
-
-    //TODO: refactor avatar to component
-    //TODO: dont show search bar on landing page
-    //TODO: placeholder for avatar/loginbutton so it doesnt jump around
 
     const items: MenuProps['items'] = [
         {
@@ -77,7 +73,7 @@ function CustomHeader() {
             key: '4',
             label: (
                 <a onClick={() => {
-                    clearToken()
+                    clearToken("logout")
                 }}>
                     Ausloggen
                 </a>
@@ -88,48 +84,37 @@ function CustomHeader() {
 
     return (
         <div style={{width: "100%", height: "100%"}}>
-            <div style={{
-                margin: "0 auto",
-                maxWidth: "1200px",
-                width: "100%",
-                height: "56px",
-                display: "flex",
-                verticalAlign: "middle",
-                gap: "10px",
-                padding: "0px 10px",
-            }}>
-                <Title level={3}
-                       style={{
-                           margin: "auto auto auto 0px",
-                           minWidth: "100px",
-                           color: "#3f3f3f"
-                       }}>
-                    <a href="/discover" style={{color: "#212321"}}>
-                        Govlearn
-                    </a>
-                </Title>
-                {loggedIn && !location.pathname.includes("searching") ?
-                    <Searchbar></Searchbar>
-                    :<div></div>
-                }
-                {loggedIn ?
-                    <div style={{margin: "auto 0px auto auto", minWidth: "32px", lineHeight: "0px"}}>
-                        <Dropdown menu={{items}} placement="bottomRight" arrow={{pointAtCenter: true}}
-                                  trigger={['click']}>
-                            <a onClick={(e) => e.preventDefault()}>
-                                <Avatar icon={<UserOutlined/>}/>
-                            </a>
-                        </Dropdown>
-                    </div>
-                    :
-                    <Button type="primary" size="large" style={{margin: "auto 0px auto auto", minWidth: "32px"}}
-                            onClick={() => {
-                                openLoginModal("login")
-                            }}>Anmelden</Button>
-                }
-
-
-            </div>
+            <Row>
+                <Col span={8}>
+                    <Title level={3}>
+                        <a href="/discover" style={{color: "#212321"}}>
+                            Govlearn
+                        </a>
+                    </Title>
+                </Col>
+                <Col span={8}>
+                    {loggedIn && !location.pathname.includes("searching") ?
+                        <Searchbar/>
+                        : <></>
+                    }
+                </Col>
+                <Col span={8}>
+                    {loggedIn ?
+                        <div className="avatar">
+                            <Dropdown menu={{items}} placement="bottomRight" arrow={{pointAtCenter: true}}
+                                      trigger={['click']}>
+                                <a onClick={(e) => e.preventDefault()}>
+                                    <Avatar icon={<UserOutlined/>}/>
+                                </a>
+                            </Dropdown>
+                        </div>
+                        :
+                        <Button className="loginbtn" type="primary" size="large" onClick={() => {
+                            openLoginModal("login")
+                        }}>Anmelden</Button>
+                    }
+                </Col>
+            </Row>
             {subHeader}
         </div>
     );
