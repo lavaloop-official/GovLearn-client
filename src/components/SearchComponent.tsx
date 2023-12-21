@@ -7,12 +7,21 @@ import {DeleteOutlined, EditOutlined, ExclamationCircleFilled} from "@ant-design
 import {fetchWrapper} from "../api/helper.ts";
 import {DELETE_COURSE} from "../constants/de.ts";
 
+/**
+ * SearchComponent is a React component that displays a course in a search result format.
+ * The component supports editing and deleting the course if the editable prop is true.
+ *
+ * @param {Course} obj - The course to be displayed.
+ * @param {boolean} editable - Whether the course can be edited or deleted.
+ */
 function SearchComponent({obj, editable}: { obj?: Course, editable?: boolean }) {
     const {confirm} = Modal;
 
     const navigate = useNavigate();
 
+    // Handles the click event on the course, navigating to the course detail page.
     const handleClick = (event: any) => {
+        // Prevents the click event from firing when the user clicks on the bookmark or edit buttons.
         if (event.target.className && (event.target.className.includes("bookmark-outer") || event.target.className.includes("edit-button")))
             return;
         if (obj && obj.id)
@@ -23,6 +32,7 @@ function SearchComponent({obj, editable}: { obj?: Course, editable?: boolean }) 
         throw new Error("Function not implemented.");
     }
 
+    // Handles the delete button click event, confirming the deletion before sending a delete request to the server.
     function handleDelete() {
         confirm({
             title: DELETE_COURSE,
