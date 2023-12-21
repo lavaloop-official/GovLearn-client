@@ -93,13 +93,13 @@ function CustomHeader() {
                     </Title>
                 </Col>
                 <Col span={8}>
-                    {loggedIn ?
+                    {loggedIn && !location.pathname.includes("searching") ?
                         <Searchbar/>
                         : <></>
                     }
                 </Col>
                 <Col span={8}>
-                    {loggedIn && !location.pathname.includes("searching") ?
+                    {loggedIn ?
                         <div className="avatar">
                             <Dropdown menu={{items}} placement="bottomRight" arrow={{pointAtCenter: true}}
                                       trigger={['click']}>
