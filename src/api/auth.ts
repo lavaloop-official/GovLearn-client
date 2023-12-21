@@ -4,10 +4,10 @@ import {clearAuth, setAuth} from "../state/authslice.ts";
 /**
  * Clears the token from localstorage or sessionstorage
  */
-function clearToken() {
+function clearToken(reason: string) {
     localStorage.removeItem("authtoken")
     sessionStorage.removeItem("authtoken")
-    reduxStore.dispatch(clearAuth())
+    reduxStore.dispatch(clearAuth(reason))
 }
 
 /**
