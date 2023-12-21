@@ -111,9 +111,42 @@ function Details() {
                                     borderRadius: "20px",
                                     boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
                                     display: "flex",
-                                    marginBottom: "5px"
+                                    flexDirection: "column",
+                                    marginBottom: "5px",
+                                    marginTop: "5px",
                                 }}
                             >
+                                <Flex style={{justifyContent: "space-between", width: "100%"}}>
+                                    <Card className="antcard" style={{margin: "5px", width: "70%"}}>
+                                        <p style={{fontWeight: "bold"}}>Beschreibung</p>
+                                        {course.description ? (
+                                            <p>{course.description}</p>
+                                        ) : (
+                                            <p>keine Beschreibung vorhanden.</p>
+                                        )}
+                                    </Card>
+                                    <Card className="antcard" style={{margin: "5px", width: "30%"}}>
+                                        <Flex justify="space-evenly">
+                                            <Image
+                                                style={{borderRadius: '50%', width: '100px', height: '100px'}}
+                                                // TODO: Bilder von Instructor einfügen
+                                                src="https://img.myloview.de/sticker/default-profile-picture-avatar-photo-placeholder-vector-illustration-700-205664584.jpg"
+                                                alt="Bild konnte nicht geladen werden"
+                                            />
+                                            <div>
+                                                {
+                                                    course.instructor ? (
+                                                        <h3>{course.instructor}</h3>
+                                                    ) : (
+                                                        <h3>Unbekannt</h3>
+                                                    )
+                                                }
+                                            </div>
+                                        </Flex>
+                                        <p>keine Beschreibung
+                                            vorhanden.</p> {/* TODO: Kurs für instructor-Beschreibung überarbeiten */}
+                                    </Card>
+                                </Flex>
                                 <Flex style={{ justifyContent: "space-between", width: "100%" }}>
                                     <Card className="antcard" style={{ margin: "5px", width: "30%" }}>
                                         <p style={{ fontWeight: "bold" }}>Durchschnittsbewertung</p>
