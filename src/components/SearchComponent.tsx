@@ -1,33 +1,14 @@
 import {Flex, Modal, Rate, Skeleton} from "antd";
 import {Course} from "../interfaces.ts";
 import Bookmark from "./Bookmark.tsx";
-import { ExclamationCircleFilled } from "@ant-design/icons";
-import { fetchWrapper } from "../api/helper.ts";
 
-function SearchComponent({obj, editable}: { obj?: Course, editable?: boolean}) {
-    const { confirm } = Modal;
+function SearchComponent({obj, editable = false, onDelete = () => {}}: { obj?: Course, editable?: boolean, onDelete?: (id: number | undefined) => void}) {
     
+    // TODO: implement handleEdit
     function handleEdit() {
         throw new Error("Function not implemented.");
     }
 
-    function handleDelete() {
-        confirm({
-            title: 'Bist du dir sicher diesen Kurs zu löschen?',
-            icon: <ExclamationCircleFilled />,
-            content: 'Dieser Kurs wird unwiderruflich gelöscht.',
-            okText: 'Ja',
-            okType: 'danger',
-            cancelText: 'Nein',
-            onOk() {
-              fetchWrapper.delete('api/v1/courses/' + obj?.id).then((res) => {
-                if (res.success) {
-                    window.location.reload();
-                }
-              });
-            }
-          });
-    }
     // TODO: Integrate Rating
     return (
         <div style={{
@@ -88,7 +69,7 @@ function SearchComponent({obj, editable}: { obj?: Course, editable?: boolean}) {
                         editable ?
                             <div style={{margin: "0px 10px 0px"}}>
                                 <a style={{margin: "4px"}} onClick={handleEdit}><img src="src\assets\editBlue.png" style={{width: "26px"}}/></a>
-                                <a style={{margin: "4px"}} onClick={handleDelete}><img src="src\assets\delete.png" style={{width: "26px"}}/></a>
+                                <a style={{margin: "4px"}} onClick={() => onDelete(obj?.id)}><img src="src\assets\delete.png" style={{width: "26px"}}/></a>
                             </div>
                             : <></>
                     }
