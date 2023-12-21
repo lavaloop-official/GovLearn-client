@@ -43,14 +43,17 @@ function Details() {
     useEffect(() => {
         const courseId = window.location.pathname.split('/').pop();
 
+
         fetchWrapper.get(`api/v1/courses/${courseId}`).then((res) => {
+            if(!res)
+                navigate('/404');
             setCourse(res.payload);
             document.title = res.payload.name;
         });
-        fetchWrapper.get(`api/v1/feedback/course/${courseId}?limit=${limit}&offset=${offset}`).then((res) => {
+        fetchWrapper.get(`api/v1/feedback/course/${courseId}?limit=5&offset=0`).then((res) => {
             setFeedback(res.payload);
-            setOffset(offset + limit);
-            if (res.payload.length < limit) {
+            setOffset(5);
+            if (res.payload.length < 5) {
                 setNoFeedbackLeft(true);
             }
         });
