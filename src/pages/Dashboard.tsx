@@ -1,9 +1,9 @@
-import react, { useEffect, useState } from "react";
-import { fetchWrapper } from "../api/helper";
-import { Course, Coursetag } from "../interfaces";
+import {useEffect, useState} from "react";
+import {fetchWrapper} from "../api/helper";
+import {Course} from "../interfaces";
 import SearchComponent from "../components/SearchComponent";
-import { Button, Flex, Modal, Steps } from "antd";
-import { ExclamationCircleFilled, FileAddOutlined } from "@ant-design/icons";
+import {Button, Flex, Modal} from "antd";
+import {ExclamationCircleFilled, FileAddOutlined} from "@ant-design/icons";
 import AddCourse from "../components/Dashboard/AddCourse";
 
 function Dashboard() {
@@ -11,10 +11,10 @@ function Dashboard() {
     // TODO: implement edit of SearchComponent
     const [mode, setMode] = useState<"view" | "edit" | "add">("view")
     const [providedCourses, setProvidedCourses] = useState<Course[]>([])
-    const { confirm } = Modal;
-    
+    const {confirm} = Modal;
+
     useEffect(() => {
-        fetchWrapper.get("api/v1/providers/courses").then((res) => {
+        fetchWrapper.get("api/v1/creators/courses").then((res) => {
             setProvidedCourses(res.payload)
         })
     }, [mode])
@@ -26,22 +26,22 @@ function Dashboard() {
     function handleDelete(id: number | undefined) {
         confirm({
             title: 'Bist du dir sicher diesen Kurs zu löschen?',
-            icon: <ExclamationCircleFilled />,
+            icon: <ExclamationCircleFilled/>,
             content: 'Dieser Kurs wird unwiderruflich gelöscht.',
             okText: 'Ja',
             okType: 'danger',
             cancelText: 'Nein',
             onOk() {
-              fetchWrapper.delete('api/v1/courses/' + id).then((res) => {
-                if (res) {
-                    console.log("deleted")
-                    setProvidedCourses(providedCourses.filter((course) => course.id !== id))
-                }
-              });
+                fetchWrapper.delete('api/v1/courses/' + id).then((res) => {
+                    if (res) {
+                        console.log("deleted")
+                        setProvidedCourses(providedCourses.filter((course) => course.id !== id))
+                    }
+                });
             }
-          });
+        });
     }
-    
+
     return (
         <div style={{
             zIndex: "1",
@@ -51,19 +51,29 @@ function Dashboard() {
             gap: "10px"
         }}>
             {mode === "view" ?
-                <div style={{ maxWidth: "1200px", minHeight: "860px", margin: "auto", width: "100%", padding: "10px 10px" }}>
+                <div style={{
+                    maxWidth: "1200px",
+                    minHeight: "860px",
+                    margin: "auto",
+                    width: "100%",
+                    padding: "10px 10px"
+                }}>
                     <Flex justify="space-between" align="center">
                         <h1>Meine Kurse</h1>
-                        <Button type="primary" icon={<FileAddOutlined />} onClick={() => { setMode("add") }}>
+                        <Button type="primary" icon={<FileAddOutlined/>} onClick={() => {
+                            setMode("add")
+                        }}>
                             Angebot hinzufügen
                         </Button>
                     </Flex>
-                    {providedCourses.length > 0 ? providedCourses.map((course) => <div key={course.id}><SearchComponent obj={course} editable={true} onDelete={handleDelete} /*TODO: delete durch parent mitgeben*//></div>)
-                        : <h2 style={{ textAlign: "center" }}>Du hast noch keine Kurse hinzugefügt.</h2>
+                    {providedCourses.length > 0 ? providedCourses.map((course) => <div key={course.id}><SearchComponent
+                            obj={course} editable onDelete={handleDelete} /*TODO: delete durch parent mitgeben*//>
+                        </div>)
+                        : <h2 style={{textAlign: "center"}}>Du hast noch keine Kurse hinzugefügt.</h2>
                     }
                 </div>
                 : mode === "add" ?
-                    <AddCourse ClickHandler={toViewMode} />
+                    <AddCourse ClickHandler={toViewMode}/>
                     : mode === "edit" ?
                         <div>
                             <h1>test</h1>
