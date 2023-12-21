@@ -1,29 +1,37 @@
 import {Button, Skeleton} from "antd";
 import Recommendation from "./Recommendation.tsx";
 import './RecomSlider.css'
-
 import 'react-multi-carousel/lib/styles.css';
 import {Course} from "../interfaces.ts";
 import {LeftOutlined, RightOutlined} from "@ant-design/icons";
 import React, {useCallback, useLayoutEffect, useRef, useState} from "react";
 
+/**
+ * RecomSlider is a React component that displays a list of courses in a horizontally scrollable slider.
+ * The slider supports both manual drag and navigation buttons for scrolling.
+ *
+ * @param {string} title - The title of the slider.
+ * @param {Course[]} data - The list of courses to be displayed in the slider.
+ */
 function RecomSlider({title, data}: { title?: string, data?: Course[] }) {
 
+    // State variables for managing the slider's position, dragging status, transition effect and maximum scrollable distance.
     const [translate, setTranslate] = useState(0);
     const [dragging, setDragging] = useState(false);
     const [transition, setTransition] = useState(false);
-
-    const ref = useRef<any>(null);
-    const contentWidth = 240;
-
     const [max, setMax] = useState(740);
 
+    // A reference to the slider's DOM element.
+    const ref = useRef<HTMLDivElement>(null);
+    // The width of each course item in the slider.
+    const contentWidth = 240;
+
+
+    // A layout effect that updates the maximum scrollable distance when the window is resized.
     useLayoutEffect(() => {
         function updateSize() {
-            //console.log(ref.current.offsetWidth)
             if (ref.current && ref.current.offsetWidth) {
                 setMax((data ? (data.length) * contentWidth : 0) - (ref.current.offsetWidth - 20))
-                //console.log((data ? (data.length) * contentWidth : 0) - (ref.current.offsetWidth - 20))
             }
         }
 
@@ -33,12 +41,10 @@ function RecomSlider({title, data}: { title?: string, data?: Course[] }) {
     }, [data, ref]);
 
 
+    // A callback function that updates the slider's position when the mouse is moved.
     const listener = useCallback((e: MouseEvent) => {
         setTranslate(translate => {
             const offset = translate + e.movementX;
-
-            //console.log(offset)
-            console.log(translate)
 
             if (offset < -max - 120)
                 return -max - 120;
@@ -49,9 +55,9 @@ function RecomSlider({title, data}: { title?: string, data?: Course[] }) {
             setDragging(true);
     }, [max])
 
+    // Event handlers for mouse down, up, leave, and click events.
     const onmousedown = (e: React.MouseEvent<HTMLElement>) => {
-        if(max > 0){
-            //console.log("mousedown")
+        if (max > 0) {
             window.addEventListener("mousemove", listener)
             e.preventDefault();
             setDragging(false)
@@ -59,32 +65,27 @@ function RecomSlider({title, data}: { title?: string, data?: Course[] }) {
     }
 
     const onmouseup = (e: React.MouseEvent<HTMLElement>) => {
-        //console.log("mouseup")
         window.removeEventListener("mousemove", listener)
         e.preventDefault();
         snap();
     }
 
     const onmouseleave = () => {
-        //console.log("mouseleave")
         window.removeEventListener("mousemove", listener)
         setDragging(false)
         snap();
     }
 
     const onclick = (e: React.MouseEvent<HTMLElement>) => {
-        //console.log("click")
         if (dragging)
             e.stopPropagation();
         setDragging(false);
     }
 
+    // A function that adjusts the slider's position to align with the nearest course item.
     const snap = () => {
-        if(max > 0) {
+        if (max > 0) {
             setTransition(true);
-
-            console.log("translate: " + translate)
-            console.log("max: " + max)
 
             setTranslate(translate => {
                 const offset = Math.abs(translate % 240);
@@ -105,6 +106,7 @@ function RecomSlider({title, data}: { title?: string, data?: Course[] }) {
         }
     }
 
+    // A function that scrolls the slider when the navigation buttons are clicked.
     const navOnClick = (direction: "l" | "r") => {
         setTransition(true);
         if (direction == "l" && translate < 0)
@@ -115,54 +117,55 @@ function RecomSlider({title, data}: { title?: string, data?: Course[] }) {
             else
                 setTranslate(translate => translate - 240);
         }
+        snap();
     }
 
     return (
         <>
-            <div id="slider" style={{
-                maxWidth: "1200px",
-                padding: "0px 10px",
-                width: "100%",
-                margin: "auto",
-                display: "flex",
-                flexDirection: "column",
-                position: "relative",
-            }}>
+            <div className="slider outer">
                 {
                     title ?
                         <h1 style={{margin: "0 0 5px 0"}}>{title}</h1>
                         : <Skeleton.Input active style={{margin: "0 0 5px 0"}}/>
                 }
 
-                <div onMouseDown={onmousedown} onMouseUp={onmouseup} onClickCapture={onclick}
-                     onMouseLeave={onmouseleave} className="slider" ref={ref}
-                     style={{
-                         background: "#D9D9D9",
-                         display: "flex",
-                         flexDirection: "row",
-                         overflowX: "hidden",
-                         padding: "10px 10px",
-                         borderRadius: "20px",
-                         position: "relative",
-                     }}>
+                <div onMouseDown={onmousedown}
+                     onMouseUp={onmouseup}
+                     onClickCapture={onclick}
+                     onMouseLeave={onmouseleave}
+                     className="slider inner"
+                     ref={ref}>
                     {
                         data ?
-                            data.map((item: Course) => <div key={item.id}><Recommendation
-                                style={{
-                                    transform: `translate(${translate}px)`,
-                                    transition: `${transition ? "all 0.2s ease-in-out" : ""}`
-                                }} obj={item}/></div>)
-                            : <Recommendation/>
+                            data.map((item: Course) =>
+                                <div key={item.id}>
+                                    <Recommendation
+                                        style={{
+                                            transform: `translate(${translate}px)`,
+                                            transition: `${transition ? "all 0.2s ease-in-out" : ""}`
+                                        }}
+                                        obj={item}/>
+                                </div>
+                            )
+                            :
+                            <Recommendation/>
                     }
                 </div>
-                <Button className="showmore right" type="text" icon={<RightOutlined />}
+                <Button className="showmore right"
+                        type="text"
+                        icon={<RightOutlined/>}
                         style={{display: `${Math.abs(translate) < max ? "block" : "none"}`}}
-                        onClick={() => navOnClick("r")}/>
-                <Button className="showmore left" type="text" icon={<LeftOutlined/>}
+                        onClick={
+                            () => navOnClick("r")
+                        }/>
+                <Button className="showmore left"
+                        type="text"
+                        icon={<LeftOutlined/>}
                         style={{display: `${translate < 0 ? "block" : "none"}`}}
-                        onClick={() => {navOnClick("l"); snap()}}/>
+                        onClick={() => {
+                            navOnClick("l");
+                        }}/>
             </div>
-
         </>
     );
 }
