@@ -1,60 +1,55 @@
-import {Flex, Modal, Rate, Skeleton, Typography} from "antd";
+import {Button, Modal, Rate, Skeleton, Typography} from "antd";
 import {Course} from "../interfaces.ts";
 import Bookmark from "./Bookmark.tsx";
 import {useNavigate} from "react-router-dom";
 import './SearchComponent.css';
-import { ExclamationCircleFilled } from "@ant-design/icons";
-import { fetchWrapper } from "../api/helper.ts";
+import {DeleteOutlined, EditOutlined, ExclamationCircleFilled} from "@ant-design/icons";
+import {fetchWrapper} from "../api/helper.ts";
+import {DELETE_COURSE} from "../constants/de.ts";
 
-function SearchComponent({obj, editable}: { obj?: Course, editable?: boolean}) {
-    const { confirm } = Modal;
-
-    function handleEdit() {
-        throw new Error("Function not implemented.");
-    }
+function SearchComponent({obj, editable}: { obj?: Course, editable?: boolean }) {
+    const {confirm} = Modal;
 
     const navigate = useNavigate();
 
     const handleClick = (event: any) => {
-        if (event.target.className && event.target.className.includes("bookmark_outer"))
+        if (event.target.className && (event.target.className.includes("bookmark-outer") || event.target.className.includes("edit-button")))
             return;
         if (obj && obj.id)
             navigate(`/detail/${obj.id}`, {state: {obj: obj}});
     }
 
+    function handleEdit() {
+        throw new Error("Function not implemented.");
+    }
+
     function handleDelete() {
         confirm({
-            title: 'Bist du dir sicher diesen Kurs zu löschen?',
-            icon: <ExclamationCircleFilled />,
+            title: DELETE_COURSE,
+            icon: <ExclamationCircleFilled/>,
             content: 'Dieser Kurs wird unwiderruflich gelöscht.',
             okText: 'Ja',
             okType: 'danger',
             cancelText: 'Nein',
             onOk() {
-              fetchWrapper.delete('api/v1/courses/' + obj?.id).then((res) => {
-                if (res.success) {
-                    window.location.reload();
-                }
-              });
+                fetchWrapper.delete('api/v1/courses/' + obj?.id).then((res) => {
+                    if (res.success) {
+                        window.location.reload();
+                    }
+                });
             }
-          });
+        });
     }
+
     // TODO: Integrate Rating
     return (
         <a>
-            <div className="searchouter" onClick={handleClick}>
-                <div className="searchinner">
-                    {obj?.id ? <Bookmark id={obj.id} style={{position: "absolute", top: "5px", right: "5px"}}/> : <></>}
+            <div className="search-outer" onClick={handleClick}>
+                <div className="search-picture">
+                    {obj?.id ? <Bookmark id={obj.id}/> : <></>}
                     {
                         obj ?
-                            <img src={obj.image} style={{
-                                width: "100%",
-                                height: "100%",
-                                objectFit: "cover",
-                                overflow: "hidden",
-                                borderRadius: "10px",
-                                backgroundColor: "grey"
-                            }}/>
+                            <img src={obj.image} alt="Image of searchresult"/>
                             : <Skeleton.Image style={{
                                 objectFit: "contain",
                                 width: "100%",
@@ -64,41 +59,43 @@ function SearchComponent({obj, editable}: { obj?: Course, editable?: boolean}) {
                             }} active/>
                     }
                 </div>
-                <div style={{width: "100%", marginLeft: "0.3rem", marginRight: "1.3rem", height: "100%"}}>
-                    <div
-                        style={{display: "flex", justifyContent: "space-between", width: "100%", alignItems: "center"}}>
-                        <a className="courselink">
-                            <div>
-                                {
-                                    obj ?
-                                        <h2 style={{maxWidth: "750px"}}>{obj.name}</h2>
-                                        : <Skeleton.Input active/>
-                                }
-                            </div>
-                        </a>
+                <div className="search-content">
+                    <div className="search-header">
+                        {
+                            obj ?
+                                <h2 className="search-title">{obj.name}</h2>
+                                : <Skeleton.Input active/>
+                        }
                         {
                             obj ?
                                 <Rate allowHalf disabled defaultValue={obj.ratingAverage}/>
                                 : <Skeleton.Input active/>
                         }
-                        {
-                            editable ?
-                                <div style={{margin: "0px 10px 0px"}}>
-                                    <a style={{margin: "4px"}} onClick={handleEdit}><img src="src\assets\editBlue.png" style={{width: "26px"}}/></a>
-                                    <a style={{margin: "4px"}} onClick={handleDelete}><img src="src\assets\delete.png" style={{width: "26px"}}/></a>
-                                </div>
-                                : <></>
-                        }
                     </div>
-                    <div>
-                        {
-                            obj ?
-                                <Typography.Paragraph ellipsis={{rows: 4}} style={{maxWidth: "750px"}}>
-                                    {obj.description} </Typography.Paragraph>
-                                : <Skeleton.Input active/>
-                        }
-                    </div>
+                    {
+                        obj ?
+                            <Typography.Paragraph ellipsis={{rows: 4}} style={{maxWidth: "750px"}}>
+                                {obj.description} </Typography.Paragraph>
+                            : <Skeleton.Input active/>
+                    }
                 </div>
+                {
+                    editable ?
+                        <div className="edit">
+                            <Button className="edit-button"
+                                    icon={<EditOutlined/>}
+                                    size="large"
+                                    type={"primary"}
+                                    onClick={handleEdit}/>
+                            <Button className="edit-button"
+                                    danger
+                                    icon={<DeleteOutlined/>}
+                                    size="large"
+                                    type={"primary"}
+                                    onClick={handleDelete}/>
+                        </div>
+                        : <></>
+                }
             </div>
         </a>
     );

@@ -15,9 +15,9 @@ function Bookmark({id, style}: { id: number, style?: React.CSSProperties }) {
     }
 
     return (
-        <Button className="bookmark_outer" type="text" onClick={onclick} shape="circle" style={style} icon={
-            marked ? <BookmarkFill className="bookmark_inner filled"/> :
-                <BookmarkPlus className="bookmark_inner outlined"/>
+        <Button className="bookmark-outer" type="text" onClick={onclick} shape="circle" style={style} icon={
+            marked ? <BookmarkFill className="bookmark-inner filled"/> :
+                <BookmarkPlus className="bookmark-inner outlined"/>
         }>
         </Button>
     );
