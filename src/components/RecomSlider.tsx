@@ -20,10 +20,10 @@ function RecomSlider({title, data}: { title?: string, data?: Course[] }) {
 
     useLayoutEffect(() => {
         function updateSize() {
-            console.log(ref.current.offsetWidth)
+            //console.log(ref.current.offsetWidth)
             if (ref.current && ref.current.offsetWidth) {
                 setMax((data ? (data.length) * contentWidth : 0) - (ref.current.offsetWidth - 20))
-                console.log((data ? (data.length) * contentWidth : 0) - (ref.current.offsetWidth - 20))
+                //console.log((data ? (data.length) * contentWidth : 0) - (ref.current.offsetWidth - 20))
             }
         }
 
@@ -37,7 +37,8 @@ function RecomSlider({title, data}: { title?: string, data?: Course[] }) {
         setTranslate(translate => {
             const offset = translate + e.movementX;
 
-            console.log(offset)
+            //console.log(offset)
+            console.log(translate)
 
             if (offset < -max - 120)
                 return -max - 120;
@@ -50,7 +51,7 @@ function RecomSlider({title, data}: { title?: string, data?: Course[] }) {
 
     const onmousedown = (e: React.MouseEvent<HTMLElement>) => {
         if(max > 0){
-            console.log("mousedown")
+            //console.log("mousedown")
             window.addEventListener("mousemove", listener)
             e.preventDefault();
             setDragging(false)
@@ -58,45 +59,50 @@ function RecomSlider({title, data}: { title?: string, data?: Course[] }) {
     }
 
     const onmouseup = (e: React.MouseEvent<HTMLElement>) => {
-        console.log("mouseup")
+        //console.log("mouseup")
         window.removeEventListener("mousemove", listener)
         e.preventDefault();
         snap();
     }
 
     const onmouseleave = () => {
-        console.log("mouseleave")
+        //console.log("mouseleave")
         window.removeEventListener("mousemove", listener)
         setDragging(false)
         snap();
     }
 
     const onclick = (e: React.MouseEvent<HTMLElement>) => {
-        console.log("click")
+        //console.log("click")
         if (dragging)
             e.stopPropagation();
         setDragging(false);
     }
 
     const snap = () => {
-        setTransition(true);
+        if(max > 0) {
+            setTransition(true);
 
-        setTranslate(translate => {
-            const offset = Math.abs(translate % 240);
+            console.log("translate: " + translate)
+            console.log("max: " + max)
 
-            if (Math.abs(translate) >= Math.abs(max))
-                return -max;
-            if (translate > 0)
-                return 0;
-            if (offset < 120)
-                return translate + offset;
-            else
-                return translate - (240 - offset);
-        })
+            setTranslate(translate => {
+                const offset = Math.abs(translate % 240);
 
-        setTimeout(() => {
-            setTransition(false);
-        }, 200);
+                if (-translate >= max)
+                    return -max;
+                if (translate > 0)
+                    return 0;
+                if (offset < 120)
+                    return translate + offset;
+                else
+                    return translate - (240 - offset);
+            })
+
+            setTimeout(() => {
+                setTransition(false);
+            }, 200);
+        }
     }
 
     const navOnClick = (direction: "l" | "r") => {
@@ -149,7 +155,7 @@ function RecomSlider({title, data}: { title?: string, data?: Course[] }) {
                             : <Recommendation/>
                     }
                 </div>
-                <Button className="showmore right" type="text" icon={<RightOutlined/>}
+                <Button className="showmore right" type="text" icon={<RightOutlined />}
                         style={{display: `${Math.abs(translate) < max ? "block" : "none"}`}}
                         onClick={() => navOnClick("r")}/>
                 <Button className="showmore left" type="text" icon={<LeftOutlined/>}
