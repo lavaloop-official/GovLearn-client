@@ -1,4 +1,4 @@
-import { Affix, Button, Card, Flex, Image, Rate, Skeleton } from "antd";
+import { Affix, Button, Card, Flex, Image, Rate} from "antd";
 import { useEffect, useState } from "react";
 import { ArrowLeftShort } from "react-bootstrap-icons";
 import Recommendation from "../components/Recommendation.tsx";
