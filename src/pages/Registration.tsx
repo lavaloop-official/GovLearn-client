@@ -5,16 +5,36 @@ import CircleSelect from "../components/CircleSelect/CircleSelect.tsx";
 
 function Registration() {
 
-
-    const slice = <CircleSelect/>
-
     const navigate = useNavigate();
 
     const [current, setCurrent] = useState(0);
+    const [selected, setSelected] = useState<string[]>([]);
+
+    const selectCallback = (name: string) => {
+        setSelected(selected => {
+            console.log("selected: " + selected + "name: " + name);
+            if (selected.includes(name)) {
+                return selected.filter(e => e != name);
+            } else {
+                const newSelected = selected.filter(e => !e.startsWith(name.charAt(0)));
+                newSelected.push(name);
+                return newSelected;
+            }
+        });
+        console.log(selected);
+    }
+
+    const first =
+        <>
+            <div style={{display: "flex", flexDirection: "column"}}>
+                <h4>{selected.map(e => `${e}; `)}</h4>
+                <CircleSelect selectCallback={selectCallback}/>
+            </div>
+        </>
 
     const content = [
         {
-            content: slice,
+            content: first,
             step: {
                 title: 'IT- und Medienkompetenz',
                 description: 'First-content'
