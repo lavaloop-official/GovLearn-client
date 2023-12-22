@@ -57,10 +57,15 @@ export interface CourseFilterWsTo {
 }
 
 export interface Group {
-    "id": number | undefined,
-    "name": string | undefined,
-    "description": string | undefined,
+    "groupId": number | undefined,
+    "groupName": string | undefined,
+    "groupDescription": string | undefined,
     "admin": boolean | undefined,
+}
+
+export interface GroupCreationWsTo {
+    "groupName": string | undefined,
+    "groupDescription": string | undefined,
 }
 
 export interface Groupmember {

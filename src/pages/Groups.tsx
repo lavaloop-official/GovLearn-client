@@ -3,25 +3,24 @@ import Groupmember from "../components/Group/Groupmember.tsx";
 import Groupadmin from "../components/Group/Groupadmin.tsx";
 import { useEffect, useState } from "react";
 import MyGroups from "../components/Group/MyGroups.tsx";
-import { Group } from "../interfaces.ts";
+import { Group, GroupCreationWsTo } from "../interfaces.ts";
 import TextArea from "antd/es/input/TextArea";
 import GroupInvitation from "../components/Group/GroupInvitation.tsx";
+import { fetchWrapper } from "../api/helper.ts";
 
 function Groups() {
 
     const [newGroupTitle, setNewGroupTitle] = useState<string>();
     const [newGroupDescription, setNewGroupDescription] = useState<string>();
+    const [newGroupCreationWsTo, setNewGroupCreationWsTo] = useState<GroupCreationWsTo>();
 
-    const [groups, setGroups] = useState<Group[]>([
-        { id: 1, name: "Gruppe 1", description: "Beschreibung 1", admin: false },
-        { id: 2, name: "Gruppe 2", description: "Beschreibung 2", admin: true },
-    ]);
+    const [groups, setGroups] = useState<Group[]>([]);
 
     const [currentGroup, setCurrentGroup] = useState<Group>(
         {
-            id: undefined,
-            name: "",
-            description: "",
+            groupId: undefined,
+            groupName: "",
+            groupDescription: "",
             admin: undefined,
         }
     );
@@ -32,22 +31,39 @@ function Groups() {
     ]); // TODO: Mitglieder in return einbinden
 
     const [groupInvitations, setGroupInvitations] = useState<Group[]>([
-        { id: 1, name: "Gruppe 1 with a very large name", description: "Beschreibung 1", admin:false },
-        { id: 2, name: "Gruppe 2 - Test", description: "Beschreibung 2" , admin:false},
+        { groupId: 1, groupName: "Gruppe 1 with a very large name", groupDescription: "Beschreibung 1", admin:false },
+        { groupId: 2, groupName: "Gruppe 2 - Test", groupDescription: "Beschreibung 2" , admin:false},
     ]);
 
     const acceptInvitation = (group: Group) => {
-        setGroupInvitations(groupInvitations.filter(e => e.id !== group.id));
+        setGroupInvitations(groupInvitations.filter(e => e.groupId !== group.groupId));
         setGroups([...groups, group]);
         setCurrentGroup(group);
     }
 
     const denyInvitation = (group: Group) => {
-        setGroupInvitations(groupInvitations.filter(e => e.id !== group.id));
+        setGroupInvitations(groupInvitations.filter(e => e.groupId !== group.groupId));
     }
 
     useEffect(() => {
-        setCurrentGroup(groups[0]);
+        let fetchedmembergroups:Group[] = [];
+        let fetchedadmingroups:Group[] = [];
+        let fetchedgroups:Group[] = [];
+        fetchWrapper.get(`api/v1/groups`).then((res) => {
+            
+            fetchedmembergroups = res.payload.memberGroups;
+            fetchedadmingroups = res.payload.adminGroups;
+            fetchedmembergroups.forEach(element => {
+                element.admin = false;
+                fetchedgroups.push(element);
+            });
+            fetchedadmingroups.forEach(element => {
+                element.admin = true;
+                fetchedgroups.push(element);
+            });
+            setGroups(fetchedgroups);
+            setCurrentGroup(fetchedgroups[0]);
+        })
     }, []);
 
     const [loading, setLoading] = useState(false);
@@ -76,10 +92,30 @@ function Groups() {
     };
   
     const handleCreateGroupModalOK = () => {
-        const newGroup: Group = {id:10, name:newGroupTitle, description:newGroupDescription, admin:true}
-        setGroups([...groups, newGroup])
-        setCurrentGroup(newGroup);
-        console.log(groups)
+        const newGroup: GroupCreationWsTo = {groupName:newGroupTitle, groupDescription:newGroupDescription};
+        const postedGroup = fetchWrapper.post(`api/v1/groups`, newGroup).then((res) => {
+            console.log(res.message)
+        })
+        Promise.all([postedGroup]).then(() => {
+            let fetchedmembergroups:Group[] = [];
+            let fetchedadmingroups:Group[] = [];
+            let fetchedgroups:Group[] = [];
+            fetchWrapper.get(`api/v1/groups`).then((res) => {
+                
+                fetchedmembergroups = res.payload.memberGroups;
+                fetchedadmingroups = res.payload.adminGroups;
+                console.log(fetchedadmingroups)
+                fetchedmembergroups.forEach(element => {
+                    element.admin = false;
+                    fetchedgroups.push(element);
+                });
+                fetchedadmingroups.forEach(element => {
+                    element.admin = true;
+                    fetchedgroups.push(element);
+                });
+                setGroups(fetchedgroups);
+            })
+        })
         handleCancel();
         setIsModalOpen(false);
     };

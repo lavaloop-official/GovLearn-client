@@ -25,10 +25,10 @@ function Groupadmin({currentGroup}:{currentGroup:Group}) {
     return (
         <div style={{background:"lightgrey", flex:"1", margin:"10px", borderRadius:"10px", display:"flex", flexDirection:"column", minWidth:"280px"}}>
             <div style={{margin:"0px 10px 0px 10px"}}>
-                <h1>{currentGroup.name}</h1>
+                <h1>{currentGroup.groupName}</h1>
             </div>
             <div style={{margin:"0px 10px 0px 10px"}}>
-                <p>{currentGroup.description}</p>
+                <p>{currentGroup.groupDescription}</p>
             </div>
             <InviteGroupmember ref={inviteGroupmemberModal}></InviteGroupmember>
             <div style={{margin:"0px 10px 0px 10px", display:"flex", flexDirection:"column"}}>
