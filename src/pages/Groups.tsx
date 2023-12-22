@@ -12,7 +12,6 @@ function Groups() {
 
     const [newGroupTitle, setNewGroupTitle] = useState<string>();
     const [newGroupDescription, setNewGroupDescription] = useState<string>();
-    const [newGroupCreationWsTo, setNewGroupCreationWsTo] = useState<GroupCreationWsTo>();
 
     const [groups, setGroups] = useState<Group[]>([]);
 
@@ -90,6 +89,39 @@ function Groups() {
     const showCreateGroupModal = () => {
       setIsModalOpen(true);
     };
+
+    const removeCurrentGroup = (group: Group) => {
+        const removedGroup = fetchWrapper.delete(`api/v1/groups/remove/group/${group.groupId}`).then(res => {
+            console.log(res.message)
+        });
+        Promise.all([removedGroup]).then(() => {
+            const fetchedGroups = handleFetchingOfAllGroups();
+            Promise.all([fetchedGroups]).then(() => {
+                setCurrentGroup(groups[0]);
+            })
+        })
+    }
+
+    const handleFetchingOfAllGroups = () => {
+        let fetchedmembergroups:Group[] = [];
+        let fetchedadmingroups:Group[] = [];
+        let fetchedgroups:Group[] = [];
+        fetchWrapper.get(`api/v1/groups`).then((res) => {
+            
+            fetchedmembergroups = res.payload.memberGroups;
+            fetchedadmingroups = res.payload.adminGroups;
+            console.log(fetchedadmingroups)
+            fetchedmembergroups.forEach(element => {
+                element.admin = false;
+                fetchedgroups.push(element);
+            });
+            fetchedadmingroups.forEach(element => {
+                element.admin = true;
+                fetchedgroups.push(element);
+            });
+            setGroups(fetchedgroups);
+        })
+    }
   
     const handleCreateGroupModalOK = () => {
         const newGroup: GroupCreationWsTo = {groupName:newGroupTitle, groupDescription:newGroupDescription};
@@ -97,24 +129,7 @@ function Groups() {
             console.log(res.message)
         })
         Promise.all([postedGroup]).then(() => {
-            let fetchedmembergroups:Group[] = [];
-            let fetchedadmingroups:Group[] = [];
-            let fetchedgroups:Group[] = [];
-            fetchWrapper.get(`api/v1/groups`).then((res) => {
-                
-                fetchedmembergroups = res.payload.memberGroups;
-                fetchedadmingroups = res.payload.adminGroups;
-                console.log(fetchedadmingroups)
-                fetchedmembergroups.forEach(element => {
-                    element.admin = false;
-                    fetchedgroups.push(element);
-                });
-                fetchedadmingroups.forEach(element => {
-                    element.admin = true;
-                    fetchedgroups.push(element);
-                });
-                setGroups(fetchedgroups);
-            })
+            handleFetchingOfAllGroups();
         })
         handleCancel();
         setIsModalOpen(false);
@@ -185,7 +200,7 @@ function Groups() {
                 </div>
                 {
                     currentGroup.admin ?
-                        <Groupadmin currentGroup={currentGroup}/>
+                        <Groupadmin currentGroup={currentGroup} removeCurrentGroup={removeCurrentGroup}/>
                         : <Groupmember currentGroup={currentGroup}/>
                 }
                 

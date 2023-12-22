@@ -1,13 +1,14 @@
-import {Badge, Button, Divider } from "antd";
+import {Badge, Button, Divider, Modal } from "antd";
 import GroupmemberCourses from "./GroupmemberCourses";
 import "./GroupmemberCourses.css"
 import { Group, Groupmember } from "../../interfaces";
 import { createRef, useEffect, useState } from "react";
-import { Plus } from "react-bootstrap-icons";
+import { Plus, Trash} from "react-bootstrap-icons";
 import Groupuser from "./Groupuser";
 import InviteGroupmember from "./InviteGroupmember";
+import { fetchWrapper } from "../../api/helper";
 
-function Groupadmin({currentGroup}:{currentGroup:Group}) {
+function Groupadmin({currentGroup, removeCurrentGroup}:{currentGroup:Group, removeCurrentGroup: (group:Group) => void}) {
 
     const inviteGroupmemberModal = createRef();
 
@@ -22,10 +23,31 @@ function Groupadmin({currentGroup}:{currentGroup:Group}) {
         //fetch groupmember
     }, [groupmember])
 
+    const [openDeleteCourseModal, setIsDeleteModalOpen] = useState(false);
+
+    const showDeleteGroupModal = () => {
+        setIsDeleteModalOpen(true);
+    };
+  
+    const handleDeleteGroupModalOK = () => {
+        removeCurrentGroup(currentGroup);
+        setIsDeleteModalOpen(false);
+    };
+  
+    const handleDeleteGroupModalCancel = () => {
+        setIsDeleteModalOpen(false);
+    };
+
     return (
         <div style={{background:"lightgrey", flex:"1", margin:"10px", borderRadius:"10px", display:"flex", flexDirection:"column", minWidth:"280px"}}>
-            <div style={{margin:"0px 10px 0px 10px"}}>
-                <h1>{currentGroup.groupName}</h1>
+            <div style={{display:"flex", justifyContent:"space-between", alignItems:"center"}}>
+                <div style={{margin:"0px 10px 0px 10px"}}>
+                    <h1>{currentGroup.groupName}</h1>
+                </div>
+                <Button style={{margin:"0px 10px 0px 10px"}} type="text" shape="circle" size="large" icon={<Trash color="white" size={28} onClick={showDeleteGroupModal}></Trash>}></Button>
+                <Modal title="Möchten Sie wirklich diese Gruppe löschen?" open={openDeleteCourseModal} onOk={handleDeleteGroupModalOK} onCancel={handleDeleteGroupModalCancel}>
+                    <p>Die Gruppe wird unwiderruflich gelöscht.</p>
+                </Modal>
             </div>
             <div style={{margin:"0px 10px 0px 10px"}}>
                 <p>{currentGroup.groupDescription}</p>
