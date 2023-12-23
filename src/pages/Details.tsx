@@ -100,7 +100,7 @@ function Details() {
                                 padding: "10px",
                             }}
                         >
-                            <CourseInfo course={course} />
+                            <CourseInfo course={course}></CourseInfo>
                             <div
                                 style={{
                                     background: "#d9d9d9",
