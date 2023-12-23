@@ -1,4 +1,4 @@
-import {Affix, Button, Steps} from "antd";
+import {Affix, Button, Steps, Tag, Typography} from "antd";
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import CircleSelect from "../components/CircleSelect/CircleSelect.tsx";
@@ -8,27 +8,75 @@ function Registration() {
     const navigate = useNavigate();
 
     const [current, setCurrent] = useState(0);
-    const [selected, setSelected] = useState<string[]>([]);
+    const [selected, setSelected] = useState<number[]>(new Array(6).fill(-1));
 
-    const selectCallback = (name: string) => {
-        setSelected(selected => {
-            console.log("selected: " + selected + "name: " + name);
-            if (selected.includes(name)) {
-                return selected.filter(e => e != name);
-            } else {
-                const newSelected = selected.filter(e => !e.startsWith(name.charAt(0)));
-                newSelected.push(name);
+
+    const selectCallback = (index: string) => {
+        const slice = parseInt(index.charAt(0));
+        const arc = parseInt(index.charAt(2));
+        if (selected[slice] == arc) {
+            setSelected(selected => {
+                const newSelected = [...selected];
+                newSelected[slice] = -1;
                 return newSelected;
+            });
+        } else {
+            setSelected(selected => {
+                const newSelected = [...selected];
+                newSelected[slice] = arc;
+                return newSelected;
+            });
+        }
+    }
+
+    const selectedToText = () => {
+        const responsibilites = ["Umsetzer", "Entscheidungsträger", "Stratege"]
+        const roles = ["Organisation", "Digitalisierung", "Informationstechnik", "Smart City", "Nicht-digital", "Personal"]
+        const text = [];
+        for (let i = 0; i < selected.length; i++) {
+            if (selected[i] != -1) {
+                text.push(<Tag color="green" key={i}>{roles[i]} - {responsibilites[selected[i]]}</Tag>)
             }
-        });
-        console.log(selected);
+        }
+        return text;
     }
 
     const first =
         <>
-            <div style={{display: "flex", flexDirection: "column"}}>
-                <h4>{selected.map(e => `${e}; `)}</h4>
-                <CircleSelect selectCallback={selectCallback}/>
+            <div style={{display: "flex", flexDirection: "column", width: "100%", padding: "10px"}}>
+                <Typography.Title level={3} style={{margin: "0"}}>
+                    Rollenauswahl
+                </Typography.Title>
+                <Typography.Text>
+                    Wählen Sie eine oder mehrere Rollen und den zugehörigen Verantwortungsbereich aus.
+                </Typography.Text>
+                <div style={{display: "flex", flexDirection: "column", margin: "0 auto"}}>
+                    <CircleSelect selectCallback={selectCallback} selected={selected}/>
+                </div>
+                <Typography.Title level={4} style={{margin: "5px 0px"}}>
+                    Ausgewählte Rollen:
+                </Typography.Title>
+                <Typography.Text>
+                    {selectedToText()}
+                </Typography.Text>
+            </div>
+        </>
+
+    const second =
+        <>
+            <div style={{display: "flex", flexDirection: "column", width: "100%", padding: "10px"}}>
+                <Typography.Title level={3} style={{margin: "0"}}>
+                    Übersicht
+                </Typography.Title>
+                <Typography.Text>
+                    Überprüfen Sie Ihre Eingaben und bestätigen Sie mit "Weiter".
+                </Typography.Text>
+                <Typography.Title level={4} style={{margin: "5px 0px"}}>
+                    Ausgewählte Rollen:
+                </Typography.Title>
+                <Typography.Text>
+                    {selectedToText()}
+                </Typography.Text>
             </div>
         </>
 
@@ -36,15 +84,15 @@ function Registration() {
         {
             content: first,
             step: {
-                title: 'IT- und Medienkompetenz',
-                description: 'First-content'
+                title: 'Rollenauswahl',
+                description: 'Auswahl der Rollen'
             }
         },
         {
-            content: <h1>Content 2</h1>,
+            content: second,
             step: {
-                title: 'Diversity Kompetenz',
-                description: 'Second-content'
+                title: 'Übersicht',
+                description: 'Eingabe kontrollieren'
             }
         },
         {
@@ -59,27 +107,6 @@ function Registration() {
             step: {
                 title: 'Persönliche Kompetenz',
                 description: 'Fourth-content'
-            }
-        },
-        {
-            content: <h1>Content 6</h1>,
-            step: {
-                title: 'Soziale Kompetenz',
-                description: 'Fifth-content'
-            }
-        },
-        {
-            content: <h1>Content 7</h1>,
-            step: {
-                title: 'Strategische Kompetenz',
-                description: 'Sixth-content'
-            }
-        },
-        {
-            content: <h1>Content 8</h1>,
-            step: {
-                title: 'Persönliche Einstellungen',
-                description: 'Datenschutz und Benachrichtigungen'
             }
         }
     ]

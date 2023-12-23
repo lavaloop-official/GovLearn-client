@@ -3,10 +3,11 @@ import Slice from "./Slice.tsx";
 import {useState} from "react";
 import {animated, useSpring} from "@react-spring/web";
 
-function CircleSelect({sliceCount = 6, arcCount = 3, selectCallback}: {
+function CircleSelect({sliceCount = 6, arcCount = 3, selectCallback, selected}: {
     sliceCount?: number,
     arcCount?: number,
-    selectCallback: (name: string) => void
+    selectCallback: (name: string) => void,
+    selected: number[]
 }) {
 
     const offset = 2 * Math.PI / sliceCount;
@@ -16,9 +17,7 @@ function CircleSelect({sliceCount = 6, arcCount = 3, selectCallback}: {
     const label = ["Organisation", "Digitalisierung", "Informationstechnik", "Smart City", "Nicht-digital", "Personal"]
 
     const [focused, setFocused] = useState<number[]>(new Array(sliceCount).fill(0));
-    const [middle, setMiddle] = useState<{ x: number, y: number }>({x: 400, y: 400});
-    const [selected, setSelected] = useState<number[]>(new Array(sliceCount).fill(-1));
-
+    const [middle, setMiddle] = useState<{ x: number, y: number }>({x: 300, y: 300});
 
     const anim = useSpring({transform: `translate(${middle.x},${middle.y})`})
 
@@ -31,30 +30,13 @@ function CircleSelect({sliceCount = 6, arcCount = 3, selectCallback}: {
             setFocused(newSelected);
         } else {
             selectCallback(index);
-            const slice = parseInt(index.charAt(0));
-            const arc = parseInt(index.charAt(2));
-            if (selected[slice] == arc) {
-                setSelected(selected => {
-                    const newSelected = [...selected];
-                    newSelected[slice] = -1;
-                    return newSelected;
-                });
-            } else {
-                setSelected(selected => {
-                    const newSelected = [...selected];
-                    newSelected[slice] = arc;
-                    return newSelected;
-                });
-            }
-
-
             resetCircle()
         }
     }
 
     const resetCircle = () => {
         setFocused(new Array(sliceCount).fill(0));
-        setMiddle({x: 400, y: 400})
+        setMiddle({x: 300, y: 300})
     }
 
     const svghandleClick = (e) => {
@@ -68,12 +50,12 @@ function CircleSelect({sliceCount = 6, arcCount = 3, selectCallback}: {
         const angle = (index + 1) * offset;
         const x = Math.cos(angle);
         const y = Math.sin(angle);
-        const newMiddle = {x: 400 + x * 200, y: 400 + y * 200}
+        const newMiddle = {x: 300 + x * 200, y: 300 + y * 200}
         setMiddle(newMiddle);
     }
 
     return (
-        <svg height={800} width={800} style={{margin: "0 auto"}} className="pieSelect" onClick={svghandleClick}>
+        <svg height={600} width={600} style={{margin: "0 auto"}} className="pieSelect" onClick={svghandleClick}>
             <animated.g {...anim}>
                 {pie.map((slice, index) => {
                     return (

@@ -14,7 +14,7 @@ function Slice({radius, slice, sliceColor, arcCount, label, click, focused, isSe
     isSelected: number
 }) {
 
-    const [modifier, setModifier] = useState<number[]>(new Array(arcCount).fill(0));
+    const [modifier, setModifier] = useState<number[]>(new Array(arcCount).fill(2.3));
 
     const textspring = useSpring({scale: focused == 0 ? 1 : 0, opacity: focused == 0 ? 1 : 0})
     const slicespring = useSpring({scale: focused == 0 ? 1 : focused == 1 ? 2.3 : 0, opacity: focused == 0 ? 1 : 1})
@@ -25,24 +25,24 @@ function Slice({radius, slice, sliceColor, arcCount, label, click, focused, isSe
     }
 
     const handleArcClick = (index: number) => {
-        console.log(`slice: ${slice.index}, arc: ${index}`);
+        //console.log(`slice: ${slice.index}, arc: ${index}`);
         click(`${slice.index}-${index}`);
     }
 
     const onMouseOver = (level: number) => {
-        const newModifier = new Array(arcCount).fill(0);
-        newModifier[level] = 0.08;
+        const newModifier = new Array(arcCount).fill(2.3);
+        newModifier[level] = 2.4;
         setModifier(newModifier);
     };
 
     const onMouseOut = () => {
         //console.log("out");
-        setModifier(new Array(arcCount).fill(0));
+        setModifier(new Array(arcCount).fill(2.3));
     };
 
     const arrangedPaths = () => {
         const paths = [];
-        const selected = modifier.findIndex((e) => e != 0);
+        const selected = modifier.findIndex((e) => e != 2.3);
 
         const names = ["Umsetzer", "Entscheidungsträger", "Stratege"]
 
@@ -66,7 +66,7 @@ function Slice({radius, slice, sliceColor, arcCount, label, click, focused, isSe
                 <animated.path
                     key={i}
                     d={arc(slice) as string}
-                    fill={isSelected == i ? "green" : sliceColor}
+                    fill={isSelected == i ? "#31f491" : sliceColor}
                     onMouseOver={() => onMouseOver(i)}
                     onMouseOut={() => onMouseOut()}
                     style={{...slicespring}}
@@ -109,7 +109,7 @@ function Slice({radius, slice, sliceColor, arcCount, label, click, focused, isSe
             <>
                 <animated.path
                     key={1}
-                    fill={isSelected != -1 ? "green" : sliceColor}
+                    fill={isSelected != -1 ? "#31f491" : sliceColor}
                     d={arc(slice) as string}
                     onClick={handleClick}
                     style={{...slicespring}}
