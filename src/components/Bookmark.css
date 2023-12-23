@@ -1,4 +1,4 @@
-#bookmark_outer {
+.bookmark-outer {
     display: flex;
     height: 32px;
     width: 32px;
@@ -6,7 +6,11 @@
     align-items: center;
 }
 
-.bookmark_inner {
+.bookmark-outer * {
+    pointer-events: none;
+}
+
+.bookmark-inner {
     scale: 150%;
 }
 
