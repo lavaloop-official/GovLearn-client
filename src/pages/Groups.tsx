@@ -3,7 +3,7 @@ import Groupmember from "../components/Group/Groupmember.tsx";
 import Groupadmin from "../components/Group/Groupadmin.tsx";
 import { useEffect, useState } from "react";
 import MyGroups from "../components/Group/MyGroups.tsx";
-import { Group, GroupCreationWsTo } from "../interfaces.ts";
+import { Group, GroupCreationWsTo, GroupInvitationWsTo } from "../interfaces.ts";
 import TextArea from "antd/es/input/TextArea";
 import GroupInvitation from "../components/Group/GroupInvitation.tsx";
 import { fetchWrapper } from "../api/helper.ts";
@@ -29,27 +29,33 @@ function Groups() {
         { name: "Mitglied 2", role: "Member", Image: "https://www.w3schools.com/howto/img_avatar.png" },
     ]); // TODO: Mitglieder in return einbinden
 
-    const [groupInvitations, setGroupInvitations] = useState<Group[]>([
-        { groupId: 1, groupName: "Gruppe 1 with a very large name", groupDescription: "Beschreibung 1", admin:false },
-        { groupId: 2, groupName: "Gruppe 2 - Test", groupDescription: "Beschreibung 2" , admin:false},
-    ]);
+    const [groupInvitations, setGroupInvitations] = useState<GroupInvitationWsTo[]>([]);
 
-    const acceptInvitation = (group: Group) => {
-        setGroupInvitations(groupInvitations.filter(e => e.groupId !== group.groupId));
-        setGroups([...groups, group]);
-        setCurrentGroup(group);
+    const acceptInvitation = (group: GroupInvitationWsTo) => {
+        let acceptGroup = {invitationId:group.invitationId, accept:true}
+        setGroupInvitations(groupInvitations.filter(e => e.invitationId !== acceptGroup.invitationId))
+        const acceptedInvitation = fetchWrapper.put(`api/v1/groups/invitations`,acceptGroup).then((res) => {
+            console.log(res.message);
+        })
+        Promise.all([acceptInvitation]).then(()=>{
+            handleFetchingOfAllGroups();
+        })
     }
 
-    const denyInvitation = (group: Group) => {
-        setGroupInvitations(groupInvitations.filter(e => e.groupId !== group.groupId));
+    const denyInvitation = (group: GroupInvitationWsTo) => {
+        let denyGroup = {invitationId:group.invitationId, accept:false}
+        setGroupInvitations(groupInvitations.filter(e => e.invitationId !== denyGroup.invitationId))
+        fetchWrapper.put(`api/v1/groups/invitations`,denyGroup).then((res) => {
+            console.log(res.message);
+        })
     }
 
     useEffect(() => {
         let fetchedmembergroups:Group[] = [];
         let fetchedadmingroups:Group[] = [];
         let fetchedgroups:Group[] = [];
+
         fetchWrapper.get(`api/v1/groups`).then((res) => {
-            
             fetchedmembergroups = res.payload.memberGroups;
             fetchedadmingroups = res.payload.adminGroups;
             fetchedmembergroups.forEach(element => {
@@ -62,6 +68,9 @@ function Groups() {
             });
             setGroups(fetchedgroups);
             setCurrentGroup(fetchedgroups[0]);
+        })
+        fetchWrapper.get(`api/v1/groups/invitations`).then((res) => {
+            setGroupInvitations(res.payload)
         })
     }, []);
 
@@ -192,7 +201,7 @@ function Groups() {
                         <div style={{display:"flex", flexDirection:"column", gap:"5px"}}>
                         {
                             groupInvitations ?
-                                groupInvitations.map((group: Group) => <GroupInvitation group={group} acceptInvitation={acceptInvitation} denyInvitation={denyInvitation}/>)
+                                groupInvitations.map((group: GroupInvitationWsTo) => <GroupInvitation group={group} acceptInvitation={acceptInvitation} denyInvitation={denyInvitation}/>)
                                 : <div/>
                         }
                         </div>

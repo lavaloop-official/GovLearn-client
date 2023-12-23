@@ -33,17 +33,8 @@ function App() {
         >
             <Provider store={reduxStore}>
                 <BrowserRouter>
-                    <Layout className="layout">
-                        <Header style={{
-                            display: 'flex',
-                            background: "inherit",
-                            boxShadow: "0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px 0 rgba(0, 0, 0, 0.02)",
-                            padding: "0px 0px",
-                            zIndex: "1000",
-                            position: "sticky",
-                            top: "0",
-                            height: "100%"
-                        }}>
+                    <Layout className="layout" style={{ minHeight: "100vh" }}>
+                        <Header>
                             <CustomHeader/>
                         </Header>
                         <Content>
@@ -60,7 +51,7 @@ function App() {
                                 <Route path="/groups" element={<Protected><Groups/></Protected>}/>
                             </Routes>
                         </Content>
-                        <Footer style={{ textAlign: 'center' }}>Govlearn  -  Made with ❤ in Münster</Footer>
+                        <Footer>Govlearn  -  Made with ❤ in Münster</Footer>
                     </Layout>
                 </BrowserRouter>
             </Provider>

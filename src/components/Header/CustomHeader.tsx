@@ -1,4 +1,4 @@
-import {Avatar, Button, Dropdown, MenuProps, Typography} from "antd";
+import {Avatar, Button, Col, Dropdown, MenuProps, Row, Typography} from "antd";
 import {UserOutlined} from "@ant-design/icons";
 import {useLocation, useNavigate, useNavigation} from "react-router-dom";
 import {useEffect, useState} from "react";
@@ -10,6 +10,7 @@ import {fetchWrapper} from "../../api/helper";
 import {clearToken} from "../../api/auth.ts";
 import Searchbar from "../Searchbar.tsx";
 import { BookmarkFill } from "react-bootstrap-icons";
+import './CustomHeader.css'
 
 const {Title} = Typography
 
@@ -93,53 +94,42 @@ function CustomHeader() {
 
     return (
         <div style={{width: "100%", height: "100%"}}>
-            <div style={{
-                margin: "0 auto",
-                maxWidth: "1200px",
-                width: "100%",
-                height: "56px",
-                display: "flex",
-                verticalAlign: "middle",
-                gap: "10px",
-                padding: "0px 10px",
-            }}>
-                <Title level={3}
-                       style={{
-                           margin: "auto auto auto 0px",
-                           minWidth: "100px",
-                           color: "#3f3f3f"
-                       }}>
-                    <a href="/discover" style={{color: "#212321"}}>
-                        Govlearn
-                    </a>
-                </Title>
-                {loggedIn && !location.pathname.includes("searching") ?
-                    <Searchbar></Searchbar>
-                    :<div></div>
-                }
-                {loggedIn ?
-                    <div style={{margin: "auto 0px auto auto", minWidth: "60px", lineHeight: "0px", display: "flex", justifyContent:"right", alignItems:"center"}}>
-                        <Button style={{marginRight:"15px", width:"32px", height:"32px"}} shape="circle">
-                            <BookmarkFill className="bookmark_inner filled" onClick={openBookmarks} style={{height:"12px"}}/>
-                        </Button>
-                        <div>
-                            <Dropdown menu={{items}} placement="bottomRight" arrow={{pointAtCenter: true}}
-                                    trigger={['click']}>
-                                <a onClick={(e) => e.preventDefault()}>
-                                    <Avatar icon={<UserOutlined/>}/>
-                                </a>
-                            </Dropdown>
+            <Row>
+                <Col span={8}>
+                    <Title level={3}>
+                        <a href="/discover" style={{color: "#212321"}}>
+                            Govlearn
+                        </a>
+                    </Title>
+                </Col>
+                <Col span={8}>
+                    {loggedIn && !location.pathname.includes("searching") ?
+                        <Searchbar/>
+                        : <></>
+                    }
+                </Col>
+                <Col span={8}>
+                    {loggedIn ?
+                        <div style={{margin: "auto 0px auto auto", minWidth: "60px", lineHeight: "0px", display: "flex", justifyContent:"right", alignItems:"center"}}>
+                            <Button style={{marginRight:"15px", width:"32px", height:"32px"}} shape="circle">
+                                <BookmarkFill className="bookmark_inner filled" onClick={openBookmarks} style={{height:"12px"}}/>
+                            </Button>
+                            <div>
+                                <Dropdown menu={{items}} placement="bottomRight" arrow={{pointAtCenter: true}}
+                                        trigger={['click']}>
+                                    <a onClick={(e) => e.preventDefault()}>
+                                        <Avatar icon={<UserOutlined/>}/>
+                                    </a>
+                                </Dropdown>
+                            </div>
                         </div>
-                    </div>
-                    :
-                    <Button type="primary" size="large" style={{margin: "auto 0px auto auto", minWidth: "32px"}}
-                            onClick={() => {
-                                openLoginModal("login")
-                            }}>Anmelden</Button>
-                }
-
-
-            </div>
+                        :
+                        <Button className="loginbtn" type="primary" size="large" onClick={() => {
+                            openLoginModal("login")
+                        }}>Anmelden</Button>
+                    }
+                </Col>
+            </Row>
             {subHeader}
         </div>
     );

@@ -94,7 +94,7 @@ function Searchbar() {
     };
 
     return (
-        <Space.Compact size="large" direction="vertical" style={{marginTop: "8px", marginBottom: "8px"}}>
+        <Space.Compact size="large" direction="vertical" style={{margin: "auto"}}>
             <Space.Compact size="large" style={{margin: "auto"}}>
                 <Popover placement="bottomLeft" title={"Nach Kategorie Filtern"} arrow={false} trigger="click" content={popContent}>
                     <Button>

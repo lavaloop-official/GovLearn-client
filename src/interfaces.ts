@@ -68,6 +68,13 @@ export interface GroupCreationWsTo {
     "groupDescription": string | undefined,
 }
 
+export interface GroupInvitationWsTo {
+    "groupId": number | undefined,
+    "groupName": string | undefined,
+    "groupDescription": string | undefined,
+    "invitationId": number | undefined,
+}
+
 export interface Groupmember {
     "id": number | undefined,
     "name": string | undefined,

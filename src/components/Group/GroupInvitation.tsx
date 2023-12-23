@@ -1,9 +1,9 @@
 import { Button } from "antd";
 import { CheckLg, XLg } from "react-bootstrap-icons";
-import { Group } from "../../interfaces";
+import {GroupInvitationWsTo } from "../../interfaces";
 import "./GroupmemberCourses.css";
 
-function GroupInvitation({group, acceptInvitation, denyInvitation}:{group:Group, acceptInvitation: (group: Group) => void, denyInvitation: (group: Group) => void}) {
+function GroupInvitation({group, acceptInvitation, denyInvitation}:{group:GroupInvitationWsTo, acceptInvitation: (group: GroupInvitationWsTo) => void, denyInvitation: (group: GroupInvitationWsTo) => void}) {
 
     const onAcceptInvitation=()=>{
         acceptInvitation(group);
