@@ -7,7 +7,7 @@ import { fetchWrapper } from "../api/helper.ts";
 import './Details.css';
 import { Course, Review } from "../interfaces.ts";
 import ReviewComp from "../components/Detail/ReviewComp.tsx";
-import Bookmark from "../components/Bookmark.tsx";
+import CourseInfo from "../components/Detail/CourseInfo.tsx";
 
 function Details() {
     const [course, setCourse] = useState<Course>({
@@ -31,8 +31,9 @@ function Details() {
     });
 
     const [relatedCourses, setRelatedCourses] = useState<Course[]>([]);
+    const [limit, setLimit] = useState<number>(10);
+    const [offset, setOffset] = useState<number>(0);
     const [feedback, setFeedback] = useState<Review[]>([]);
-    const defaultImageSrc = "https://st4.depositphotos.com/13194036/31587/i/450/depositphotos_315873928-stock-photo-selective-focus-happy-businessman-glasses.jpg"
 
     useEffect(() => {
         const courseId = window.location.pathname.split('/').pop();
@@ -41,7 +42,7 @@ function Details() {
             setCourse(res.payload);
             document.title = res.payload.name;
         });
-        fetchWrapper.get(`api/v1/feedback/course/${courseId}/limit/100/offset/0`).then((res) => {
+        fetchWrapper.get(`api/v1/feedback/course/${courseId}?limit=${limit}&offset=${offset}`).then((res) => {
             setFeedback(res.payload);
         });
         fetchWrapper.get(`api/v1/similar-courses/${courseId}/`).then((res) => {
@@ -54,19 +55,11 @@ function Details() {
         history.back();
     }
 
-    const translateFormat = (format: string) => {
-        switch (format) {
-            case "Praesenz":
-                return "Präsenz";
-            case "OnlineLive":
-                return "Online Live-Veranstaltung";
-            case "OnlineSelbstorganisiert":
-                return "Online Selbstorganisiert";
-            case "Hybrid":
-                return "Hybridveranstaltung";
-            default:
-                return "Unbekannt";
-        }
+    const loadFeedback = () => {
+        const courseId = window.location.pathname.split('/').pop();
+        fetchWrapper.get(`api/v1/feedback/course/${courseId}/limit/6/offset/${feedback.length}`).then((res) => {
+            setFeedback([...feedback, ...res.payload]);
+        });
     }
 
     return (
@@ -107,156 +100,7 @@ function Details() {
                                 padding: "10px",
                             }}
                         >
-                            <div
-                                style={{
-                                    height: "100%",
-                                    width: "100%",
-                                    background: "#d9d9d9",
-                                    borderRadius: "20px",
-                                    boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
-                                    display: "flex",
-                                    maxWidth: "1200px",
-                                }}
-                            >
-                                {
-                                    course.image ? (
-                                        <img
-                                            src={course.image ? course.image : defaultImageSrc}
-                                            alt=""
-                                            style={{
-                                                width: "100%",
-                                                height: "100%",
-                                                objectFit: "cover",
-                                                borderRadius: "20px",
-                                                padding: "5px",
-                                                maxWidth: "700px",
-                                                minHeight: "400px"
-                                            }}
-                                        />
-                                    ) : (
-                                        <div id="detailpic" style={{
-                                            padding: "5px",
-                                            maxWidth: "725px",
-                                            maxHeight: "400px",
-                                            width: "100%",
-                                            height: "400px",
-                                            display: "flex",
-                                        }}>
-                                            <Skeleton.Image active style={{
-                                                borderRadius: "15px",
-                                                width: "100%",
-                                                height: "100%",
-                                            }} />
-                                        </div>
-                                    )
-                                }
-
-
-                                <Flex className="course-sidebar" vertical gap="middle"
-                                    style={{
-                                        maxWidth: "200px",
-                                        width: "100%",
-                                        padding: "5px",
-                                    }}
-                                >
-                                    <Card className="antcard" style={{ height: "100%" }}>
-                                        {course.id ? <Bookmark id={course.id}
-                                            style={{ position: "absolute", top: "10px", right: "10px" }} /> : <></>}
-                                        <div className="course-details" style={{
-                                            padding: "0px",
-                                            maxWidth: "190px",
-                                            wordWrap: "break-word",
-                                        }}>
-                                            {course.durationInHours && (
-                                                <div className="course-attribute">
-                                                    <p className="attribute-label">Länge:</p>
-                                                    <p className="attribute-value">{course.durationInHours}</p>
-                                                </div>
-                                            )}
-                                            {course.skilllevel && (
-                                                <div className="course-attribute">
-                                                    <p className="attribute-label">Schwierigkeit:</p>
-                                                    <p className="attribute-value">{course.skilllevel}</p>
-                                                </div>
-                                            )}
-                                            {course.format && (
-                                                <div className="course-attribute">
-                                                    <p className="attribute-label">Format:</p>
-                                                    <p className="attribute-value">{translateFormat(course.format)}</p>
-                                                </div>
-                                            )}
-                                            {course.startDate && (
-                                                <div className="course-attribute">
-                                                    <p className="attribute-label">Start:</p>
-                                                    <p className="attribute-value">{new Date(course.startDate).toLocaleDateString('DE')}</p>
-                                                </div>
-                                            )}
-                                            {course.certificate && (
-                                                <div className="course-attribute">
-                                                    <p className="attribute-label">Zertifizierung:</p>
-                                                    <p className="attribute-value">{course.certificate ? 'vorhanden' : 'nicht vorhanden'}</p>
-                                                </div>
-                                            )}
-                                            {course.costFree && (
-                                                <div className="course-attribute">
-                                                    <p className="attribute-label">Kosten:</p>
-                                                    <p className="attribute-value">{course.costFree ? 'kostenlos' : 'kostenpflichtig'}</p>
-                                                </div>
-                                            )}
-                                            {course.domainSpecific && (
-                                                <div className="course-attribute">
-                                                    <p className="attribute-label">Verwaltungsbezogen</p>
-                                                </div>
-                                            )}
-                                        </div>
-                                    </Card>
-                                    <Button style={{ margin: "5px", borderRadius: "15px" }} type="primary" size="large"
-                                        href={course.link ? course.link : undefined}>
-                                        Zum Angebot
-                                    </Button>
-                                </Flex>
-                            </div>
-                            <div
-                                style={{
-                                    background: "#d9d9d9",
-                                    borderRadius: "20px",
-                                    boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
-                                    marginBottom: "5px",
-                                    marginTop: "5px"
-                                }}
-                            >
-                                <Flex style={{ justifyContent: "space-between", width: "100%" }}>
-                                    <Card className="antcard" style={{ margin: "5px", width: "70%" }}>
-                                        <p style={{ fontWeight: "bold" }}>Beschreibung</p>
-                                        {course.description ? (
-                                            <p>{course.description}</p>
-                                        ) : (
-                                            <p>keine Beschreibung vorhanden.</p>
-                                        )}
-                                    </Card>
-                                    <Card className="antcard" style={{ margin: "5px", width: "30%" }}>
-                                        <Flex justify="space-evenly">
-                                            <Image
-                                                style={{ borderRadius: '50%', width: '100px', height: '100px' }}
-                                                // TODO: Bilder von Instructor einfügen
-                                                src="https://img.myloview.de/sticker/default-profile-picture-avatar-photo-placeholder-vector-illustration-700-205664584.jpg"
-                                                alt="Bild konnte nicht geladen werden"
-                                            />
-                                            <div>
-                                                {
-                                                    course.instructor ? (
-                                                        <h3>{course.instructor}</h3>
-                                                    ) : (
-                                                        <h3>Unbekannt</h3>
-                                                    )
-                                                }
-                                            </div>
-                                        </Flex>
-                                        <p>keine Beschreibung
-                                            vorhanden.</p> {/* TODO: Kurs für instructor-Beschreibung überarbeiten */}
-                                    </Card>
-                                </Flex>
-                            </div>
+                            <CourseInfo course={course}></CourseInfo>
                             <div
                                 style={{
                                     background: "#d9d9d9",
@@ -266,10 +110,10 @@ function Details() {
                                     marginBottom: "5px"
                                 }}
                             >
-                                <Flex style={{justifyContent: "space-between", width: "100%"}}>
-                                    <Card className="antcard" style={{margin: "5px", width: "30%"}}>
-                                        <p style={{fontWeight: "bold"}}>Durchschnittsbewertung</p>
-                                        <Rate disabled value={course.ratingAverage}/>
+                                <Flex style={{ justifyContent: "space-between", width: "100%" }}>
+                                    <Card className="antcard" style={{ margin: "5px", width: "30%" }}>
+                                        <p style={{ fontWeight: "bold" }}>Durchschnittsbewertung</p>
+                                        <Rate disabled value={course.ratingAverage} />
                                     </Card>
                                     <ReviewComp id={course.id}></ReviewComp>
                                 </Flex>
@@ -291,6 +135,7 @@ function Details() {
                                         <Card className="antcard" style={{ justifyContent: "center" }}>keine Bewertungen
                                             vorhanden.</Card>
                                     )}
+                                    <Button type="primary" onClick={loadFeedback}>mehr Laden</Button>
                                 </Flex>
                             </div>
                         </Flex>

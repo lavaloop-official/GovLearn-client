@@ -1,8 +1,9 @@
-import {createSlice} from "@reduxjs/toolkit";
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {getToken} from "../api/auth.ts";
 
 const intialState = {
     auth: !!getToken(),
+    reason: ""
 }
 
 const authSlice = createSlice({
@@ -12,7 +13,8 @@ const authSlice = createSlice({
         setAuth: (state) => {
             state.auth = true
         },
-        clearAuth: (state) => {
+        clearAuth: (state, action: PayloadAction<string>) => {
+            state.reason = action.payload
             state.auth = false
         }
     }
