@@ -2,16 +2,21 @@ import { Button } from "antd";
 import { Group } from "../../interfaces";
 import "./GroupmemberCourses.css";
 
-function MyGroups({ group, setCurrentGroup }: { group: Group, setCurrentGroup: (group: Group) => void }) {
+function MyGroups({ group, setCurrentGroup, selected = false }: { group: Group, setCurrentGroup: (group: Group) => void, selected: boolean }) {
 
     const setToCurrentGroup = () => {
         setCurrentGroup(group)
     }
 
     return (
-        <Button style={{ height: "fit-content", textAlign: "center", background: "grey", borderRadius: "5px", margin: "5px", overflow: "auto" }} type="primary" className="scrollbar" onClick={setToCurrentGroup}>
-            <h3>{group.groupName}</h3>
-        </Button>
+        selected ?
+            <Button style={{ color: "white", textAlign: "left", background: "cornflowerblue", borderRadius: "5px", margin: "5px", overflow: "auto" }} type="primary" className="scrollbar" onClick={setToCurrentGroup}>
+                <b>{group.groupName}</b>
+            </Button>
+            :
+            <Button style={{ color: "black", textAlign: "left", background: "white", borderRadius: "5px", margin: "5px", overflow: "auto" }} type="primary" className="scrollbar" onClick={setToCurrentGroup}>
+                <b>{group.groupName}</b>
+            </Button>
     )
 }
 

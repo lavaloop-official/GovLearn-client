@@ -1,4 +1,4 @@
-import {Button, Empty, Input, Modal} from "antd";
+import { Button, Empty, Input, Modal } from "antd";
 import Groupmember from "../components/Group/Groupmember.tsx";
 import Groupadmin from "../components/Group/Groupadmin.tsx";
 import { useEffect, useState } from "react";
@@ -22,20 +22,20 @@ function Groups() {
     const [groupInvitations, setGroupInvitations] = useState<GroupInvitationWsTo[]>([]);
 
     const acceptInvitation = (group: GroupInvitationWsTo) => {
-        let acceptGroup = {invitationId:group.invitationId, accept:true}
+        let acceptGroup = { invitationId: group.invitationId, accept: true }
         setGroupInvitations(groupInvitations.filter(e => e.invitationId !== acceptGroup.invitationId))
-        const acceptedInvitation = fetchWrapper.put(`api/v1/groups/invitations`,acceptGroup).then((res) => {
+        const acceptedInvitation = fetchWrapper.put(`api/v1/groups/invitations`, acceptGroup).then((res) => {
             console.log(res.message);
         })
-        Promise.all([acceptedInvitation]).then(()=>{
+        Promise.all([acceptedInvitation]).then(() => {
             handleFetchingOfAllGroups();
         })
     }
 
     const denyInvitation = (group: GroupInvitationWsTo) => {
-        let denyGroup = {invitationId:group.invitationId, accept:false}
+        let denyGroup = { invitationId: group.invitationId, accept: false }
         setGroupInvitations(groupInvitations.filter(e => e.invitationId !== denyGroup.invitationId))
-        fetchWrapper.put(`api/v1/groups/invitations`,denyGroup).then((res) => {
+        fetchWrapper.put(`api/v1/groups/invitations`, denyGroup).then((res) => {
             console.log(res.message);
         })
     }
@@ -43,6 +43,7 @@ function Groups() {
     useEffect(() => {
         fetchWrapper.get(`api/v1/groups`).then((res) => {
             setGroups(res.payload);
+            setCurrentGroup(res.payload[0]);
             // if (res.payload != null){
             //     const newGroups = res.payload[0]
             //     Promise.all([newGroups]).then(()=>{
@@ -57,27 +58,27 @@ function Groups() {
 
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
-  
+
     const showModal = () => {
-      setOpen(true);
+        setOpen(true);
     };
-  
+
     const handleOk = () => {
-      setLoading(true);
-      setTimeout(() => {
-        setLoading(false);
-        setOpen(false);
-      }, 3000);
+        setLoading(true);
+        setTimeout(() => {
+            setLoading(false);
+            setOpen(false);
+        }, 3000);
     };
-  
+
     const handleCancel = () => {
-      setOpen(false);
+        setOpen(false);
     };
 
     const [isCreateGroupModalOpen, setIsModalOpen] = useState(false);
 
     const showCreateGroupModal = () => {
-      setIsModalOpen(true);
+        setIsModalOpen(true);
     };
 
     const removeCurrentGroup = (group: Group) => {
@@ -97,9 +98,9 @@ function Groups() {
             setGroups(res.payload);
         })
     }
-  
+
     const handleCreateGroupModalOK = () => {
-        const newGroup: GroupCreationWsTo = {groupName:newGroupTitle, groupDescription:newGroupDescription};
+        const newGroup: GroupCreationWsTo = { groupName: newGroupTitle, groupDescription: newGroupDescription };
         const postedGroup = fetchWrapper.post(`api/v1/groups`, newGroup).then((res) => {
             console.log(res.message)
         })
@@ -109,9 +110,9 @@ function Groups() {
         handleCancel();
         setIsModalOpen(false);
     };
-  
+
     const handleCreateGroupModalCancel = () => {
-      setIsModalOpen(false);
+        setIsModalOpen(false);
     };
 
     const updateCreateGroupTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -123,64 +124,64 @@ function Groups() {
     }
 
     return (
-        <div style={{display:"flex", justifyContent:"center", marginLeft:"25px", marginRight:"25px"}}>
-            <div style={{background:"#D9D9D9", width:"fit-content", margin:"25px", borderRadius:"20px", display:"flex", minWidth:"650px", maxWidth:"80%", boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px"}}>
-                <div style={{background:"lightgrey", width:"250px", margin:"10px", borderRadius:"10px", display:"flex", flexDirection:"column", justifyContent:"space-between"}}>
-                    <div style={{display:"flex", flexDirection:"column"}}>
-                        <div style={{height:"fit-content"}}>
-                            <h2 style={{textAlign:"center"}}>Meine Gruppen</h2>
+        <div style={{ display: "flex", justifyContent: "center", marginLeft: "25px", marginRight: "25px" }}>
+            <div style={{ background: "#D9D9D9", width: "fit-content", margin: "25px", borderRadius: "20px", display: "flex", minWidth: "650px", maxWidth: "80%", boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px" }}>
+                <div style={{ background: "lightgrey", width: "250px", margin: "10px", borderRadius: "10px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+                    <div style={{ display: "flex", flexDirection: "column" }}>
+                        <div style={{ height: "fit-content" }}>
+                            <h2 style={{ textAlign: "center" }}>Meine Gruppen</h2>
                         </div>
                         {
                             groups ?
-                                groups.map((group: Group) => <MyGroups group={group} setCurrentGroup={setCurrentGroup}/>)
-                                : <div/>
+                                groups.map((group: Group) => <MyGroups group={group} setCurrentGroup={setCurrentGroup} selected={currentGroup?.groupId == group.groupId} />)
+                                : <div />
                         }
-                        <Button type="primary" style={{margin:"5px"}} onClick={showModal}>Gruppe hinzufügen</Button>
+                        <Button type="primary" style={{ margin: "5px" }} onClick={showModal}>Gruppe hinzufügen</Button>
                         <Modal
                             open={open}
                             title="Gruppe beitreten oder neue Gruppe erstellen."
                             onOk={handleOk}
                             onCancel={handleCancel}
                             footer={[
-                            <Button key="submit" type="primary" loading={loading} onClick={handleOk}>
-                                Gruppe beitreten
-                            </Button>,
-                            <Button
-                                type="primary"
-                                loading={loading}
-                                onClick={showCreateGroupModal}
-                            >
-                                Neue Gruppe erstellen
-                            </Button>,
+                                <Button key="submit" type="primary" loading={loading} onClick={handleOk}>
+                                    Gruppe beitreten
+                                </Button>,
+                                <Button
+                                    type="primary"
+                                    loading={loading}
+                                    onClick={showCreateGroupModal}
+                                >
+                                    Neue Gruppe erstellen
+                                </Button>,
                             ]}
                         >
                         </Modal>
                         <Modal title="Gruppe erstellen" open={isCreateGroupModalOpen} onOk={handleCreateGroupModalOK} onCancel={handleCreateGroupModalCancel}>
                             <h3>Gruppenname</h3>
-                            <Input placeholder="Geben Sie einen Gruppennamen ein..." onChange={updateCreateGroupTitle}/>
+                            <Input placeholder="Geben Sie einen Gruppennamen ein..." onChange={updateCreateGroupTitle} />
                             <h3>Gruppenbeschreibung</h3>
-                            <TextArea rows={4} onChange={updateCreateGroupDescription}/>
+                            <TextArea rows={4} onChange={updateCreateGroupDescription} />
                         </Modal>
                     </div>
                     <div>
-                        <h3 style={{textAlign:"center"}}>Einladungen</h3>
-                        <div style={{display:"flex", flexDirection:"column", gap:"5px"}}>
-                        {
-                            groupInvitations ?
-                                groupInvitations.map((group: GroupInvitationWsTo) => <GroupInvitation group={group} acceptInvitation={acceptInvitation} denyInvitation={denyInvitation}/>)
-                                : <div/>
-                        }
+                        <h3 style={{ textAlign: "center" }}>Einladungen</h3>
+                        <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
+                            {
+                                groupInvitations ?
+                                    groupInvitations.map((group: GroupInvitationWsTo) => <GroupInvitation group={group} acceptInvitation={acceptInvitation} denyInvitation={denyInvitation} />)
+                                    : <div />
+                            }
                         </div>
                     </div>
                 </div>
                 {
                     currentGroup != undefined ?
                         currentGroup!.role == Role.Admin ?
-                            <Groupadmin currentGroup={currentGroup!} removeCurrentGroup={removeCurrentGroup} handleFetchingOfAllGroups={handleFetchingOfAllGroups}/>
-                            : <Groupmember currentGroup={currentGroup!}/>
-                        :<Empty style={{marginTop:"100px", marginBottom:"100px", marginLeft:"75px"}} description={NO_GROUPS}/>
+                            <Groupadmin currentGroup={currentGroup!} removeCurrentGroup={removeCurrentGroup} handleFetchingOfAllGroups={handleFetchingOfAllGroups} />
+                            : <Groupmember currentGroup={currentGroup!} />
+                        : <Empty style={{ marginTop: "100px", marginBottom: "100px", marginLeft: "75px" }} description={NO_GROUPS} />
                 }
-                
+
             </div>
         </div>
     )
