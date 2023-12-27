@@ -1,4 +1,4 @@
-import {Button, Input, Modal} from "antd";
+import {Button, Empty, Input, Modal} from "antd";
 import Groupmember from "../components/Group/Groupmember.tsx";
 import Groupadmin from "../components/Group/Groupadmin.tsx";
 import { useEffect, useState } from "react";
@@ -7,6 +7,8 @@ import { Group, GroupCreationWsTo, GroupInvitationWsTo } from "../interfaces.ts"
 import TextArea from "antd/es/input/TextArea";
 import GroupInvitation from "../components/Group/GroupInvitation.tsx";
 import { fetchWrapper } from "../api/helper.ts";
+import { Role } from "../Enum.ts";
+import { NO_GROUPS } from "../constants/de.ts";
 
 function Groups() {
 
@@ -15,19 +17,7 @@ function Groups() {
 
     const [groups, setGroups] = useState<Group[]>([]);
 
-    const [currentGroup, setCurrentGroup] = useState<Group>(
-        {
-            groupId: undefined,
-            groupName: "",
-            groupDescription: "",
-            admin: undefined,
-        }
-    );
-    
-    const [groupMembers, setGroupMembers] = useState([
-        { name: "Mitglied 1", role: "Admin", Image: "https://www.w3schools.com/howto/img_avatar.png" },
-        { name: "Mitglied 2", role: "Member", Image: "https://www.w3schools.com/howto/img_avatar.png" },
-    ]); // TODO: Mitglieder in return einbinden
+    const [currentGroup, setCurrentGroup] = useState<Group>();
 
     const [groupInvitations, setGroupInvitations] = useState<GroupInvitationWsTo[]>([]);
 
@@ -37,7 +27,7 @@ function Groups() {
         const acceptedInvitation = fetchWrapper.put(`api/v1/groups/invitations`,acceptGroup).then((res) => {
             console.log(res.message);
         })
-        Promise.all([acceptInvitation]).then(()=>{
+        Promise.all([acceptedInvitation]).then(()=>{
             handleFetchingOfAllGroups();
         })
     }
@@ -51,27 +41,18 @@ function Groups() {
     }
 
     useEffect(() => {
-        let fetchedmembergroups:Group[] = [];
-        let fetchedadmingroups:Group[] = [];
-        let fetchedgroups:Group[] = [];
-
         fetchWrapper.get(`api/v1/groups`).then((res) => {
-            fetchedmembergroups = res.payload.memberGroups;
-            fetchedadmingroups = res.payload.adminGroups;
-            fetchedmembergroups.forEach(element => {
-                element.admin = false;
-                fetchedgroups.push(element);
-            });
-            fetchedadmingroups.forEach(element => {
-                element.admin = true;
-                fetchedgroups.push(element);
-            });
-            setGroups(fetchedgroups);
-            setCurrentGroup(fetchedgroups[0]);
-        })
+            setGroups(res.payload);
+            // if (res.payload != null){
+            //     const newGroups = res.payload[0]
+            //     Promise.all([newGroups]).then(()=>{
+            //         setCurrentGroup(newGroups);
+            //     });
+            // }
+        });
         fetchWrapper.get(`api/v1/groups/invitations`).then((res) => {
             setGroupInvitations(res.payload)
-        })
+        });
     }, []);
 
     const [loading, setLoading] = useState(false);
@@ -112,23 +93,8 @@ function Groups() {
     }
 
     const handleFetchingOfAllGroups = () => {
-        let fetchedmembergroups:Group[] = [];
-        let fetchedadmingroups:Group[] = [];
-        let fetchedgroups:Group[] = [];
         fetchWrapper.get(`api/v1/groups`).then((res) => {
-            
-            fetchedmembergroups = res.payload.memberGroups;
-            fetchedadmingroups = res.payload.adminGroups;
-            console.log(fetchedadmingroups)
-            fetchedmembergroups.forEach(element => {
-                element.admin = false;
-                fetchedgroups.push(element);
-            });
-            fetchedadmingroups.forEach(element => {
-                element.admin = true;
-                fetchedgroups.push(element);
-            });
-            setGroups(fetchedgroups);
+            setGroups(res.payload);
         })
     }
   
@@ -208,9 +174,11 @@ function Groups() {
                     </div>
                 </div>
                 {
-                    currentGroup.admin ?
-                        <Groupadmin currentGroup={currentGroup} removeCurrentGroup={removeCurrentGroup}/>
-                        : <Groupmember currentGroup={currentGroup}/>
+                    currentGroup != undefined ?
+                        currentGroup!.role == Role.Admin ?
+                            <Groupadmin currentGroup={currentGroup!} removeCurrentGroup={removeCurrentGroup} handleFetchingOfAllGroups={handleFetchingOfAllGroups}/>
+                            : <Groupmember currentGroup={currentGroup!}/>
+                        :<Empty style={{marginTop:"100px", marginBottom:"100px", marginLeft:"75px"}} description={NO_GROUPS}/>
                 }
                 
             </div>

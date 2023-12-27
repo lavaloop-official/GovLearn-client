@@ -1,4 +1,4 @@
-import { Format, Skilllevel } from "./Enum"
+import { Format, Role, Skilllevel } from "./Enum"
 
 export interface Course {
     "id": number | undefined,
@@ -60,10 +60,16 @@ export interface Group {
     "groupId": number | undefined,
     "groupName": string | undefined,
     "groupDescription": string | undefined,
-    "admin": boolean | undefined,
+    "role": Role | undefined,
 }
 
 export interface GroupCreationWsTo {
+    "groupName": string | undefined,
+    "groupDescription": string | undefined,
+}
+
+export interface GroupEditWsTo {
+    "groupId": number | undefined,
     "groupName": string | undefined,
     "groupDescription": string | undefined,
 }
@@ -75,8 +81,20 @@ export interface GroupInvitationWsTo {
     "invitationId": number | undefined,
 }
 
+export interface SendInvitationWsTo {
+    "userEmail": string | undefined,
+    "groupId": number | undefined,
+}
+
 export interface Groupmember {
-    "id": number | undefined,
+    "memberId": number | undefined,
+    "email": string | undefined,
     "name": string | undefined,
-    "admin": boolean | undefined,
+    "memberSince": string | undefined,
+    "role": Role | undefined,
+}
+
+export interface User {
+    "email": string | undefined,
+    "name": string | undefined,
 }

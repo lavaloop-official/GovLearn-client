@@ -1,27 +1,69 @@
-import {Badge, Button, Divider, Modal } from "antd";
+import {Badge, Button, Divider, Input, Modal } from "antd";
 import GroupmemberCourses from "./GroupmemberCourses";
 import "./GroupmemberCourses.css"
-import { Group, Groupmember } from "../../interfaces";
+import { Group, GroupCreationWsTo, GroupEditWsTo, Groupmember } from "../../interfaces";
 import { createRef, useEffect, useState } from "react";
-import { Plus, Trash} from "react-bootstrap-icons";
+import { Plus, Trash , PenFill} from "react-bootstrap-icons";
 import Groupuser from "./Groupuser";
 import InviteGroupmember from "./InviteGroupmember";
 import { fetchWrapper } from "../../api/helper";
+import TextArea from "antd/es/input/TextArea";
 
-function Groupadmin({currentGroup, removeCurrentGroup}:{currentGroup:Group, removeCurrentGroup: (group:Group) => void}) {
+function Groupadmin({currentGroup, removeCurrentGroup, handleFetchingOfAllGroups}:{currentGroup:Group, removeCurrentGroup: (group:Group) => void, handleFetchingOfAllGroups: () => void}) {
+
+    const [editGroupTitle, setEditGroupTitle] = useState<string>();
+    const [editGroupDescription, setEditGroupDescription] = useState<string>();
+    const [isEditGroupModalOpen, setIsModalOpen] = useState(false);
+
+    const updateEditGroupTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setEditGroupTitle(e.target.value);
+    }
+
+    const updateEditGroupDescription = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        setEditGroupDescription(e.target.value);
+    }
+
+    const handleEditGroupModalOK = () => {
+        const editGroup: GroupEditWsTo = {groupId:currentGroup.groupId, groupName:editGroupTitle, groupDescription:editGroupDescription};
+        const groupchanged = fetchWrapper.put(`api/v1/groups`, editGroup).then((res) => {
+            console.log(res.message)
+        });
+        Promise.all([groupchanged]).then(()=>{
+            handleFetchingOfAllGroups();
+            currentGroup.groupName = editGroupTitle;
+            currentGroup.groupDescription = editGroupDescription;
+        });
+        setIsModalOpen(false);
+    };
+  
+    const handleEditGroupModalCancel = () => {
+        setIsModalOpen(false);
+    };
+
+    const showEditGroupModal = () => {
+        setIsModalOpen(true);
+    };
 
     const inviteGroupmemberModal = createRef();
 
-    const [groupmember, setGroupmember] = useState<Groupmember[]>([{id:1, name:"Testuser", admin:true}, {id:2, name:"Testuser2", admin:false}]);
+    const [groupmember, setGroupmember] = useState<Groupmember[]>([]);
 
     const removeUserFromGroup = (groupmem: Groupmember) => {
-        setGroupmember(groupmember.filter(e => e.id !== groupmem.id));
-        //update database
+        const removedUserFromGroup = fetchWrapper.delete(`api/v1/groups/${groupmem.memberId}`).then(res => {
+            console.log(res.message);
+        })
+        Promise.all([removedUserFromGroup]).then(() => fetchAllGroupMembers());
     }
 
+    const fetchAllGroupMembers = () => {
+        fetchWrapper.get(`api/v1/groups/${currentGroup.groupId}/members`).then(res => {
+            setGroupmember(res.payload);
+        });
+    } 
+
     useEffect(() => {
-        //fetch groupmember
-    }, [groupmember])
+        fetchAllGroupMembers();
+    }, [currentGroup])
 
     const [openDeleteCourseModal, setIsDeleteModalOpen] = useState(false);
 
@@ -44,15 +86,24 @@ function Groupadmin({currentGroup, removeCurrentGroup}:{currentGroup:Group, remo
                 <div style={{margin:"0px 10px 0px 10px"}}>
                     <h1>{currentGroup.groupName}</h1>
                 </div>
-                <Button style={{margin:"0px 10px 0px 10px"}} type="text" shape="circle" size="large" icon={<Trash color="white" size={28} onClick={showDeleteGroupModal}></Trash>}></Button>
+                <div style={{margin:"0px 10px 0px 10px"}}>
+                <Button style={{margin:"0px 10px 0px 10px"}} type="text" shape="circle" size="large" icon={<PenFill color="white" size={28} onClick={showEditGroupModal}></PenFill>}></Button>
+                    <Button  type="text" shape="circle" size="large" icon={<Trash color="white" size={28} onClick={showDeleteGroupModal}></Trash>}></Button>
+                </div>
                 <Modal title="Möchten Sie wirklich diese Gruppe löschen?" open={openDeleteCourseModal} onOk={handleDeleteGroupModalOK} onCancel={handleDeleteGroupModalCancel}>
                     <p>Die Gruppe wird unwiderruflich gelöscht.</p>
+                </Modal>
+                <Modal title="Gruppe bearbeiten" open={isEditGroupModalOpen} onOk={handleEditGroupModalOK} onCancel={handleEditGroupModalCancel}>
+                    <h3>Gruppenname</h3>
+                    <Input placeholder="Geben Sie einen Gruppennamen ein..." onChange={updateEditGroupTitle}/>
+                    <h3>Gruppenbeschreibung</h3>
+                    <TextArea rows={4} onChange={updateEditGroupDescription}/>
                 </Modal>
             </div>
             <div style={{margin:"0px 10px 0px 10px"}}>
                 <p>{currentGroup.groupDescription}</p>
             </div>
-            <InviteGroupmember ref={inviteGroupmemberModal}></InviteGroupmember>
+            <InviteGroupmember groupId={currentGroup.groupId} ref={inviteGroupmemberModal}></InviteGroupmember>
             <div style={{margin:"0px 10px 0px 10px", display:"flex", flexDirection:"column"}}>
                 <h3>Gruppenmitglieder</h3>
                 <div style={{overflow:"scroll", borderRadius:"10px"}} className="scrollbar">

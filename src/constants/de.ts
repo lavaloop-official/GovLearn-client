@@ -21,3 +21,5 @@ export const WELCOME = 'Entdecke Weiterbildungsangebote, die dich weiterbringen.
 export const NO_BOOKMARKS = 'Sie haben keine Kurse markiert!'
 
 export const DELETE_COURSE = 'Möchten Sie diesen Kurs wirklich löschen?'
+
+export const NO_GROUPS = 'Sie sind noch in keiner Gruppe.'

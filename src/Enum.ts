@@ -10,3 +10,9 @@ export enum Format{
     OnlineSelbstorganisiert,
     Hybrid
 }
+
+export enum Role{
+    Member = "Member",
+    Moderator = "Moderator",
+    Admin = "Admin"
+}

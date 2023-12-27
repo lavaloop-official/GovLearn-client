@@ -4,6 +4,7 @@ import "./GroupmemberCourses.css"
 import { Group, Groupmember } from "../../interfaces";
 import { useEffect, useState } from "react";
 import { PersonDashFill } from "react-bootstrap-icons";
+import { Role } from "../../Enum";
 
 function Groupuser({groupmember, admin, removeUserFromGroup}:{groupmember:Groupmember, admin:boolean, removeUserFromGroup?: (groupmember: Groupmember) => void}) {
 
@@ -14,7 +15,7 @@ function Groupuser({groupmember, admin, removeUserFromGroup}:{groupmember:Groupm
     return (
         <div>
             {
-                groupmember.admin?
+                groupmember.role == Role.Admin?
                     <Badge.Ribbon text="Admin" color="green" placement="start">
                         <Avatar size={75} style={{background:"white", color:"black"}}>{groupmember.name}</Avatar>
                         {

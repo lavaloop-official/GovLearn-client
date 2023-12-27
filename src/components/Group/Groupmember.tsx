@@ -5,10 +5,11 @@ import Groupuser from "./Groupuser";
 import Groupcourse from "./Groupcourse";
 import { Course } from "../../interfaces";
 import "./GroupmemberCourses.css"
+import { fetchWrapper } from "../../api/helper";
 
 function Groupmember({currentGroup}: {currentGroup: groupmember.Group}) {
 
-    const [groupmember, setGroupmember] = useState<groupmember.Groupmember[]>([{id:1, name:"Testuser", admin:true}, {id:2, name:"Testuser2", admin:false}]);
+    const [groupmember, setGroupmember] = useState<groupmember.Groupmember[]>([]);
 
     const [courses, setCourses] = useState<Course[]>(
         [
@@ -31,8 +32,10 @@ function Groupmember({currentGroup}: {currentGroup: groupmember.Group}) {
     );
 
     useEffect(() => {
-        //fetch groupmember
-    }, [groupmember])
+        fetchWrapper.get(`api/v1/groups/${currentGroup.groupId}/members`).then(res => {
+            setGroupmember(res.payload);
+        });
+    }, [currentGroup])
 
     return (
         <div style={{background:"lightgrey", flex:"1", margin:"10px", borderRadius:"10px", display:"flex", flexDirection:"column", minWidth:"280px"}}>
