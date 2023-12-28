@@ -9,7 +9,7 @@ import {RootState} from "../../state/reduxStore.ts";
 import {fetchWrapper} from "../../api/helper";
 import {clearToken} from "../../api/auth.ts";
 import Searchbar from "../Searchbar.tsx";
-import { BookmarkFill } from "react-bootstrap-icons";
+import {BookmarkFill} from "react-bootstrap-icons";
 import './CustomHeader.css'
 
 const {Title} = Typography
@@ -27,7 +27,7 @@ function CustomHeader() {
     const [name, setName] = useState('')
 
     useEffect(() => {
-        if (location.pathname.includes("discover") || location.pathname.includes("detail") || location.pathname.includes("profile") || location.pathname.includes("searching") || location.pathname.includes("bookmarks") || location.pathname.includes("groups")){
+        if (location.pathname.includes("discover") || location.pathname.includes("detail") || location.pathname.includes("profile") || location.pathname.includes("searching") || location.pathname.includes("bookmarks") || location.pathname.includes("groups")) {
             setSubHeader(<SubHeader/>)
         } else {
             setSubHeader(<></>)
@@ -110,13 +110,21 @@ function CustomHeader() {
                 </Col>
                 <Col span={8}>
                     {loggedIn ?
-                        <div style={{margin: "auto 0px auto auto", minWidth: "60px", lineHeight: "0px", display: "flex", justifyContent:"right", alignItems:"center"}}>
-                            <Button style={{marginRight:"15px", width:"32px", height:"32px"}} shape="circle">
-                                <BookmarkFill className="bookmark_inner filled" onClick={openBookmarks} style={{height:"12px"}}/>
+                        <div style={{
+                            margin: "auto 0px auto auto",
+                            minWidth: "60px",
+                            lineHeight: "0px",
+                            display: "flex",
+                            justifyContent: "right",
+                            alignItems: "center"
+                        }}>
+                            <Button style={{marginRight: "15px", width: "32px", height: "32px"}} shape="circle"
+                                    onClick={openBookmarks}>
+                                <BookmarkFill className="bookmark_inner filled" style={{height: "12px"}}/>
                             </Button>
                             <div>
                                 <Dropdown menu={{items}} placement="bottomRight" arrow={{pointAtCenter: true}}
-                                        trigger={['click']}>
+                                          trigger={['click']}>
                                     <a onClick={(e) => e.preventDefault()}>
                                         <Avatar icon={<UserOutlined/>}/>
                                     </a>
