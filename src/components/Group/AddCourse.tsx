@@ -19,12 +19,13 @@ const AddCourse = forwardRef((props: AddCourseProps, ref) => {
     const [open, setOpen] = useState(false);
 
     const [options, setOptions] = useState<SelectProps['options']>([]);
-    let courseIDs:number[] = [];
+    const [courseIDs, setCourseIDs] = useState<number[]>([]);
 
     const handleChange = (value: string[]) => {
-        courseIDs = value.map(element => {
+        let courseIDs = value.map(element => {
             return Number(element);
         });
+        setCourseIDs(courseIDs)
         console.log(`selected ${value}`);
     };
 
@@ -35,6 +36,7 @@ const AddCourse = forwardRef((props: AddCourseProps, ref) => {
     const handleOk = () => {
         setLoading(true);
         setTimeout(() => {
+            console.log(courseIDs)
             props.addCourseToGroupmember(courseIDs);
             setLoading(false);
             setOpen(false);

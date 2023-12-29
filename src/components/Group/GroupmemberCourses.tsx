@@ -15,6 +15,10 @@ function GroupmemberCourses({ groupmember, admin, currentGroup}: { groupmember: 
     const [courses, setCourses] = useState<Course[]>([]);
 
     useEffect(() => {
+        fetchAllContent();
+    }, [])
+
+    const fetchAllContent = () => {
         let courseIds:number[]=[];
         const fetchedCourseIds = fetchWrapper.get(`api/v1/groups/content/${currentGroup.groupId}/${groupmember.memberId}`).then(res => {
             courseIds = res.payload.courseIds;
@@ -28,17 +32,25 @@ function GroupmemberCourses({ groupmember, admin, currentGroup}: { groupmember: 
                 })
             })
         })
-    }, [])
+    }
 
     const addCourseToGroupmember = (courseIds: number[]) => {
+        if(courses.length != 0)
+        {
+            const existingCourseIds:number[] = courses.map(item => item.id) as number[]; 
+            courseIds = courseIds.filter(element => !existingCourseIds.includes(element))
+        }
         courseIds.forEach(element => {
-            fetchWrapper.post(`api/v1/groups/content`, {memberId: groupmember.memberId, courseId: element}).then(res => console.log(res.message))
+            const addedContent = fetchWrapper.post(`api/v1/groups/content`, {memberId: groupmember.memberId, courseId: element}).then(res => console.log(res.message));
+            Promise.all([addedContent]).then(()=>{
+                fetchAllContent();
+            })
         })
     }
 
     const removeCourseFromUser = (course: Course) => {
         setCourses(courses.filter(e => e.id !== course.id));
-        //update database
+        fetchWrapper.delete(`api/v1/groups/content/${currentGroup.groupId}/${course.id}/${groupmember.memberId}`)
     }
 
     return (
