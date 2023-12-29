@@ -1,4 +1,4 @@
-import {Affix, Button, Steps, Tag, Typography} from "antd";
+import {Button, Steps, Switch, Tag, Typography} from "antd";
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import CircleSelect from "../components/CircleSelect/CircleSelect.tsx";
@@ -9,7 +9,7 @@ function Registration() {
 
     const [current, setCurrent] = useState(0);
     const [selected, setSelected] = useState<number[]>(new Array(6).fill(-1));
-
+    const [digitallotse, setDigitallotse] = useState<boolean>(false);
 
     const selectCallback = (index: string) => {
         const slice = parseInt(index.charAt(0));
@@ -38,8 +38,35 @@ function Registration() {
                 text.push(<Tag color="green" key={i}>{roles[i]} - {responsibilites[selected[i]]}</Tag>)
             }
         }
+        if (text.length == 0)
+            return <Tag color="red">Keine Rollen ausgewählt</Tag>
         return text;
     }
+
+    const zero =
+        <>
+            <div style={{display: "flex", flexDirection: "column", width: "100%", padding: "10px"}}>
+                <Typography.Title level={4} style={{margin: "5px 0px"}}>
+                    Herzlich willkommen bei GovLearn
+                </Typography.Title>
+                <Typography.Text>
+                    Ihrer Plattform für gezielte Weiterbildungen im öffentlichen Dienst. Wir freuen uns, Sie als neues
+                    Mitglied in unserer wachsenden Gemeinschaft begrüßen zu dürfen. Um Ihnen bestmögliche Empfehlungen
+                    bieten zu können, möchten wir Sie durch den einfachen Registrierungsprozess führen.
+                    <br/>
+                    1. Rolle wählen:
+                    Nach erfolgreicher Registrierung werden Sie gebeten, Ihre aktuelle Rolle im öffentlichen Dienst
+                    auszuwählen. Ob Sie in der Verwaltung, im Finanzwesen oder in der Rechtsabteilung tätig sind –
+                    wählen Sie die Rolle, die am besten Ihre beruflichen Aufgaben widerspiegelt.
+                    <br/>
+                    2. Kompetenzen definieren:
+                    Nachdem Sie Ihre Rolle ausgewählt haben, geht es darum, Ihre spezifischen Kompetenzen genauer zu
+                    beschreiben. Geben Sie an, welche Fähigkeiten und Kenntnisse Sie in Ihrer beruflichen Tätigkeit
+                    auszeichnen. Je präziser Sie diese Informationen eingeben, desto besser können wir Ihnen
+                    personalisierte Weiterbildungsempfehlungen präsentieren.
+                </Typography.Text>
+            </div>
+        </>
 
     const first =
         <>
@@ -50,63 +77,72 @@ function Registration() {
                 <Typography.Text>
                     Wählen Sie eine oder mehrere Rollen und den zugehörigen Verantwortungsbereich aus.
                 </Typography.Text>
-                <div style={{display: "flex", flexDirection: "column", margin: "0 auto"}}>
-                    <CircleSelect selectCallback={selectCallback} selected={selected}/>
+                <div style={{display: "flex", flexDirection: "row"}}>
+                    <div style={{display: "flex", flexDirection: "column", margin: "0 auto"}}>
+                        <CircleSelect selectCallback={selectCallback} selected={selected}/>
+                    </div>
+                    <div style={{display: "flex", flexDirection: "column", marginTop: "20px"}}>
+                        <div style={{minHeight: "160px"}}>
+                            <Typography.Title level={4} style={{margin: "5px 0px"}}>
+                                Ausgewählte Rollen:
+                            </Typography.Title>
+                            <Typography.Text>
+                                {selectedToText()}
+                            </Typography.Text>
+                        </div>
+                        <Typography.Title level={3} style={{margin: "0"}}>
+                            Zusätzliche Anforderungen
+                        </Typography.Title>
+                        <Typography.Text>
+                            Ich benötige Kompetenzen in meiner Funktion als Digitallotse
+                        </Typography.Text>
+                        <div>
+                            <Switch checkedChildren="Ja" unCheckedChildren="Nein" defaultChecked={digitallotse}
+                                    onClick={() => {
+                                        setDigitallotse(digitallotse => !digitallotse)
+                                    }}/>
+                        </div>
+                    </div>
                 </div>
-                <Typography.Title level={4} style={{margin: "5px 0px"}}>
-                    Ausgewählte Rollen:
-                </Typography.Title>
-                <Typography.Text>
-                    {selectedToText()}
-                </Typography.Text>
             </div>
         </>
 
     const second =
         <>
             <div style={{display: "flex", flexDirection: "column", width: "100%", padding: "10px"}}>
-                <Typography.Title level={3} style={{margin: "0"}}>
-                    Übersicht
-                </Typography.Title>
-                <Typography.Text>
-                    Überprüfen Sie Ihre Eingaben und bestätigen Sie mit "Weiter".
-                </Typography.Text>
                 <Typography.Title level={4} style={{margin: "5px 0px"}}>
                     Ausgewählte Rollen:
                 </Typography.Title>
                 <Typography.Text>
                     {selectedToText()}
+                    {digitallotse ? <Tag color="green">Digitallotse</Tag> : <></>}
                 </Typography.Text>
+                <div style={{display: "flex", flexDirection: "row"}}>
+                    <Typography.Title level={4} style={{margin: "5px 0px"}}>
+                        Grundlagen-Kompetenzen
+                    </Typography.Title>
+
+                </div>
             </div>
         </>
 
     const content = [
         {
+            content: zero,
+            step: {
+                title: 'Einführung'
+            }
+        },
+        {
             content: first,
             step: {
-                title: 'Rollenauswahl',
-                description: 'Auswahl der Rollen'
+                title: 'Rollen'
             }
         },
         {
             content: second,
             step: {
-                title: 'Übersicht',
-                description: 'Eingabe kontrollieren'
-            }
-        },
-        {
-            content: <h1>Content 3</h1>,
-            step: {
-                title: 'Ethische Kompetenz',
-                description: 'Third-content'
-            }
-        },
-        {
-            content: <h1>Content 5</h1>,
-            step: {
-                title: 'Persönliche Kompetenz',
-                description: 'Fourth-content'
+                title: 'Kompetenzen'
             }
         }
     ]
@@ -140,27 +176,25 @@ function Registration() {
             maxWidth: "1200px",
             padding: "10px 10px",
         }}>
-            <h1 style={{margin: "0", padding: "0 15px", textAlign: "center"}}>Registrierung</h1>
-            <div style={{display: "flex", flexDirection: "row", maxWidth: "1100px", width: "100%"}}>
-                <Affix offsetTop={90} style={{width: "100%", maxWidth: "300px", maxHeight: "500px"}}>
-                    <Steps
-                        style={{height: "500px"}}
-                        onChange={onChange}
-                        direction="vertical"
-                        current={current}
-                        items={content.map((item) => item.step)}
-                    />
-                </Affix>
+            <Steps
+                size="small"
+                onChange={onChange}
+                direction="horizontal"
+                current={current}
+                items={content.map((item) => item.step)}
+            />
+            <div style={{display: "flex", flexDirection: "row", width: "100%"}}>
                 <div style={{
                     width: "100%",
                     background: "#d9d9d9",
                     borderRadius: "20px",
-                    height: "1000px",
                     padding: "10px",
                     display: "flex",
                     position: "relative",
                 }}>
-                    {content[current].content}
+                    <div style={{marginBottom: "40px"}}>
+                        {content[current].content}
+                    </div>
                     <Button type="primary" onClick={next} shape="round"
                             style={{position: "absolute", bottom: "10px", right: "10px"}}>
                         {current == content.length - 1 ? "Fertig" : "Weiter"}
