@@ -9,7 +9,8 @@ import { SearchProps } from "antd/es/input/Search";
 import { fetchWrapper } from "../../api/helper";
 
 interface AddCourseProps {
-    name: string | undefined;
+    groupmember: Groupmember | undefined;
+    addCourseToGroupmember(courseId: number[]): void;
 }
 
 const AddCourse = forwardRef((props: AddCourseProps, ref) => {
@@ -18,8 +19,12 @@ const AddCourse = forwardRef((props: AddCourseProps, ref) => {
     const [open, setOpen] = useState(false);
 
     const [options, setOptions] = useState<SelectProps['options']>([]);
+    let courseIDs:number[] = [];
 
     const handleChange = (value: string[]) => {
+        courseIDs = value.map(element => {
+            return Number(element);
+        });
         console.log(`selected ${value}`);
     };
 
@@ -30,9 +35,10 @@ const AddCourse = forwardRef((props: AddCourseProps, ref) => {
     const handleOk = () => {
         setLoading(true);
         setTimeout(() => {
+            props.addCourseToGroupmember(courseIDs);
             setLoading(false);
             setOpen(false);
-        }, 3000);
+        }, 1000);
     };
 
     const handleCancel = () => {
@@ -64,7 +70,7 @@ const AddCourse = forwardRef((props: AddCourseProps, ref) => {
         <div>
             <Modal
                 open={open}
-                title={"Kurs hinzufügen - " + props.name}
+                title={"Kurs hinzufügen - " + props.groupmember?.name}
                 onOk={handleOk}
                 onCancel={handleCancel}
                 footer={[

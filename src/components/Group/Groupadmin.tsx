@@ -129,7 +129,7 @@ function Groupadmin({ currentGroup, removeCurrentGroup, handleFetchingOfAllGroup
             {
                 groupmember ?
                     groupmember.map((groupmember: Groupmember) =>
-                        <GroupmemberCourses groupmember={groupmember} admin={true} />)
+                        <GroupmemberCourses groupmember={groupmember} admin={true} currentGroup={currentGroup}/>)
                     : <div />
             }
         </div>

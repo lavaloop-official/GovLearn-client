@@ -1,29 +1,39 @@
 import { Button, Divider } from "antd";
 import Recommendation from "../Recommendation";
 import "./GroupmemberCourses.css"
-import { Course, Groupmember } from "../../interfaces";
+import {Course, Group, Groupmember } from "../../interfaces";
 import { Plus, DashSquare } from "react-bootstrap-icons";
 import { createRef, useEffect, useState } from "react";
 import Groupcourse from "./Groupcourse";
 import AddCourse from "./AddCourse";
+import { fetchWrapper } from "../../api/helper";
 
-function GroupmemberCourses({ groupmember, admin }: { groupmember: Groupmember, admin: Boolean }) {
+function GroupmemberCourses({ groupmember, admin, currentGroup}: { groupmember: Groupmember, admin: Boolean, currentGroup: Group }) {
 
     const addCourseModal = createRef();
 
-    const [courses, setCourses] = useState<Course[]>(
-        [
-            { id: 1, name: "Test", description: "Test", image: "", createdAt: "", provider: "", instructor: "", certificate: "", skilllevel: "", durationInHours: "", format: "", startDate: "", costFree: true, domainSpecific: true, link: "", ratingAmount: 1, ratingAverage: 2 },
-            { id: 2, name: "Test2", description: "Test2", image: "", createdAt: "", provider: "", instructor: "", certificate: "", skilllevel: "", durationInHours: "", format: "", startDate: "", costFree: true, domainSpecific: true, link: "", ratingAmount: 1, ratingAverage: 2 }
-        ]
-    );
+    const [courses, setCourses] = useState<Course[]>([]);
 
     useEffect(() => {
-        //fetch courses for user
-    }, [courses])
+        let courseIds:number[]=[];
+        const fetchedCourseIds = fetchWrapper.get(`api/v1/groups/content/${currentGroup.groupId}/${groupmember.memberId}`).then(res => {
+            courseIds = res.payload.courseIds;
+        })
+        Promise.all([fetchedCourseIds]).then(() => {
+            let fetchedCourses:Course[]=[];
+            courseIds.forEach(courseId => {
+                fetchWrapper.get(`api/v1/courses/${courseId}`).then(res => {
+                    fetchedCourses = [res.payload, ...fetchedCourses];
+                    setCourses(fetchedCourses);
+                })
+            })
+        })
+    }, [])
 
-    const addCourseToGroupmember = () => {
-        //add course to user
+    const addCourseToGroupmember = (courseIds: number[]) => {
+        courseIds.forEach(element => {
+            fetchWrapper.post(`api/v1/groups/content`, {memberId: groupmember.memberId, courseId: element}).then(res => console.log(res.message))
+        })
     }
 
     const removeCourseFromUser = (course: Course) => {
@@ -32,10 +42,10 @@ function GroupmemberCourses({ groupmember, admin }: { groupmember: Groupmember, 
     }
 
     return (
-        <div style={{ margin: "0px 10px 10px 10px", display: "flex", flexDirection: "column" }}>
+        <div style={{ margin: "0px 10px 10px 10px", display: "flex", flexDirection: "column"}}>
             <h3>{groupmember.name}</h3>
             <div style={{ background: "grey", height: "fit-content", borderRadius: "10px", maxWidth: "fit-content" }}>
-                <div style={{ display: "flex", flexDirection: "row", overflow: "scroll", height: "100%", alignItems: "center" }} className="scrollbar">
+                <div style={{ display: "flex", flexDirection: "row", overflowX: "scroll", overflowY: "hidden", height: "fit-content", alignItems: "center" }} className="scrollbar">
                     {
                         courses ?
                             courses.map((course: Course) => <Groupcourse course={course} admin={admin} removeCourseFromUser={removeCourseFromUser} />)
@@ -44,7 +54,7 @@ function GroupmemberCourses({ groupmember, admin }: { groupmember: Groupmember, 
                     <Button onClick={() => addCourseModal?.current?.openDialog()} style={{ height: "fit-content", width: "fit-content", marginRight: "15px", marginLeft: "15px" }} icon={<Plus style={{ color: "white", height: "100%", width: "75px" }} />} type="text" />
                 </div>
             </div>
-            <AddCourse name={groupmember.name} ref={addCourseModal} />
+            <AddCourse groupmember={groupmember} ref={addCourseModal} addCourseToGroupmember={addCourseToGroupmember}/>
         </div>
     )
 }
