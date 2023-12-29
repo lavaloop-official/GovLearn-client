@@ -18,10 +18,15 @@ const InviteGroupmember = forwardRef((props: InviteGroupProps, ref) => {
     const [open, setOpen] = useState(false);
 
     const [options, setOptions] = useState<SelectProps['options']>([]);
+    const [invitations, setInvitations] = useState<number[]>([]);
 
     const [users, setUsers] = useState<User[]>([]);
 
     const handleChange = (value: string[]) => {
+        let invitations = value.map(element => {
+            return Number(element);
+        });
+        setInvitations(invitations)
         console.log(`selected ${value}`);
     };
 
@@ -32,11 +37,11 @@ const InviteGroupmember = forwardRef((props: InviteGroupProps, ref) => {
     const handleOk = () => {
         setLoading(true);
         setTimeout(() => {
-            let invitations: SendInvitationWsTo[] = [];
-            options!.forEach(element => {
-                invitations.push({ userEmail: element.value?.toString(), groupId: props.groupId })
+            let invitationWsTos: SendInvitationWsTo[] = [];
+            invitations.forEach(element => {
+                invitationWsTos.push({ userEmail: element.toString(), groupId: props.groupId })
             });
-            fetchWrapper.post(`api/v1/groups/invitations`, invitations).then(res => {
+            fetchWrapper.post(`api/v1/groups/invitations`, invitationWsTos).then(res => {
                 console.log(res.message);
             })
             setLoading(false);
