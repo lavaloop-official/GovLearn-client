@@ -1,11 +1,12 @@
 import { Badge, Button, Divider, Modal, Input, Select, SelectProps } from "antd";
 import GroupmemberCourses from "./GroupmemberCourses";
 import "./GroupmemberCourses.css"
-import { Group, Groupmember } from "../../interfaces";
+import { Course, Group, Groupmember } from "../../interfaces";
 import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { Plus } from "react-bootstrap-icons";
 import Groupuser from "./Groupuser";
 import { SearchProps } from "antd/es/input/Search";
+import { fetchWrapper } from "../../api/helper";
 
 interface AddCourseProps {
     name: string | undefined;
@@ -16,16 +17,7 @@ const AddCourse = forwardRef((props: AddCourseProps, ref) => {
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
 
-    const options: SelectProps['options'] = [];
-
-    for (let i = 0; i < 100000; i++) {
-        const value = `${i.toString(36)}${i}`;
-        options.push({
-            label: value,
-            value,
-            disabled: i === 10,
-        });
-    }
+    const [options, setOptions] = useState<SelectProps['options']>([]);
 
     const handleChange = (value: string[]) => {
         console.log(`selected ${value}`);
@@ -54,8 +46,19 @@ const AddCourse = forwardRef((props: AddCourseProps, ref) => {
     }));
 
     useEffect(() => {
-        //fetch all users and insert them into the search array
-    })
+        const options: SelectProps['options'] = []
+        const fetchedCourses = fetchWrapper.get(`api/v1/courses`).then(res => {
+            let fetchedCourses:Course[] = res.payload;
+            fetchedCourses.forEach(course => {
+                options.push({
+                    label: course.name,
+                    value: course.id,
+                    disabled: false,
+                });
+            });
+        });
+        Promise.all([fetchedCourses]).then(()=> setOptions(options));
+    }, [open]);
 
     return (
         <div>
