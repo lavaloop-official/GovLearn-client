@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Checkbox, DatePicker, Flex, Form, Input, InputNumber, Select, Steps, Tag, Upload, message, Image, Card, Skeleton } from "antd";
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
-import { RcFile, UploadChangeParam, UploadFile, UploadProps } from "antd/es/upload";
+import { RcFile } from "antd/es/upload";
 import TextArea from "antd/es/input/TextArea";
 import { Category, Course, Coursetag } from "../../interfaces";
 import { ValueType } from "rc-input-number";
@@ -9,7 +9,7 @@ import { CheckboxChangeEvent } from "antd/es/checkbox";
 import { fetchWrapper } from "../../api/helper";
 import CourseInfo from "../Detail/CourseInfo";
 
-const getBase64 = (img: RcFile, callback: (url: string) => void) => {
+/*const getBase64 = (img: RcFile, callback: (url: string) => void) => {
     const reader = new FileReader();
     reader.addEventListener('load', () => callback(reader.result as string));
     reader.readAsDataURL(img);
@@ -25,7 +25,7 @@ const beforeUpload = (file: RcFile) => {
         message.error('Image must smaller than 2MB!');
     }
     return isJpgOrPng && isLt2M;
-};
+};*/
 
 interface ToggleProps {
     ClickHandler: (event: React.MouseEvent<HTMLButtonElement>) => void
@@ -39,6 +39,7 @@ function AddCourse(Props: ToggleProps) {
     const [categories, setCategories] = useState<Category[]>([]);
     const [tags, setTags] = useState<Coursetag[]>([]);
     const [selectedTags, setSelectedTags] = useState<Coursetag[]>([]);
+    const [messageApi, contextHolder] = message.useMessage();
 
     useEffect(() => {
         const tags = fetchWrapper.get('api/v1/tags').then(res => res.payload)
@@ -50,7 +51,7 @@ function AddCourse(Props: ToggleProps) {
     }, [])
 
     //TODO: add Image attribute to Course to store images in database
-    const setCourseImage: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
+    /*const setCourseImage: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
         if (info.file.status === 'uploading') {
             setLoading(true);
             return;
@@ -62,7 +63,7 @@ function AddCourse(Props: ToggleProps) {
                 setNewCourse({ ...newCourse!, image: url });
             });
         }
-    };
+    };*/
 
     const setCourseName: React.ChangeEventHandler<HTMLInputElement> = (event) => {
         setNewCourse({ ...newCourse!, name: event.target.value });
@@ -77,6 +78,14 @@ function AddCourse(Props: ToggleProps) {
     }
 
     const setCourseDuration: (value: ValueType | null) => void = (value) => {
+        // Duration cannot be negative
+        if (value !== null && Number(value) < 0) {
+            value = null;
+            messageApi.open({
+                type: 'error',
+                content: 'Dauer kann nicht negativ sein.',
+            });
+        }
         setNewCourse({ ...newCourse!, durationInHours: `${value} Stunden` });
     }
 
@@ -124,7 +133,7 @@ function AddCourse(Props: ToggleProps) {
 
     // Prüfen ob mindestens ein Tag und maximal vier ausgewählt wurden
     const nextPageAndTestTags: () => void = () => {
-        if (selectedTags.length > 0 && selectedTags.length < 5 ) {
+        if (selectedTags.length > 0 && selectedTags.length < 5) {
             setPage(page + 1);
         } else {
             message.error('Bitte wähle zwischen einem und vier Tags.');
@@ -214,7 +223,7 @@ function AddCourse(Props: ToggleProps) {
                             autoComplete="off">
                             <h4>Allgemeines</h4>
                             <hr />
-                            <Form.Item name="picture" label="Bild">
+                            {/*<Form.Item name="picture" label="Bild">
                                 <Upload
                                     name="avatar"
                                     listType="picture-card"
@@ -226,7 +235,7 @@ function AddCourse(Props: ToggleProps) {
                                 >
                                     {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
                                 </Upload>
-                            </Form.Item>
+                        </Form.Item>*/}
 
                             {!imageUrl && <>
                                 <Form.Item name="image" label="Bild-Url" rules={[{ required: true }]}>
@@ -287,7 +296,7 @@ function AddCourse(Props: ToggleProps) {
                                 <Checkbox defaultChecked={typeof newCourse?.certificate === 'boolean' ? newCourse.certificate : false} onChange={setCourseCertificate}></Checkbox>;                            </Form.Item>
                             <h4>Links</h4>
                             <hr />
-                            <Form.Item initialValue={newCourse?.link} name="website" label="Website" rules={[{required: true}]}>
+                            <Form.Item initialValue={newCourse?.link} name="website" label="Website" rules={[{ required: true }]}>
                                 <Input width={"100px"} onChange={setCourseLink} />
                             </Form.Item>
                         </Form> : page === 1 ?
@@ -324,7 +333,7 @@ function AddCourse(Props: ToggleProps) {
                                 </Flex>
                             </div>
                             : page === 2 ?
-                                <Flex vertical justify="center" gap={"2px"} style={{minWidth: "900px"}}>
+                                <Flex vertical justify="center" gap={"2px"} style={{ minWidth: "900px" }}>
 
                                     <h2>Vorschau: neues Weiterbildungsangebot</h2>
                                     {
