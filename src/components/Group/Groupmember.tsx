@@ -11,12 +11,7 @@ function Groupmember({currentGroup}: {currentGroup: groupmember.Group}) {
 
     const [groupmember, setGroupmember] = useState<groupmember.Groupmember[]>([]);
 
-    const [courses, setCourses] = useState<Course[]>(
-        [
-            {id:1,name:"Test",description:"Test",image:"",createdAt:"",provider:"", instructor:"",certificate:"",skilllevel:"",durationInHours:"", format:"", startDate:"", costFree:true, domainSpecific:true,link:"",ratingAmount:1, ratingAverage:2},
-            {id:2,name:"Test2",description:"Test2",image:"",createdAt:"",provider:"", instructor:"",certificate:"",skilllevel:"",durationInHours:"", format:"", startDate:"", costFree:true, domainSpecific:true,link:"",ratingAmount:1, ratingAverage:2}
-        ]
-    );
+    const [courses, setCourses] = useState<Course[]>([]);
 
     const [toBeDoneCourses, setToBeDoneCourses] = useState<Course[]>(
         [
@@ -26,7 +21,6 @@ function Groupmember({currentGroup}: {currentGroup: groupmember.Group}) {
 
     const [finishedCourses, setFinishedCourses] = useState<Course[]>(
         [
-            
             {id:2,name:"Test2",description:"Test2",image:"",createdAt:"",provider:"", instructor:"",certificate:"",skilllevel:"",durationInHours:"", format:"", startDate:"", costFree:true, domainSpecific:true,link:"",ratingAmount:1, ratingAverage:2}
         ]
     );
@@ -35,6 +29,17 @@ function Groupmember({currentGroup}: {currentGroup: groupmember.Group}) {
         fetchWrapper.get(`api/v1/groups/${currentGroup.groupId}/members`).then(res => {
             setGroupmember(res.payload);
         });
+        let courseIDs:number[]=[];
+        const finishedFetchingCourseIDs = fetchWrapper.get(`api/v1/groups/content/${currentGroup.groupId}`).then(res => {
+            courseIDs = res.payload.courseIds;
+        });
+        Promise.all([finishedFetchingCourseIDs]).then(()=>{
+            let courses:Course[]=[];
+            const finishedFetchingCourses = courseIDs.forEach(courseID => fetchWrapper.get(`api/v1/courses/${courseID}`).then(res => {
+                courses.push(res.payload);
+                setCourses(courses);
+            }));
+        })
     }, [currentGroup])
 
     return (
@@ -60,7 +65,7 @@ function Groupmember({currentGroup}: {currentGroup: groupmember.Group}) {
                     </div>
                     <div style={{margin:"0px 10px 0px 10px", display:"flex", flexDirection:"column"}}>
                         <h3>Zugewiesene Kurse</h3>
-                        <div style={{background:"grey", height:"fit-content", borderRadius:"10px", display:"flex", flexDirection:"row", overflow:"scroll", maxWidth:"fit-content"}} className="scrollbar">
+                        <div style={{background:"grey", height:"fit-content", borderRadius:"10px", display:"flex", flexDirection:"row", overflowX:"scroll", maxWidth:"fit-content"}} className="scrollbar">
                             {
                                 courses?
                                     courses.map((course: Course) => <Groupcourse course={course} admin={false}/>)
