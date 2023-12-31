@@ -44,12 +44,6 @@ function Groups() {
         fetchWrapper.get(`api/v1/groups`).then((res) => {
             setGroups(res.payload);
             setCurrentGroup(res.payload[0]);
-            // if (res.payload != null){
-            //     const newGroups = res.payload[0]
-            //     Promise.all([newGroups]).then(()=>{
-            //         setCurrentGroup(newGroups);
-            //     });
-            // }
         });
         fetchWrapper.get(`api/v1/groups/invitations`).then((res) => {
             setGroupInvitations(res.payload)
@@ -86,16 +80,21 @@ function Groups() {
             console.log(res.message)
         });
         Promise.all([removedGroup]).then(() => {
-            const fetchedGroups = handleFetchingOfAllGroups();
-            Promise.all([fetchedGroups]).then(() => {
-                setCurrentGroup(groups[0]);
-            })
+            handleFetchingOfAllGroups();
         })
     }
 
     const handleFetchingOfAllGroups = () => {
-        fetchWrapper.get(`api/v1/groups`).then((res) => {
+        let groups:Group[]=[];
+        const fetchedGroups = fetchWrapper.get(`api/v1/groups`).then((res) => {
             setGroups(res.payload);
+            groups = res.payload;
+        })
+        Promise.all([fetchedGroups]).then(() => {
+            if (groups.length == 0)
+                setCurrentGroup(undefined);
+            else
+                setCurrentGroup(groups[0]);
         })
     }
 
@@ -178,7 +177,7 @@ function Groups() {
                     currentGroup != undefined ?
                         currentGroup!.role == Role.Admin ?
                             <Groupadmin currentGroup={currentGroup!} removeCurrentGroup={removeCurrentGroup} handleFetchingOfAllGroups={handleFetchingOfAllGroups} />
-                            : <Groupmember currentGroup={currentGroup!} />
+                            : <Groupmember currentGroup={currentGroup!} fetchAllGroups={handleFetchingOfAllGroups} />
                         : <Empty style={{ marginTop: "100px", marginBottom: "100px", marginLeft: "75px" }} description={NO_GROUPS} />
                 }
 

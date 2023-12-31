@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { createRef, useEffect, useState } from "react";
 import * as groupmember from "../../interfaces" ;
 import { Avatar, Button } from "antd";
 import Groupuser from "./Groupuser";
@@ -6,8 +6,12 @@ import Groupcourse from "./Groupcourse";
 import { Course } from "../../interfaces";
 import "./GroupmemberCourses.css"
 import { fetchWrapper } from "../../api/helper";
+import { PersonDashFill } from "react-bootstrap-icons";
+import LeaveGroupModal from "./LeaveGroupModal";
 
-function Groupmember({currentGroup}: {currentGroup: groupmember.Group}) {
+function Groupmember({currentGroup, fetchAllGroups}: {currentGroup: groupmember.Group, fetchAllGroups: () => void}) {
+
+    const leaveGroupModal = createRef();
 
     const [groupmember, setGroupmember] = useState<groupmember.Groupmember[]>([]);
 
@@ -24,6 +28,15 @@ function Groupmember({currentGroup}: {currentGroup: groupmember.Group}) {
             {id:2,name:"Test2",description:"Test2",image:"",createdAt:"",provider:"", instructor:"",certificate:"",skilllevel:"",durationInHours:"", format:"", startDate:"", costFree:true, domainSpecific:true,link:"",ratingAmount:1, ratingAverage:2}
         ]
     );
+
+    const leaveGroup = () => {
+        const leftGroup = fetchWrapper.delete(`api/v1/groups/members/removes/${currentGroup.groupId}`).then(res => {
+            console.log(res.messages[0].message);
+        });
+        Promise.all([leftGroup]).then(()=>{
+            fetchAllGroups();
+        });
+    }
 
     useEffect(() => {
         fetchWrapper.get(`api/v1/groups/${currentGroup.groupId}/members`).then(res => {
@@ -44,9 +57,13 @@ function Groupmember({currentGroup}: {currentGroup: groupmember.Group}) {
 
     return (
         <div style={{background:"lightgrey", flex:"1", margin:"10px", borderRadius:"10px", display:"flex", flexDirection:"column", minWidth:"280px"}}>
-                    <div style={{margin:"0px 10px 0px 10px"}}>
-                        <h1>{currentGroup.groupName}</h1>
+                    <div style={{margin:"0px 12px 0px 10px"}}>
+                        <div style={{display:"flex", justifyContent:"space-between"}}>
+                            <h1>{currentGroup.groupName}</h1>
+                            <Button onClick={() => leaveGroupModal?.current?.openDialog()} style={{marginTop:"10px"}} type="text" shape="circle" size="large" icon={<PersonDashFill color="white" size={30}/>}></Button>
+                        </div>
                     </div>
+                    <LeaveGroupModal currentgroup={currentGroup} ref={leaveGroupModal} leaveGroup={leaveGroup}/>
                     <div style={{margin:"0px 10px 0px 10px"}}>
                         <p>{currentGroup.groupDescription}</p>
                     </div>
