@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Button, Checkbox, DatePicker, Flex, Form, Input, InputNumber, Select, Steps, Tag, Upload, message, Image, Card, Skeleton } from "antd";
+import { Button, Checkbox, DatePicker, Flex, Form, Input, InputNumber, Select, Steps, Tag, message, Image, Card, Skeleton } from "antd";
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
-import { RcFile } from "antd/es/upload";
 import TextArea from "antd/es/input/TextArea";
 import { Category, Course, Coursetag } from "../../interfaces";
 import { ValueType } from "rc-input-number";
@@ -39,7 +38,7 @@ function AddCourse(Props: ToggleProps) {
     const [categories, setCategories] = useState<Category[]>([]);
     const [tags, setTags] = useState<Coursetag[]>([]);
     const [selectedTags, setSelectedTags] = useState<Coursetag[]>([]);
-    const [messageApi, contextHolder] = message.useMessage();
+
 
     useEffect(() => {
         const tags = fetchWrapper.get('api/v1/tags').then(res => res.payload)
@@ -78,14 +77,6 @@ function AddCourse(Props: ToggleProps) {
     }
 
     const setCourseDuration: (value: ValueType | null) => void = (value) => {
-        // Duration cannot be negative
-        if (value !== null && Number(value) < 0) {
-            value = null;
-            messageApi.open({
-                type: 'error',
-                content: 'Dauer kann nicht negativ sein.',
-            });
-        }
         setNewCourse({ ...newCourse!, durationInHours: `${value} Stunden` });
     }
 
@@ -261,7 +252,7 @@ function AddCourse(Props: ToggleProps) {
                                 <DatePicker onChange={setCourseStartDate} />
                             </Form.Item>
                             <Form.Item name="duration" label="Dauer" >
-                                <InputNumber defaultValue={newCourse?.durationInHours} addonAfter="Stunden" onChange={setCourseDuration} />
+                                <InputNumber min={1} defaultValue={newCourse?.durationInHours?.split(" ")[0]} addonAfter="Stunden" onChange={setCourseDuration} />
                             </Form.Item>
                             <Form.Item name="price" label="Kostenfrei">
                                 <Checkbox defaultChecked={newCourse?.costFree} onChange={setCoursePrice}></Checkbox>;
