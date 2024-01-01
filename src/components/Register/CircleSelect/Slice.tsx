@@ -66,7 +66,7 @@ function Slice({radius, slice, sliceColor, arcCount, label, click, focused, isSe
                 <animated.path
                     key={i}
                     d={arc(slice) as string}
-                    fill={isSelected == i ? "#31f491" : sliceColor}
+                    fill={isSelected == i ? "#91caff" : sliceColor}
                     onMouseOver={() => onMouseOver(i)}
                     onMouseOut={() => onMouseOut()}
                     style={{...slicespring}}
@@ -109,7 +109,7 @@ function Slice({radius, slice, sliceColor, arcCount, label, click, focused, isSe
             <>
                 <animated.path
                     key={1}
-                    fill={isSelected != -1 ? "#31f491" : sliceColor}
+                    fill={isSelected != -1 ? "#61b2ff" : sliceColor}
                     d={arc(slice) as string}
                     onClick={handleClick}
                     style={{...slicespring}}

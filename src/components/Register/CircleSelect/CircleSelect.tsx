@@ -45,7 +45,7 @@ function CircleSelect({sliceCount = 6, arcCount = 3, selectCallback, selected}: 
         }
     }
 
-    const setoffset = (index) => {
+    const setoffset = (index: number) => {
         const offset = 2 * Math.PI / sliceCount;
         const angle = (index + 1) * offset;
         const x = Math.cos(angle);

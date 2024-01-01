@@ -1,9 +1,13 @@
 import {Button, Steps, Switch, Tag, Typography} from "antd";
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
-import CircleSelect from "../components/CircleSelect/CircleSelect.tsx";
+import CircleSelect from "../components/Register/CircleSelect/CircleSelect.tsx";
+import Deselect from "../components/Register/Deselect.tsx";
+import './Registration.css';
 
 function Registration() {
+
+    //TODO: move onlick to here and pass down to circleselect so that it can be reset by clicking outside of the circle
 
     const navigate = useNavigate();
 
@@ -35,7 +39,7 @@ function Registration() {
         const text = [];
         for (let i = 0; i < selected.length; i++) {
             if (selected[i] != -1) {
-                text.push(<Tag color="green" key={i}>{roles[i]} - {responsibilites[selected[i]]}</Tag>)
+                text.push(<Tag color="blue" key={i}>{roles[i]} - {responsibilites[selected[i]]}</Tag>)
             }
         }
         if (text.length == 0)
@@ -117,11 +121,34 @@ function Registration() {
                     {selectedToText()}
                     {digitallotse ? <Tag color="green">Digitallotse</Tag> : <></>}
                 </Typography.Text>
-                <div style={{display: "flex", flexDirection: "row"}}>
-                    <Typography.Title level={4} style={{margin: "5px 0px"}}>
-                        Grundlagen-Kompetenzen
-                    </Typography.Title>
-
+                <div className="competence-container">
+                    <div className="competence-inner">
+                        <Typography.Title level={5} style={{margin: "5px 0px"}}>
+                            Grundlagen-Kompetenzen
+                        </Typography.Title>
+                        <div className="deselect-grid">
+                            <Deselect title={"kompetenzkompetenzkompetenzkompetenz"}/>
+                            <Deselect title={"kompetenzkompetenzkompetenzkompetenz"}/>
+                            <Deselect title={"kompetenzkompetenzkompetenzkompetenz"}/>
+                            <Deselect title={"dsfggdsfdfg"}/>
+                            <Deselect/>
+                            <Deselect/>
+                        </div>
+                    </div>
+                    <div className="competence-inner">
+                        <Typography.Title level={5} style={{margin: "5px 0px"}}>
+                            Fortgeschrittene Kompetenzen
+                        </Typography.Title>
+                        <div className="deselect-grid">
+                            <Deselect/>
+                            <Deselect/>
+                            <Deselect/>
+                            <Deselect/>
+                            <Deselect/>
+                            <Deselect/>
+                            <Deselect/>
+                        </div>
+                    </div>
                 </div>
             </div>
         </>
@@ -172,7 +199,7 @@ function Registration() {
             justifyContent: "center",
             flexDirection: "column",
             gap: "10px",
-            margin: "auto",
+            margin: "10px auto",
             maxWidth: "1200px",
             padding: "10px 10px",
         }}>
@@ -182,6 +209,7 @@ function Registration() {
                 direction="horizontal"
                 current={current}
                 items={content.map((item) => item.step)}
+                style={{marginBottom: "10px", minWidth: "100%"}}
             />
             <div style={{display: "flex", flexDirection: "row", width: "100%"}}>
                 <div style={{
@@ -192,7 +220,7 @@ function Registration() {
                     display: "flex",
                     position: "relative",
                 }}>
-                    <div style={{marginBottom: "40px"}}>
+                    <div style={{marginBottom: "40px", width: "100%"}}>
                         {content[current].content}
                     </div>
                     <Button type="primary" onClick={next} shape="round"
