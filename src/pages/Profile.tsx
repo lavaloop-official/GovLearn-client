@@ -38,10 +38,18 @@ function Profile() {
     
     const handleOkMail = () => {
         fetchWrapper.put(`api/v1/users`,{email: newEmail, password: password, name: name}).then(res => {
+            console.log(res)
             if(res.payload == "Keine Änderung gefunden!"){
                 Modal.error({
                     centered: true,
                     title: "Ihre E-Mailadresse konnte nicht geändert werden!",
+                    content: 'Bitte geben Sie eine andere E-Mailadresse ein.',
+                });
+            }
+            else if(res.messages[0].message == "User exists already"){
+                Modal.error({
+                    centered: true,
+                    title: "E-Mailaddresse bereits vergeben!",
                     content: 'Bitte geben Sie eine andere E-Mailadresse ein.',
                 });
             }
