@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Button, Checkbox, DatePicker, Flex, Form, Input, InputNumber, Select, Steps, Tag, message, Image, Card, Skeleton } from "antd";
-import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import TextArea from "antd/es/input/TextArea";
 import { Category, Course, Coursetag } from "../../interfaces";
 import { ValueType } from "rc-input-number";
@@ -80,6 +79,14 @@ function AddCourse(Props: ToggleProps) {
         setNewCourse({ ...newCourse!, durationInHours: `${value} Stunden` });
     }
 
+    const setCourseInstructor: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+        setNewCourse({ ...newCourse!, instructor: event.target.value });
+    }
+
+    const setCourseProvider: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+        setNewCourse({ ...newCourse!, provider: event.target.value });
+    }
+
     const setCoursePrice: (e: CheckboxChangeEvent) => void = (e) => {
         setNewCourse({ ...newCourse!, costFree: e.target.checked });
     }
@@ -115,12 +122,12 @@ function AddCourse(Props: ToggleProps) {
         }
     }
 
-    const uploadButton = (
+    /*const uploadButton = (
         <div>
             {loading ? <LoadingOutlined /> : <PlusOutlined />}
             <div style={{ marginTop: 8 }}>Upload</div>
         </div>
-    );
+    );*/
 
     // Prüfen ob mindestens ein Tag und maximal vier ausgewählt wurden
     const nextPageAndTestTags: () => void = () => {
@@ -151,8 +158,8 @@ function AddCourse(Props: ToggleProps) {
             description: newCourse?.description || "",
             createdAt: new Date(),
             //globalen User-Namen einfügen
-            provider: "Test",
-            instructor: "Test",
+            provider: newCourse?.provider || "",
+            instructor: newCourse?.instructor || "",
             certificate: newCourse?.certificate || false,
             skilllevel: newCourse?.skilllevel || "",
             durationInHours: newCourse?.durationInHours || "",
@@ -237,7 +244,7 @@ function AddCourse(Props: ToggleProps) {
                                     }} />
                                 </Form.Item>
                                 <Flex justify="center">
-                                    {newCourse?.image ? <Image src={newCourse?.image} style={{ margin: "5px 0px 15px", border: "1px solid black", borderRadius: "25px" }} /> : <></>}
+                                    {newCourse?.image ? <Image src={newCourse?.image} style={{ margin: "5px 0px 15px", border: "1px solid black", borderRadius: "25px", width: "200px", height: "150px", objectFit: "contain" }} /> : <></>}
                                 </Flex>
                             </>}
                             <Form.Item initialValue={newCourse?.name} name="name" label="Name" rules={[{ required: true }]}>
@@ -253,6 +260,12 @@ function AddCourse(Props: ToggleProps) {
                             </Form.Item>
                             <Form.Item name="duration" label="Dauer" >
                                 <InputNumber min={1} defaultValue={newCourse?.durationInHours?.split(" ")[0]} addonAfter="Stunden" onChange={setCourseDuration} />
+                            </Form.Item>
+                            <Form.Item name="instructor" label="Dozent" >
+                                <Input width={"100px"} onChange={setCourseInstructor} />
+                            </Form.Item>
+                            <Form.Item name="provider" label="Anbieter" >
+                                <Input width={"100px"} onChange={setCourseProvider} />
                             </Form.Item>
                             <Form.Item name="price" label="Kostenfrei">
                                 <Checkbox defaultChecked={newCourse?.costFree} onChange={setCoursePrice}></Checkbox>;
