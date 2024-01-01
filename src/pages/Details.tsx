@@ -1,4 +1,4 @@
-import { Affix, Button, Card, Flex, Image, Rate, Skeleton } from "antd";
+import { Affix, Button, Card, Flex, Image, Rate } from "antd";
 import { useEffect, useState } from "react";
 import { ArrowLeftShort } from "react-bootstrap-icons";
 import Recommendation from "../components/Recommendation.tsx";
@@ -7,9 +7,13 @@ import { fetchWrapper } from "../api/helper.ts";
 import './Details.css';
 import { Course, Review } from "../interfaces.ts";
 import ReviewComp from "../components/Detail/ReviewComp.tsx";
+import { useNavigate } from "react-router-dom";
 import CourseInfo from "../components/Detail/CourseInfo.tsx";
 
 function Details() {
+
+    const navigate = useNavigate();
+
     const [course, setCourse] = useState<Course>({
         id: undefined,
         name: "",
@@ -31,25 +35,33 @@ function Details() {
     });
 
     const [relatedCourses, setRelatedCourses] = useState<Course[]>([]);
-    const [limit, setLimit] = useState<number>(10);
+    const [limit, setLimit] = useState<number>(5);
     const [offset, setOffset] = useState<number>(0);
     const [feedback, setFeedback] = useState<Review[]>([]);
+    const [noFeebackLeft, setNoFeedbackLeft] = useState<boolean>(false);
 
     useEffect(() => {
         const courseId = window.location.pathname.split('/').pop();
 
+
         fetchWrapper.get(`api/v1/courses/${courseId}`).then((res) => {
+            if (!res)
+                navigate('/404');
             setCourse(res.payload);
             document.title = res.payload.name;
         });
-        fetchWrapper.get(`api/v1/feedback/course/${courseId}?limit=${limit}&offset=${offset}`).then((res) => {
+        fetchWrapper.get(`api/v1/feedback/course/${courseId}?limit=5&offset=0`).then((res) => {
             setFeedback(res.payload);
+            setOffset(5);
+            if (res.payload.length < 5) {
+                setNoFeedbackLeft(true);
+            }
         });
         fetchWrapper.get(`api/v1/similar-courses/${courseId}/`).then((res) => {
             const filtered = res.payload.slice(0, 3);
             setRelatedCourses(filtered);
         });
-    }, []);
+    }, [navigate]);
 
     const onClickBackBtn = () => {
         history.back();
@@ -57,8 +69,12 @@ function Details() {
 
     const loadFeedback = () => {
         const courseId = window.location.pathname.split('/').pop();
-        fetchWrapper.get(`api/v1/feedback/course/${courseId}/limit/6/offset/${feedback.length}`).then((res) => {
+        fetchWrapper.get(`api/v1/feedback/course/${courseId}?limit=${limit}&offset=${offset}`).then((res) => {
             setFeedback([...feedback, ...res.payload]);
+            setOffset(offset + limit);
+            if (res.payload.length < limit) {
+                setNoFeedbackLeft(true);
+            }
         });
     }
 
@@ -100,14 +116,16 @@ function Details() {
                                 padding: "10px",
                             }}
                         >
-                            <CourseInfo course={course} />
+                            <CourseInfo course={course}></CourseInfo>
                             <div
                                 style={{
                                     background: "#d9d9d9",
                                     borderRadius: "20px",
                                     boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
                                     display: "flex",
-                                    marginBottom: "5px"
+                                    flexDirection: "column",
+                                    marginBottom: "5px",
+                                    marginTop: "5px",
                                 }}
                             >
                                 <Flex style={{ justifyContent: "space-between", width: "100%" }}>
@@ -135,7 +153,7 @@ function Details() {
                                         <Card className="antcard" style={{ justifyContent: "center" }}>keine Bewertungen
                                             vorhanden.</Card>
                                     )}
-                                    <Button type="primary" onClick={loadFeedback}>mehr Laden</Button>
+                                    {!noFeebackLeft && <Button type="primary" onClick={loadFeedback}>mehr Laden</Button>}
                                 </Flex>
                             </div>
                         </Flex>
