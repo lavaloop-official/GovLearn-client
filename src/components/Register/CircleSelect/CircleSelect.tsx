@@ -1,9 +1,9 @@
 import * as d3 from "d3";
 import Slice from "./Slice.tsx";
-import {useState} from "react";
-import {animated, useSpring} from "@react-spring/web";
+import { useState } from "react";
+import { animated, useSpring } from "@react-spring/web";
 
-function CircleSelect({sliceCount = 6, arcCount = 3, selectCallback, selected}: {
+function CircleSelect({ sliceCount = 6, arcCount = 3, selectCallback, selected }: {
     sliceCount?: number,
     arcCount?: number,
     selectCallback: (name: string) => void,
@@ -17,9 +17,9 @@ function CircleSelect({sliceCount = 6, arcCount = 3, selectCallback, selected}: 
     const label = ["Organisation", "Digitalisierung", "Informationstechnik", "Smart City", "Nicht-digital", "Personal"]
 
     const [focused, setFocused] = useState<number[]>(new Array(sliceCount).fill(0));
-    const [middle, setMiddle] = useState<{ x: number, y: number }>({x: 300, y: 300});
+    const [middle, setMiddle] = useState<{ x: number, y: number }>({ x: 300, y: 300 });
 
-    const anim = useSpring({transform: `translate(${middle.x},${middle.y})`})
+    const anim = useSpring({ transform: `translate(${middle.x},${middle.y})` })
 
     const handleClick = (index: string) => {
         if (!index.includes("-")) {
@@ -36,7 +36,7 @@ function CircleSelect({sliceCount = 6, arcCount = 3, selectCallback, selected}: 
 
     const resetCircle = () => {
         setFocused(new Array(sliceCount).fill(0));
-        setMiddle({x: 300, y: 300})
+        setMiddle({ x: 300, y: 300 })
     }
 
     const svghandleClick = (e) => {
@@ -50,12 +50,12 @@ function CircleSelect({sliceCount = 6, arcCount = 3, selectCallback, selected}: 
         const angle = (index + 1) * offset;
         const x = Math.cos(angle);
         const y = Math.sin(angle);
-        const newMiddle = {x: 300 + x * 200, y: 300 + y * 200}
+        const newMiddle = { x: 300 + x * 200, y: 300 + y * 200 }
         setMiddle(newMiddle);
     }
 
     return (
-        <svg height={600} width={600} style={{margin: "0 auto"}} className="pieSelect" onClick={svghandleClick}>
+        <svg height={600} width={600} style={{ margin: "0 auto" }} className="pieSelect" onClick={svghandleClick}>
             <animated.g {...anim}>
                 {pie.map((slice, index) => {
                     return (

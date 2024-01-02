@@ -1,10 +1,10 @@
-import {Button, Skeleton} from "antd";
+import { Button, Skeleton } from "antd";
 import Recommendation from "./Recommendation.tsx";
 import './RecomSlider.css'
 import 'react-multi-carousel/lib/styles.css';
-import {Course} from "../interfaces.ts";
-import {LeftOutlined, RightOutlined} from "@ant-design/icons";
-import React, {useCallback, useLayoutEffect, useRef, useState} from "react";
+import { Course } from "../interfaces.ts";
+import { LeftOutlined, RightOutlined } from "@ant-design/icons";
+import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
 
 /**
  * RecomSlider is a React component that displays a list of courses in a horizontally scrollable slider.
@@ -13,7 +13,7 @@ import React, {useCallback, useLayoutEffect, useRef, useState} from "react";
  * @param {string} title - The title of the slider.
  * @param {Course[]} data - The list of courses to be displayed in the slider.
  */
-function RecomSlider({title, data}: { title?: string, data?: Course[] }) {
+function RecomSlider({ title, data }: { title?: string, data?: Course[] }) {
 
     // State variables for managing the slider's position, dragging status, transition effect and maximum scrollable distance.
     const [translate, setTranslate] = useState(0);
@@ -125,16 +125,16 @@ function RecomSlider({title, data}: { title?: string, data?: Course[] }) {
             <div className="slider outer">
                 {
                     title ?
-                        <h1 style={{margin: "0 0 5px 0"}}>{title}</h1>
-                        : <Skeleton.Input active style={{margin: "0 0 5px 0"}}/>
+                        <h1 style={{ margin: "0 0 5px 0" }}>{title}</h1>
+                        : <Skeleton.Input active style={{ margin: "0 0 5px 0" }} />
                 }
 
                 <div onMouseDown={onmousedown}
-                     onMouseUp={onmouseup}
-                     onClickCapture={onclick}
-                     onMouseLeave={onmouseleave}
-                     className="slider inner"
-                     ref={ref}>
+                    onMouseUp={onmouseup}
+                    onClickCapture={onclick}
+                    onMouseLeave={onmouseleave}
+                    className="slider inner"
+                    ref={ref}>
                     {
                         data ?
                             data.map((item: Course) =>
@@ -144,27 +144,27 @@ function RecomSlider({title, data}: { title?: string, data?: Course[] }) {
                                             transform: `translate(${translate}px)`,
                                             transition: `${transition ? "all 0.2s ease-in-out" : ""}`
                                         }}
-                                        obj={item}/>
+                                        obj={item} />
                                 </div>
                             )
                             :
-                            <Recommendation/>
+                            <Recommendation />
                     }
                 </div>
                 <Button className="showmore right"
-                        type="text"
-                        icon={<RightOutlined/>}
-                        style={{display: `${Math.abs(translate) < max ? "block" : "none"}`}}
-                        onClick={
-                            () => navOnClick("r")
-                        }/>
+                    type="text"
+                    icon={<RightOutlined />}
+                    style={{ display: `${Math.abs(translate) < max ? "block" : "none"}` }}
+                    onClick={
+                        () => navOnClick("r")
+                    } />
                 <Button className="showmore left"
-                        type="text"
-                        icon={<LeftOutlined/>}
-                        style={{display: `${translate < 0 ? "block" : "none"}`}}
-                        onClick={() => {
-                            navOnClick("l");
-                        }}/>
+                    type="text"
+                    icon={<LeftOutlined />}
+                    style={{ display: `${translate < 0 ? "block" : "none"}` }}
+                    onClick={() => {
+                        navOnClick("l");
+                    }} />
             </div>
         </>
     );

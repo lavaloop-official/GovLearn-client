@@ -20,3 +20,13 @@
     flex-wrap: wrap;
     gap: 8px;
 }
+
+.intro-step{
+    min-width: 100px;
+}
+
+.vertical{
+    width: 1px;
+    height: 64px;
+    display: inline-block;
+}

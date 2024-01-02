@@ -1,9 +1,10 @@
-import {Button, Steps, Switch, Tag, Typography} from "antd";
-import {useState} from "react";
-import {useNavigate} from "react-router-dom";
+import { Button, Flex, Steps, Switch, Tag, Tooltip, Typography } from "antd";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import CircleSelect from "../components/Register/CircleSelect/CircleSelect.tsx";
 import Deselect from "../components/Register/Deselect.tsx";
 import './Registration.css';
+import { QuestionCircleOutlined, StarOutlined, TeamOutlined } from "@ant-design/icons";
 
 function Registration() {
 
@@ -47,64 +48,113 @@ function Registration() {
         return text;
     }
 
+    const digitalLotseInfoText =
+        <>
+            <p>Digitallotsen sind Ansprechpartner/-in und Impulsgeber/-in, die Veränderungsprozesse anregen, die Veränderungen aktiv mit der Belegschaft der Kommunalverwaltungen gestalten und bei Innovationen unterstützen.</p>
+            <a href="https://www.nsi-hsvn.de/digital-lotsen.html#:~:text=Die%20Digital%2DLotsen%20sind%20Ansprechpartner,gestalten%20und%20bei%20Innovationen%20unterst%C3%BCtzen.">Quelle</a>
+        </>
+
+    // TODO: add definitions
+    //TODO: add roles    
+    const AreaInfoText =
+        <>
+            <h4>Organisation</h4>
+            <p></p>
+            <h4>Digitalisierung</h4>
+            <p></p>
+            <h4>Informationstechnik</h4>
+            <p></p>
+            <h4>Smart City</h4>
+            <p></p>
+            <h4>Nicht-digital</h4>
+            <p></p>
+            <h4>Personal</h4>
+            <p></p>
+
+        </>
+
     const zero =
         <>
-            <div style={{display: "flex", flexDirection: "column", width: "100%", padding: "10px"}}>
-                <Typography.Title level={4} style={{margin: "5px 0px"}}>
-                    Herzlich willkommen bei GovLearn
+            <div style={{ display: "flex", flexDirection: "column", width: "100%", padding: "10px" }}>
+                <Typography.Title level={4} style={{ margin: "5px 0px" }}>
+                    Herzlich Willkommen bei GovLearn
                 </Typography.Title>
-                <Typography.Text>
-                    Ihrer Plattform für gezielte Weiterbildungen im öffentlichen Dienst. Wir freuen uns, Sie als neues
-                    Mitglied in unserer wachsenden Gemeinschaft begrüßen zu dürfen. Um Ihnen bestmögliche Empfehlungen
-                    bieten zu können, möchten wir Sie durch den einfachen Registrierungsprozess führen.
-                    <br/>
-                    1. Rolle wählen:
-                    Nach erfolgreicher Registrierung werden Sie gebeten, Ihre aktuelle Rolle im öffentlichen Dienst
-                    auszuwählen. Ob Sie in der Verwaltung, im Finanzwesen oder in der Rechtsabteilung tätig sind –
-                    wählen Sie die Rolle, die am besten Ihre beruflichen Aufgaben widerspiegelt.
-                    <br/>
-                    2. Kompetenzen definieren:
-                    Nachdem Sie Ihre Rolle ausgewählt haben, geht es darum, Ihre spezifischen Kompetenzen genauer zu
-                    beschreiben. Geben Sie an, welche Fähigkeiten und Kenntnisse Sie in Ihrer beruflichen Tätigkeit
-                    auszeichnen. Je präziser Sie diese Informationen eingeben, desto besser können wir Ihnen
-                    personalisierte Weiterbildungsempfehlungen präsentieren.
-                </Typography.Text>
+                Ihrer Plattform für gezielte Weiterbildungen im öffentlichen Dienst. Wir freuen uns, Sie als neues
+                Mitglied in unserer wachsenden Gemeinschaft begrüßen zu dürfen. Um Ihnen bestmögliche Empfehlungen
+                bieten zu können, möchten wir Sie durch den einfachen Registrierungsprozess führen.
+                <br />
+                <Flex vertical style={{ marginTop: "10px" }}>
+                    <Flex align="center">
+                        <Flex className="intro-step" vertical justify="center" align="center">
+                            <TeamOutlined style={{ fontSize: "64px" }} />
+                            <h5 style={{ margin: "0" }}>1. Rolle(n) wählen</h5>
+                        </Flex>
+                        <hr className="vertical"></hr>
+                        <p>
+                            Nach erfolgreicher Registrierung werden Sie gebeten, Ihre aktuelle Rolle im öffentlichen Dienst
+                            auszuwählen. Ob Sie in der Verwaltung, im Finanzwesen oder in der Rechtsabteilung tätig sind –
+                            wählen Sie die Rolle, die am besten Ihre beruflichen Aufgaben widerspiegelt.
+                        </p>
+                    </Flex>
+                    <br />
+                    <Flex align="center">
+                        <Flex className="intro-step" vertical justify="center" align="center">
+                            <StarOutlined style={{ fontSize: "64px" }} />
+                            <h5 style={{ margin: "0" }}>2. Kompetenzen - definieren</h5>
+                        </Flex>
+                        <hr className="vertical"></hr>
+                        <p>
+                            Nachdem Sie Ihre Rolle ausgewählt haben, geht es darum, Ihre spezifischen Kompetenzen genauer zu
+                            beschreiben. Geben Sie an, welche Fähigkeiten und Kenntnisse Sie in Ihrer beruflichen Tätigkeit
+                            auszeichnen. Je präziser Sie diese Informationen eingeben, desto besser können wir Ihnen
+                            personalisierte Weiterbildungsempfehlungen präsentieren.
+                        </p>
+                    </Flex>
+                </Flex>
             </div>
         </>
 
     const first =
         <>
-            <div style={{display: "flex", flexDirection: "column", width: "100%", padding: "10px"}}>
-                <Typography.Title level={3} style={{margin: "0"}}>
-                    Rollenauswahl
-                </Typography.Title>
+            <div style={{ display: "flex", flexDirection: "column", width: "100%", padding: "10px" }}>
+                <Flex justify="space-between">
+                    <Typography.Title level={3} style={{ margin: "0" }}>
+                        Rollenauswahl
+                    </Typography.Title>
+                    <Tooltip placement="leftBottom" title={AreaInfoText} style={{ marginRight: "10px" }}>
+                        <QuestionCircleOutlined style={{ fontSize: "24px" }} />
+                    </Tooltip>
+                </Flex>
                 <Typography.Text>
                     Wählen Sie eine oder mehrere Rollen und den zugehörigen Verantwortungsbereich aus.
                 </Typography.Text>
-                <div style={{display: "flex", flexDirection: "row"}}>
-                    <div style={{display: "flex", flexDirection: "column", margin: "0 auto"}}>
-                        <CircleSelect selectCallback={selectCallback} selected={selected}/>
+                <div style={{ display: "flex", flexDirection: "row" }}>
+                    <div style={{ display: "flex", flexDirection: "column", margin: "0 auto" }}>
+                        <CircleSelect selectCallback={selectCallback} selected={selected} />
                     </div>
-                    <div style={{display: "flex", flexDirection: "column", marginTop: "20px"}}>
-                        <div style={{minHeight: "160px"}}>
-                            <Typography.Title level={4} style={{margin: "5px 0px"}}>
+                    <div style={{ display: "flex", flexDirection: "column", marginTop: "20px" }}>
+                        <div style={{ minHeight: "160px" }}>
+                            <Typography.Title level={4} style={{ margin: "5px 0px" }}>
                                 Ausgewählte Rollen:
                             </Typography.Title>
                             <Typography.Text>
                                 {selectedToText()}
                             </Typography.Text>
                         </div>
-                        <Typography.Title level={3} style={{margin: "0"}}>
+                        <Typography.Title level={3} style={{ margin: "0" }}>
                             Zusätzliche Anforderungen
                         </Typography.Title>
                         <Typography.Text>
-                            Ich benötige Kompetenzen in meiner Funktion als Digitallotse
+                            Ich benötige Kompetenzen in meiner Funktion als <b>Digitallotse</b>
+                            <Tooltip placement="leftBottom" title={digitalLotseInfoText} >
+                                <QuestionCircleOutlined />
+                            </Tooltip>
                         </Typography.Text>
                         <div>
                             <Switch checkedChildren="Ja" unCheckedChildren="Nein" defaultChecked={digitallotse}
-                                    onClick={() => {
-                                        setDigitallotse(digitallotse => !digitallotse)
-                                    }}/>
+                                onClick={() => {
+                                    setDigitallotse(digitallotse => !digitallotse)
+                                }} />
                         </div>
                     </div>
                 </div>
@@ -113,8 +163,8 @@ function Registration() {
 
     const second =
         <>
-            <div style={{display: "flex", flexDirection: "column", width: "100%", padding: "10px"}}>
-                <Typography.Title level={4} style={{margin: "5px 0px"}}>
+            <div style={{ display: "flex", flexDirection: "column", width: "100%", padding: "10px" }}>
+                <Typography.Title level={4} style={{ margin: "5px 0px" }}>
                     Ausgewählte Rollen:
                 </Typography.Title>
                 <Typography.Text>
@@ -123,30 +173,30 @@ function Registration() {
                 </Typography.Text>
                 <div className="competence-container">
                     <div className="competence-inner">
-                        <Typography.Title level={5} style={{margin: "5px 0px"}}>
+                        <Typography.Title level={5} style={{ margin: "5px 0px" }}>
                             Grundlagen-Kompetenzen
                         </Typography.Title>
                         <div className="deselect-grid">
-                            <Deselect title={"kompetenzkompetenzkompetenzkompetenz"}/>
-                            <Deselect title={"kompetenzkompetenzkompetenzkompetenz"}/>
-                            <Deselect title={"kompetenzkompetenzkompetenzkompetenz"}/>
-                            <Deselect title={"dsfggdsfdfg"}/>
-                            <Deselect/>
-                            <Deselect/>
+                            <Deselect title={"kompetenzkompetenzkompetenzkompetenz"} />
+                            <Deselect title={"kompetenzkompetenzkompetenzkompetenz"} />
+                            <Deselect title={"kompetenzkompetenzkompetenzkompetenz"} />
+                            <Deselect title={"dsfggdsfdfg"} />
+                            <Deselect />
+                            <Deselect />
                         </div>
                     </div>
                     <div className="competence-inner">
-                        <Typography.Title level={5} style={{margin: "5px 0px"}}>
+                        <Typography.Title level={5} style={{ margin: "5px 0px" }}>
                             Fortgeschrittene Kompetenzen
                         </Typography.Title>
                         <div className="deselect-grid">
-                            <Deselect/>
-                            <Deselect/>
-                            <Deselect/>
-                            <Deselect/>
-                            <Deselect/>
-                            <Deselect/>
-                            <Deselect/>
+                            <Deselect />
+                            <Deselect />
+                            <Deselect />
+                            <Deselect />
+                            <Deselect />
+                            <Deselect />
+                            <Deselect />
                         </div>
                     </div>
                 </div>
@@ -209,9 +259,9 @@ function Registration() {
                 direction="horizontal"
                 current={current}
                 items={content.map((item) => item.step)}
-                style={{marginBottom: "10px", minWidth: "100%"}}
+                style={{ marginBottom: "10px", minWidth: "100%" }}
             />
-            <div style={{display: "flex", flexDirection: "row", width: "100%"}}>
+            <div style={{ display: "flex", flexDirection: "row", width: "100%" }}>
                 <div style={{
                     width: "100%",
                     background: "#d9d9d9",
@@ -220,20 +270,20 @@ function Registration() {
                     display: "flex",
                     position: "relative",
                 }}>
-                    <div style={{marginBottom: "40px", width: "100%"}}>
+                    <div style={{ marginBottom: "40px", width: "100%" }}>
                         {content[current].content}
                     </div>
                     <Button type="primary" onClick={next} shape="round"
-                            style={{position: "absolute", bottom: "10px", right: "10px"}}>
+                        style={{ position: "absolute", bottom: "10px", right: "10px" }}>
                         {current == content.length - 1 ? "Fertig" : "Weiter"}
                     </Button>
                     <Button onClick={prev} shape="round"
-                            style={{
-                                position: "absolute",
-                                bottom: "10px",
-                                left: "10px",
-                                display: current == 0 ? "none" : ""
-                            }}>
+                        style={{
+                            position: "absolute",
+                            bottom: "10px",
+                            left: "10px",
+                            display: current == 0 ? "none" : ""
+                        }}>
                         Zurück
                     </Button>
                 </div>
