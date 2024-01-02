@@ -51,7 +51,7 @@ function Registration() {
     const digitalLotseInfoText =
         <>
             <p>Digitallotsen sind Ansprechpartner/-in und Impulsgeber/-in, die Veränderungsprozesse anregen, die Veränderungen aktiv mit der Belegschaft der Kommunalverwaltungen gestalten und bei Innovationen unterstützen.</p>
-            <a href="https://www.nsi-hsvn.de/digital-lotsen.html#:~:text=Die%20Digital%2DLotsen%20sind%20Ansprechpartner,gestalten%20und%20bei%20Innovationen%20unterst%C3%BCtzen.">Quelle</a>
+            <a target="_blank" rel="noopener noreferrer" href="https://www.nsi-hsvn.de/digital-lotsen.html#:~:text=Die%20Digital%2DLotsen%20sind%20Ansprechpartner,gestalten%20und%20bei%20Innovationen%20unterst%C3%BCtzen.">Quelle</a>
         </>
 
     // TODO: add definitions
