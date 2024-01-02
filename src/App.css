@@ -6,8 +6,9 @@ body {
     filter: contrast(1.3);
 }
 
-
-
+main {
+    background: #fdfdfd;
+}
 
 .ant-layout-header {
     display: flex;
@@ -22,4 +23,5 @@ body {
 
 .ant-layout-footer {
     text-align: center;
+    background: #fdfdfd;
 }
