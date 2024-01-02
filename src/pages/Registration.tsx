@@ -26,6 +26,10 @@ function Registration() {
         setCompetences(["Datenschutz", "Excel", "Word", "Powerpoint", "Führung", "Projektmanagement"]);
     }, []);
 
+    useEffect(() => {
+        document.title = "GovLearn - Registrierung";
+    }, []);
+
     const selectCallback = (index: string) => {
         const slice = parseInt(index.charAt(0));
         const arc = parseInt(index.charAt(2));
