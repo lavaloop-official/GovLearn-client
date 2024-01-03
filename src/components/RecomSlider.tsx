@@ -1,7 +1,6 @@
 import { Button, Skeleton } from "antd";
 import Recommendation from "./Recommendation.tsx";
 import './RecomSlider.css'
-import 'react-multi-carousel/lib/styles.css';
 import { Course } from "../interfaces.ts";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
