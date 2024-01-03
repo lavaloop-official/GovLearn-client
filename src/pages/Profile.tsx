@@ -1,12 +1,13 @@
 import {ChangeEventHandler, useEffect, useState} from "react";
-import {UserOutlined} from "@ant-design/icons";
-import {Skeleton, Button, Modal, Switch, Input, Form, Divider} from "antd";
+import {LockOutlined, UserOutlined} from "@ant-design/icons";
+import {Skeleton, Button, Modal, Switch, Input, Form, Divider, Alert} from "antd";
 import './Profile.css';
 import edit from '../assets/edit.png';
-import { EMAIL_WRONG_FORMAT, ENTER_EMAIL } from "../constants/de.ts";
+import { EMAIL_WRONG_FORMAT, ENTER_EMAIL, ENTER_PASSWORD, REENTER_PASSWORD } from "../constants/de.ts";
 import {fetchWrapper} from "../api/helper";
 import { Key } from "react-bootstrap-icons";
 import {setToken} from "../api/auth.ts";
+import Typography from "antd/es/typography/Typography";
 
 function Profile() {
 
@@ -17,6 +18,7 @@ function Profile() {
     const [newName, setNewName] = useState('')
     const [oldPassword, setOldPassword] = useState('')
     const [newPassword, setNewPassword] = useState('')
+    const [submitPassword, setSubmitPassword] = useState(true)
 
     useEffect(() => {
         fetchWrapper.get('api/v1/users').then(res => {
@@ -165,6 +167,7 @@ function Profile() {
     
     const handleOkNewPassword = () => {
         fetchWrapper.put(`api/v1/users/password`,{email: email, password: newPassword, name: name}).then(res => {
+            console.log(newPassword);
             if(res.payload == "Gleiches Passwort!"){
                 Modal.error({
                     centered: true,
@@ -196,6 +199,8 @@ function Profile() {
     const onChange = (checked: boolean) => {
         console.log(`switch to ${checked}`);
     };
+    
+    const [form] = Form.useForm();
 
     return (
         <div style={{width:"100%", display:"flex", justifyContent:"center"}}>
@@ -268,13 +273,13 @@ function Profile() {
                         <Modal title="Passwort ändern" open={isModalOldPasswordOpen} onOk={handleOkOldPassword} onCancel={handleCancelOldPassword}                 
                         footer={[
                             <Button key="back" onClick={handleCancelOldPassword}>
-                            Abbrechen
+                                Abbrechen
                             </Button>,
                             <Button
-                            type="primary"
-                            onClick={handleOkOldPassword}
+                                type="primary"
+                                onClick={handleOkOldPassword}
                             >
-                            Weiter
+                                Weiter
                             </Button>,
                         ]}>
                             <p>Geben Sie hier bitte Ihr altes Passwort ein.</p>
@@ -286,15 +291,53 @@ function Profile() {
                                     Abbrechen
                                 </Button>,
                                 <Button
+                                    htmlType="submit"
                                     type="primary"
                                     onClick={handleOkNewPassword}
+                                    disabled={submitPassword}
                                 >
                                     Passwort ändern
                                 </Button>,
-                                ]}
+                            ]}
                         >
                             <p>Geben Sie hier bitte Ihr neues Passwort ein.</p>
-                            <Input.Password prefix={<Key/>} placeholder="Passwort" onChange={onChangeNewPassword} hidden={true}/>
+                            <Form
+                                form={form}
+                                name="dependencies"
+                                autoComplete="off"
+                                style={{ maxWidth: 600 }}
+                                layout="vertical"
+                                >
+                                
+                                <Form.Item label="Passwort" name="password" rules={[{ required: true , message: ENTER_PASSWORD}]}>
+                                    <Input.Password placeholder="Passwort eingeben"/>
+                                </Form.Item>
+
+                                {/* Field */}
+                                <Form.Item
+                                    label="Passwort wiederholen"
+                                    name="password2"
+                                    dependencies={['password']}
+                                    rules={[
+                                    {
+                                        required: true, message: REENTER_PASSWORD
+                                    },
+                                    ({ getFieldValue }) => ({
+                                        validator(_, value) {
+                                        if (!value || getFieldValue('password') === value) {
+                                            setNewPassword(value);
+                                            setSubmitPassword(false);
+                                            return Promise.resolve();
+                                        }
+                                        setSubmitPassword(true);
+                                        return Promise.reject(new Error('Die Passwörter stimmen nicht überein!'));
+                                        },
+                                    }),
+                                    ]}
+                                >
+                                    <Input.Password placeholder="Passwort eingeben"/>
+                                </Form.Item>
+                                </Form>
                         </Modal>
                     </div>
                 </div>
