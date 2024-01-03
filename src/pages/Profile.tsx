@@ -39,7 +39,6 @@ function Profile() {
 
     const handleOkMail = () => {
         fetchWrapper.put(`api/v1/users`, {email: newEmail, password: password, name: name}).then(res => {
-            console.log(res)
             if (res.payload == "Keine Änderung gefunden!") {
                 Modal.error({
                     centered: true,
@@ -129,7 +128,6 @@ function Profile() {
 
     const handleOkOldPassword = () => {
         fetchWrapper.post(`api/v1/users/auth-token`, {email: email, password: oldPassword, name: name}).then(res => {
-            console.log(res);
             if (res.messages[0].message == "Password wrong") {
                 Modal.error({
                     centered: true,
@@ -160,7 +158,6 @@ function Profile() {
 
     const handleOkNewPassword = () => {
         fetchWrapper.put(`api/v1/users/password`, {email: email, password: newPassword, name: name}).then(res => {
-            console.log(newPassword);
             if (res.payload == "Gleiches Passwort!") {
                 Modal.error({
                     centered: true,
