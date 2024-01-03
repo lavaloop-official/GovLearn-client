@@ -1,21 +1,19 @@
-import {Button, Modal, Rate, Skeleton, Typography} from "antd";
+import {Button, Rate, Skeleton, Typography} from "antd";
 import {Course} from "../interfaces.ts";
 import Bookmark from "./Bookmark.tsx";
 import {useNavigate} from "react-router-dom";
 import './SearchComponent.css';
-import {DeleteOutlined, EditOutlined, ExclamationCircleFilled} from "@ant-design/icons";
-import {fetchWrapper} from "../api/helper.ts";
-import {DELETE_COURSE} from "../constants/de.ts";
+import {DeleteOutlined, EditOutlined} from "@ant-design/icons";
+
 
 /**
  * SearchComponent is a React component that displays a course in a search result format.
  * The component supports editing and deleting the course if the editable prop is true.
  *
- * @param {Course} obj - The course to be displayed.
- * @param {boolean} editable - Whether the course can be edited or deleted.
+ * @param Course obj - The course to be displayed.
+ * @param onDelete callback for deleting the course
  */
-function SearchComponent({obj, editable}: { obj?: Course, editable?: boolean }) {
-    const {confirm} = Modal;
+function SearchComponent({obj, editable = false, onDelete = () => {}}: { obj?: Course, editable?: boolean, onDelete?: (id: number | undefined) => void}) {
 
     const navigate = useNavigate();
 
@@ -28,30 +26,11 @@ function SearchComponent({obj, editable}: { obj?: Course, editable?: boolean }) 
             navigate(`/detail/${obj.id}`, {state: {obj: obj}});
     }
 
+    // TODO: implement handleEdit
     function handleEdit() {
         throw new Error("Function not implemented.");
     }
 
-    // Handles the delete button click event, confirming the deletion before sending a delete request to the server.
-    function handleDelete() {
-        confirm({
-            title: DELETE_COURSE,
-            icon: <ExclamationCircleFilled/>,
-            content: 'Dieser Kurs wird unwiderruflich gelöscht.',
-            okText: 'Ja',
-            okType: 'danger',
-            cancelText: 'Nein',
-            onOk() {
-                fetchWrapper.delete('api/v1/courses/' + obj?.id).then((res) => {
-                    if (res.success) {
-                        window.location.reload();
-                    }
-                });
-            }
-        });
-    }
-
-    // TODO: Integrate Rating
     return (
         <a>
             <div className="search-outer" onClick={handleClick}>
@@ -102,7 +81,7 @@ function SearchComponent({obj, editable}: { obj?: Course, editable?: boolean }) 
                                     icon={<DeleteOutlined/>}
                                     size="large"
                                     type={"primary"}
-                                    onClick={handleDelete}/>
+                                    onClick={() => onDelete(obj?.id)}/>
                         </div>
                         : <></>
                 }
