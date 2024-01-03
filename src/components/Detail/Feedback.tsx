@@ -50,13 +50,13 @@ function Feedback({ review }: { review: Review }) {
         <>
             <Card className="antcard feedback" style={{ paddingBottom: "0px", paddingTop: "0px" }}>
                 <div style={{ height: "120px" }}>
-                    <Flex style={{ width: "100%" }} justify="space-between">
+                    <Flex style={{ width: "100%" }} justify="flex-start">
                         <Flex vertical gap="small" style={{ minWidth: "140px" }}>
                             <p style={{ fontWeight: "bold" }}> {review.username}</p>
                             <Rate disabled value={review.rating} />
                         </Flex>
                         <hr />
-                        <Flex vertical align="flex-start">
+                        <Flex vertical align="flex-start" style={{ marginLeft: "5px", marginRight: "auto" }}>
                             <p style={{ fontWeight: "bold", marginBottom: "0px" }}>{review.title}</p>
                             <p>{review.description}</p>
                         </Flex>
