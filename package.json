@@ -11,8 +11,12 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.2.6",
+    "@react-spring/web": "^9.7.3",
     "@reduxjs/toolkit": "^1.9.7",
+    "@types/d3": "^7.4.3",
     "antd": "^5.10.2",
+    "d3": "^7.8.5",
+    "d3-transition": "^3.0.1",
     "react": "^18.2.0",
     "react-bootstrap-icons": "^1.10.3",
     "react-dom": "^18.2.0",

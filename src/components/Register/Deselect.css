@@ -1,0 +1,45 @@
+.deselect {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #e6f4ff;
+    height: 32px;
+    width: 180px;
+    border: 1px solid #91caff;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: box-shadow 0.3s ease;
+    padding: 0 10px; /* Add padding to the left and right of the element */
+}
+
+.deselect-inner {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.selected {
+    background: #e6f4ff;
+    border: 1px solid #91caff;
+}
+
+.not-selected {
+    background: #f9f9f9;
+    border: 1px solid #dbdbdb;
+}
+
+.selected:hover {
+    box-shadow: 0 0 10px 2px rgba(145, 202, 255, 0.5);
+}
+
+.not-selected:hover {
+    box-shadow: 0 0 10px 2px rgba(219, 219, 219, 0.5);
+}
+
+.deselect-inner span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 140px;
+}
