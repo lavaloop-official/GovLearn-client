@@ -1,28 +1,23 @@
-import {useEffect, useState} from "react";
-import {fetchWrapper} from "../api/helper";
-import {Course} from "../interfaces";
-import SearchComponent from "../components/SearchComponent";
 import {Button, Flex, Modal} from "antd";
 import {ExclamationCircleFilled, FileAddOutlined} from "@ant-design/icons";
-import AddCourse from "../components/Dashboard/AddCourse";
-import {Route, Routes, useNavigate} from "react-router-dom";
-import NotFound from "./NotFound.tsx";
-import DashOverview from "../components/Dashboard/DashOverview.tsx";
+import SearchComponent from "../SearchComponent.tsx";
+import {useNavigate} from "react-router-dom";
+import {useEffect, useState} from "react";
+import {fetchWrapper} from "../../api/helper.ts";
+import {Course} from "../../interfaces.ts";
 
-function Dashboard() {
-    // TODO: update state on delete of SearchComponent
-    // TODO: implement edit of SearchComponent
+function DashOverview() {
+    const {confirm} = Modal;
+
     const navigate = useNavigate();
 
-    const [mode, setMode] = useState<"view" | "edit" | "add">("view")
     const [providedCourses, setProvidedCourses] = useState<Course[]>([])
-    const {confirm} = Modal;
 
     useEffect(() => {
         fetchWrapper.get("api/v1/creators/courses").then((res) => {
             setProvidedCourses(res.payload)
         })
-    }, [mode])
+    }, [])
 
     function handleDelete(id: number | undefined) {
         confirm({
@@ -42,7 +37,7 @@ function Dashboard() {
         });
     }
 
-    const overview = (
+    return (
         <>
             <div style={{
                 maxWidth: "1200px",
@@ -66,23 +61,7 @@ function Dashboard() {
                 }
             </div>
         </>
-    )
-
-    return (
-        <div style={{
-            zIndex: "1",
-            display: "flex",
-            justifyContent: "center",
-            flexDirection: "column",
-            gap: "10px"
-        }}>
-            <Routes>
-                <Route path="/" element={<DashOverview/>}/>
-                <Route path="add/*" element={<AddCourse/>}/>
-                <Route path="*" element={<NotFound/>}/>
-            </Routes>
-        </div>
     );
 }
 
-export default Dashboard;
+export default DashOverview;

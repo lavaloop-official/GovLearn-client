@@ -25,7 +25,7 @@ function CustomHeader() {
     const [name, setName] = useState('')
 
     useEffect(() => {
-        if (location.pathname.includes("discover") || location.pathname.includes("detail") || location.pathname.includes("profile") || location.pathname.includes("searching") || location.pathname.includes("bookmarks")) {
+        if (location.pathname.includes("discover") || (location.pathname.includes("detail") && !location.pathname.includes("dashboard")) || location.pathname.includes("profile") || location.pathname.includes("searching") || location.pathname.includes("bookmarks")) {
             setSubHeader(<SubHeader/>)
         } else {
             setSubHeader(<></>)
