@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from "react";
+import dayjs from 'dayjs';
 import {Button, Checkbox, DatePicker, Flex, Form, Image, Input, InputNumber, message, Select, Steps, Tag} from "antd";
 import TextArea from "antd/es/input/TextArea";
 import {Category, Coursetag, CreateCourse} from "../../interfaces";
 import {fetchWrapper} from "../../api/helper";
 import CourseInfo from "../Detail/CourseInfo";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 
 /*const getBase64 = (img: RcFile, callback: (url: string) => void) => {
     const reader = new FileReader();
@@ -26,16 +27,19 @@ const beforeUpload = (file: RcFile) => {
 
 function AddCourse() {
     const navigate = useNavigate();
+    const location = useLocation();
 
     const [current, setCurrent] = useState(0);
 
-    //const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const [imageUrl, setImageUrl] = useState<string>();
     const [newCourse, setNewCourse] = useState<CreateCourse>();
     const [categories, setCategories] = useState<Category[]>([]);
     const [tags, setTags] = useState<Coursetag[]>([]);
     const [selectedTags, setSelectedTags] = useState<Coursetag[]>([]);
+
+    const [oldData, setOldData] = useState<{ id: number, tags: Coursetag[] }>({id: -1, tags: []});
 
     const [form] = Form.useForm();
 
@@ -47,6 +51,12 @@ function AddCourse() {
             setCategories(categories);
             setTags(tags);
         });
+        if (location.state?.obj) {
+            fetchWrapper.get('api/v1/tags/courses/' + location.state?.obj.id).then(res => {
+                setSelectedTags(res.payload);
+                setOldData({id: location.state?.obj.id, tags: res.payload});
+            })
+        }
     }, [])
 
     //TODO: add Image attribute to Course to store images in database
@@ -64,11 +74,11 @@ function AddCourse() {
         }
     };*/
 
-    const onTagSelection: React.MouseEventHandler<HTMLSpanElement> = (event) => {
-        const tag = tags.find((tag) => tag.name === event.currentTarget.innerText);
+    const onTagSelection = (id: number) => {
+        const tag = tags.find((tag) => tag.id == id);
         if (tag) {
-            if (selectedTags.includes(tag)) {
-                setSelectedTags(selectedTags.filter((selectedTag) => selectedTag !== tag));
+            if (selectedTags.find(selTags => selTags.id == tag.id)) {
+                setSelectedTags(selectedTags.filter((selectedTag) => selectedTag.id !== tag.id));
             } else {
                 setSelectedTags([...selectedTags, tag]);
             }
@@ -83,19 +93,53 @@ function AddCourse() {
     );*/
 
     const uploadCourse = () => {
-        fetchWrapper.post('api/v1/courses', {...newCourse}).then((res) => {
-            const course = res.payload;
-            const requests: Promise<any>[] = [];
-            selectedTags.forEach((tag) => {
-                requests.push(fetchWrapper.post('api/v1/tags/courses', {
-                    courseId: course.id,
-                    tagId: tag.id,
-                }))
+        const requests: Promise<any>[] = [];
+        setLoading(true)
+        if (oldData.id != -1) {
+            fetchWrapper.put('api/v1/courses/', {...newCourse, id: oldData.id}).then(() => {
+                selectedTags.forEach((tag) => {
+                    requests.push(fetchWrapper.post('api/v1/tags/courses', {
+                        courseId: oldData.id,
+                        tagId: tag.id,
+                    }))
+                })
+                oldData.tags.forEach((tag) => {
+                    if (!selectedTags.find(selTag => selTag.id == tag.id)) {
+                        requests.push(fetchWrapper.delete('api/v1/tags/courses', {
+                            courseId: oldData.id,
+                            tagId: tag.id,
+                        }))
+                    }
+                })
+
             })
-            Promise.all(requests).then(() => {
-                navigate("/dashboard/");
+        } else {
+            fetchWrapper.post('api/v1/courses', {...newCourse}).then((res) => {
+                const course = res.payload;
+                selectedTags.forEach((tag) => {
+                    requests.push(fetchWrapper.post('api/v1/tags/courses', {
+                        courseId: course.id,
+                        tagId: tag.id,
+                    }))
+                })
             })
+        }
+        Promise.all(requests).then(() => {
+            setLoading(false);
+            navigate("/dashboard/");
         })
+    }
+
+    const getInitialValues = () => {
+        if (location.state?.obj) {
+            return {
+                ...location.state?.obj,
+                createdAt: dayjs(location.state?.obj.createdAt),
+                startDate: dayjs(location.state?.obj.startDate),
+            }
+        } else {
+            return {}
+        }
     }
 
     const first = (
@@ -106,7 +150,8 @@ function AddCourse() {
                 labelCol={{span: 8}}
                 wrapperCol={{span: 16}}
                 style={{minWidth: 600, maxWidth: 900}}
-                autoComplete="off">
+                autoComplete="off"
+                initialValues={getInitialValues()}>
                 <h4>Allgemeines</h4>
                 <hr/>
                 {/*<Form.Item name="picture" label="Bild">
@@ -226,7 +271,7 @@ function AddCourse() {
                                                 return (
                                                     <div key={tag.id}>
                                                         {
-                                                            selectedTags.includes(tag) ?
+                                                            selectedTags.find(selTag => selTag.id == tag.id) ?
                                                                 <Tag style={{
                                                                     background: "cornflowerblue",
                                                                     color: "white",
@@ -234,14 +279,16 @@ function AddCourse() {
                                                                     border: "1px solid blue",
                                                                     cursor: "pointer",
                                                                     fontWeight: "bold"
-                                                                }} onClick={onTagSelection}>{tag.name}</Tag>
+                                                                }}
+                                                                     onClick={() => onTagSelection(tag.id)}>{tag.name}</Tag>
                                                                 :
                                                                 <Tag style={{
                                                                     background: "white",
                                                                     padding: "3px",
                                                                     border: "1px solid gray",
                                                                     cursor: "pointer"
-                                                                }} onClick={onTagSelection}>{tag.name}</Tag>
+                                                                }}
+                                                                     onClick={() => onTagSelection(tag.id)}>{tag.name}</Tag>
                                                         }
                                                     </div>
                                                 )
@@ -410,6 +457,7 @@ function AddCourse() {
                         bottom: "10px",
                         right: "10px"
                     }}
+                    loading={loading}
                 >
                     {current == content.length - 1 ? "Fertig" : "Weiter"}
                 </Button>

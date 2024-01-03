@@ -30,7 +30,7 @@ function DashOverview() {
             onOk() {
                 fetchWrapper.delete('api/v1/courses/' + id).then((res) => {
                     if (res) {
-                        setProvidedCourses(providedCourses.filter((course) => course.id !== id))
+                        setProvidedCourses(prevState => prevState.filter((course) => course.id !== id))
                     }
                 });
             }
