@@ -46,7 +46,7 @@ function App() {
                                 <Route path="/bookmarks" element={<Protected><Bookmarks/></Protected>}/>
                                 <Route path="/searching/:searchString?" element={<Protected><Searching/></Protected>}/>
                                 <Route path="*" element={<NotFound/>}/>
-                                <Route path="/dashboard" element={<Protected><Dashboard/></Protected>}/>
+                                <Route path="/dashboard/*" element={<Protected><Dashboard/></Protected>}/>
                             </Routes>
                         </Content>
                         <Footer>Govlearn - Made with ❤ in Münster</Footer>
