@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import dayjs from 'dayjs';
 import {Button, Checkbox, DatePicker, Flex, Form, Image, Input, InputNumber, message, Select, Steps, Tag} from "antd";
 import TextArea from "antd/es/input/TextArea";
@@ -93,7 +93,7 @@ function AddCourse() {
     );*/
 
     const uploadCourse = () => {
-        const requests: Promise<any>[] = [];
+        const requests: Promise<object>[] = [];
         setLoading(true)
         if (oldData.id != -1) {
             fetchWrapper.put('api/v1/courses/', {...newCourse, id: oldData.id}).then(() => {
