@@ -29,7 +29,7 @@ function AddCourse() {
 
     const [current, setCurrent] = useState(0);
 
-    const [loading, setLoading] = useState(false);
+    //const [loading, setLoading] = useState(false);
 
     const [imageUrl, setImageUrl] = useState<string>();
     const [newCourse, setNewCourse] = useState<CreateCourse>();
