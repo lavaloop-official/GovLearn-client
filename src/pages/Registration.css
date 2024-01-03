@@ -1,0 +1,32 @@
+.competence-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    flex-grow: 1;
+    gap: 24px
+}
+
+.competence-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.competence-inner {
+    width: 100%;
+}
+
+.deselect-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.intro-step{
+    min-width: 100px;
+}
+
+.vertical{
+    width: 1px;
+    height: 64px;
+    display: inline-block;
+}

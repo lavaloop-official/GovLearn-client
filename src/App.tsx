@@ -32,7 +32,7 @@ function App() {
         >
             <Provider store={reduxStore}>
                 <BrowserRouter>
-                    <Layout className="layout" style={{ minHeight: "100vh" }}>
+                    <Layout className="layout" style={{minHeight: "100vh"}}>
                         <Header>
                             <CustomHeader/>
                         </Header>
@@ -42,14 +42,14 @@ function App() {
                                 <Route path="/discover" element={<Protected><Discover/></Protected>}/>
                                 <Route path="/detail/*" element={<Protected><Details/></Protected>}/>
                                 <Route path="/profile" element={<Protected><Profile/></Protected>}/>
-                                <Route path="/register" element={<Protected><Registration/></Protected>}/>
+                                <Route path="/register/*" element={<Protected><Registration/></Protected>}/>
                                 <Route path="/bookmarks" element={<Protected><Bookmarks/></Protected>}/>
                                 <Route path="/searching/:searchString?" element={<Protected><Searching/></Protected>}/>
                                 <Route path="*" element={<NotFound/>}/>
                                 <Route path="/dashboard" element={<Protected><Dashboard/></Protected>}/>
                             </Routes>
                         </Content>
-                        <Footer>Govlearn  -  Made with ❤ in Münster</Footer>
+                        <Footer>Govlearn - Made with ❤ in Münster</Footer>
                     </Layout>
                 </BrowserRouter>
             </Provider>

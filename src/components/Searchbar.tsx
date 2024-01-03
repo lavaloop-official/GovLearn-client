@@ -1,5 +1,5 @@
 import Search, {SearchProps} from "antd/es/input/Search";
-import {Button, Popover, Space, Tag, Tree} from "antd";
+import {Button, Form, Popover, Space, Tag, Tree} from "antd";
 import {useLocation, useNavigate} from "react-router-dom";
 import {Key, useEffect, useState} from "react";
 import {fetchWrapper} from "../api/helper";
@@ -106,8 +106,10 @@ function Searchbar() {
                         }}/>
                     </Button>
                 </Popover>
-                <Search placeholder="Kursangebote suchen" size="large" style={{maxWidth: "400px"}} allowClear
-                        onSearch={onSearch} autoComplete="off"/>
+                <Form autoComplete="off">
+                    <Search placeholder="Kursangebote suchen" size="large" style={{maxWidth: "400px"}} allowClear
+                            onSearch={onSearch} autoComplete="off"/>
+                </Form>
             </Space.Compact>
         </Space.Compact>
     );
