@@ -21,3 +21,9 @@ export const WELCOME = 'Entdecke Weiterbildungsangebote, die dich weiterbringen.
 export const NO_BOOKMARKS = 'Sie haben keine Kurse markiert!'
 
 export const DELETE_COURSE = 'Möchten Sie diesen Kurs wirklich löschen?'
+
+export const URL_WRONG_FORMAT = 'Die eingegebene URL ist nicht gültig!'
+export const ENTER_URL = 'Bitte geben Sie eine Website an.'
+export const ENTER_PICTURE_URL = 'Bitte geben Sie eine Bild-Addresse an.'
+export const ENTER_TITLE = 'Bitte geben Sie einen Kursnamen an.'
+export const ENTER_DESCRIPTION = 'Bitte geben Sie einen Kursbeschreibung an.'

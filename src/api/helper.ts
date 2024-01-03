@@ -54,7 +54,7 @@ async function handleResponse(response: Response | undefined) {
     if (!response)
         return handleError(new Error("No response"))
 
-    return response.text().then(text => {
+    return response.clone().text().then(text => {
         if (!response.ok) {
             return handleErrorCode(response)
         }
@@ -65,22 +65,30 @@ async function handleResponse(response: Response | undefined) {
 function handleErrorCode(response: Response) {
     switch (response.status) {
         case 403:
-            if (!response.url.endsWith("bookmarks"))
+            console.log(response.url)
+            if (!response.url.endsWith("bookmarks") && !response.url.endsWith("users") && !response.url.endsWith("auth-token"))
                 clearToken("401");
+            else
+                return handleError(new Error("Forbidden"), response)
             break;
+        case 400:
+            return handleError(new Error("Bad request"), response)
         case 401:
-            return handleError(new Error("Unauthorized"))
+            return handleError(new Error("Unauthorized"), response)
         case 404:
-            return handleError(new Error("Not found"))
+            return handleError(new Error("Not found"), response)
         case 500:
-            return handleError(new Error("Internal server error"))
+            return handleError(new Error("Internal server error"), response)
         default:
-            return handleError(new Error("Unknown error"))
+            return handleError(new Error("Unknown error"), response)
     }
 }
 
-function handleError(error: any) {
+function handleError(error: any, response?: Response) {
     console.error(error)
-    return undefined;
+    if(response){
+        return response.clone().json();
+    }
+    return error.message;
 }
 
