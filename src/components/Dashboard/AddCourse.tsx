@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Button, Checkbox, DatePicker, Flex, Form, Input, InputNumber, Select, Steps, Tag, message, Image, Card, Skeleton } from "antd";
+import { Button, Checkbox, DatePicker, Flex, Form, Input, InputNumber, Select, Steps, Tag, message, Image } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { Category, Course, Coursetag } from "../../interfaces";
 import { ValueType } from "rc-input-number";
 import { CheckboxChangeEvent } from "antd/es/checkbox";
 import { fetchWrapper } from "../../api/helper";
 import CourseInfo from "../Detail/CourseInfo";
+import { ENTER_DESCRIPTION, ENTER_PICTURE_URL, ENTER_TITLE, ENTER_URL, URL_WRONG_FORMAT } from "../../constants/de";
 
 /*const getBase64 = (img: RcFile, callback: (url: string) => void) => {
     const reader = new FileReader();
@@ -236,7 +237,7 @@ function AddCourse(Props: ToggleProps) {
                         </Form.Item>*/}
 
                             {!imageUrl && <>
-                                <Form.Item name="image" label="Bild-Url" rules={[{ required: true }]}>
+                                <Form.Item name="image" label="Bild-Url" rules={[{ required: true, message: ENTER_PICTURE_URL}, {type: 'url', message: URL_WRONG_FORMAT}]}>
                                     <Input defaultValue={newCourse?.image} width={"100px"} onChange={(event) => {
                                         setNewCourse(
                                             { ...newCourse!, image: event.target.value }
@@ -247,10 +248,10 @@ function AddCourse(Props: ToggleProps) {
                                     {newCourse?.image ? <Image src={newCourse?.image} style={{ margin: "5px 0px 15px", border: "1px solid black", borderRadius: "25px", width: "200px", height: "150px", objectFit: "contain" }} /> : <></>}
                                 </Flex>
                             </>}
-                            <Form.Item initialValue={newCourse?.name} name="name" label="Name" rules={[{ required: true }]}>
+                            <Form.Item initialValue={newCourse?.name} name="name" label="Name" rules={[{ required: true, message: ENTER_TITLE}]}>
                                 <Input width={"100px"} onChange={setCourseName} />
                             </Form.Item>
-                            <Form.Item initialValue={newCourse?.description} name="description" label="Beschreibung" rules={[{ required: true }]}>
+                            <Form.Item initialValue={newCourse?.description} name="description" label="Beschreibung" rules={[{ required: true, message: ENTER_DESCRIPTION }]}>
                                 <TextArea onChange={setCourseDescription} />
                             </Form.Item>
                             <h4>Details</h4>
@@ -300,7 +301,7 @@ function AddCourse(Props: ToggleProps) {
                                 <Checkbox defaultChecked={typeof newCourse?.certificate === 'boolean' ? newCourse.certificate : false} onChange={setCourseCertificate}></Checkbox>;                            </Form.Item>
                             <h4>Links</h4>
                             <hr />
-                            <Form.Item initialValue={newCourse?.link} name="website" label="Website" rules={[{ required: true }]}>
+                            <Form.Item initialValue={newCourse?.link} name="website" label="Website" rules={[{ required: true, message: ENTER_URL}, {type: 'url', message: URL_WRONG_FORMAT}]}>
                                 <Input width={"100px"} onChange={setCourseLink} />
                             </Form.Item>
                         </Form> : page === 1 ?
@@ -357,17 +358,17 @@ function AddCourse(Props: ToggleProps) {
                     }
                 </Flex>
                 {page === 0 ?
-                    <Flex justify="space-between" style={{ margin: "15px" }}>
+                    <Flex justify="space-between" style={{ margin: "15px", paddingBottom:"15px" }}>
                         <Button onClick={Props.ClickHandler}>Abbrechen</Button>
                         <Button onClick={nextPageAndTestForm} htmlType="submit">Weiter</Button>
                     </Flex>
                     : page === 1 ?
-                        <Flex justify="space-between" style={{ margin: "15px" }}>
+                        <Flex justify="space-between" style={{ margin: "15px", paddingBottom:"15px" }}>
                             <Button onClick={lastPage}>Zurück</Button>
                             <Button onClick={nextPageAndTestTags}>Weiter</Button>
                         </Flex>
                         : page === 2 ?
-                            <Flex justify="space-between" style={{ margin: "15px" }}>
+                            <Flex justify="space-between" style={{ margin: "15px", paddingBottom:"15px" }}>
                                 <Button onClick={lastPage}>Zurück</Button>
                                 <Button type="primary" onClick={uploadCourse}>Abschließen</Button>
                             </Flex>
