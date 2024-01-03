@@ -28,7 +28,7 @@ function SearchComponent({obj, editable = false, onDelete = () => {}}: { obj?: C
 
     // TODO: implement handleEdit
     function handleEdit() {
-        throw new Error("Function not implemented.");
+        navigate(`/dashboard/add/details`, {state: {obj: obj}})
     }
 
     return (
