@@ -96,7 +96,7 @@ function AddCourse() {
         const requests: Promise<object>[] = [];
         setLoading(true)
         if (oldData.id != -1) {
-            fetchWrapper.put('api/v1/courses/', {...newCourse, id: oldData.id}).then(() => {
+            fetchWrapper.put('api/v1/courses', {...newCourse, id: oldData.id}).then(() => {
                 selectedTags.forEach((tag) => {
                     requests.push(fetchWrapper.post('api/v1/tags/courses', {
                         courseId: oldData.id,
@@ -138,7 +138,7 @@ function AddCourse() {
                 startDate: dayjs(location.state?.obj.startDate),
             }
         } else {
-            return {}
+            return undefined
         }
     }
 
@@ -390,8 +390,8 @@ function AddCourse() {
             return true;
     }
 
-    const next = () => {
-        if (validate()) {
+    const next = async () => {
+        if (await validate()) {
             if (current == content.length - 1) {
                 uploadCourse();
             } else {
@@ -407,10 +407,10 @@ function AddCourse() {
             navigate("/dashboard/");
     };
 
-    const onChange = (value: number) => {
+    const onChange = async (value: number) => {
         if (value < current) //always allow to go back
             navigate(`/dashboard/add/${content[value].url}`);
-        else if (validate()) //only allow to go forward if current page is valid
+        else if (await validate()) //only allow to go forward if current page is valid
             navigate(`/dashboard/add/${content[value].url}`);
     };
 
