@@ -134,8 +134,8 @@ function Registration() {
                         <hr className="vertical"></hr>
                         <p>
                             Nach erfolgreicher Registrierung werden Sie gebeten, Ihre aktuelle Rolle im öffentlichen
-                            Dienst auszuwählen. Ob Sie in der Verwaltung, im Finanzwesen oder in der Rechtsabteilung
-                            tätig sind – wählen Sie die Rolle, die am besten Ihre beruflichen Aufgaben widerspiegelt.
+                            Dienst auszuwählen. Ob Sie für die Digitalisierung zuständig sind oder eine Nicht-digitale
+                            Rolle ausüben – wählen Sie die Rolle, die am besten Ihre beruflichen Aufgaben widerspiegelt.
                         </p>
                     </Flex>
                     <br/>
@@ -147,9 +147,9 @@ function Registration() {
                         <hr className="vertical"></hr>
                         <p>
                             Nachdem Sie Ihre Rolle ausgewählt haben, geht es darum, Ihre spezifischen Kompetenzen
-                            genauer zu beschreiben. Geben Sie an, welche Fähigkeiten und Kenntnisse Sie in Ihrer
-                            beruflichen Tätigkeit auszeichnen. Je präziser Sie diese Informationen eingeben, desto
-                            besser können wir Ihnen personalisierte Weiterbildungsempfehlungen präsentieren.
+                            genauer zu beschreiben. Auf Basis ihrer ausgewählten Rollen werden Ihnen Kompetenzen
+                            zugeordnet. Diese können Sie nun anpassen, indem Sie Kompetenzen abwählen, die nicht in die
+                            Weiterbildungsempfehlungen einfließen sollen.
                         </p>
                     </Flex>
                 </Flex>
@@ -182,8 +182,7 @@ function Registration() {
                     <div
                         style={{
                             display: "flex",
-                            flexDirection: "column",
-                            margin: "0 auto"
+                            flexDirection: "column"
                         }}
                     >
                         <CircleSelect selectCallback={selectCallback} selected={selected}/>
@@ -242,6 +241,13 @@ function Registration() {
                 <Typography.Text>
                     {selectedToText()}
                     {digitallotse ? <Tag color="green">Digitallotse</Tag> : <></>}
+                </Typography.Text>
+                <Typography.Title level={4} style={{marginTop: "15px"}}>
+                    Kompetenzen:
+                </Typography.Title>
+                <Typography.Text>
+                    Wählen Sie hier die Kompetenzen ab, welche nicht in die Weiterbildungsempfehlungen einfließen
+                    sollen.
                 </Typography.Text>
                 <div className="competence-container">
                     <div className="competence-inner">
