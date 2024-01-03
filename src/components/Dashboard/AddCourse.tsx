@@ -6,6 +6,7 @@ import {Category, Coursetag, CreateCourse} from "../../interfaces";
 import {fetchWrapper} from "../../api/helper";
 import CourseInfo from "../Detail/CourseInfo";
 import {useLocation, useNavigate} from "react-router-dom";
+import { URL_WRONG_FORMAT } from "../../constants/de";
 
 /*const getBase64 = (img: RcFile, callback: (url: string) => void) => {
     const reader = new FileReader();
@@ -170,7 +171,7 @@ function AddCourse() {
 
                 {!imageUrl && <>
                     <Form.Item name="image" label="Bild-Url"
-                               rules={[{required: true, message: "Bitte geben Sie ein Bild an"}]}>
+                               rules={[{required: true, message: "Bitte geben Sie ein Bild an"}, {type: 'url', message: URL_WRONG_FORMAT}]}>
                         <Input width={"100px"} onChange={(event) => {
                             setNewCourse(
                                 {...newCourse!, image: event.target.value}
@@ -246,7 +247,7 @@ function AddCourse() {
                 <h4>Links</h4>
                 <hr/>
                 <Form.Item name="link" label="Website"
-                           rules={[{required: true, message: "Bitte geben Sie den Link zum Angebot an"}]}>
+                           rules={[{required: true, message: "Bitte geben Sie den Link zum Angebot an"}, {type: 'url', message: URL_WRONG_FORMAT}]}>
                     <Input width={"100px"}/>
                 </Form.Item>
             </Form>

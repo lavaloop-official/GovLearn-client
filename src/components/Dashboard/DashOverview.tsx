@@ -17,7 +17,7 @@ function DashOverview() {
         fetchWrapper.get("api/v1/creators/courses").then((res) => {
             setProvidedCourses(res.payload)
         })
-    }, [])
+    }, [navigate])
 
     function handleDelete(id: number | undefined) {
         confirm({

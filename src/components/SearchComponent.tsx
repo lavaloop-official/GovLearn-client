@@ -13,10 +13,7 @@ import {DeleteOutlined, EditOutlined} from "@ant-design/icons";
  * @param Course obj - The course to be displayed.
  * @param onDelete callback for deleting the course
  */
-function SearchComponent({
-                             obj, editable = false, onDelete = () => {
-    }
-                         }: { obj?: Course, editable?: boolean, onDelete?: (id: number | undefined) => void }) {
+function SearchComponent({obj, editable = false, onDelete = () => {}}: { obj?: Course, editable?: boolean, onDelete?: (id: number | undefined) => void}) {
 
     const navigate = useNavigate();
 
