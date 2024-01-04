@@ -1,5 +1,5 @@
-# Stage 1: Build Angular app
-FROM node:16-alpine as builder
+# Stage 1: Build React app
+FROM node:14 as builder
 
 WORKDIR /app
 
@@ -12,7 +12,7 @@ RUN npm install
 # Copy app files
 COPY . .
 
-# Build the Angular app
+# Build the React app
 RUN npm run build
 
 # Stage 2: Setup Nginx and deploy built app
@@ -27,7 +27,7 @@ COPY nginx-local.conf /etc/nginx/conf.d/default.conf
 RUN rm -rf /usr/share/nginx/html/*
 
 # Copy the built app from the previous stage
-COPY --from=builder /app/dist /usr/share/nginx/html
+COPY --from=builder /app/build /usr/share/nginx/html
 
 # Expose port 80
 EXPOSE 80
