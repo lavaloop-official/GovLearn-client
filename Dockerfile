@@ -1,5 +1,5 @@
-# Stage 1: Build Angular app
-FROM node:16-alpine as builder
+# Stage 1: Build React app
+FROM node:14 as builder
 
 WORKDIR /app
 
@@ -12,7 +12,7 @@ RUN npm install
 # Copy app files
 COPY . .
 
-# Build the Angular app
+# Build the React app
 RUN npm run build
 
 # Stage 2: Setup Nginx and deploy built app
