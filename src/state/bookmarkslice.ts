@@ -2,9 +2,17 @@ import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {changeBookmarkStatus, getBookmarks} from "../api/bookmarks.ts";
 import {Course} from "../interfaces.ts";
 
-const intialState: { bookmarks: number[] } = {
-    bookmarks: await getBookmarks().then((bookmarks: Course[]) => bookmarks.map((bookmark) => bookmark.id) as number[])
-}
+let intialState: { bookmarks: number[] };
+
+getBookmarks().then((bookmarks: Course[]) => bookmarks.map((bookmark) => bookmark.id) as number[]).then(
+    (processedBookmarks: number[]) => {
+        intialState = {
+            bookmarks: processedBookmarks
+        }
+    }
+)
+
+
 
 const bookmarkSlice = createSlice({
     name: 'bookmark',
