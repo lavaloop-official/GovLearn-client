@@ -1,4 +1,4 @@
-import { Button, Divider } from "antd";
+import { Button, Divider, Flex } from "antd";
 import Recommendation from "../Recommendation";
 import "./GroupmemberCourses.css"
 import {Course, Group, Groupmember } from "../../interfaces";
@@ -7,9 +7,10 @@ import { createRef, useEffect, useState } from "react";
 import Groupcourse from "./Groupcourse";
 import AddCourse from "./AddCourse";
 import { fetchWrapper } from "../../api/helper";
+import { DownOutlined, UpOutlined } from "@ant-design/icons";
 
 function GroupmemberCourses({ groupmember, admin, currentGroup}: { groupmember: Groupmember, admin: Boolean, currentGroup: Group }) {
-
+    const [expanded, setExpanded] = useState(true);
     const addCourseModal = createRef();
 
     const [courses, setCourses] = useState<Course[]>([]);
@@ -55,9 +56,15 @@ function GroupmemberCourses({ groupmember, admin, currentGroup}: { groupmember: 
 
     return (
         <div style={{ margin: "0px 10px 10px 10px", display: "flex", flexDirection: "column"}}>
-            <h3>{groupmember.name}</h3>
-            <div style={{ background: "grey", height: "fit-content", borderRadius: "10px", maxWidth: "fit-content" }}>
-                <div style={{ display: "flex", flexDirection: "row", overflowX: "scroll", overflowY: "hidden", height: "fit-content", alignItems: "center" }} className="scrollbar">
+            <Flex justify="space-between" align="center">
+                <h3>{groupmember.name}</h3>
+                <Button onClick={() => {
+                    setExpanded(!expanded);
+                }} icon={expanded ? <UpOutlined /> : <DownOutlined />}/>
+            </Flex>
+            {expanded ? 
+            <>
+                <div style={{padding:"10px"}} className="scrollbar course-display">
                     {
                         courses ?
                             courses.map((course: Course) => <Groupcourse course={course} admin={admin} removeCourseFromUser={removeCourseFromUser} />)
@@ -65,8 +72,9 @@ function GroupmemberCourses({ groupmember, admin, currentGroup}: { groupmember: 
                     }
                     <Button onClick={() => addCourseModal?.current?.openDialog()} style={{ height: "fit-content", width: "fit-content", marginRight: "15px", marginLeft: "15px" }} icon={<Plus style={{ color: "white", height: "100%", width: "75px" }} />} type="text" />
                 </div>
-            </div>
             <AddCourse groupmember={groupmember} ref={addCourseModal} addCourseToGroupmember={addCourseToGroupmember}/>
+            </>
+            : <div />}
         </div>
     )
 }
