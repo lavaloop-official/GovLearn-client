@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { Button, Checkbox, DatePicker, Flex, Form, Input, InputNumber, Select, Steps, Tag, Upload, message, Image, Card, Skeleton } from "antd";
-import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
-import { RcFile, UploadChangeParam, UploadFile, UploadProps } from "antd/es/upload";
+import { useEffect, useState } from "react";
+import dayjs from 'dayjs';
+import { Button, Checkbox, DatePicker, Flex, Form, Image, Input, InputNumber, message, Select, Steps, Tag } from "antd";
 import TextArea from "antd/es/input/TextArea";
-import { Category, Course, Coursetag } from "../../interfaces";
-import { ValueType } from "rc-input-number";
-import { CheckboxChangeEvent } from "antd/es/checkbox";
+import { Category, Coursetag, CreateCourse } from "../../interfaces";
 import { fetchWrapper } from "../../api/helper";
 import CourseInfo from "../Detail/CourseInfo";
+import { useLocation, useNavigate } from "react-router-dom";
+import { URL_WRONG_FORMAT } from "../../constants/de";
 
-const getBase64 = (img: RcFile, callback: (url: string) => void) => {
+/*const getBase64 = (img: RcFile, callback: (url: string) => void) => {
     const reader = new FileReader();
     reader.addEventListener('load', () => callback(reader.result as string));
     reader.readAsDataURL(img);
@@ -25,20 +24,26 @@ const beforeUpload = (file: RcFile) => {
         message.error('Image must smaller than 2MB!');
     }
     return isJpgOrPng && isLt2M;
-};
+};*/
 
-interface ToggleProps {
-    ClickHandler: (event: React.MouseEvent<HTMLButtonElement>) => void
-}
+function AddCourse() {
+    const navigate = useNavigate();
+    const location = useLocation();
 
-function AddCourse(Props: ToggleProps) {
+    const [current, setCurrent] = useState(0);
+
     const [loading, setLoading] = useState(false);
+
     const [imageUrl, setImageUrl] = useState<string>();
-    const [page, setPage] = useState(0);
-    const [newCourse, setNewCourse] = useState<Course>();
+    const [newCourse, setNewCourse] = useState<CreateCourse>();
     const [categories, setCategories] = useState<Category[]>([]);
     const [tags, setTags] = useState<Coursetag[]>([]);
     const [selectedTags, setSelectedTags] = useState<Coursetag[]>([]);
+
+    const [oldData, setOldData] = useState<{ id: number, tags: Coursetag[] }>({ id: -1, tags: [] });
+
+    const [form] = Form.useForm();
+
 
     useEffect(() => {
         const tags = fetchWrapper.get('api/v1/tags').then(res => res.payload)
@@ -47,106 +52,387 @@ function AddCourse(Props: ToggleProps) {
             setCategories(categories);
             setTags(tags);
         });
+        if (location.state?.obj) {
+            fetchWrapper.get('api/v1/tags/courses/' + location.state?.obj.id).then(res => {
+                setSelectedTags(res.payload);
+                setOldData({ id: location.state?.obj.id, tags: res.payload });
+            })
+        }
     }, [])
 
-    const setCourseImage: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
+    //TODO: add Image attribute to Course to store images in database
+    /*const setCourseImage: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
         if (info.file.status === 'uploading') {
             setLoading(true);
             return;
         }
         if (info.file.status === 'done') {
-            // Get this url from response in real world.
             getBase64(info.file.originFileObj as RcFile, (url) => {
                 setLoading(false);
                 setImageUrl(url);
                 setNewCourse({ ...newCourse!, image: url });
             });
         }
-    };
+    };*/
 
-    const setCourseName: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-        setNewCourse({ ...newCourse!, name: event.target.value });
-    };
-
-    const setCourseDescription: React.ChangeEventHandler<HTMLTextAreaElement> = (event) => {
-        setNewCourse({ ...newCourse!, description: event.target.value });
-    }
-
-    const setCourseStartDate: (date: any, dateString: string) => void = (date, dateString) => {
-        setNewCourse({ ...newCourse!, startDate: dateString });
-    }
-
-    const setCourseDuration: (value: ValueType | null) => void = (value) => {
-        setNewCourse({ ...newCourse!, durationInHours: `${value} Stunden` });
-    }
-
-    const setCoursePrice: (e: CheckboxChangeEvent) => void = (e) => {
-        setNewCourse({ ...newCourse!, costFree: e.target.checked });
-    }
-
-    const setCourseDomainspecific: (e: CheckboxChangeEvent) => void = (e) => {
-        setNewCourse({ ...newCourse!, domainSpecific: e.target.checked });
-    }
-
-    const setCourseFormat: (value: string) => void = (value) => {
-        setNewCourse({ ...newCourse!, format: value });
-    }
-
-    const setCourseSkilllevel: (value: string) => void = (value) => {
-        setNewCourse({ ...newCourse!, skilllevel: value });
-    }
-
-    const setCourseCertificate: (e: CheckboxChangeEvent) => void = (e) => {
-        setNewCourse({ ...newCourse!, certificate: e.target.checked });
-    }
-
-    const setCourseLink: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-        setNewCourse({ ...newCourse!, link: event.target.value });
-    }
-
-    const onTagSelection: React.MouseEventHandler<HTMLSpanElement> = (event) => {
-        const tag = tags.find((tag) => tag.name === event.currentTarget.innerText);
+    const onTagSelection = (id: number) => {
+        const tag = tags.find((tag) => tag.id == id);
         if (tag) {
-            if (selectedTags.includes(tag)) {
-                setSelectedTags(selectedTags.filter((selectedTag) => selectedTag !== tag));
+            if (selectedTags.find(selTags => selTags.id == tag.id)) {
+                setSelectedTags(selectedTags.filter((selectedTag) => selectedTag.id !== tag.id));
             } else {
                 setSelectedTags([...selectedTags, tag]);
             }
         }
     }
 
-    const uploadButton = (
+    /*const uploadButton = (
         <div>
             {loading ? <LoadingOutlined /> : <PlusOutlined />}
             <div style={{ marginTop: 8 }}>Upload</div>
         </div>
-    );
+    );*/
 
-    const nextPage: () => void = () => {
-        setPage(page + 1);
+    const uploadCourse = () => {
+        const requests: Promise<object>[] = [];
+        setLoading(true)
+        if (oldData.id != -1) {
+            fetchWrapper.put('api/v1/courses', { ...newCourse, id: oldData.id }).then(() => {
+                selectedTags.forEach((tag) => {
+                    requests.push(fetchWrapper.post('api/v1/tags/courses', {
+                        courseId: oldData.id,
+                        tagId: tag.id,
+                    }))
+                })
+                oldData.tags.forEach((tag) => {
+                    if (!selectedTags.find(selTag => selTag.id == tag.id)) {
+                        requests.push(fetchWrapper.delete('api/v1/tags/courses', {
+                            courseId: oldData.id,
+                            tagId: tag.id,
+                        }))
+                    }
+                })
+
+            })
+        } else {
+            fetchWrapper.post('api/v1/courses', { ...newCourse }).then((res) => {
+                const course = res.payload;
+                selectedTags.forEach((tag) => {
+                    requests.push(fetchWrapper.post('api/v1/tags/courses', {
+                        courseId: course.id,
+                        tagId: tag.id,
+                    }))
+                })
+            })
+        }
+        Promise.all(requests).then(() => {
+            setLoading(false);
+            navigate("/dashboard/");
+        })
     }
 
-    const lastPage: () => void = () => {
-        setPage(page - 1);
+    const getInitialValues = () => {
+        if (location.state?.obj) {
+            return {
+                ...location.state?.obj,
+                createdAt: dayjs(location.state?.obj.createdAt),
+                startDate: dayjs(location.state?.obj.startDate),
+            }
+        } else {
+            return undefined
+        }
     }
+
+    const first = (
+        <>
+            <Form
+                name="basic"
+                form={form}
+                labelCol={{ span: 8 }}
+                wrapperCol={{ span: 16 }}
+                style={{ minWidth: 600, maxWidth: 900 }}
+                autoComplete="off"
+                initialValues={getInitialValues()}>
+                <h4>Allgemeines</h4>
+                <hr />
+                {/*<Form.Item name="picture" label="Bild">
+                                <Upload
+                                    name="avatar"
+                                    listType="picture-card"
+                                    className="avatar-uploader"
+                                    showUploadList={false}
+                                    action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
+                                    beforeUpload={beforeUpload}
+                                    onChange={setCourseImage}
+                                >
+                                    {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
+                                </Upload>
+                        </Form.Item>*/}
+
+                {!imageUrl && <>
+                    <Form.Item name="image" label="Bild-Url"
+                        rules={[{ required: true, message: "Bitte geben Sie ein Bild an" }, { type: 'url', message: URL_WRONG_FORMAT }]}>
+                        <Input width={"100px"} onChange={(event) => {
+                            setNewCourse(
+                                { ...newCourse!, image: event.target.value }
+                            )
+                        }} />
+                    </Form.Item>
+                    <Flex justify="center">
+                        {newCourse?.image ? <Image src={newCourse?.image} style={{
+                            margin: "5px 0px 15px",
+                            border: "1px solid black",
+                            borderRadius: "25px",
+                            width: "200px",
+                            height: "150px",
+                            objectFit: "contain"
+                        }} /> : <></>}
+                    </Flex>
+                </>}
+                <Form.Item name="name" label="Name"
+                    rules={[{ required: true, message: "Bitte geben Sie einen Namen an" }]}>
+                    <Input width={"100px"} />
+                </Form.Item>
+                <Form.Item name="description" label="Beschreibung"
+                    rules={[{ required: true, message: "Bitte geben Sie eine Beschreibung an" }]}>
+                    <TextArea />
+                </Form.Item>
+                <h4>Details</h4>
+                <hr />
+                <Form.Item name="createdAt" label="Start-Datum"
+                    rules={[{ required: true, message: "Bitte geben Sie einen Startdatum an" }]}>
+                    <DatePicker />
+                </Form.Item>
+                <Form.Item name="durationInHours" label="Dauer">
+                    <InputNumber min={1} addonAfter="Stunden" />
+                </Form.Item>
+                <Form.Item name="instructor" label="Dozent">
+                    <Input width={"100px"} />
+                </Form.Item>
+                <Form.Item name="provider" label="Anbieter">
+                    <Input width={"100px"} />
+                </Form.Item>
+                <Form.Item name="costFree" label="Kostenfrei">
+                    <Checkbox />
+                </Form.Item>
+                <Form.Item name="domainSpecific" label="Verwaltungsbezogen">
+                    <Checkbox />
+                </Form.Item>
+                <Form.Item name="format" label="Format"
+                    rules={[{ required: true, message: "Bitte geben Sie ein Format an" }]}>
+                    <Select
+                        style={{ width: 120 }}
+                        options={[
+                            { value: 'Praesenz', label: 'Präsenz' },
+                            { value: 'OnlineLive', label: 'Live (Online)' },
+                            { value: 'OnlineSelbstorganisiert', label: 'Selbstorganisiert (Online)' },
+                            { value: 'Hybrid', label: 'Hybrid' },
+                        ]}
+                    />
+                </Form.Item>
+                <Form.Item name="skilllevel" label="Schwierigkeit"
+                    rules={[{ required: true, message: 'Please geben Sie eine Schwierigkeit an' }]}>
+                    <Select
+                        style={{ width: 120 }}
+                        options={[
+                            { value: 'Anfaenger', label: 'Anfänger' },
+                            { value: 'Fortgeschritten', label: 'Fortgeschritten' },
+                            { value: 'Experte', label: 'Experte' },
+                        ]}
+                    />
+                </Form.Item>
+                <Form.Item name="certificate" label="Zertifikat">
+                    <Checkbox />
+                </Form.Item>
+                <h4>Links</h4>
+                <hr />
+                <Form.Item name="link" label="Website"
+                    rules={[{ required: true, message: "Bitte geben Sie den Link zum Angebot an" }, { type: 'url', message: URL_WRONG_FORMAT }]}>
+                    <Input width={"100px"} />
+                </Form.Item>
+            </Form>
+        </>
+    )
+
+    const second = (
+        <>
+            <div>
+                <h4>Füge passende Tags hinzu</h4>
+                <p>Diese helfen uns das Weiterbildungsangebot für passende Nutzer vorzuschlagen</p>
+                <hr />
+                <Flex vertical style={{ gap: "10px" }}>
+                    {
+                        categories.map((category) => {
+                            return (
+                                <div key={category.id}>
+                                    <h4>{category.name}</h4>
+                                    <Flex wrap="wrap" gap={"10px"}>
+                                        {
+                                            tags.filter((tag) => tag.categoryID === category.id).map((tag) => {
+                                                return (
+                                                    <div key={tag.id}>
+                                                        {
+                                                            selectedTags.find(selTag => selTag.id == tag.id) ?
+                                                                <Tag style={{
+                                                                    background: "cornflowerblue",
+                                                                    color: "white",
+                                                                    padding: "3px",
+                                                                    border: "1px solid blue",
+                                                                    cursor: "pointer",
+                                                                    fontWeight: "bold"
+                                                                }}
+                                                                    onClick={() => onTagSelection(tag.id)}>{tag.name}</Tag>
+                                                                :
+                                                                <Tag style={{
+                                                                    background: "white",
+                                                                    padding: "3px",
+                                                                    border: "1px solid gray",
+                                                                    cursor: "pointer"
+                                                                }}
+                                                                    onClick={() => onTagSelection(tag.id)}>{tag.name}</Tag>
+                                                        }
+                                                    </div>
+                                                )
+                                            })
+                                        }
+                                    </Flex>
+                                </div>
+                            )
+                        })
+                    }
+                </Flex>
+            </div>
+        </>
+    )
+
+    const third = (
+        <>
+            <Flex vertical justify="center" gap={"2px"} style={{ minWidth: "900px" }}>
+
+                <h2>Vorschau: neues Weiterbildungsangebot</h2>
+                {
+                    newCourse && <CourseInfo course={{ ...newCourse, id: 9999, ratingAverage: 0, ratingAmount: 0 }} />
+                }
+                <Flex>
+                    {
+                        selectedTags.map((tag) => {
+                            return (
+                                <Tag key={tag.id} style={{
+                                    background: "cornflowerblue",
+                                    color: "white",
+                                    padding: "3px",
+                                    border: "1px solid blue",
+                                    fontWeight: "bold"
+                                }}>{tag.name}</Tag>
+                            )
+                        })
+                    }
+                </Flex>
+            </Flex>
+        </>
+    )
+
+    const content = [
+        {
+            content: first,
+            step: {
+                title: "Kursdetails festlegen"
+            },
+            url: "details"
+        },
+        {
+            content: second,
+            step: {
+                title: 'Tags hinzufügen'
+            },
+            url: "tags"
+        },
+        {
+            content: third,
+            step: {
+                title: "Abschluss"
+            },
+            url: "review"
+        }
+    ];
+
+    const validate = () => {
+        if (current == 0) {
+            return form.validateFields().then((values) => {
+                setNewCourse({
+                    name: values.name ?? "",
+                    image: values.image ?? "",
+                    description: values.description ?? "",
+                    createdAt: new Date().toISOString(),
+                    provider: values.provider ?? "",
+                    instructor: values.instructor ?? "",
+                    certificate: values.certificate ?? false,
+                    skilllevel: values.skilllevel ?? "Anfaenger",
+                    durationInHours: values.durationInHours ?? "",
+                    format: values.format ?? "",
+                    startDate: new Date(values.startDate ?? new Date().toISOString()).toISOString(),
+                    costFree: values.costFree ?? false,
+                    domainSpecific: values.domainSpecific ?? false,
+                    link: values.link ?? "",
+                });
+                return true;
+            }).catch((info) => {
+                console.log('Validate Failed:', info);
+                return false;
+            });
+        } else if (current == 1) {
+            if (selectedTags.length > 0 && selectedTags.length < 5) {
+                return true;
+            } else {
+                message.error('Bitte wähle zwischen einem und vier Tags.');
+                return false;
+            }
+        } else
+            return true;
+    }
+
+    const next = async () => {
+        if (await validate()) {
+            if (current == content.length - 1) {
+                uploadCourse();
+            } else {
+                navigate(`/dashboard/add/${content[current + 1].url}`);
+            }
+        }
+    };
+
+    const prev = () => {
+        if (current != 0) {
+            navigate(`/dashboard/add/${content[current - 1].url}`);
+        } else if (current == 0)
+            navigate("/dashboard/");
+    };
+
+    const onChange = async (value: number) => {
+        if (value < current) //always allow to go back
+            navigate(`/dashboard/add/${content[value].url}`);
+        else if (await validate()) //only allow to go forward if current page is valid
+            navigate(`/dashboard/add/${content[value].url}`);
+    };
+
+    useEffect(() => {
+        setCurrent(() => {
+            const url = window.location.pathname.split("/").pop();
+            const index = content.findIndex((item) => item.url == url);
+            if (index == -1) return 0;
+            return index;
+        });
+    }, [navigate]);
+
 
     return (
         <div style={{ maxWidth: "1200px", minHeight: "860px", margin: "auto", width: "100%", padding: "10px 10px" }}>
             <Steps
                 size="small"
-                current={page}
-                items={[
-                    {
-                        title: 'Kursdetails festlegen',
-                    },
-                    {
-                        title: 'Tags hinzufügen',
-                    },
-                    {
-                        title: 'Abschluss',
-                    },
-                ]}
-                style={{ margin: "5px" }}
+                onChange={onChange}
+                current={current}
+                items={content.map((item) => item.step)}
+                style={{ marginTop: "5px", marginBottom: "10px" }}
             />
             <div
                 style={{
@@ -156,157 +442,37 @@ function AddCourse(Props: ToggleProps) {
                     borderRadius: "20px",
                     boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
                     maxWidth: "1200px",
+                    position: "relative",
+                    padding: "0px 10px 36px 10px"
                 }}
             >
-                <Flex vertical justify="center">
-                    {page === 0 ?
-                        <Form
-                            name="basic"
-                            labelCol={{ span: 8 }}
-                            wrapperCol={{ span: 16 }}
-                            style={{ maxWidth: 600 }}
-                            initialValues={{ remember: true }}
-                            /*onFinish={onFinish}
-                            onFinishFailed={onFinishFailed}*/
-                            autoComplete="off">
-                            <h4>Allgemeines</h4>
-                            <hr />
-                            <Form.Item name="picture" label="Bild">
-                                <Upload
-                                    name="avatar"
-                                    listType="picture-card"
-                                    className="avatar-uploader"
-                                    showUploadList={false}
-                                    action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
-                                    beforeUpload={beforeUpload}
-                                //onChange={setCourseImage}
-                                >
-                                    {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
-                                </Upload>
-                            </Form.Item>
-                            <Flex>
-                                <Form.Item name="image" label="Bild-Url">
-                                    <Input width={"100px"} onChange={(event) => {
-                                        setNewCourse(
-                                            { ...newCourse!, image: event.target.value }
-                                        )
-                                    }} />
-                                </Form.Item>
-                                {
-                                    newCourse?.image ? <Image src={newCourse?.image} /> : <></>
-                                }
-                            </Flex>
-                            <Form.Item name="name" label="Name">
-                                <Input width={"100px"} onChange={setCourseName} />
-                            </Form.Item>
-                            <Form.Item name="description" label="Beschreibung">
-                                <TextArea onChange={setCourseDescription} />
-                            </Form.Item>
-                            <h4>Details</h4>
-                            <hr />
-                            <Form.Item name="startDate" label="Start-Datum" >
-                                <DatePicker onChange={setCourseStartDate} />
-                            </Form.Item>
-                            <Form.Item name="duration" label="Dauer" >
-                                <InputNumber addonAfter="Stunden" onChange={setCourseDuration} />
-                            </Form.Item>
-                            <Form.Item name="price" label="Kostenfrei">
-                                <Checkbox onChange={setCoursePrice}></Checkbox>;
-                            </Form.Item>
-                            <Form.Item name="domainspecific" label="Verwaltungsbezogen">
-                                <Checkbox onChange={setCourseDomainspecific}></Checkbox>;
-                            </Form.Item>
-                            <Form.Item name="format" label="Format">
-                                <Select
-                                    style={{ width: 120 }}
-                                    onChange={setCourseFormat}
-                                    options={[
-                                        { value: 'Praesenz', label: 'Präsenz' },
-                                        { value: 'OnlineLive', label: 'Live (Online)' },
-                                        { value: 'OnlineSelbstorganisiert', label: 'Selbstorganisiert (Online)' },
-                                        { value: 'Hybrid', label: 'Hybrid' },
-                                    ]}
-                                />
-                            </Form.Item>
-                            <Form.Item name="skilllevel" label="Schwierigkeit">
-                                <Select
-                                    style={{ width: 120 }}
-                                    onChange={setCourseSkilllevel}
-                                    options={[
-                                        { value: 'Anfaenger', label: 'Anfänger' },
-                                        { value: 'Fortgeschritten', label: 'Fortgeschritten' },
-                                        { value: 'Experte', label: 'Experte' },
-                                    ]}
-                                />
-                            </Form.Item>
-                            <Form.Item name="certificate" label="Zertifikat">
-                                <Checkbox onChange={setCourseCertificate}></Checkbox>;
-                            </Form.Item>
-                            <h4>Links</h4>
-                            <hr />
-                            <Form.Item name="website" label="Website">
-                                <Input width={"100px"} onChange={setCourseLink} />
-                            </Form.Item>
-                        </Form> : page === 1 ?
-                            <div>
-                                <h4>Füge passende Tags hinzu</h4>
-                                <p>Diese helfen uns das Weiterbildungsangebot für passende Nutzer vorzuschlagen</p>
-                                <hr />
-                                <Flex vertical style={{ gap: "10px" }}>
-                                    {
-                                        categories.map((category) => {
-                                            return (
-                                                <div key={category.id}>
-                                                    <h4>{category.name}</h4>
-                                                    <Flex wrap="wrap" style={{ gap: "10px" }}>
-                                                        {
-                                                            tags.filter((tag) => tag.categoryID === category.id).map((tag) => {
-                                                                return (
-                                                                    <div key={tag.id}>
-                                                                        {
-                                                                            selectedTags.includes(tag) ?
-                                                                                <Tag style={{ background: "cornflowerblue", color: "white", padding: "3px", border: "1px solid blue", cursor: "pointer", fontWeight: "bold" }} onClick={onTagSelection}>{tag.name}</Tag>
-                                                                                :
-                                                                                <Tag style={{ background: "white", padding: "3px", border: "1px solid gray", cursor: "pointer" }} onClick={onTagSelection}>{tag.name}</Tag>
-                                                                        }
-                                                                    </div>
-                                                                )
-                                                            })
-                                                        }
-                                                    </Flex>
-                                                </div>
-                                            )
-                                        })
-                                    }
-                                </Flex>
-                            </div>
-                            : page === 2 ?
-                                <div>
-                                    <h2>Vorschau: neues Weiterbildungsangebot</h2>
-                                    {
-                                        newCourse && <CourseInfo course={newCourse} />
-                                    }
-                                </div>
-                                : <></>
-                    }
+                <Flex justify="center">
+                    {content[current].content}
                 </Flex>
-                {page === 0 ?
-                    <Flex justify="space-between" style={{ margin: "15px" }}>
-                        <Button onClick={Props.ClickHandler}>Abbrechen</Button>
-                        <Button onClick={nextPage}>Weiter</Button>
-                    </Flex>
-                    : page === 1 ?
-                        <Flex justify="space-between" style={{ margin: "15px" }}>
-                            <Button onClick={lastPage}>Zurück</Button>
-                            <Button onClick={nextPage}>Weiter</Button>
-                        </Flex>
-                        : page === 2 ?
-                            <Flex justify="space-between" style={{ margin: "15px" }}>
-                                <Button onClick={lastPage}>Zurück</Button>
-                                <Button type="primary" onClick={nextPage}>Abschließen</Button>
-                            </Flex>
-                            : <></>
-                }
+                <Button
+                    type="primary"
+                    onClick={next}
+                    shape="round"
+                    style={{
+                        position: "absolute",
+                        bottom: "4px",
+                        right: "10px"
+                    }}
+                    loading={loading}
+                >
+                    {current == content.length - 1 ? "Fertig" : "Weiter"}
+                </Button>
+                <Button
+                    onClick={prev}
+                    shape="round"
+                    style={{
+                        position: "absolute",
+                        bottom: "4px",
+                        left: "10px"
+                    }}
+                >
+                    {current == 0 ? "Abbrechen" : "Zurück"}
+                </Button>
             </div>
         </div>
     )

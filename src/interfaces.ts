@@ -1,4 +1,4 @@
-import { Format, Role, Skilllevel } from "./Enum"
+import {Format, Role, Skilllevel} from "./Enum"
 
 export interface Course {
     "id": number | undefined,
@@ -18,6 +18,23 @@ export interface Course {
     "link": string | undefined,
     "ratingAverage": number | undefined,
     "ratingAmount": number | undefined,
+}
+
+export interface CreateCourse {
+    "name": string | undefined,
+    "image": string | undefined,
+    "description": string | undefined,
+    "createdAt": string | undefined,
+    "provider": string | undefined,
+    "instructor": string | undefined,
+    "certificate": string | boolean | undefined,
+    "skilllevel": string | undefined,
+    "durationInHours": string | undefined,
+    "format": string | undefined,
+    "startDate": string | undefined,
+    "costFree": boolean | undefined,
+    "domainSpecific": boolean | undefined,
+    "link": string | undefined
 }
 
 export interface Review {

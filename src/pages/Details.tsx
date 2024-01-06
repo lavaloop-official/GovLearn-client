@@ -43,7 +43,6 @@ function Details() {
     useEffect(() => {
         const courseId = window.location.pathname.split('/').pop();
 
-
         fetchWrapper.get(`api/v1/courses/${courseId}`).then((res) => {
             if (!res)
                 navigate('/404');

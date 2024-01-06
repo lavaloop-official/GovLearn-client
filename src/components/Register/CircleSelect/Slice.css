@@ -1,0 +1,7 @@
+svg.pieSelect text {
+    pointer-events: none;
+}
+
+svg.pieSelect path {
+    cursor: pointer;
+}
