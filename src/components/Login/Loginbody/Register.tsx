@@ -1,6 +1,13 @@
 import {Button, Checkbox, Form, Input} from "antd";
 import {LockOutlined, UserOutlined} from "@ant-design/icons";
-import {EMAIL_WRONG_FORMAT, ENTER_EMAIL, ENTER_PASSWORD, REENTER_PASSWORD, ENTER_NAME} from "../../../constants/de.ts";
+import {
+    EMAIL_WRONG_FORMAT,
+    ENTER_EMAIL,
+    ENTER_NAME,
+    ENTER_PASSWORD,
+    PASSWORD_SHORT,
+    REENTER_PASSWORD
+} from "../../../constants/de.ts";
 
 
 function Register({finished, loading, changeType}: { finished: any, loading: boolean, changeType: any }) {
@@ -32,7 +39,7 @@ function Register({finished, loading, changeType}: { finished: any, loading: boo
                 </Form.Item>
                 <Form.Item
                     name="password"
-                    rules={[{required: true, message: ENTER_PASSWORD}]}
+                    rules={[{required: true, message: ENTER_PASSWORD}, {min: 8, message: PASSWORD_SHORT}]}
                     hasFeedback
                 >
                     <Input.Password

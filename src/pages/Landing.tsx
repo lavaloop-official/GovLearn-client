@@ -1,10 +1,6 @@
 import "./Landing.css";
 import {Card, Flex, notification, Typography} from "antd";
-import {
-    ReadOutlined,
-    UserOutlined,
-    PartitionOutlined
-} from "@ant-design/icons";
+import {PartitionOutlined, ReadOutlined, UserOutlined} from "@ant-design/icons";
 import {openLoginModal} from "../state/modalutil.ts";
 import LoginModal from "../components/Login/LoginModal.tsx";
 import AnimatedButton from "../components/AnimatedButton.tsx";
@@ -20,7 +16,7 @@ function Landing() {
     const location = useLocation();
 
     const [api, contextHolder] = notification.useNotification();
-    
+
     useEffect(() => {
         const openNotification = (message: string, description: string) => {
             api.info({
@@ -29,13 +25,12 @@ function Landing() {
                 placement: "top",
             });
         }
-        console.log(location.state?.reason);
         if (location.state?.reason === "logout")
             openNotification("Erfolgreich ausgeloggt", "Sie wurden erfolgreich ausgeloggt.");
         else if (location.state?.reason === "401")
             openNotification("Sitzung abgelaufen", "Ihre Sitzung ist abgelaufen. Bitte loggen Sie sich erneut ein.");
     }, [api, location.state?.reason]);
-    
+
     const cardStyle: React.CSSProperties = {
         width: 1440,
     };
