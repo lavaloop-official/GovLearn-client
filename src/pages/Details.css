@@ -1,3 +1,11 @@
+.back-btn {
+    height: fit-content;
+    width: fit-content;
+    padding: 0;
+    line-height: 0px;
+    align-self: center;
+}
+
 /* Apply styling to the course details */
 .course-details {
     padding: 0px;
@@ -45,7 +53,7 @@ hr {
     padding: 5px;
 }
 
-.course-sidebar .ant-card-body{
+.course-sidebar .ant-card-body {
     padding: 24px 16px 16px;
 }
 

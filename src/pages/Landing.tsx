@@ -1,10 +1,6 @@
 import "./Landing.css";
 import {Card, Flex, notification, Typography} from "antd";
-import {
-    ReadOutlined,
-    UserOutlined,
-    PartitionOutlined
-} from "@ant-design/icons";
+import {PartitionOutlined, ReadOutlined, UserOutlined} from "@ant-design/icons";
 import {openLoginModal} from "../state/modalutil.ts";
 import LoginModal from "../components/Login/LoginModal.tsx";
 import AnimatedButton from "../components/AnimatedButton.tsx";
@@ -14,13 +10,18 @@ import {useLocation, useNavigate} from "react-router-dom";
 import {WELCOME, WELCOME_BACK} from "../constants/de.ts";
 import {useEffect} from "react";
 
+/**
+ * Landing page component.
+ * This component is displayed when the user navigates to the root URL.
+ * It provides an overview of the application and prompts the user to log in or register.
+ */
 function Landing() {
     const loggedIn = useSelector((state: RootState) => !!state.auth.auth);
     const navigate = useNavigate();
     const location = useLocation();
 
     const [api, contextHolder] = notification.useNotification();
-    
+
     useEffect(() => {
         const openNotification = (message: string, description: string) => {
             api.info({
@@ -35,7 +36,7 @@ function Landing() {
         else if (location.state?.reason === "401")
             openNotification("Sitzung abgelaufen", "Ihre Sitzung ist abgelaufen. Bitte loggen Sie sich erneut ein.");
     }, [api, location.state?.reason]);
-    
+
     const cardStyle: React.CSSProperties = {
         width: 1440,
     };
@@ -50,11 +51,6 @@ function Landing() {
         alignItems: "center",
     };
 
-    const imgStyle: React.CSSProperties = {
-        display: "block",
-        width: 756,
-    };
-
     const complementColor: React.CSSProperties = {
         backgroundColor: "cornflowerblue",
     };
@@ -62,22 +58,14 @@ function Landing() {
     return (
         <>
             {contextHolder}
-            <div
-                style={{
-                    zIndex: "1",
-                    display: "flex",
-                    justifyContent: "center",
-                    flexDirection: "row",
-                    gap: "10px",
-                }}
-            >
+            <div className="landing-container">
                 <Flex vertical justify="center">
                     <Card style={cardStyle} bodyStyle={{padding: 0, overflow: "hidden"}}>
                         <Flex justify="space-between">
                             <img
+                                className="landing-image"
                                 alt="avatar"
                                 src="https://images.pexels.com/photos/4065891/pexels-photo-4065891.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                                style={imgStyle}
                             />
                             <Flex
                                 vertical

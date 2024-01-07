@@ -180,10 +180,6 @@ function Profile() {
         setIsModalNewPasswordOpen(false);
     };
 
-    const onChangeNewPassword: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-        setNewPassword(event.target.value);
-    };
-
     //Switch Benachrichtigung
     const onChange = (checked: boolean) => {
         console.log(`switch to ${checked}`);
@@ -192,33 +188,13 @@ function Profile() {
     const [form] = Form.useForm();
 
     return (
-        <div style={{width: "100%", display: "flex", justifyContent: "center"}}>
-            <div style={{
-                display: "flex",
-                flexWrap: "wrap",
-                justifyContent: "center",
-                minWidth: "400px",
-                maxWidth: "800px",
-                marginLeft: "20%",
-                marginRight: "20%",
-                background: "#F9F9F9",
-                borderRadius: "20px",
-                marginTop: "25px",
-                paddingLeft: "15px",
-                paddingRight: "15px",
-                color: "#3F3F3F"
-            }}>
+        <div className="profile-container">
+            <div className="profile-content">
                 <div>
                     <h1>Profil</h1>
                 </div>
-                <div style={{
-                    background: "#F7F7F7",
-                    borderRadius: "10px",
-                    paddingLeft: "15px",
-                    paddingRight: "15px",
-                    flexBasis: "100%"
-                }}>
-                    <div style={{flexDirection: "row", flexWrap: "wrap", display: "flex", flexBasis: "100%"}}>
+                <div className="profile-content-section">
+                    <div className="profile-content-section-flex">
                         {email ? <p style={{flex: "80%", width: "100%"}}>Ihre E-Mailadresse: {email}</p> :
                             <Skeleton active/>}
                         <div style={{flex: "20%", display: "flex", flexDirection: "row-reverse", alignItems: "center"}}>
@@ -256,9 +232,9 @@ function Profile() {
                             </Form>
                         </Modal>
                     </div>
-                    <div style={{flexDirection: "row", flexWrap: "wrap", display: "flex", flexBasis: "100%"}}>
+                    <div className="profile-content-section-flex">
                         {name ? <p style={{flex: "85%"}}>Ihr Name: {name}</p> : <Skeleton active/>}
-                        <div style={{flex: "15%", display: "flex", flexDirection: "row-reverse", alignItems: "center"}}>
+                        <div className="profile-content-section-flex-15">
                             <Button type="primary" onClick={showModalName}><img src={edit}
                                                                                 style={{width: "15px"}}></img></Button>
                         </div>
@@ -283,9 +259,9 @@ function Profile() {
                                             hidden={true}/>
                         </Modal>
                     </div>
-                    <div style={{flexDirection: "row", flexWrap: "wrap", display: "flex", flexBasis: "100%"}}>
+                    <div className="profile-content-section-flex">
                         {name ? <p style={{flex: "85%"}}>Passwort ändern</p> : <Skeleton active/>}
-                        <div style={{flex: "15%", display: "flex", flexDirection: "row-reverse", alignItems: "center"}}>
+                        <div className="profile-content-section-flex-15">
                             <Button type="primary" onClick={showModalOldPassword}><img src={edit}
                                                                                        style={{width: "15px"}}></img></Button>
                         </div>
@@ -369,18 +345,9 @@ function Profile() {
                     <div>
                         <h2 style={{textAlign: "center"}}>Benachrichtigung</h2>
                     </div>
-                    <div style={{
-                        flexDirection: "row",
-                        flexWrap: "wrap",
-                        display: "flex",
-                        flexBasis: "100%",
-                        background: "#F7F7F7",
-                        borderRadius: "10px",
-                        paddingLeft: "15px",
-                        paddingRight: "15px"
-                    }}>
+                    <div className="profile-content-section-notifications">
                         <p style={{flex: "85%"}}>Benachrichtigung zu neuen Kursempfehlungen</p>
-                        <div style={{flex: "15%", display: "flex", flexDirection: "row-reverse", alignItems: "center"}}>
+                        <div className="profile-content-section-flex-15">
                             <Switch defaultChecked onChange={onChange}/>
                         </div>
                     </div>

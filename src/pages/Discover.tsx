@@ -4,7 +4,17 @@ import RecomSlider from "../components/RecomSlider.tsx";
 import {useEffect, useState} from "react";
 import {fetchWrapper} from "../api/helper.ts";
 import {Course} from "../interfaces.ts";
+import './Discover.css';
 
+/**
+ * Discover function component
+ *
+ * This component fetches and displays featured and recommended courses.
+ * It uses the Carousel component to display the featured courses and the RecomSlider component to display the recommended courses.
+ * The courses data is fetched from the API endpoint 'api/v1/recommendations/bundle'.
+ *
+ * @returns JSX.Element
+ */
 function Discover() {
 
     const [featured, setFeatured] = useState<Course[]>([])
@@ -20,14 +30,8 @@ function Discover() {
 
     return (
         <>
-            <div style={{
-                zIndex: "1",
-                display: "flex",
-                justifyContent: "center",
-                flexDirection: "column",
-                gap: "10px"
-            }}>
-                <div style={{maxWidth: "1200px", margin: "auto", width: "100%", padding: "10px 10px"}}>
+            <div className="discover-container">
+                <div className="carousel-container">
                     <Carousel autoplay={true}
                               effect="fade"
                               style={{
@@ -40,16 +44,7 @@ function Discover() {
                         }
                     </Carousel>
                 </div>
-                <div style={{
-                    zIndex: "1",
-                    display: "flex",
-                    justifyContent: "center",
-                    flexDirection: "column",
-                    gap: "10px",
-                    maxWidth: "1200px",
-                    width: "100%",
-                    margin: "auto",
-                }}>
+                <div className="recommended-container">
                     {
                         recommended.length == 0 ? <RecomSlider/> :
                             recommended.map((item: { category: string, items: Course[] }) => <div key={item.category}>

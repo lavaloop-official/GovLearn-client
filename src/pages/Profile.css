@@ -1,3 +1,60 @@
-.ant-modal-footer{
-    display: block !important ;
+.ant-modal-footer {
+    display: block !important;
+}
+
+/* ProfileStyles.css */
+
+.profile-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.profile-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    min-width: 400px;
+    max-width: 800px;
+    margin-left: 20%;
+    margin-right: 20%;
+    background: #d9d9d9;
+    border-radius: 20px;
+    margin-top: 25px;
+    padding-left: 15px;
+    padding-right: 15px;
+    color: #3F3F3F;
+}
+
+.profile-content-section {
+    background: #F7F7F7;
+    border-radius: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+    flex-basis: 100%;
+}
+
+.profile-content-section-flex {
+    flex-direction: row;
+    flex-wrap: wrap;
+    display: flex;
+    flex-basis: 100%;
+}
+
+.profile-content-section-flex-15 {
+    flex: 15%;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+}
+
+.profile-content-section-notifications {
+    flex-direction: row;
+    flex-wrap: wrap;
+    display: flex;
+    flex-basis: 100%;
+    background: #F7F7F7;
+    border-radius: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
 }

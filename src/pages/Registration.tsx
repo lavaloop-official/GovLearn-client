@@ -6,6 +6,11 @@ import Deselect from "../components/Register/Deselect.tsx";
 import "./Registration.css";
 import {QuestionCircleOutlined, StarOutlined, TeamOutlined} from "@ant-design/icons";
 
+/**
+ * Registration component for the application.
+ * This component handles the registration process of a new user.
+ * It guides the user through a series of steps to gather necessary information.
+ */
 function Registration() {
     //TODO: move onlick to here and pass down to circleselect so that it can be reset by clicking outside of the circle
 
@@ -16,7 +21,11 @@ function Registration() {
     const [digitallotse, setDigitallotse] = useState<boolean>(false);
     const [competences, setCompetences] = useState<string[]>([]);
 
+    /**
+     * Fetch competences on component mount
+     */
     useEffect(() => {
+        document.title = "GovLearn - Registrierung";
         /*
         fetchWrapper.get("/competences").then((res) => {
             setCompetences(res);
@@ -26,10 +35,7 @@ function Registration() {
         setCompetences(["Datenschutz", "Excel", "Word", "Powerpoint", "Führung", "Projektmanagement"]);
     }, []);
 
-    useEffect(() => {
-        document.title = "GovLearn - Registrierung";
-    }, []);
-
+    // Callback function to handle selection in the CircleSelect component
     const selectCallback = (index: string) => {
         const slice = parseInt(index.charAt(0));
         const arc = parseInt(index.charAt(2));
@@ -48,6 +54,7 @@ function Registration() {
         }
     };
 
+    // Function to convert selected roles to text
     const selectedToText = () => {
         const responsibilites = ["Umsetzer", "Entscheidungsträger", "Stratege"];
         const roles = [
@@ -72,6 +79,7 @@ function Registration() {
         return text;
     };
 
+    // Content for the tooltips
     const digitalLotseInfoText = (
         <>
             <p>
@@ -275,6 +283,7 @@ function Registration() {
         </>
     );
 
+    // Content for the registration steps
     const content = [
         {
             content: zero,
@@ -316,6 +325,7 @@ function Registration() {
         navigate(`/register/${content[value].url}`);
     };
 
+    // Update the current step based on the URL
     useEffect(() => {
         setCurrent(() => {
             const url = window.location.pathname.split("/").pop();
@@ -326,18 +336,7 @@ function Registration() {
     }, [content, navigate]);
 
     return (
-        <div
-            style={{
-                zIndex: "1",
-                display: "flex",
-                justifyContent: "center",
-                flexDirection: "column",
-                gap: "10px",
-                margin: "10px auto",
-                maxWidth: "1200px",
-                padding: "10px 10px"
-            }}
-        >
+        <div className="registration-container">
             <Steps
                 size="small"
                 onChange={onChange}
@@ -347,38 +346,21 @@ function Registration() {
                 style={{marginBottom: "10px", minWidth: "100%"}}
             />
             <div style={{display: "flex", flexDirection: "row", width: "100%"}}>
-                <div
-                    style={{
-                        width: "100%",
-                        background: "#d9d9d9",
-                        borderRadius: "20px",
-                        padding: "10px",
-                        display: "flex",
-                        position: "relative"
-                    }}
-                >
+                <div className="registration-content">
                     <div style={{marginBottom: "40px", width: "100%"}}>{content[current].content}</div>
                     <Button
                         type="primary"
                         onClick={next}
                         shape="round"
-                        style={{
-                            position: "absolute",
-                            bottom: "10px",
-                            right: "10px"
-                        }}
+                        className="registration-button next"
                     >
                         {current == content.length - 1 ? "Fertig" : "Weiter"}
                     </Button>
                     <Button
                         onClick={prev}
                         shape="round"
-                        style={{
-                            position: "absolute",
-                            bottom: "10px",
-                            left: "10px",
-                            display: current == 0 ? "none" : ""
-                        }}
+                        className="registration-button back"
+                        style={{display: current == 0 ? "none" : ""}}
                     >
                         Zurück
                     </Button>

@@ -16,10 +16,11 @@ import Bookmarks from "./pages/Bookmarks.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
 
+/**
+ * Main App component
+ * @returns JSX.Element
+ */
 function App() {
-    //TODO: remove inline styles from components
-    //TODO: refactor redux login modal state management
-    //TODO: remove any types
     return (
         <ConfigProvider
             theme={{
@@ -32,7 +33,7 @@ function App() {
         >
             <Provider store={reduxStore}>
                 <BrowserRouter>
-                    <Layout className="layout" style={{minHeight: "100vh"}}>
+                    <Layout className="layout">
                         <Header>
                             <CustomHeader/>
                         </Header>

@@ -6,7 +6,13 @@ import {useLocation} from "react-router-dom";
 import {Button} from 'antd';
 import SearchOptions from "../components/SearchOptions.tsx";
 import Search from "antd/es/input/Search";
+import './Searching.css';
 
+/**
+ * Searching component
+ * This component is responsible for handling the search functionality of the application.
+ * It allows users to search for courses and filter the results.
+ */
 function Searching() {
 
     const limit = 10;
@@ -34,11 +40,16 @@ function Searching() {
         setSearchStr(value);
     }
 
-    // Define the callback function
+    /**
+     * Define the onFilterChange function to update the course filter
+     */
     const onFilterChange = (filter: object): void => {
         setCourseFilter(courseFilter => ({...courseFilter, ...filter}));
     };
 
+    /**
+     * Define the handlePagination function to fetch more courses when the user clicks the "Show more" button
+     */
     const handlePagination = () => {
         const newOffset = offset + limit;
         setOffset(newOffset)
@@ -47,6 +58,9 @@ function Searching() {
         });
     }
 
+    /**
+     * Use the useEffect hook to fetch courses when the component mounts or when the search string or course filter changes
+     */
     useEffect(() => {
         setOffset(0);
         fetchWrapper.post('api/v1/filter/limit/' + limit + '/offset/' + 0 + '/' + searchStr, courseFilter).then((res) => {
@@ -55,22 +69,16 @@ function Searching() {
     }, [searchStr, courseFilter]);
 
     return (
-        <div style={{display: "flex", width: "100%", justifyContent: "center", flexDirection: "row", flexWrap: "wrap"}}>
-            <div style={{flexBasis: "100%", textAlign: "center", marginTop: "1rem", maxWidth: "400px"}}>
+        <div className="searching-container">
+            <div className="search-bar">
                 <Search size="large" defaultValue={searchStr} placeholder="Kursangebote durchsuchen"
                         onSearch={onSearch}/>
             </div>
-            <div style={{
-                display: "flex",
-                width: "100%",
-                justifyContent: "center",
-                flexDirection: "row",
-                flexWrap: "wrap"
-            }}>
-                <div style={{margin: "1rem"}}>
+            <div className="search-results">
+                <div className="search-options">
                     <SearchOptions initialTags={location.state?.tagsforselect ?? []} onFilterChange={onFilterChange}/>
                 </div>
-                <div style={{flex: "1", maxWidth: "1000px", marginRight: "1rem"}}>
+                <div className="courses-list">
                     {
                         courses ?
                             courses.map((course: Course) => <div key={course.id}><SearchComponent obj={course}/>
@@ -78,12 +86,11 @@ function Searching() {
                             : <SearchComponent/>
                     }
                 </div>
-                <div style={{flexBasis: "100%", display: "flex", justifyContent: "center", marginTop: "20px"}}>
+                <div className="show-more">
                     <Button type="primary" onClick={handlePagination}>Mehr anzeigen</Button>
                 </div>
             </div>
         </div>
-
     );
 }
 
