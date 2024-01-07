@@ -170,7 +170,7 @@ function Groups() {
                             {
                                 groupInvitations && groupInvitations.length>0 ?
                                 groupInvitations.map((group: GroupInvitationWsTo) => <GroupInvitation group={group} acceptInvitation={acceptInvitation} denyInvitation={denyInvitation} />)
-                                    : <p style={{alignSelf:"center"}}>Keine offenen Einladungen</p>
+                                    : <Empty description="Keine offenen Einladungen" style={{alignSelf:"center", marginBottom:"15px"}}/>
                             }
                         </div>
                     </div>
