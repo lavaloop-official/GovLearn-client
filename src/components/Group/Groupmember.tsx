@@ -1,6 +1,6 @@
 import { createRef, useEffect, useState } from "react";
 import * as groupmember from "../../interfaces" ;
-import { Avatar, Button } from "antd";
+import { Avatar, Button, Empty } from "antd";
 import Groupuser from "./Groupuser";
 import Groupcourse from "./Groupcourse";
 import { Course } from "../../interfaces";
@@ -17,17 +17,9 @@ function Groupmember({currentGroup, fetchAllGroups}: {currentGroup: groupmember.
 
     const [courses, setCourses] = useState<Course[]>([]);
 
-    const [toBeDoneCourses, setToBeDoneCourses] = useState<Course[]>(
-        [
-            {id:1,name:"Test",description:"Test",image:"",createdAt:"",provider:"", instructor:"",certificate:"",skilllevel:"",durationInHours:"", format:"", startDate:"", costFree:true, domainSpecific:true,link:"",ratingAmount:1, ratingAverage:2}
-        ]
-    );
+    const [toBeDoneCourses, setToBeDoneCourses] = useState<Course[]>([]);
 
-    const [finishedCourses, setFinishedCourses] = useState<Course[]>(
-        [
-            {id:2,name:"Test2",description:"Test2",image:"",createdAt:"",provider:"", instructor:"",certificate:"",skilllevel:"",durationInHours:"", format:"", startDate:"", costFree:true, domainSpecific:true,link:"",ratingAmount:1, ratingAverage:2}
-        ]
-    );
+    const [finishedCourses, setFinishedCourses] = useState<Course[]>([]);
 
     const leaveGroup = () => {
         const leftGroup = fetchWrapper.delete(`api/v1/groups/members/removes/${currentGroup.groupId}`).then(res => {
@@ -84,9 +76,9 @@ function Groupmember({currentGroup, fetchAllGroups}: {currentGroup: groupmember.
                         <h3>Zugewiesene Kurse</h3>
                         <div style={{maxWidth:"fit-content"}} className="scrollbar course-display">
                             {
-                                courses?
+                                courses.length > 0?
                                     courses.map((course: Course) => <Groupcourse course={course} admin={false}/>)
-                                    : <div/>
+                                    : <Empty description="Keine zugewiesenen Kurse"/>
                             }
                         </div>
                     </div>
@@ -94,9 +86,9 @@ function Groupmember({currentGroup, fetchAllGroups}: {currentGroup: groupmember.
                         <h3>Zu bearbeitende Kurse</h3>
                         <div style={{maxWidth:"fit-content"}} className="scrollbar course-display">
                             {
-                                toBeDoneCourses?
+                                toBeDoneCourses.length > 0?
                                     toBeDoneCourses.map((course: Course) => <Groupcourse course={course} admin={false}/>)
-                                    : <div/>
+                                    : <Empty description="Keine zu bearbeitenden Kurse"/>
                             }
                         </div>
                     </div>
@@ -104,9 +96,9 @@ function Groupmember({currentGroup, fetchAllGroups}: {currentGroup: groupmember.
                         <h3>Abgeschlossene Kurse</h3>
                         <div style={{maxWidth:"fit-content"}} className="scrollbar course-display">
                             {
-                                finishedCourses?
+                                finishedCourses.length > 0?
                                     finishedCourses.map((course: Course) => <Groupcourse course={course} admin={false}/>)
-                                    : <div/>
+                                    : <Empty description="Keine abgeschlossenen Kurse"/>
                             }
                         </div>
                     </div>
