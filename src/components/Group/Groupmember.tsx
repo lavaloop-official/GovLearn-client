@@ -48,11 +48,11 @@ function Groupmember({currentGroup, fetchAllGroups}: {currentGroup: groupmember.
     }, [currentGroup])
 
     return (
-        <div style={{background:"lightgrey", flex:"1", margin:"10px", borderRadius:"10px", display:"flex", flexDirection:"column", minWidth:"280px"}}>
+        <div style={{background:"#F4F4F4", flex:"1", margin:"10px", borderRadius:"10px", display:"flex", flexDirection:"column", minWidth:"280px", color:"#3F3F3F"}}>
                     <div style={{margin:"0px 12px 0px 10px"}}>
                         <div style={{display:"flex", justifyContent:"space-between"}}>
                             <h1>{currentGroup.groupName}</h1>
-                            <Button onClick={() => leaveGroupModal?.current?.openDialog()} style={{marginTop:"10px"}} type="text" shape="circle" size="large" icon={<PersonDashFill color="white" size={30}/>}></Button>
+                            <Button onClick={() => leaveGroupModal?.current?.openDialog()} style={{marginTop:"10px"}} type="text" shape="circle" size="large" icon={<PersonDashFill color="grey" size={30}/>}></Button>
                         </div>
                     </div>
                     <LeaveGroupModal currentgroup={currentGroup} ref={leaveGroupModal} leaveGroup={leaveGroup}/>
@@ -62,7 +62,7 @@ function Groupmember({currentGroup, fetchAllGroups}: {currentGroup: groupmember.
                     <div style={{margin:"0px 10px 0px 10px", display:"flex", flexDirection:"column"}}>
                         <h3>Gruppenmitglieder</h3>
                         <div style={{overflow:"scroll", borderRadius:"10px"}} className="scrollbar">
-                        <div style={{background:"grey", borderRadius:"10px", height:"100px", display:"flex", flexDirection:"row", alignItems:"center", gap:"30px", paddingLeft:"10px", paddingRight:"10px", width:"fit-content"}} className="scrollbar">
+                        <div style={{background:"#D9D9D9", borderRadius:"10px", height:"100px", display:"flex", flexDirection:"row", alignItems:"center", gap:"30px", paddingLeft:"10px", paddingRight:"10px", width:"fit-content"}} className="scrollbar">
                             {
                                 groupmember ?
                                     groupmember.map((groupmember: groupmember.Groupmember) => 

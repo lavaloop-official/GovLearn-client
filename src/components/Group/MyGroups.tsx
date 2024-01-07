@@ -14,7 +14,7 @@ function MyGroups({ group, setCurrentGroup, selected = false }: { group: Group, 
                 <b>{group.groupName}</b>
             </Button>
             :
-            <Button style={{ color: "black", textAlign: "left", background: "white", borderRadius: "5px", margin: "5px", overflow: "auto" }} type="primary" className="scrollbar" onClick={setToCurrentGroup}>
+            <Button style={{ color: "#3F3F3F", textAlign: "left", background: "white", borderRadius: "5px", margin: "5px", overflow: "auto" }} type="primary" className="scrollbar" onClick={setToCurrentGroup}>
                 <b>{group.groupName}</b>
             </Button>
     )

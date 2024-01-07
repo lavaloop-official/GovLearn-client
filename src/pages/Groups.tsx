@@ -123,7 +123,7 @@ function Groups() {
     }
 
     return (
-        <div style={{ display: "flex", justifyContent: "center", marginLeft: "25px", marginRight: "25px" }}>
+        <div style={{ display: "flex", justifyContent: "center", marginLeft: "25px", marginRight: "25px", color:"#3F3F3F"}}>
             <div style={{ background: "#F9F9F9", width: "1200px", margin: "25px", borderRadius: "20px", display: "flex", boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px" }}>
                 <div style={{ background: "#F4F4F4", width: "250px", margin: "10px", borderRadius: "10px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
                     <div style={{ display: "flex", flexDirection: "column" }}>
