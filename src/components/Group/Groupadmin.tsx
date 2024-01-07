@@ -129,13 +129,17 @@ function Groupadmin({ currentGroup, removeCurrentGroup, handleFetchingOfAllGroup
             {
                 groupmember ?
                     groupmember.map((groupmember: Groupmember) =>
-                    <>
-                        <Divider style={{margin:"0"}}/>
                         groupmember.role == Role.Admin ?
-                            <GroupmemberCourses groupmember={groupmember} admin={true} currentGroup={currentGroup}/>
-                    </>
-                            : groupmember.role == Role.Member ? 
+                            <>
+                                <Divider style={{margin:"0px"}}/>
                                 <GroupmemberCourses groupmember={groupmember} admin={true} currentGroup={currentGroup}/>
+                            </>
+
+                            : groupmember.role == Role.Member ? 
+                                <>
+                                    <Divider style={{margin:"0px"}}/>
+                                    <GroupmemberCourses groupmember={groupmember} admin={true} currentGroup={currentGroup}/>
+                                </>
                                 : <div/>)
                     : <div />
             }
