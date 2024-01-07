@@ -14,7 +14,7 @@ function Groupcourse({course, admin, removeCourseFromUser}:{course: Course, admi
 
     return (
         <div style={{ height:"fit-content", display:"flex", flexDirection:"row"}}>
-            <Recommendation obj={course} style={{background:"lightgrey"}}/>
+            <Recommendation obj={course} style={{background:"#D9D9D9"}}/>
             {
                 admin?
                     <Button style={{top:"95px", right:"43px", color:"red"}} type="text" icon={<DashSquare style={{width:"25px", height:"25px"}}/>} onClick={onRemoveCourseFromUser}></Button>

@@ -20,7 +20,7 @@ function Groupuser({ groupmember, admin, removeUserFromGroup }: { groupmember: G
                         <Avatar size={75} style={{ background: "white", color: "black", display:"flex"}}>{groupmember.name}</Avatar>
                         {
                             admin ?
-                                <Button style={{ bottom: "85px", left: "55px", color: "#D9D9D9" }} type="text" shape="circle" icon={<PersonDashFill style={{ width: "25px", height: "25px" }} />} onClick={onRemoveUserFromGroup}></Button>
+                                <Button style={{ bottom: "85px", left: "55px", color: "grey" }} type="text" shape="circle" icon={<PersonDashFill style={{ width: "25px", height: "25px" }} />} onClick={onRemoveUserFromGroup}></Button>
                                 : <div />
                         }
                     </Badge.Ribbon>
@@ -29,7 +29,7 @@ function Groupuser({ groupmember, admin, removeUserFromGroup }: { groupmember: G
                                 <Avatar size={75} style={{ background: "white", color: "black", display:"flex"}}>{groupmember.name}</Avatar>
                                 {
                                     admin ?
-                                        <Button style={{ bottom: "85px", left: "55px", color: "#D9D9D9", zIndex:"1" }} type="text" shape="circle" icon={<PersonDashFill style={{ width: "25px", height: "25px" }} />} onClick={onRemoveUserFromGroup}></Button>
+                                        <Button style={{ bottom: "85px", left: "55px", color: "grey", zIndex:"1" }} type="text" shape="circle" icon={<PersonDashFill style={{ width: "25px", height: "25px" }} />} onClick={onRemoveUserFromGroup}></Button>
                                         : <div />
                                 }
                             </Badge.Ribbon>
@@ -37,7 +37,7 @@ function Groupuser({ groupmember, admin, removeUserFromGroup }: { groupmember: G
                                 <Avatar size={75} style={{ background: "white", color: "black", display:"flex"}}>{groupmember.name}</Avatar>
                                 {
                                     admin ?
-                                        <Button style={{ bottom: "85px", left: "55px", color: "#D9D9D9" }} type="text" shape="circle" icon={<PersonDashFill style={{ width: "25px", height: "25px" }} />} onClick={onRemoveUserFromGroup}></Button>
+                                        <Button style={{ bottom: "85px", left: "55px", color: "grey" }} type="text" shape="circle" icon={<PersonDashFill style={{ width: "25px", height: "25px" }} />} onClick={onRemoveUserFromGroup}></Button>
                                         : <div />
                                 }
                             </Badge.Ribbon>

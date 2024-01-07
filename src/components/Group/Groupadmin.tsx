@@ -90,14 +90,14 @@ function Groupadmin({ currentGroup, removeCurrentGroup, handleFetchingOfAllGroup
     };
 
     return (
-        <div style={{ background: "lightgrey", flex: "1", margin: "10px", borderRadius: "10px", display: "flex", flexDirection: "column", minWidth: "280px" }}>
+        <div style={{ background: "#F4F4F4", flex: "1", margin: "10px", borderRadius: "10px", display: "flex", flexDirection: "column", minWidth: "280px", color:"#3F3F3F" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <div style={{ margin: "0px 10px 0px 10px" }}>
                     <h1>{currentGroup.groupName}</h1>
                 </div>
-                <div style={{ margin: "0px 10px 0px 10px" }}>
-                    <Button style={{ margin: "0px 10px 0px 10px" }} type="text" shape="circle" size="large" icon={<Pen color="white" size={28} onClick={showEditGroupModal}></Pen>}></Button>
-                    <Button type="text" shape="circle" size="large" icon={<Trash color="white" size={28} onClick={showDeleteGroupModal}></Trash>}></Button>
+                <div style={{ margin: "0px 10px 0px 10px", flex:1, display:"flex", justifyContent:"end", alignItems:"start", height:"100%", marginTop:"20px"}}>
+                    <Button style={{ margin: "0px 10px 0px 10px" }} type="text" shape="circle" size="large" icon={<Pen color="grey" size={28} onClick={showEditGroupModal}></Pen>}></Button>
+                    <Button type="text" shape="circle" size="large" icon={<Trash color="grey" size={28} onClick={showDeleteGroupModal}></Trash>}></Button>
                 </div>
                 <Modal title="Möchten Sie wirklich diese Gruppe löschen?" open={openDeleteCourseModal} onOk={handleDeleteGroupModalOK} onCancel={handleDeleteGroupModalCancel}>
                     <p>Die Gruppe wird unwiderruflich gelöscht.</p>
@@ -116,7 +116,7 @@ function Groupadmin({ currentGroup, removeCurrentGroup, handleFetchingOfAllGroup
             <div style={{ margin: "0px 10px 0px 10px", display: "flex", flexDirection: "column" }}>
                 <h3>Gruppenmitglieder</h3>
                 <div style={{ overflow: "scroll", borderRadius: "10px" }} className="scrollbar">
-                    <div style={{ background: "grey", borderRadius: "10px", height: "100px", display: "flex", flexDirection: "row", alignItems: "center", gap: "30px", paddingLeft: "10px", paddingRight: "10px", width: "fit-content", overflowX:"scroll", overflowY:"hidden" }} className="scrollbar">
+                    <div style={{ background: "#D9D9D9", borderRadius: "10px", height: "100px", display: "flex", flexDirection: "row", alignItems: "center", gap: "30px", paddingLeft: "15px", paddingRight: "10px", width: "fit-content", overflowX:"scroll", overflowY:"hidden" }} className="scrollbar">
                         {
                             groupmember ?
                                 groupmember.map((groupmember: Groupmember) =>
