@@ -11,7 +11,9 @@
 
   .course-display{
     background: grey;
-    border-radius: 10px;
+    border-radius: 30px;
+    padding: 10px;
+    gap:10px;
     display: flex; 
     flex-direction: row; 
     overflow-x: scroll; 
@@ -23,5 +25,5 @@
   .course-member-display{
     margin:0px 10px 10px 10px;
     display:flex; 
-    flex-direction:column:
+    flex-direction:column;
   }
