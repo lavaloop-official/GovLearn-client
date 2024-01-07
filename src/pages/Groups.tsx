@@ -124,7 +124,7 @@ function Groups() {
 
     return (
         <div style={{ display: "flex", justifyContent: "center", marginLeft: "25px", marginRight: "25px" }}>
-            <div style={{ background: "#D9D9D9", width: "fit-content", margin: "25px", borderRadius: "20px", display: "flex", minWidth: "650px", maxWidth: "80%", boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px" }}>
+            <div style={{ background: "#D9D9D9", width: "1200px", margin: "25px", borderRadius: "20px", display: "flex", boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px" }}>
                 <div style={{ background: "lightgrey", width: "250px", margin: "10px", borderRadius: "10px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <div style={{ height: "fit-content" }}>
@@ -141,6 +141,8 @@ function Groups() {
                             title="Gruppe beitreten oder neue Gruppe erstellen."
                             onOk={handleOk}
                             onCancel={handleCancel}
+                            okText="Bestätigen" 
+                            cancelText="Abbrechen"
                             footer={[
                                 <Button key="submit" type="primary" loading={loading} onClick={handleOk}>
                                     Gruppe beitreten
@@ -155,7 +157,7 @@ function Groups() {
                             ]}
                         >
                         </Modal>
-                        <Modal title="Gruppe erstellen" open={isCreateGroupModalOpen} onOk={handleCreateGroupModalOK} onCancel={handleCreateGroupModalCancel}>
+                        <Modal title="Gruppe erstellen" open={isCreateGroupModalOpen} onOk={handleCreateGroupModalOK} onCancel={handleCreateGroupModalCancel} okText="Bestätigen" cancelText="Abbrechen">
                             <h3>Gruppenname</h3>
                             <Input placeholder="Geben Sie einen Gruppennamen ein..." onChange={updateCreateGroupTitle} />
                             <h3>Gruppenbeschreibung</h3>
@@ -166,9 +168,9 @@ function Groups() {
                         <h3 style={{ textAlign: "center" }}>Einladungen</h3>
                         <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
                             {
-                                groupInvitations ?
-                                    groupInvitations.map((group: GroupInvitationWsTo) => <GroupInvitation group={group} acceptInvitation={acceptInvitation} denyInvitation={denyInvitation} />)
-                                    : <div />
+                                groupInvitations && groupInvitations.length>0 ?
+                                groupInvitations.map((group: GroupInvitationWsTo) => <GroupInvitation group={group} acceptInvitation={acceptInvitation} denyInvitation={denyInvitation} />)
+                                    : <p style={{alignSelf:"center"}}>Keine offenen Einladungen</p>
                             }
                         </div>
                     </div>

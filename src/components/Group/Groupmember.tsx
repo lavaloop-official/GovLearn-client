@@ -80,9 +80,9 @@ function Groupmember({currentGroup, fetchAllGroups}: {currentGroup: groupmember.
                         </div>
                     </div>
                     </div>
-                    <div style={{margin:"0px 10px 0px 10px", display:"flex", flexDirection:"column"}}>
+                    <div className="course-member-display">
                         <h3>Zugewiesene Kurse</h3>
-                        <div style={{background:"grey", height:"fit-content", borderRadius:"10px", display:"flex", flexDirection:"row", overflowX:"scroll", overflowY:"hidden", maxWidth:"fit-content"}} className="scrollbar">
+                        <div style={{maxWidth:"fit-content"}} className="scrollbar course-display">
                             {
                                 courses?
                                     courses.map((course: Course) => <Groupcourse course={course} admin={false}/>)
@@ -90,9 +90,9 @@ function Groupmember({currentGroup, fetchAllGroups}: {currentGroup: groupmember.
                             }
                         </div>
                     </div>
-                    <div style={{margin:"0px 10px 10px 10px", display:"flex", flexDirection:"column"}}>
+                    <div className="course-member-display">
                         <h3>Zu bearbeitende Kurse</h3>
-                        <div style={{background:"grey", height:"fit-content", borderRadius:"10px", display:"flex", flexDirection:"row", overflow:"scroll", maxWidth:"fit-content"}} className="scrollbar">
+                        <div style={{maxWidth:"fit-content"}} className="scrollbar course-display">
                             {
                                 toBeDoneCourses?
                                     toBeDoneCourses.map((course: Course) => <Groupcourse course={course} admin={false}/>)
@@ -100,9 +100,9 @@ function Groupmember({currentGroup, fetchAllGroups}: {currentGroup: groupmember.
                             }
                         </div>
                     </div>
-                    <div style={{margin:"0px 10px 10px 10px", display:"flex", flexDirection:"column"}}>
+                    <div className="course-member-display">
                         <h3>Abgeschlossene Kurse</h3>
-                        <div style={{background:"grey", height:"fit-content", borderRadius:"10px", display:"flex", flexDirection:"row", overflow:"scroll", maxWidth:"fit-content"}} className="scrollbar">
+                        <div style={{maxWidth:"fit-content"}} className="scrollbar course-display">
                             {
                                 finishedCourses?
                                     finishedCourses.map((course: Course) => <Groupcourse course={course} admin={false}/>)

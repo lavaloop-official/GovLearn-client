@@ -119,19 +119,21 @@ function Groupadmin({ currentGroup, removeCurrentGroup, handleFetchingOfAllGroup
                     </div>
                 </div>
             </div>
-            <div style={{ margin: "0px 10px 0px 10px", display: "flex", flexDirection: "column" }}>
+            <div style={{ margin: "0px 10px 10px 10px", display: "flex", flexDirection: "column" }}>
                 <h3>Gruppenverwaltung</h3>
                 <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
                     <Button>Mitglieder hinzufügen</Button>
                     <Button>Mitglieder entfernen</Button>
                 </div>
-                <Divider />
             </div>
             {
                 groupmember ?
                     groupmember.map((groupmember: Groupmember) =>
+                    <>
+                        <Divider style={{margin:"0"}}/>
                         groupmember.role == Role.Admin ?
                             <GroupmemberCourses groupmember={groupmember} admin={true} currentGroup={currentGroup}/>
+                    </>
                             : groupmember.role == Role.Member ? 
                                 <GroupmemberCourses groupmember={groupmember} admin={true} currentGroup={currentGroup}/>
                                 : <div/>)

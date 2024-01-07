@@ -8,3 +8,20 @@
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
   }
+
+  .course-display{
+    background: grey;
+    border-radius: 10px;
+    display: flex; 
+    flex-direction: row; 
+    overflow-x: scroll; 
+    overflow-y: hidden; 
+    height: fit-content; 
+    align-items: center;
+  }
+
+  .course-member-display{
+    margin:0px 10px 10px 10px;
+    display:flex; 
+    flex-direction:column:
+  }
