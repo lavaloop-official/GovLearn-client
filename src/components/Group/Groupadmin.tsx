@@ -50,10 +50,18 @@ function Groupadmin({ currentGroup, removeCurrentGroup, handleFetchingOfAllGroup
     const [groupmember, setGroupmember] = useState<Groupmember[]>([]);
 
     const removeUserFromGroup = (groupmem: Groupmember) => {
-        const removedUserFromGroup = fetchWrapper.delete(`api/v1/groups/${groupmem.memberId}`).then(res => {
-            console.log(res.messages[0].message);
-        })
-        Promise.all([removedUserFromGroup]).then(() => fetchAllGroupMembers());
+        if(groupmem.role != Role.Invited){
+            const removedUserFromGroup = fetchWrapper.delete(`api/v1/groups/${groupmem.memberId}`).then(res => {
+                console.log(res.messages[0].message);
+            })
+            Promise.all([removedUserFromGroup]).then(() => fetchAllGroupMembers());
+        }
+        else{
+            const removedUserFromGroup = fetchWrapper.delete(`api/v1/groups/invitations/groupID/${currentGroup.groupId}/usermail/${groupmem.email}`).then(res => {
+                console.log(res.messages[0].message);
+            })
+            Promise.all([removedUserFromGroup]).then(() => fetchAllGroupMembers());
+        }
     }
 
     const fetchAllGroupMembers = () => {
