@@ -1,5 +1,4 @@
-
-import {INTERNAL_ERROR} from "../constants/de.ts";
+import {INTERNAL_ERROR, LOGIN_ERROR, REGISTER_ERROR} from "../constants/de.ts";
 import {BACKEND_URL} from "../constants/backend.ts";
 import {LoginType} from "../state/modalslice.ts";
 import {setToken} from "./auth.ts";
@@ -24,13 +23,23 @@ async function handleLogin(data: { values: { email: string, password: string, re
     //handle anything that is not a 200 response
     if (!response.ok) {
         //TODO: handle Error codes and send specific error messages
-        throw new Error(INTERNAL_ERROR);
+        const json = await response.json();
+        const error = json?.messages[0]?.message;
+        switch (error) {
+            case "User not found":
+                throw new Error(LOGIN_ERROR);
+            case "Password wrong":
+                throw new Error(LOGIN_ERROR);
+            case "User exists already":
+                throw new Error(REGISTER_ERROR);
+            default:
+                throw new Error(INTERNAL_ERROR);
+        }
+    } else {
+        const json = await response.json();
+        setToken(json.payload.token, remember);
+        return navigateTo;
     }
-    const json = await response.json();
-
-    setToken(json.payload.token, remember);
-
-    return navigateTo;
 }
 
 export default handleLogin;
