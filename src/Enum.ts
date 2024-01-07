@@ -14,5 +14,6 @@ export enum Format{
 export enum Role{
     Member = "Member",
     Moderator = "Moderator",
-    Admin = "Admin"
+    Admin = "Admin",
+    Invited = "Invited"
 }

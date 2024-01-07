@@ -8,6 +8,7 @@ import Groupuser from "./Groupuser";
 import InviteGroupmember from "./InviteGroupmember";
 import { fetchWrapper } from "../../api/helper";
 import TextArea from "antd/es/input/TextArea";
+import { Role } from "../../Enum";
 
 function Groupadmin({ currentGroup, removeCurrentGroup, handleFetchingOfAllGroups }: { currentGroup: Group, removeCurrentGroup: (group: Group) => void, handleFetchingOfAllGroups: () => void }) {
 
@@ -26,7 +27,7 @@ function Groupadmin({ currentGroup, removeCurrentGroup, handleFetchingOfAllGroup
     const handleEditGroupModalOK = () => {
         const editGroup: GroupEditWsTo = { groupId: currentGroup.groupId, groupName: editGroupTitle, groupDescription: editGroupDescription };
         const groupchanged = fetchWrapper.put(`api/v1/groups`, editGroup).then((res) => {
-            console.log(res.message)
+            console.log(res.messages[0].message)
         });
         Promise.all([groupchanged]).then(() => {
             handleFetchingOfAllGroups();
@@ -50,7 +51,7 @@ function Groupadmin({ currentGroup, removeCurrentGroup, handleFetchingOfAllGroup
 
     const removeUserFromGroup = (groupmem: Groupmember) => {
         const removedUserFromGroup = fetchWrapper.delete(`api/v1/groups/${groupmem.memberId}`).then(res => {
-            console.log(res.message);
+            console.log(res.messages[0].message);
         })
         Promise.all([removedUserFromGroup]).then(() => fetchAllGroupMembers());
     }
@@ -103,11 +104,11 @@ function Groupadmin({ currentGroup, removeCurrentGroup, handleFetchingOfAllGroup
             <div style={{ margin: "0px 10px 0px 10px" }}>
                 <p>{currentGroup.groupDescription}</p>
             </div>
-            <InviteGroupmember groupId={currentGroup.groupId} ref={inviteGroupmemberModal}></InviteGroupmember>
+            <InviteGroupmember groupId={currentGroup.groupId} ref={inviteGroupmemberModal} fetchGroupmembers={fetchAllGroupMembers}></InviteGroupmember>
             <div style={{ margin: "0px 10px 0px 10px", display: "flex", flexDirection: "column" }}>
                 <h3>Gruppenmitglieder</h3>
                 <div style={{ overflow: "scroll", borderRadius: "10px" }} className="scrollbar">
-                    <div style={{ background: "grey", borderRadius: "10px", height: "100px", display: "flex", flexDirection: "row", alignItems: "center", gap: "0px", paddingLeft: "10px", paddingRight: "10px", width: "fit-content" }} className="scrollbar">
+                    <div style={{ background: "grey", borderRadius: "10px", height: "100px", display: "flex", flexDirection: "row", alignItems: "center", gap: "30px", paddingLeft: "10px", paddingRight: "10px", width: "fit-content", overflowX:"scroll", overflowY:"hidden" }} className="scrollbar">
                         {
                             groupmember ?
                                 groupmember.map((groupmember: Groupmember) =>
@@ -129,7 +130,11 @@ function Groupadmin({ currentGroup, removeCurrentGroup, handleFetchingOfAllGroup
             {
                 groupmember ?
                     groupmember.map((groupmember: Groupmember) =>
-                        <GroupmemberCourses groupmember={groupmember} admin={true} currentGroup={currentGroup}/>)
+                        groupmember.role == Role.Admin ?
+                            <GroupmemberCourses groupmember={groupmember} admin={true} currentGroup={currentGroup}/>
+                            : groupmember.role == Role.Member ? 
+                                <GroupmemberCourses groupmember={groupmember} admin={true} currentGroup={currentGroup}/>
+                                : <div/>)
                     : <div />
             }
         </div>

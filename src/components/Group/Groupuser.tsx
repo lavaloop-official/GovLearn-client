@@ -13,25 +13,36 @@ function Groupuser({ groupmember, admin, removeUserFromGroup }: { groupmember: G
     }
 
     return (
-        <div>
+        <div style={{height:"70px"}}>
             {
                 groupmember.role == Role.Admin ?
                     <Badge.Ribbon text="Admin" color="green" placement="start">
-                        <Avatar size={75} style={{ background: "white", color: "black" }}>{groupmember.name}</Avatar>
+                        <Avatar size={75} style={{ background: "white", color: "black", display:"flex", justifyContent:"center", alignItems:"center"}}>{groupmember.name}</Avatar>
                         {
                             admin ?
-                                <Button style={{ bottom: "20px", right: "20px", color: "#D9D9D9" }} type="text" shape="circle" icon={<PersonDashFill style={{ width: "25px", height: "25px" }} />} onClick={onRemoveUserFromGroup}></Button>
+                                <Button style={{ bottom: "85px", left: "55px", color: "#D9D9D9" }} type="text" shape="circle" icon={<PersonDashFill style={{ width: "25px", height: "25px" }} />} onClick={onRemoveUserFromGroup}></Button>
                                 : <div />
                         }
                     </Badge.Ribbon>
-                    : <Badge.Ribbon text="Nutzer" color="blue" placement="start">
-                        <Avatar size={75} style={{ background: "white", color: "black" }}>{groupmember.name}</Avatar>
-                        {
-                            admin ?
-                                <Button style={{ bottom: "20px", right: "20px", color: "#D9D9D9" }} type="text" shape="circle" icon={<PersonDashFill style={{ width: "25px", height: "25px" }} />} onClick={onRemoveUserFromGroup}></Button>
-                                : <div />
-                        }
-                    </Badge.Ribbon>
+                    : groupmember.role == Role.Invited ?
+                            <Badge.Ribbon text="Eingeladen" color="yellow" placement="start">
+                                <Avatar size={75} style={{ background: "white", color: "black"}}>{groupmember.name}</Avatar>
+                                {/* 
+                                TODO: Update Invitation Controller to also support removing group invitations
+                                {
+                                    admin ?
+                                        <Button style={{ bottom: "20px", right: "20px", color: "#D9D9D9" }} type="text" shape="circle" icon={<PersonDashFill style={{ width: "25px", height: "25px" }} />} onClick={onRemoveUserFromGroup}></Button>
+                                        : <div />
+                                } */}
+                            </Badge.Ribbon>
+                            : <Badge.Ribbon text="Nutzer" color="blue" placement="start">
+                                <Avatar size={75} style={{ background: "white", color: "black", display:"flex"}}>{groupmember.name}</Avatar>
+                                {
+                                    admin ?
+                                        <Button style={{ bottom: "85px", left: "55px", color: "#D9D9D9" }} type="text" shape="circle" icon={<PersonDashFill style={{ width: "25px", height: "25px" }} />} onClick={onRemoveUserFromGroup}></Button>
+                                        : <div />
+                                }
+                            </Badge.Ribbon>
             }
         </div>
     )
