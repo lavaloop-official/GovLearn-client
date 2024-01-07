@@ -51,7 +51,7 @@ function Groupadmin({ currentGroup, removeCurrentGroup, handleFetchingOfAllGroup
 
     const removeUserFromGroup = (groupmem: Groupmember) => {
         if(groupmem.role != Role.Invited){
-            const removedUserFromGroup = fetchWrapper.delete(`api/v1/groups/${groupmem.memberId}`).then(res => {
+            const removedUserFromGroup = fetchWrapper.delete(`api/v1/groups/members/${groupmem.memberId}`).then(res => {
                 console.log(res.messages[0].message);
             })
             Promise.all([removedUserFromGroup]).then(() => fetchAllGroupMembers());

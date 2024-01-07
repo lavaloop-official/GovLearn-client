@@ -62,7 +62,7 @@ function Groupmember({currentGroup, fetchAllGroups}: {currentGroup: groupmember.
                     <div style={{margin:"0px 10px 0px 10px", display:"flex", flexDirection:"column"}}>
                         <h3>Gruppenmitglieder</h3>
                         <div style={{overflow:"scroll", borderRadius:"10px"}} className="scrollbar">
-                        <div style={{background:"#D9D9D9", borderRadius:"10px", height:"100px", display:"flex", flexDirection:"row", alignItems:"center", gap:"30px", paddingLeft:"10px", paddingRight:"10px", width:"fit-content"}} className="scrollbar">
+                        <div style={{background:"#D9D9D9", borderRadius:"10px", height:"100px", display:"flex", flexDirection:"row", alignItems:"center", gap:"30px", paddingLeft:"15px", paddingRight:"10px", width:"fit-content"}} className="scrollbar">
                             {
                                 groupmember ?
                                     groupmember.map((groupmember: groupmember.Groupmember) => 

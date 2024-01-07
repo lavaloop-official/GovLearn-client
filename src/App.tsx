@@ -1,9 +1,9 @@
 import './App.css'
-import {ConfigProvider, Layout} from "antd";
+import {ConfigProvider, Divider, Flex, Layout} from "antd";
 import {Content, Footer, Header} from "antd/es/layout/layout";
 import CustomHeader from "./components/Header/CustomHeader.tsx";
 import Discover from "./pages/Discover.tsx";
-import {BrowserRouter, Route, Routes} from "react-router-dom";
+import {BrowserRouter, Link, Route, Routes} from "react-router-dom";
 import Details from "./pages/Details.tsx";
 import Profile from "./pages/Profile.tsx";
 import Landing from "./pages/Landing.tsx";
@@ -18,6 +18,7 @@ import Dashboard from "./pages/Dashboard.tsx";
 import Groups from "./pages/Groups.tsx";
 
 function App() {
+
     //TODO: remove inline styles from components
     //TODO: refactor redux login modal state management
     //TODO: remove any types
@@ -51,7 +52,15 @@ function App() {
                                 <Route path="/groups" element={<Protected><Groups/></Protected>}/>
                             </Routes>
                         </Content>
-                        <Footer>Govlearn - Made with ❤ in Münster</Footer>
+                        <Footer>
+                            <Flex justify='center' align='center' gap='50px'>
+                                <a style={{textAlign:"left", width:"fit-content", textDecoration:"None", color:"black"}} href='/discover'>Govlearn</a>
+                                <Divider type='vertical' style={{background:"black"}}/>
+                                <p style={{textAlign:"center", width:"fit-content"}}>Made with ❤ in Münster</p>
+                                <Divider type='vertical' style={{background:"black"}}/>
+                                <Link style={{textAlign:"right", width:"fit-content", textDecoration:"None", color:"black"}} to='/profile#impressum'>Impressum</Link>
+                            </Flex>
+                        </Footer>
                     </Layout>
                 </BrowserRouter>
             </Provider>

@@ -392,6 +392,15 @@ function Profile() {
                         werden irgendwann einmal Informationen zum Datenschutz stehen: Cookies, Datenschutzerklärung
                         etc.</p>
                 </div>
+                <Divider/>
+                <section id="impressum">
+                    <div style={{flexBasis: "100%", marginBottom: "0px"}}>
+                        <h2 style={{textAlign: "center"}}>Impressum</h2>
+                        <p style={{textAlign: "left", background: "#F7F7F7", borderRadius: "10px", padding: "15px"}}>Hier
+                            werden irgendwann einmal Informationen zum Datenschutz stehen: Cookies, Datenschutzerklärung
+                            etc.</p>
+                    </div>
+                </section>
             </div>
         </div>
     );
