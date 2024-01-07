@@ -53,6 +53,9 @@ const InviteGroupmember = forwardRef((props: InviteGroupProps, ref) => {
             Promise.all([sendInvitations]).then(() => {
                 props.fetchGroupmembers();
                 form.resetFields();
+                fetchWrapper.get(`api/v1/users/all?groupID=${props.groupId}`).then(res => {
+                    setUsers(res.payload);
+                });
             })
             setLoading(false);
             setOpen(false);

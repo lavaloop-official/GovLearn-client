@@ -24,9 +24,9 @@ function GroupInvitation({group, acceptInvitation, denyInvitation}:{group:GroupI
                 <Button onClick={onAcceptInvitation} icon={<CheckLg color="green"/>}></Button>
             </div>
         </div>
-                    {
-                        expanded ? <div style={{background:"lightgray", padding:"5px", borderRadius: "10px"}}>{group.groupDescription}</div> : <div/>
-                    }
+            {
+                expanded ? <div style={{background:"lightgray", padding:"5px", borderRadius: "10px"}}>{group.groupDescription}</div> : <div/>
+            }
         </Flex>
     )
 }
