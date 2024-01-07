@@ -10,6 +10,7 @@ import { fetchWrapper } from "../../api/helper";
 
 interface AddCourseProps {
     groupmember: Groupmember | undefined;
+    currentGroup: Group | undefined;
     addCourseToGroupmember(courseId: number[]): void;
 }
 
@@ -55,7 +56,7 @@ const AddCourse = forwardRef((props: AddCourseProps, ref) => {
 
     useEffect(() => {
         const options: SelectProps['options'] = []
-        const fetchedCourses = fetchWrapper.get(`api/v1/courses`).then(res => {
+        const fetchedCourses = fetchWrapper.get(`api/v1/courses?groupmemberID=${props.groupmember?.memberId}&groupID=${props.currentGroup?.groupId}`).then(res => {
             let fetchedCourses:Course[] = res.payload;
             fetchedCourses.forEach(course => {
                 options.push({

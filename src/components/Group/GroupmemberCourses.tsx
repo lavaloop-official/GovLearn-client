@@ -72,7 +72,7 @@ function GroupmemberCourses({ groupmember, admin, currentGroup}: { groupmember: 
                     }
                     <Button onClick={() => addCourseModal?.current?.openDialog()} style={{ height: "fit-content", width: "fit-content", marginRight: "15px", marginLeft: "15px" }} icon={<Plus style={{ color: "white", height: "100%", width: "75px" }} />} type="text" />
                 </div>
-            <AddCourse groupmember={groupmember} ref={addCourseModal} addCourseToGroupmember={addCourseToGroupmember}/>
+            <AddCourse groupmember={groupmember} currentGroup={currentGroup} ref={addCourseModal} addCourseToGroupmember={addCourseToGroupmember}/>
             </>
             : <div />}
         </div>
