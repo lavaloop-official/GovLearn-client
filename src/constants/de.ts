@@ -10,6 +10,8 @@ export const FORGOT_EXPLAIN_TEXT = 'Geben sie Ihre E-mail ein, um Ihr Passwort z
 export const LOGIN_ERROR = 'Die eingegebenen Anmeldedaten sind nicht korrekt!'
 export const REGISTER_ERROR = 'Es besteht bereits ein Konto mit dieser E-mail Adresse!'
 
+export const PASSWORD_SHORT = 'Das Passwort muss mindestens 8 Zeichen lang sein!'
+
 export const INTERNAL_ERROR = 'Es ist etwas schief gelaufen! Bitte versuchen Sie es später erneut!'
 
 export const SEARCH_ERROR = 'Bitte geben Sie einen Suchbegriff ein!'
