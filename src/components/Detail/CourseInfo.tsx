@@ -39,7 +39,7 @@ function CourseInfo({course}: { course: Course }) {
         setTimeout(() => {
             setConfetti(false);
         }, 5000);
-        fetchWrapper.post(`api/v1/completion/courses/${course.id}/}`)
+        fetchWrapper.post(`api/v1/completion/courses/${course.id}`)
     }
 
     const handleCancel = () => {
