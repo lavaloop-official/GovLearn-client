@@ -99,19 +99,20 @@ function CustomHeader() {
                     }
                 </Col>
                 <Col span={8}>
-                    {loggedIn ?
-                        <div className="avatar">
-                            <Dropdown menu={{items}} placement="bottomRight" arrow={{pointAtCenter: true}}
-                                      trigger={['click']}>
-                                <a onClick={(e) => e.preventDefault()}>
-                                    <Avatar icon={<UserOutlined/>}/>
-                                </a>
-                            </Dropdown>
-                        </div>
-                        :
-                        <Button className="loginbtn" type="primary" size="large" onClick={() => {
-                            openLoginModal("login")
-                        }}>Anmelden</Button>
+                    {window.location.pathname.includes("reset-password") ? <></> :
+                        loggedIn ?
+                            <div className="avatar">
+                                <Dropdown menu={{items}} placement="bottomRight" arrow={{pointAtCenter: true}}
+                                          trigger={['click']}>
+                                    <a onClick={(e) => e.preventDefault()}>
+                                        <Avatar icon={<UserOutlined/>}/>
+                                    </a>
+                                </Dropdown>
+                            </div>
+                            :
+                            <Button className="loginbtn" type="primary" size="large" onClick={() => {
+                                openLoginModal("login")
+                            }}>Anmelden</Button>
                     }
                 </Col>
             </Row>
