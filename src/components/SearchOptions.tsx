@@ -75,11 +75,6 @@ function SearchOptions({onFilterChange, initialTags}: {
         onFilterChange({anbieter: value});
     };
 
-    const optionsWissensbezug = ["Theorie", "Praxis"];
-    const onChangeWissensbezug = (checkedValues: CheckboxValueType[]) => {
-        onFilterChange({wissensbezug: checkedValues});
-    };
-
     const optionsVerwaltungsspezifisch = ['Verwaltungsspezifisch'];
     const onChangeVerwaltungsspezifisch = (checkedValues: CheckboxValueType[]) => {
         onFilterChange({verwaltungsspezifisch: checkedValues.includes("Verwaltungsspezifisch")});
@@ -122,7 +117,7 @@ function SearchOptions({onFilterChange, initialTags}: {
                 array[index] = "8+Std."
             }
         }
-        onFilterChange({dauer: array});
+        onFilterChange({dauerInMinLaengerAls: array[0], dauerInMinKuerzerAls: array[(array.length-1)]});
     };
 
     const optionsFormat = [
@@ -141,7 +136,7 @@ function SearchOptions({onFilterChange, initialTags}: {
 
     const optionsKosten = ['Kostenlos'];
     const onChangeKosten = (checkedValues: CheckboxValueType[]) => {
-        onFilterChange({kosten: checkedValues.includes("Kostenlos")});
+        onFilterChange({kostenlos: checkedValues.includes("Kostenlos")});
     };
 
     return (
@@ -173,10 +168,6 @@ function SearchOptions({onFilterChange, initialTags}: {
             />
             <Divider/>
 
-            <p>Wissensbezug</p>
-            <Checkbox.Group onChange={onChangeWissensbezug} options={optionsWissensbezug}/>
-            <Divider/>
-
             <p>Verwaltungsspezifisch</p>
             <Checkbox.Group onChange={onChangeVerwaltungsspezifisch} options={optionsVerwaltungsspezifisch}/>
             <Divider/>
@@ -204,9 +195,6 @@ function SearchOptions({onFilterChange, initialTags}: {
 
             <p>Kosten</p>
             <Checkbox.Group onChange={onChangeKosten} options={optionsKosten}/>
-            <Divider/>
-
-            <p>Sonstiges</p>
         </Card>
     );
 }
