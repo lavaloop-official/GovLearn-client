@@ -67,6 +67,7 @@ function RecomSlider({ title, data }: { title?: string, data?: Course[] }) {
         setIsMouseDown(false)
         if (!ref.current) return
         document.body.style.cursor = "default"
+        //snap();
     }
 
     const onMouseLeave = () => {
@@ -112,14 +113,16 @@ function RecomSlider({ title, data }: { title?: string, data?: Course[] }) {
             if(ref.current){
                 const offset = Math.abs(ref.current.scrollLeft % 240);
 
+                const base = ref.current.scrollLeft
+
                 if (Math.abs(ref.current.scrollLeft) >= max)
                     ref.current.scrollLeft = max;
                 if (Math.abs(ref.current.scrollLeft) > 0)
                     ref.current.scrollLeft = 0;
                 if (offset < 120)
-                    ref.current.scrollLeft = ref.current.scrollLeft + offset;
+                    ref.current.scrollLeft = base + offset;
                 else
-                    ref.current.scrollLeft = ref.current.scrollLeft - (240 - offset);
+                    ref.current.scrollLeft = base - (240 - offset);
             }
         }
     }
@@ -146,7 +149,7 @@ function RecomSlider({ title, data }: { title?: string, data?: Course[] }) {
                     setLeftButton(true);
                 }
         }
-        //snap();
+        snap();
         }
     }
 
@@ -182,6 +185,7 @@ function RecomSlider({ title, data }: { title?: string, data?: Course[] }) {
         return () => {
           // Cleanup: clear the timer when the component unmounts
           if (scrollTimer.current) {
+
             clearInterval(scrollTimer.current);
           }
         };
