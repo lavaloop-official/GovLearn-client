@@ -18,16 +18,15 @@ function Searching() {
     const [searchStr, setSearchStr] = useState<string>(location.state?.searchStr ?? "");
     const [courseFilter, setCourseFilter] = useState<CourseFilterWsTo>({
         tagIDs: location.state?.tagIDs ?? [],
-        anbieter: [],
-        wissensbezug: [],
-        verwaltungsspezifisch: false,
-        zertifikat: false,
-        kompetenzstufe: [],
         format: [],
+        dauerInMinLaengerAls: undefined,
+        verwaltungsspezifisch: undefined,
+        dauerInMinKuerzerAls: undefined,
+        anbieter: [],
         startdatum: undefined,
-        dauer: [],
-        kostenlos: false,
-        sonstiges: []
+        kompetenzstufe: [],
+        zertifikat: undefined,
+        kostenlos: undefined
     });
 
     const onSearch = (value: string) => {
