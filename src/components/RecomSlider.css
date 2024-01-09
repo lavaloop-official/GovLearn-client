@@ -6,10 +6,12 @@
 .slider.inner {
     background: #D9D9D9;
     flex-direction: row;
-    overflow-x: hidden;
+    overflow-x: scroll;
     padding: 10px 10px;
     border-radius: 20px;
-    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    box-shadow: rgba(123, 123, 123, 0.2) 0px 2px 8px 0px;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
 }
 
 .slider.outer {
@@ -24,17 +26,23 @@
     position: absolute;
     bottom: 88px;
     scale: 1.5;
-    background: rgb(69, 69, 69, 0.7);
+    background: rgba(224, 224, 224, 0.7);
 }
 
 .showmore:hover {
-    background: rgb(69, 69, 69, 0.9)
+    background: rgb(224, 224, 224, 0.7)
 }
 
 .showmore.right {
     right: 30px;
+    background: rgb(224, 224, 224, 0.7)
 }
 
 .showmore.left {
     left: 30px;
+    background: rgb(224, 224, 224, 0.7)
 }
+
+.slider.inner::-webkit-scrollbar {
+    display: none;
+  }

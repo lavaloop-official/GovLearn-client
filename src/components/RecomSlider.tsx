@@ -3,7 +3,8 @@ import Recommendation from "./Recommendation.tsx";
 import './RecomSlider.css'
 import { Course } from "../interfaces.ts";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
-import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { timeout } from "d3";
 
 /**
  * RecomSlider is a React component that displays a list of courses in a horizontally scrollable slider.
@@ -15,10 +16,10 @@ import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
 function RecomSlider({ title, data }: { title?: string, data?: Course[] }) {
 
     // State variables for managing the slider's position, dragging status, transition effect and maximum scrollable distance.
-    const [translate, setTranslate] = useState(0);
     const [dragging, setDragging] = useState(false);
-    const [transition, setTransition] = useState(false);
     const [max, setMax] = useState(740);
+    const [leftButton, setLeftButton] = useState(false);
+    const [rightButton, setRightButton] = useState(true);
 
     // A reference to the slider's DOM element.
     const ref = useRef<HTMLDivElement>(null);
@@ -39,40 +40,64 @@ function RecomSlider({ title, data }: { title?: string, data?: Course[] }) {
         return () => window.removeEventListener('resize', updateSize);
     }, [data, ref]);
 
-
-    // A callback function that updates the slider's position when the mouse is moved.
-    const listener = useCallback((e: MouseEvent) => {
-        setTranslate(translate => {
-            const offset = translate + e.movementX;
-
-            if (offset < -max - 120)
-                return -max - 120;
-
-            return offset > 120 ? 120 : offset
-        })
-        if (e.movementX !== 0)
-            setDragging(true);
-    }, [max])
-
     // Event handlers for mouse down, up, leave, and click events.
-    const onmousedown = (e: React.MouseEvent<HTMLElement>) => {
-        if (max > 0) {
-            window.addEventListener("mousemove", listener)
-            e.preventDefault();
-            setDragging(false)
-        }
+    const [isMouseDown, setIsMouseDown] = useState(false);
+
+    const mouseCoords = useRef({
+        startX: 0,
+        startY: 0,
+        scrollLeft: 0,
+        scrollTop: 0
+    });
+    const [isScrolling, setIsScrolling] = useState(false);
+
+    const handleDragStart = (e) => {
+        if (!ref.current) return
+        const slider = ref.current;
+        const startX = e.pageX - slider.offsetLeft;
+        const startY = e.pageY - slider.offsetTop;
+        const scrollLeft = slider.scrollLeft;
+        const scrollTop = slider.scrollTop;
+        mouseCoords.current = { startX, startY, scrollLeft, scrollTop }
+        setIsMouseDown(true)
+        document.body.style.cursor = "grabbing"
     }
 
-    const onmouseup = (e: React.MouseEvent<HTMLElement>) => {
-        window.removeEventListener("mousemove", listener)
+    const handleDragEnd = () => {
+        setIsMouseDown(false)
+        if (!ref.current) return
+        document.body.style.cursor = "default"
+    }
+
+    const onMouseLeave = () => {
+        setIsMouseDown(false)
+        if (!ref.current) return
+        document.body.style.cursor = "default"
+    }
+
+    const handleDrag = (e) => {
+        if (!isMouseDown || ! ref.current) return;
         e.preventDefault();
-        snap();
-    }
-
-    const onmouseleave = () => {
-        window.removeEventListener("mousemove", listener)
-        setDragging(false)
-        snap();
+        const slider = ref.current;
+        const x = e.pageX - slider.offsetLeft;
+        const y = e.pageY - slider.offsetTop;
+        const walkX = (x - mouseCoords.current.startX) * 1.5;
+        const walkY = (y - mouseCoords.current.startY) * 1.5;
+        slider.scrollLeft = mouseCoords.current.scrollLeft - walkX;
+        slider.scrollTop = mouseCoords.current.scrollTop - walkY;
+        //console.log(slider.scrollLeft)
+        if(Math.abs(slider.scrollLeft) >= max){
+            setRightButton(false);
+            setLeftButton(true);
+        }
+        else if(Math.abs(slider.scrollLeft) < max && Math.abs(slider.scrollLeft) > 0){
+            setRightButton(true);
+            setLeftButton(true);
+        }
+        else if(Math.abs(slider.scrollLeft) <= 0){
+            setRightButton(true);
+            setLeftButton(false);
+        }
     }
 
     const onclick = (e: React.MouseEvent<HTMLElement>) => {
@@ -84,40 +109,83 @@ function RecomSlider({ title, data }: { title?: string, data?: Course[] }) {
     // A function that adjusts the slider's position to align with the nearest course item.
     const snap = () => {
         if (max > 0) {
-            setTransition(true);
+            if(ref.current){
+                const offset = Math.abs(ref.current.scrollLeft % 240);
 
-            setTranslate(translate => {
-                const offset = Math.abs(translate % 240);
-
-                if (-translate >= max)
-                    return -max;
-                if (translate > 0)
-                    return 0;
+                if (Math.abs(ref.current.scrollLeft) >= max)
+                    ref.current.scrollLeft = max;
+                if (Math.abs(ref.current.scrollLeft) > 0)
+                    ref.current.scrollLeft = 0;
                 if (offset < 120)
-                    return translate + offset;
+                    ref.current.scrollLeft = ref.current.scrollLeft + offset;
                 else
-                    return translate - (240 - offset);
-            })
-
-            setTimeout(() => {
-                setTransition(false);
-            }, 200);
+                    ref.current.scrollLeft = ref.current.scrollLeft - (240 - offset);
+            }
         }
     }
 
     // A function that scrolls the slider when the navigation buttons are clicked.
     const navOnClick = (direction: "l" | "r") => {
-        setTransition(true);
-        if (direction == "l" && translate < 0)
-            setTranslate(translate => translate + 240);
-        else if (direction == "r" && Math.abs(translate) < max) {
-            if (Math.abs(translate) + 240 > max)
-                setTranslate(-max);
-            else
-                setTranslate(translate => translate - 240);
+        if(ref.current){
+            if (direction == "l" && ref.current.scrollLeft > 0){
+                ref.current.scrollLeft -= 240
+                setRightButton(true);
+            }
+            else if(direction == "l" && ref.current.scrollLeft == 0){
+                setRightButton(true);
+                setLeftButton(false);
+            }
+            else if (direction == "r" && ref.current.scrollLeft < max) {
+                if (ref.current.scrollLeft + 240 > max){
+                        ref.current.scrollLeft = max
+                        setRightButton(false);
+                        setLeftButton(true);
+                    }
+                else{
+                    ref.current.scrollLeft += 240
+                    setLeftButton(true);
+                }
         }
-        snap();
+        //snap();
+        }
     }
+
+    const scrollTimer = useRef<NodeJS.Timeout | null>(null);
+
+    const handleScroll = (event) => {
+        setIsScrolling(true)
+        if(Math.abs(event.target.scrollLeft) == max){
+            setRightButton(false);
+            setLeftButton(true);
+        }
+        else if(Math.abs(event.target.scrollLeft) < max && Math.abs(event.target.scrollLeft) > 0){
+            setRightButton(true);
+            setLeftButton(true);
+        }
+        else if(Math.abs(event.target.scrollLeft) == 0){
+            setRightButton(true);
+            setLeftButton(false);
+        }
+
+        if (scrollTimer.current) {
+            clearInterval(scrollTimer.current);
+          }
+      
+          // Set a new timer to check for scroll stop after 200 milliseconds (adjust as needed)
+          scrollTimer.current = setInterval(() => {
+            setIsScrolling(false)
+            clearInterval(scrollTimer.current);
+          }, 200);
+    }
+
+    useEffect(() => {
+        return () => {
+          // Cleanup: clear the timer when the component unmounts
+          if (scrollTimer.current) {
+            clearInterval(scrollTimer.current);
+          }
+        };
+      }, []);
 
     return (
         <>
@@ -128,20 +196,22 @@ function RecomSlider({ title, data }: { title?: string, data?: Course[] }) {
                         : <Skeleton.Input active style={{ margin: "0 0 5px 0" }} />
                 }
 
-                <div onMouseDown={onmousedown}
-                    onMouseUp={onmouseup}
+                <div onMouseDown={handleDragStart}
+                    onMouseUp={handleDragEnd}
                     onClickCapture={onclick}
-                    onMouseLeave={onmouseleave}
-                    className="slider inner"
-                    ref={ref}>
+                    onMouseLeave={onMouseLeave}
+                    onMouseMove={handleDrag}
+                    className="slider inner" 
+                    onScroll={handleScroll}
+                    ref={ref}
+                    style={{transition: "all 0.2s ease-in-out"}}>
                     {
                         data ?
                             data.map((item: Course) =>
                                 <div key={item.id}>
                                     <Recommendation
                                         style={{
-                                            transform: `translate(${translate}px)`,
-                                            transition: `${transition ? "all 0.2s ease-in-out" : ""}`
+                                            pointerEvents: `${isScrolling? isMouseDown ? "none": "auto":"auto"}`,
                                         }}
                                         obj={item} />
                                 </div>
@@ -153,14 +223,14 @@ function RecomSlider({ title, data }: { title?: string, data?: Course[] }) {
                 <Button className="showmore right"
                     type="text"
                     icon={<RightOutlined />}
-                    style={{ display: `${Math.abs(translate) < max ? "block" : "none"}` }}
+                    style={{ display: `${rightButton ? "block" : "none"}` }}
                     onClick={
                         () => navOnClick("r")
                     } />
                 <Button className="showmore left"
                     type="text"
                     icon={<LeftOutlined />}
-                    style={{ display: `${translate < 0 ? "block" : "none"}` }}
+                    style={{ display: `${leftButton ? "block" : "none"}` }}
                     onClick={() => {
                         navOnClick("l");
                     }} />
