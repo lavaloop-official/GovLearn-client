@@ -196,8 +196,7 @@ function CourseInfo({course}: { course: Course }) {
                 </Button>,
             ]}>
                 <p>Bitte bestätige, dass du den Kurs erfolgreich abgeschlossen hast.</p>
-                <p>Deine Bestätigung wird anonymisiert gespeichert und dient der Verbesserung der
-                    Kursvorschläge.</p>
+                <p>Deine Bestätigung wird gespeichert und dient der Verbesserung Ihrer Kursvorschläge.</p>
                 <p>Vielen Dank!</p>
             </Modal>
         </Flex>
