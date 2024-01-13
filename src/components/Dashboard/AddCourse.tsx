@@ -135,6 +135,7 @@ function AddCourse() {
         if (location.state?.obj) {
             return {
                 ...location.state?.obj,
+                durationInHours: location.state?.obj.durationInHours.split(" ")[0],
                 createdAt: dayjs(location.state?.obj.createdAt),
                 startDate: dayjs(location.state?.obj.startDate),
             }
@@ -368,7 +369,7 @@ function AddCourse() {
                     instructor: values.instructor ?? "",
                     certificate: values.certificate ?? false,
                     skilllevel: values.skilllevel ?? "Anfaenger",
-                    durationInHours: values.durationInHours ?? "",
+                    durationInHours: values.durationInHours + " Stunden" ?? "",
                     format: values.format ?? "",
                     startDate: new Date(values.startDate ?? new Date().toISOString()).toISOString(),
                     costFree: values.costFree ?? false,

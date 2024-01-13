@@ -1,10 +1,18 @@
-import { Button, Card, Flex, Skeleton, Image, Modal } from "antd";
+import {Button, Card, Flex, Skeleton, Image, Modal} from "antd";
 import Bookmark from "../Bookmark";
-import { Course } from "../../interfaces";
-import { useState } from "react";
+import {Course} from "../../interfaces";
+import {useState} from "react";
+import {useWindowSize} from "@uidotdev/usehooks";
+import Confetti from 'react-confetti'
+import {fetchWrapper} from "../../api/helper.ts";
 
-function CourseInfo({ course }: { course: Course }) {
+function CourseInfo({course}: { course: Course }) {
     const defaultImageSrc = "https://st4.depositphotos.com/13194036/31587/i/450/depositphotos_315873928-stock-photo-selective-focus-happy-businessman-glasses.jpg"
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [confetti, setConfetti] = useState(false);
+
+    const {width, height} = useWindowSize()
 
     const translateFormat = (format: string) => {
         switch (format) {
@@ -21,51 +29,45 @@ function CourseInfo({ course }: { course: Course }) {
         }
     }
 
-    // TODO: fetch whether course has been already done
-    // TODO: manage setting course as done
-
-    const [open, setOpen] = useState(false);
-    const [abgeschlossen, setAbgeschlossen] = useState(false);
-
-    const onCancel = () => {
-        setOpen(false);
+    const gotoCourse = () => {
+        setIsModalOpen(true);
     }
 
-    const onOk = () => {
-        setAbgeschlossen(true);
-        setOpen(false);
+    const handleOk = () => {
+        setIsModalOpen(false);
+        setConfetti(true);
+        setTimeout(() => {
+            setConfetti(false);
+        }, 5000);
+        fetchWrapper.post(`api/v1/completion/courses/${course.id}`)
     }
 
-    const showModal = () => {
-        setOpen(true);
-    }
-
-    const [openAbgeschlossen, setOpenAbgeschlossen] = useState(false);
-
-    const onCancelAbgeschlossen = () => {
-        setOpenAbgeschlossen(false);
-    }
-
-    const onOkAbgeschlossen = () => {
-        setAbgeschlossen(false);
-        setOpenAbgeschlossen(false);
-    }
-
-    const showModalAbgeschlossen = () => {
-        setOpenAbgeschlossen(true);
+    const handleCancel = () => {
+        setIsModalOpen(false);
     }
 
     return (
         <Flex vertical
-            style={{
-                height: "100%",
-                width: "100%",
-                background: "#d9d9d9",
-                borderRadius: "20px",
-                boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
-                maxWidth: "1200px",
-            }}
+              style={{
+                  height: "100%",
+                  width: "100%",
+                  background: "#d9d9d9",
+                  borderRadius: "20px",
+                  boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
+                  maxWidth: "1200px",
+              }}
         >
+            {
+                confetti ? (
+                    <Confetti
+                        width={width - 20}
+                        height={window.innerHeight}
+                        recycle={false}
+                    />
+                ) : (
+                    <></>
+                )
+            }
             <Flex className="course">
                 {
                     course.image ? (
@@ -95,22 +97,22 @@ function CourseInfo({ course }: { course: Course }) {
                                 borderRadius: "15px",
                                 width: "100%",
                                 height: "100%",
-                            }} />
+                            }}/>
                         </div>
                     )
                 }
 
 
                 <Flex className="course-sidebar" vertical gap="middle"
-                    style={{
-                        maxWidth: "200px",
-                        width: "100%",
-                        padding: "5px",
-                    }}
+                      style={{
+                          maxWidth: "200px",
+                          width: "100%",
+                          padding: "5px",
+                      }}
                 >
-                    <Card className="antcard" style={{ height: "100%" }}>
+                    <Card className="antcard" style={{height: "100%"}}>
                         {course.id ? <Bookmark id={course.id}
-                            style={{ position: "absolute", top: "10px", right: "10px" }} /> : <></>}
+                                               style={{position: "absolute", top: "10px", right: "10px"}}/> : <></>}
                         <div className="course-details" style={{
                             padding: "0px",
                             maxWidth: "190px",
@@ -148,60 +150,25 @@ function CourseInfo({ course }: { course: Course }) {
                             )}
                         </div>
                     </Card>
-                    <Flex vertical align="top">
-                        <Button style={{ margin: "5px", borderRadius: "15px" }} type="primary" size="large"
-                            href={course.link ? course.link : undefined}>
-                            Zum Angebot
-                        </Button>
-                        {
-                            !abgeschlossen?
-                                <Button style={{ margin: "5px", borderRadius: "15px", background:"#FFBE25"}} type="primary" size="large"
-                                    onClick={showModal}>
-                                    Kurs abgeschlossen?
-                                </Button>
-                                :<Button style={{ margin: "5px", borderRadius: "15px", background:"#64D11C"}} type="primary" size="large"
-                                    onClick={showModalAbgeschlossen}
-                                >
-                                    Kurs abgeschlossen
-                                </Button>
-                        }
-                        <Modal onOk={onOk} open={open} onCancel={onCancel} title="Kurs abgeschlossen?" centered footer={[
-                            <Button onClick={onCancel}>
-                                Abbrechen
-                            </Button>,
-                            <Button type="primary" onClick={onOk}>
-                                Bestätigen
-                            </Button>
-                        ]}>
-                            <p>Hier durch bestätigen Sie, dass Sie diesen Kurs erfolgreich abgeschlossen haben.</p>
-                            <p>Durch die Bestätigung passen wir ihre zukünftigen Empfehlungen an.</p>
-                        </Modal>
-                        <Modal onOk={onOkAbgeschlossen} open={openAbgeschlossen} onCancel={onCancelAbgeschlossen} title="Kurs abgeschlossen?" centered footer={[
-                            <Button onClick={onCancelAbgeschlossen}>
-                                Abbrechen
-                            </Button>,
-                            <Button type="primary" onClick={onOkAbgeschlossen}>
-                                Bestätigen
-                            </Button>
-                        ]}>
-                            <p>Kurs als nicht abgeschlossen markieren.</p>
-                        </Modal>
-                    </Flex>
+                    <Button style={{margin: "5px", borderRadius: "15px"}} type="primary" size="large"
+                            href={course.link ? course.link : undefined} target="_blank" onClick={gotoCourse}>
+                        Zum Angebot
+                    </Button>
                 </Flex>
             </Flex>
-            <Flex style={{ justifyContent: "space-between", width: "100%" }}>
-                <Card className="antcard" style={{ margin: "5px", width: "70%" }}>
-                    <p style={{ fontWeight: "bold" }}>Beschreibung</p>
+            <Flex style={{justifyContent: "space-between", width: "100%"}}>
+                <Card className="antcard" style={{margin: "5px", width: "70%"}}>
+                    <p style={{fontWeight: "bold"}}>Beschreibung</p>
                     {course.description ? (
                         <p>{course.description}</p>
                     ) : (
                         <p>keine Beschreibung vorhanden.</p>
                     )}
                 </Card>
-                <Card className="antcard" style={{ margin: "5px", width: "30%" }}>
+                <Card className="antcard" style={{margin: "5px", width: "30%"}}>
                     <Flex justify="space-evenly">
                         <Image
-                            style={{ borderRadius: '50%', width: '100px', height: '100px' }}
+                            style={{borderRadius: '50%', width: '100px', height: '100px'}}
                             // TODO: Bilder von Instructor einfügen
                             src="https://img.myloview.de/sticker/default-profile-picture-avatar-photo-placeholder-vector-illustration-700-205664584.jpg"
                             alt="Bild konnte nicht geladen werden"
@@ -220,6 +187,18 @@ function CourseInfo({ course }: { course: Course }) {
                         vorhanden.</p> {/* TODO: Kurs für instructor-Beschreibung überarbeiten */}
                 </Card>
             </Flex>
+            <Modal title="Kurs abgeschlossen?" open={isModalOpen} footer={[
+                <Button key="back" onClick={handleCancel}>
+                    Nicht Abgeschlossen
+                </Button>,
+                <Button key="submit" type="primary" onClick={handleOk}>
+                    Abgeschlossen
+                </Button>,
+            ]}>
+                <p>Bitte bestätige, dass du den Kurs erfolgreich abgeschlossen hast.</p>
+                <p>Deine Bestätigung wird gespeichert und dient der Verbesserung Ihrer Kursvorschläge.</p>
+                <p>Vielen Dank!</p>
+            </Modal>
         </Flex>
     );
 }
