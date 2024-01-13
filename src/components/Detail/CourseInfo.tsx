@@ -187,7 +187,7 @@ function CourseInfo({course}: { course: Course }) {
                         vorhanden.</p> {/* TODO: Kurs für instructor-Beschreibung überarbeiten */}
                 </Card>
             </Flex>
-            <Modal title="Kurs abgeschlossen?" open={isModalOpen} footer={[
+            <Modal title="Kurs abgeschlossen?" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={[
                 <Button key="back" onClick={handleCancel}>
                     Nicht Abgeschlossen
                 </Button>,
