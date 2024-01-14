@@ -5,7 +5,7 @@ import CircleSelect from "../components/Register/CircleSelect/CircleSelect.tsx";
 import Deselect from "../components/Register/Deselect.tsx";
 import "./Registration.css";
 import {QuestionCircleOutlined, StarOutlined, TeamOutlined} from "@ant-design/icons";
-import {Competences, Role, RoleTag} from "../interfaces.ts";
+import {Role, RoleTag} from "../interfaces.ts";
 import {fetchWrapper} from "../api/helper.ts";
 
 function Registration() {
@@ -344,10 +344,8 @@ function Registration() {
 
     const next = () => {
         if (current == content.length - 1) {
-            handleSubmit().then((res) => {
-                if (res?.messages?.[0]?.message == "success") {
-                    navigate("/discover");
-                }
+            handleSubmit().then(() => {
+                navigate("/discover");
             });
         } else {
             navigate(`/register/${content[current + 1].url}`);
