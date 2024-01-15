@@ -38,7 +38,7 @@ function CustomHeader() {
         {
             key: '1',
             label: (
-                <a rel="noopener noreferrer" href="profile">
+                <a rel="noopener noreferrer" href="/profile">
                     Eingeloggt als:
                     <span style={{
                         textOverflow: "ellipsis",
