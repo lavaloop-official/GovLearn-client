@@ -20,18 +20,8 @@ function GroupmemberCourses({ groupmember, admin, currentGroup}: { groupmember: 
     }, [])
 
     const fetchAllContent = () => {
-        let courseIds:number[]=[];
-        const fetchedCourseIds = fetchWrapper.get(`api/v1/groups/content/${currentGroup.groupId}/${groupmember.memberId}`).then(res => {
-            courseIds = res.payload.courseIds;
-        })
-        Promise.all([fetchedCourseIds]).then(() => {
-            let fetchedCourses:Course[]=[];
-            courseIds.forEach(courseId => {
-                fetchWrapper.get(`api/v1/courses/${courseId}`).then(res => {
-                    fetchedCourses = [res.payload, ...fetchedCourses];
-                    setCourses(fetchedCourses);
-                })
-            })
+        fetchWrapper.get(`api/v1/groups/content/${currentGroup.groupId}/${groupmember.memberId}`).then(res => {
+            setCourses(res.payload.courses);
         })
     }
 

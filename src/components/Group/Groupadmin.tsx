@@ -1,4 +1,4 @@
-import { Badge, Button, Divider, Input, Modal } from "antd";
+import { Badge, Button, Divider, Empty, Input, Modal } from "antd";
 import GroupmemberCourses from "./GroupmemberCourses";
 import "./GroupmemberCourses.css"
 import { Group, GroupCreationWsTo, GroupEditWsTo, Groupmember } from "../../interfaces";
@@ -113,7 +113,7 @@ function Groupadmin({ currentGroup, removeCurrentGroup, handleFetchingOfAllGroup
                 <p>{currentGroup.groupDescription}</p>
             </div>
             <InviteGroupmember groupId={currentGroup.groupId} ref={inviteGroupmemberModal} fetchGroupmembers={fetchAllGroupMembers}></InviteGroupmember>
-            <div style={{ margin: "0px 10px 0px 10px", display: "flex", flexDirection: "column" }}>
+            <div style={{ margin: "0px 10px 20px 10px", display: "flex", flexDirection: "column" }}>
                 <h3>Gruppenmitglieder</h3>
                 <div style={{ overflow: "scroll", borderRadius: "10px" }} className="scrollbar">
                     <div style={{ background: "#D9D9D9", borderRadius: "10px", height: "100px", display: "flex", flexDirection: "row", alignItems: "center", gap: "30px", paddingLeft: "15px", paddingRight: "10px", width: "fit-content", overflowX:"scroll", overflowY:"hidden" }} className="scrollbar">
@@ -127,28 +127,15 @@ function Groupadmin({ currentGroup, removeCurrentGroup, handleFetchingOfAllGroup
                     </div>
                 </div>
             </div>
-            <div style={{ margin: "0px 10px 10px 10px", display: "flex", flexDirection: "column" }}>
-                <h3>Gruppenverwaltung</h3>
-                <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
-                    <Button>Mitglieder hinzufügen</Button>
-                    <Button>Mitglieder entfernen</Button>
-                </div>
-            </div>
             {
                 groupmember ?
                     groupmember.map((groupmember: Groupmember) =>
-                        groupmember.role == Role.Admin ?
-                            <>
-                                <Divider style={{margin:"0px"}}/>
-                                <GroupmemberCourses groupmember={groupmember} admin={true} currentGroup={currentGroup}/>
-                            </>
-
-                            : groupmember.role == Role.Member ? 
-                                <>
-                                    <Divider style={{margin:"0px"}}/>
-                                    <GroupmemberCourses groupmember={groupmember} admin={true} currentGroup={currentGroup}/>
-                                </>
-                                : <div/>)
+                        groupmember.role == Role.Member ? 
+                        <>
+                            <Divider style={{margin:"0px"}}/>
+                            <GroupmemberCourses groupmember={groupmember} admin={true} currentGroup={currentGroup}/>
+                        </>
+                        : <div/>)
                     : <div />
             }
         </div>

@@ -144,8 +144,8 @@ function Groups() {
                             okText="Bestätigen" 
                             cancelText="Abbrechen"
                             footer={[
-                                <Button key="submit" type="primary" loading={loading} onClick={handleOk}>
-                                    Gruppe beitreten
+                                <Button loading={loading} onClick={handleCancel}>
+                                    Abbrechen
                                 </Button>,
                                 <Button
                                     type="primary"

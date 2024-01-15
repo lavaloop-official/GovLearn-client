@@ -19,7 +19,7 @@ function Profile() {
     const [oldPassword, setOldPassword] = useState('')
     const [newPassword, setNewPassword] = useState('')
     const [submitPassword, setSubmitPassword] = useState(true)
-    const [completedCourses, setCompletedCourses] = useState([])
+    const [completedCourses, setCompletedCourses] = useState<Course[]>([])
 
     useEffect(() => {
         fetchWrapper.get('api/v1/users').then(res => {
@@ -27,9 +27,10 @@ function Profile() {
             setName(res.payload.name)
         })
         //TODO: change to use completed courses endpoint
-        fetchWrapper.get('api/v1/completion').then(res => {
-            setCompletedCourses(res?.payload ?? [])
+        const fetchedcourses = fetchWrapper.get('api/v1/completions').then(res => {
+            setCompletedCourses(res.payload)
         })
+        Promise.all([fetchedcourses]).then(() => console.log(completedCourses))
     }, [])
 
     // E-Mail ändern
@@ -200,7 +201,7 @@ function Profile() {
     const deleteCourse = (id: number | undefined) => {
         if (!id)
             return
-        fetchWrapper.delete(`api/v1/completion/courses/${id}`)
+        fetchWrapper.delete(`api/v1/completions/course/${id}`)
         setCompletedCourses(prevState => prevState.filter((course: Course) => course.id !== id))
     }
 
