@@ -6,8 +6,10 @@ import Forgot from "./Loginbody/Forgot.tsx";
 import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import handleLogin from "../../api/login.ts";
-import {closeModal, changeAlert, changeLoading, changeType, LoginType} from "../../state/modalslice.ts";
+import {changeAlert, changeLoading, changeType, closeModal, LoginType} from "../../state/modalslice.ts";
 import {RootState} from "../../state/reduxStore.ts";
+import {fetchWrapper} from "../../api/helper.ts";
+import ResetSuccess from "./Loginbody/ResetSuccess.tsx";
 
 function LoginModal() {
     const {type, open, loading, alert} = useSelector((state: RootState) => state.loginModal)
@@ -66,8 +68,17 @@ function LoginModal() {
      * @param values
      */
     const onForgot = async (values: { email: string, type: LoginType }) => {
-        console.log('Success:', values);
-        //TODO: implement forgot password
+        //console.log('Success:', values);
+        dispatch(changeLoading(true))
+        fetchWrapper.post("api/v1/users/reset/request", {email: values.email}, false).then((res) => {
+            console.log(res)
+            dispatch(changeLoading(false))
+            if (res?.messages?.[0]?.message == "User not found")
+                dispatch(changeAlert("Diese Email wurde nicht gefunden"))
+            else
+                dispatch(changeType("resetsuccess"))
+
+        })
     }
 
     /**
@@ -93,6 +104,8 @@ function LoginModal() {
                 return <Register finished={onRegister} loading={loading} changeType={changeModalType}/>
             case "forgot":
                 return <Forgot finished={onForgot} loading={loading} changeType={changeModalType}/>
+            case "resetsuccess":
+                return <ResetSuccess finished={close}/>
         }
     }
 
@@ -107,6 +120,8 @@ function LoginModal() {
                 return "Registrieren"
             case "forgot":
                 return "Passwort vergessen"
+            case "resetsuccess":
+                return "E-Mail versendet"
         }
     }
 

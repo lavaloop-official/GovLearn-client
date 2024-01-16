@@ -48,7 +48,7 @@ function CustomHeader() {
         {
             key: '1',
             label: (
-                <a rel="noopener noreferrer" href="profile">
+                <a rel="noopener noreferrer" href="/profile">
                     Eingeloggt als:
                     <span style={{
                         textOverflow: "ellipsis",
@@ -109,28 +109,29 @@ function CustomHeader() {
                     }
                 </Col>
                 <Col span={8}>
-                    {loggedIn ?
-                        <div style={{
-                            margin: "auto 0px auto auto",
-                            minWidth: "60px",
-                            lineHeight: "0px",
-                            display: "flex",
-                            justifyContent: "right",
-                            alignItems: "center"
-                        }}>
-                            <Button style={{marginRight: "15px", width: "32px", height: "32px"}} shape="circle"
-                                    onClick={openBookmarks}>
-                                <BookmarkFill className="bookmark_inner filled" style={{height: "12px"}}/>
-                            </Button>
-                            <div>
-                                <Dropdown menu={{items}} placement="bottomRight" arrow={{pointAtCenter: true}}
-                                          trigger={['click']}>
-                                    <a onClick={(e) => e.preventDefault()}>
-                                        <Avatar icon={<UserOutlined/>}/>
-                                    </a>
-                                </Dropdown>
+                    {window.location.pathname.includes("reset-password") ? <></> :
+                        loggedIn ?
+                            <div style={{
+                                margin: "auto 0px auto auto",
+                                minWidth: "60px",
+                                lineHeight: "0px",
+                                display: "flex",
+                                justifyContent: "right",
+                                alignItems: "center"
+                            }}>
+                                <Button style={{marginRight: "15px", width: "32px", height: "32px"}} shape="circle"
+                                        onClick={openBookmarks}>
+                                    <BookmarkFill className="bookmark_inner filled" style={{height: "12px"}}/>
+                                </Button>
+                                <div>
+                                    <Dropdown menu={{items}} placement="bottomRight" arrow={{pointAtCenter: true}}
+                                            trigger={['click']}>
+                                        <a onClick={(e) => e.preventDefault()}>
+                                            <Avatar icon={<UserOutlined/>}/>
+                                        </a>
+                                    </Dropdown>
+                                </div>
                             </div>
-                        </div>
                         :
                         <Button className="loginbtn" type="primary" size="large" onClick={() => {
                             openLoginModal("login")

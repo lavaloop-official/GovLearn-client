@@ -1,4 +1,4 @@
-import {Format, Role, Skilllevel} from "./Enum"
+import {Format, RoleEnum, Skilllevel} from "./Enum"
 
 export interface Course {
     "id": number | undefined,
@@ -76,7 +76,7 @@ export interface Group {
     "groupId": number | undefined,
     "groupName": string | undefined,
     "groupDescription": string | undefined,
-    "role": Role | undefined,
+    "role": RoleEnum | undefined,
 }
 
 export interface GroupCreationWsTo {
@@ -107,7 +107,7 @@ export interface Groupmember {
     "email": string | undefined,
     "name": string | undefined,
     "memberSince": string | undefined,
-    "role": Role | undefined,
+    "role": RoleEnum | undefined,
 }
 
 export interface User {
@@ -119,7 +119,7 @@ export interface Group {
     "groupId": number | undefined,
     "groupName": string | undefined,
     "groupDescription": string | undefined,
-    "role": Role | undefined,
+    "role": RoleEnum | undefined,
 }
 
 export interface GroupCreationWsTo {
@@ -150,10 +150,30 @@ export interface Groupmember {
     "email": string | undefined,
     "name": string | undefined,
     "memberSince": string | undefined,
-    "role": Role | undefined,
+    "role": RoleEnum | undefined,
 }
 
 export interface User {
     "email": string | undefined,
     "name": string | undefined,
+}
+
+export interface Role {
+    id: number,
+    name: string,
+    description: string,
+    verantwortungsbereich: string,
+    roleTagWsTos: Array<RoleTag>
+}
+
+export interface RoleTag {
+    ID: number,
+    tagID: number,
+    rating: number,
+    tagName: string
+}
+
+export interface Competences {
+    normal: Array<RoleTag>,
+    advanced: Array<RoleTag>
 }

@@ -8,7 +8,7 @@ import Groupuser from "./Groupuser";
 import InviteGroupmember from "./InviteGroupmember";
 import { fetchWrapper } from "../../api/helper";
 import TextArea from "antd/es/input/TextArea";
-import { Role } from "../../Enum";
+import { RoleEnum } from "../../Enum";
 
 function Groupadmin({ currentGroup, removeCurrentGroup, handleFetchingOfAllGroups }: { currentGroup: Group, removeCurrentGroup: (group: Group) => void, handleFetchingOfAllGroups: () => void }) {
 
@@ -50,7 +50,7 @@ function Groupadmin({ currentGroup, removeCurrentGroup, handleFetchingOfAllGroup
     const [groupmember, setGroupmember] = useState<Groupmember[]>([]);
 
     const removeUserFromGroup = (groupmem: Groupmember) => {
-        if(groupmem.role != Role.Invited){
+        if(groupmem.role != RoleEnum.Invited){
             const removedUserFromGroup = fetchWrapper.delete(`api/v1/groups/members/${groupmem.memberId}`).then(res => {
                 console.log(res.messages[0].message);
             })
@@ -130,7 +130,7 @@ function Groupadmin({ currentGroup, removeCurrentGroup, handleFetchingOfAllGroup
             {
                 groupmember ?
                     groupmember.map((groupmember: Groupmember) =>
-                        groupmember.role == Role.Member ? 
+                        groupmember.role == RoleEnum.Member ? 
                         <>
                             <Divider style={{margin:"0px"}}/>
                             <GroupmemberCourses groupmember={groupmember} admin={true} currentGroup={currentGroup}/>

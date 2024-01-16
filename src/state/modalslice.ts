@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
-export type LoginType = 'login' | 'register' | 'forgot';
+export type LoginType = 'login' | 'register' | 'forgot' | 'resetsuccess';
 
 interface LoginState {
     open: boolean;

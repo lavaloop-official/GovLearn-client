@@ -27,10 +27,9 @@ function Profile() {
             setName(res.payload.name)
         })
         //TODO: change to use completed courses endpoint
-        const fetchedcourses = fetchWrapper.get('api/v1/completions').then(res => {
-            setCompletedCourses(res.payload)
-        })
-        Promise.all([fetchedcourses]).then(() => console.log(completedCourses))
+        fetchWrapper.get('api/v1/completions').then(res => {
+            setCompletedCourses(res?.payload ?? [])
+        });
     }, [])
 
     // E-Mail ändern

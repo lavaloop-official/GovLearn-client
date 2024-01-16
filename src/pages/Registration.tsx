@@ -5,6 +5,8 @@ import CircleSelect from "../components/Register/CircleSelect/CircleSelect.tsx";
 import Deselect from "../components/Register/Deselect.tsx";
 import "./Registration.css";
 import {QuestionCircleOutlined, StarOutlined, TeamOutlined} from "@ant-design/icons";
+import {Role, RoleTag} from "../interfaces.ts";
+import {fetchWrapper} from "../api/helper.ts";
 
 function Registration() {
     //TODO: move onlick to here and pass down to circleselect so that it can be reset by clicking outside of the circle
@@ -14,16 +16,13 @@ function Registration() {
     const [current, setCurrent] = useState(0);
     const [selected, setSelected] = useState<number[]>(new Array(6).fill(-1));
     const [digitallotse, setDigitallotse] = useState<boolean>(false);
-    const [competences, setCompetences] = useState<string[]>([]);
+    const [deselected, setDeselected] = useState<number[]>([]);
+    const [roles, setRoles] = useState<Role[]>([]);
 
     useEffect(() => {
-        /*
-        fetchWrapper.get("/competences").then((res) => {
-            setCompetences(res);
+        fetchWrapper.get("api/v1/roles").then((res) => {
+            setRoles(res.payload)
         })
-         */
-        //testing
-        setCompetences(["Datenschutz", "Excel", "Word", "Powerpoint", "Führung", "Projektmanagement"]);
     }, []);
 
     useEffect(() => {
@@ -62,15 +61,57 @@ function Registration() {
         for (let i = 0; i < selected.length; i++) {
             if (selected[i] != -1) {
                 text.push(
-                    <Tag color="blue" key={i}>
-                        {roles[i]} - {responsibilites[selected[i]]}
-                    </Tag>
+                    {role: roles[i], resp: responsibilites[selected[i]]}
                 );
             }
         }
-        if (text.length == 0) return <Tag color="red">Keine Rollen ausgewählt</Tag>;
         return text;
+    }
+
+    const selectedToDisplay = () => {
+        const text = selectedToText();
+        if (text.length == 0)
+            return <Tag color="red">Keine Rollen ausgewählt</Tag>;
+        return text.map((item, index) => (
+            <Tag color="blue" key={index}>
+                {item.role} - {item.resp}
+            </Tag>
+        ));
     };
+
+    const selectedToCompetences = (rating: number) => {
+        const objects = selectedToText();
+        const competences: RoleTag[] = [];
+        for (const obj of objects) {
+            const role = roles.find((role) => role.name == obj.role && role.verantwortungsbereich == obj.resp);
+            if (role == undefined)
+                continue;
+            competences.push(...role
+                .roleTagWsTos
+                .filter((tag) => tag.rating == rating)
+                .filter((tag) => competences.findIndex((competence) => competence.tagName == tag.tagName) == -1)
+            );
+        }
+        return competences;
+    }
+
+    const handleDeselect = (id: number) => {
+        setDeselected((deselected) => {
+            if (deselected.includes(id)) {
+                return deselected.filter((item) => item != id);
+            } else {
+                return [...deselected, id];
+            }
+        });
+    }
+
+    const handleSubmit = () => {
+        const tags = selectedToCompetences(1).concat(selectedToCompetences(2));
+        //filter out deselected tags
+        const filteredTags = tags.filter((tag) => !deselected.includes(tag.tagID));
+        const objs = filteredTags.map((tag) => ({tagId: tag.tagID, rating: tag.rating}));
+        return fetchWrapper.post("api/v1/tags/users", objs)
+    }
 
     const digitalLotseInfoText = (
         <>
@@ -198,7 +239,7 @@ function Registration() {
                             <Typography.Title level={4} style={{margin: "5px 0px"}}>
                                 Ausgewählte Rollen:
                             </Typography.Title>
-                            <Typography.Text>{selectedToText()}</Typography.Text>
+                            <Typography.Text>{selectedToDisplay()}</Typography.Text>
                         </div>
                         <Typography.Title level={3} style={{margin: "0"}}>
                             Zusätzliche Anforderungen
@@ -239,7 +280,7 @@ function Registration() {
                     Ausgewählte Rollen:
                 </Typography.Title>
                 <Typography.Text>
-                    {selectedToText()}
+                    {selectedToDisplay()}
                     {digitallotse ? <Tag color="green">Digitallotse</Tag> : <></>}
                 </Typography.Text>
                 <Typography.Title level={4} style={{marginTop: "15px"}}>
@@ -255,8 +296,9 @@ function Registration() {
                             Grundlagen-Kompetenzen
                         </Typography.Title>
                         <div className="deselect-grid">
-                            {competences.map((competence, index) => (
-                                <Deselect title={competence} key={index}/>
+                            {selectedToCompetences(1).map((competence, index) => (
+                                <Deselect title={competence.tagName} id={competence.tagID} deselect={handleDeselect}
+                                          key={index}/>
                             ))}
                         </div>
                     </div>
@@ -265,8 +307,9 @@ function Registration() {
                             Fortgeschrittene Kompetenzen
                         </Typography.Title>
                         <div className="deselect-grid">
-                            {competences.map((competence, index) => (
-                                <Deselect title={competence} key={index}/>
+                            {selectedToCompetences(2).map((competence, index) => (
+                                <Deselect title={competence.tagName} id={competence.tagID} deselect={handleDeselect}
+                                          key={index}/>
                             ))}
                         </div>
                     </div>
@@ -300,8 +343,11 @@ function Registration() {
     ];
 
     const next = () => {
-        if (current == content.length - 1) navigate("/discover");
-        else {
+        if (current == content.length - 1) {
+            handleSubmit().then(() => {
+                navigate("/discover");
+            });
+        } else {
             navigate(`/register/${content[current + 1].url}`);
         }
     };

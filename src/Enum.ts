@@ -11,7 +11,7 @@ export enum Format{
     Hybrid
 }
 
-export enum Role{
+export enum RoleEnum{
     Member = "Member",
     Moderator = "Moderator",
     Admin = "Admin",

@@ -7,7 +7,7 @@ import { Group, GroupCreationWsTo, GroupInvitationWsTo } from "../interfaces.ts"
 import TextArea from "antd/es/input/TextArea";
 import GroupInvitation from "../components/Group/GroupInvitation.tsx";
 import { fetchWrapper } from "../api/helper.ts";
-import { Role } from "../Enum.ts";
+import { RoleEnum } from "../Enum.ts";
 import { NO_GROUPS } from "../constants/de.ts";
 
 function Groups() {
@@ -177,7 +177,7 @@ function Groups() {
                 </div>
                 {
                     currentGroup != undefined ?
-                        currentGroup!.role == Role.Admin ?
+                        currentGroup!.role == RoleEnum.Admin ?
                             <Groupadmin currentGroup={currentGroup!} removeCurrentGroup={removeCurrentGroup} handleFetchingOfAllGroups={handleFetchingOfAllGroups} />
                             : <Groupmember currentGroup={currentGroup!} fetchAllGroups={handleFetchingOfAllGroups} />
                         : <Empty style={{ marginTop: "100px", marginBottom: "100px", marginLeft: "75px" }} description={NO_GROUPS} />
