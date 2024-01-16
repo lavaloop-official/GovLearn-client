@@ -71,3 +71,23 @@ export interface CourseFilterWsTo {
     "zertifikat": boolean | undefined,
     "kostenlos": boolean | undefined
 }
+
+export interface Role {
+    id: number,
+    name: string,
+    description: string,
+    verantwortungsbereich: string,
+    roleTagWsTos: Array<RoleTag>
+}
+
+export interface RoleTag {
+    ID: number,
+    tagID: number,
+    rating: number,
+    tagName: string
+}
+
+export interface Competences {
+    normal: Array<RoleTag>,
+    advanced: Array<RoleTag>
+}
