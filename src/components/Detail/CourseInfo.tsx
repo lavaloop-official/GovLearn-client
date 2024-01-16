@@ -1,7 +1,7 @@
-import {Button, Card, Flex, Skeleton, Image, Modal} from "antd";
+import {Button, Card, Flex, Skeleton, Image, Modal, Badge} from "antd";
 import Bookmark from "../Bookmark";
 import {Course} from "../../interfaces";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useWindowSize} from "@uidotdev/usehooks";
 import Confetti from 'react-confetti'
 import {fetchWrapper} from "../../api/helper.ts";
@@ -12,7 +12,13 @@ function CourseInfo({course}: { course: Course }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [confetti, setConfetti] = useState(false);
 
-    const {width, height} = useWindowSize()
+    const {width, height} = useWindowSize();
+
+    const [abgeschlossen, setAbgeschlossen] = useState(false);
+
+    useEffect(()=>{
+        fetchWrapper.get(`api/v1/completions/course/${course.id}`).then(res => setAbgeschlossen(res.payload));
+    })
 
     const translateFormat = (format: string) => {
         switch (format) {
@@ -30,7 +36,9 @@ function CourseInfo({course}: { course: Course }) {
     }
 
     const gotoCourse = () => {
-        setIsModalOpen(true);
+        if(!abgeschlossen){
+            setIsModalOpen(true);
+        }   
     }
 
     const handleOk = () => {
@@ -39,7 +47,8 @@ function CourseInfo({course}: { course: Course }) {
         setTimeout(() => {
             setConfetti(false);
         }, 5000);
-        fetchWrapper.post(`api/v1/completions/course/${course.id}`)
+        fetchWrapper.post(`api/v1/completions/course/${course.id}`).then(res => console.log(res.messages[0].message))
+        setAbgeschlossen(true);
     }
 
     const handleCancel = () => {
@@ -60,7 +69,7 @@ function CourseInfo({course}: { course: Course }) {
             {
                 confetti ? (
                     <Confetti
-                        width={width - 20}
+                        width={width! - 20}
                         height={window.innerHeight}
                         recycle={false}
                     />
@@ -70,39 +79,76 @@ function CourseInfo({course}: { course: Course }) {
             }
             <Flex className="course">
                 {
-                    course.image ? (
-                        <img
-                            src={course.image ? course.image : defaultImageSrc}
-                            alt=""
-                            style={{
-                                width: "100%",
-                                height: "100%",
-                                objectFit: "cover",
-                                borderRadius: "20px",
-                                padding: "5px",
-                                maxWidth: "700px",
-                                minHeight: "400px"
-                            }}
-                        />
-                    ) : (
-                        <div id="detailpic" style={{
-                            padding: "5px",
-                            maxWidth: "725px",
-                            maxHeight: "400px",
-                            width: "100%",
-                            height: "400px",
-                            display: "flex",
-                        }}>
-                            <Skeleton.Image active style={{
-                                borderRadius: "15px",
-                                width: "100%",
-                                height: "100%",
-                            }}/>
-                        </div>
-                    )
+                    abgeschlossen?
+                    <Badge.Ribbon text="Kurs abgeschlossen" placement="start" style={{scale:"1.5", marginLeft:"30px"}} color="green">
+                        {
+                            course.image ? (
+                                <img
+                                    src={course.image ? course.image : defaultImageSrc}
+                                    alt=""
+                                    style={{
+                                        width: "100%",
+                                        height: "100%",
+                                        objectFit: "cover",
+                                        borderRadius: "20px",
+                                        padding: "5px",
+                                        maxWidth: "700px",
+                                        minHeight: "400px"
+                                    }}
+                                />
+                            ) : (
+                                <div id="detailpic" style={{
+                                    padding: "5px",
+                                    maxWidth: "725px",
+                                    maxHeight: "400px",
+                                    width: "100%",
+                                    height: "400px",
+                                    display: "flex",
+                                }}>
+                                    <Skeleton.Image active style={{
+                                        borderRadius: "15px",
+                                        width: "100%",
+                                        height: "100%",
+                                    }}/>
+                                </div>
+                            )
+                        }
+                    </Badge.Ribbon>:
+                    <div>
+                        {
+                            course.image ? (
+                                <img
+                                    src={course.image ? course.image : defaultImageSrc}
+                                    alt=""
+                                    style={{
+                                        width: "100%",
+                                        height: "100%",
+                                        objectFit: "cover",
+                                        borderRadius: "20px",
+                                        padding: "5px",
+                                        maxWidth: "700px",
+                                        minHeight: "400px"
+                                    }}
+                                />
+                            ) : (
+                                <div id="detailpic" style={{
+                                    padding: "5px",
+                                    maxWidth: "725px",
+                                    maxHeight: "400px",
+                                    width: "100%",
+                                    height: "400px",
+                                    display: "flex",
+                                }}>
+                                    <Skeleton.Image active style={{
+                                        borderRadius: "15px",
+                                        width: "100%",
+                                        height: "100%",
+                                    }}/>
+                                </div>
+                            )
+                        }
+                    </div>
                 }
-
-
                 <Flex className="course-sidebar" vertical gap="middle"
                       style={{
                           maxWidth: "200px",
@@ -187,7 +233,7 @@ function CourseInfo({course}: { course: Course }) {
                         vorhanden.</p> {/* TODO: Kurs für instructor-Beschreibung überarbeiten */}
                 </Card>
             </Flex>
-            <Modal title="Kurs abgeschlossen?" open={isModalOpen} footer={[
+            <Modal title="Kurs abgeschlossen?" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={[
                 <Button key="back" onClick={handleCancel}>
                     Nicht Abgeschlossen
                 </Button>,

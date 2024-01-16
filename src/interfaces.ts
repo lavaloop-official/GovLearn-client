@@ -1,4 +1,4 @@
-import {Format, Skilllevel} from "./Enum"
+import {Format, RoleEnum, Skilllevel} from "./Enum"
 
 export interface Course {
     "id": number | undefined,
@@ -70,6 +70,92 @@ export interface CourseFilterWsTo {
     "kompetenzstufe": Array<Skilllevel> | undefined,
     "zertifikat": boolean | undefined,
     "kostenlos": boolean | undefined
+}
+
+export interface Group {
+    "groupId": number | undefined,
+    "groupName": string | undefined,
+    "groupDescription": string | undefined,
+    "role": RoleEnum | undefined,
+}
+
+export interface GroupCreationWsTo {
+    "groupName": string | undefined,
+    "groupDescription": string | undefined,
+}
+
+export interface GroupEditWsTo {
+    "groupId": number | undefined,
+    "groupName": string | undefined,
+    "groupDescription": string | undefined,
+}
+
+export interface GroupInvitationWsTo {
+    "groupId": number | undefined,
+    "groupName": string | undefined,
+    "groupDescription": string | undefined,
+    "invitationId": number | undefined,
+}
+
+export interface SendInvitationWsTo {
+    "userEmail": string | undefined,
+    "groupId": number | undefined,
+}
+
+export interface Groupmember {
+    "memberId": number | undefined,
+    "email": string | undefined,
+    "name": string | undefined,
+    "memberSince": string | undefined,
+    "role": RoleEnum | undefined,
+}
+
+export interface User {
+    "email": string | undefined,
+    "name": string | undefined,
+}
+
+export interface Group {
+    "groupId": number | undefined,
+    "groupName": string | undefined,
+    "groupDescription": string | undefined,
+    "role": RoleEnum | undefined,
+}
+
+export interface GroupCreationWsTo {
+    "groupName": string | undefined,
+    "groupDescription": string | undefined,
+}
+
+export interface GroupEditWsTo {
+    "groupId": number | undefined,
+    "groupName": string | undefined,
+    "groupDescription": string | undefined,
+}
+
+export interface GroupInvitationWsTo {
+    "groupId": number | undefined,
+    "groupName": string | undefined,
+    "groupDescription": string | undefined,
+    "invitationId": number | undefined,
+}
+
+export interface SendInvitationWsTo {
+    "userEmail": string | undefined,
+    "groupId": number | undefined,
+}
+
+export interface Groupmember {
+    "memberId": number | undefined,
+    "email": string | undefined,
+    "name": string | undefined,
+    "memberSince": string | undefined,
+    "role": RoleEnum | undefined,
+}
+
+export interface User {
+    "email": string | undefined,
+    "name": string | undefined,
 }
 
 export interface Role {

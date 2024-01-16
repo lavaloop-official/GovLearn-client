@@ -19,7 +19,7 @@ function Profile() {
     const [oldPassword, setOldPassword] = useState('')
     const [newPassword, setNewPassword] = useState('')
     const [submitPassword, setSubmitPassword] = useState(true)
-    const [completedCourses, setCompletedCourses] = useState([])
+    const [completedCourses, setCompletedCourses] = useState<Course[]>([])
 
     useEffect(() => {
         fetchWrapper.get('api/v1/users').then(res => {
@@ -29,7 +29,7 @@ function Profile() {
         //TODO: change to use completed courses endpoint
         fetchWrapper.get('api/v1/completions').then(res => {
             setCompletedCourses(res?.payload ?? [])
-        })
+        });
     }, [])
 
     // E-Mail ändern
@@ -200,7 +200,7 @@ function Profile() {
     const deleteCourse = (id: number | undefined) => {
         if (!id)
             return
-        fetchWrapper.delete(`api/v1/completion/courses/${id}`)
+        fetchWrapper.delete(`api/v1/completions/course/${id}`)
         setCompletedCourses(prevState => prevState.filter((course: Course) => course.id !== id))
     }
 
@@ -428,6 +428,14 @@ function Profile() {
                         werden irgendwann einmal Informationen zum Datenschutz stehen: Cookies, Datenschutzerklärung
                         etc.</p>
                 </div>
+                <Divider/>
+                <section id="impressum" style={{flexBasis: "100%", marginBottom: "0px"}}>
+                    <h2 style={{textAlign: "center"}}>Impressum</h2>
+                    <p style={{textAlign: "left", background: "#F7F7F7", borderRadius: "10px", padding: "15px"}}>
+                        GovLearn - Ein Projekt der Uni Münster <br/><br/>
+                        Schlossplatz 2 - Münster
+                    </p>
+                </section>
             </div>
         </div>
     );
