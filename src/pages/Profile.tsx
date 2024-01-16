@@ -27,7 +27,7 @@ function Profile() {
             setName(res.payload.name)
         })
         //TODO: change to use completed courses endpoint
-        fetchWrapper.get('api/v1/completion').then(res => {
+        fetchWrapper.get('api/v1/completions').then(res => {
             setCompletedCourses(res?.payload ?? [])
         })
     }, [])
