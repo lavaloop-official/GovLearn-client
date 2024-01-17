@@ -87,12 +87,11 @@ function CourseInfo({course}: { course: Course }) {
                                     src={course.image ? course.image : defaultImageSrc}
                                     alt=""
                                     style={{
-                                        width: "100%",
                                         height: "100%",
                                         objectFit: "cover",
                                         borderRadius: "20px",
                                         padding: "5px",
-                                        maxWidth: "700px",
+                                        width: "700px",
                                         minHeight: "400px"
                                     }}
                                 />
@@ -210,7 +209,7 @@ function CourseInfo({course}: { course: Course }) {
                         <p>keine Beschreibung vorhanden.</p>
                     )}
                 </Card>
-                <Card className="antcard" style={{margin: "5px", width: "30%"}}>
+                <Card className="antcard" style={{margin: "5px", width: "30%", overflow: "hidden"}}>
                     <Flex justify="space-evenly">
                         <Image
                             style={{borderRadius: '50%', width: '100px', height: '100px'}}
