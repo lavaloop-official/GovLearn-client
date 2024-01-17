@@ -121,12 +121,11 @@ function CourseInfo({course}: { course: Course }) {
                                     src={course.image ? course.image : defaultImageSrc}
                                     alt=""
                                     style={{
-                                        width: "100%",
                                         height: "100%",
                                         objectFit: "cover",
                                         borderRadius: "20px",
                                         padding: "5px",
-                                        maxWidth: "700px",
+                                        width: "700px",
                                         minHeight: "400px"
                                     }}
                                 />
