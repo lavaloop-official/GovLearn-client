@@ -74,14 +74,6 @@ function CustomHeader() {
         {
             key: '3',
             label: (
-                <a target="_blank" rel="noopener noreferrer" href="https://www.aliyun.com">
-                    Einstellungen
-                </a>
-            ),
-        },
-        {
-            key: '4',
-            label: (
                 <a onClick={() => {
                     clearToken("logout")
                 }}>
@@ -125,17 +117,17 @@ function CustomHeader() {
                                 </Button>
                                 <div>
                                     <Dropdown menu={{items}} placement="bottomRight" arrow={{pointAtCenter: true}}
-                                            trigger={['click']}>
+                                              trigger={['click']}>
                                         <a onClick={(e) => e.preventDefault()}>
                                             <Avatar icon={<UserOutlined/>}/>
                                         </a>
                                     </Dropdown>
                                 </div>
                             </div>
-                        :
-                        <Button className="loginbtn" type="primary" size="large" onClick={() => {
-                            openLoginModal("login")
-                        }}>Anmelden</Button>
+                            :
+                            <Button className="loginbtn" type="primary" size="large" onClick={() => {
+                                openLoginModal("login")
+                            }}>Anmelden</Button>
                     }
                 </Col>
             </Row>
