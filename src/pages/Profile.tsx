@@ -1,12 +1,13 @@
 import {useEffect, useState} from "react";
-import {UserOutlined} from "@ant-design/icons";
-import {Button, Divider, Form, Input, Modal, Skeleton, Switch} from "antd";
+import {DeleteOutlined, UserOutlined} from "@ant-design/icons";
+import {Button, Divider, Empty, Form, Input, List, Modal, Skeleton, Switch} from "antd";
 import './Profile.css';
 import edit from '../assets/edit.png';
 import {EMAIL_WRONG_FORMAT, ENTER_EMAIL, ENTER_PASSWORD, REENTER_PASSWORD} from "../constants/de.ts";
 import {fetchWrapper} from "../api/helper";
 import {Key} from "react-bootstrap-icons";
 import {setToken} from "../api/auth.ts";
+import {Course} from "../interfaces.ts";
 
 function Profile() {
 
@@ -18,12 +19,17 @@ function Profile() {
     const [oldPassword, setOldPassword] = useState('')
     const [newPassword, setNewPassword] = useState('')
     const [submitPassword, setSubmitPassword] = useState(true)
+    const [completedCourses, setCompletedCourses] = useState<Course[]>([])
 
     useEffect(() => {
         fetchWrapper.get('api/v1/users').then(res => {
             setEmail(res.payload.email)
             setName(res.payload.name)
         })
+        //TODO: change to use completed courses endpoint
+        fetchWrapper.get('api/v1/completions').then(res => {
+            setCompletedCourses(res?.payload ?? [])
+        });
     }, [])
 
     // E-Mail ändern
@@ -190,6 +196,13 @@ function Profile() {
     };
 
     const [form] = Form.useForm();
+
+    const deleteCourse = (id: number | undefined) => {
+        if (!id)
+            return
+        fetchWrapper.delete(`api/v1/completions/course/${id}`)
+        setCompletedCourses(prevState => prevState.filter((course: Course) => course.id !== id))
+    }
 
     return (
         <div style={{width: "100%", display: "flex", justifyContent: "center"}}>
@@ -387,11 +400,42 @@ function Profile() {
                 </div>
                 <Divider/>
                 <div style={{flexBasis: "100%", marginBottom: "0px"}}>
+                    <h2 style={{textAlign: "center"}}>Beendete Kurse</h2>
+                    <div style={{textAlign: "left", background: "#F7F7F7", borderRadius: "10px", padding: "15px"}}>
+                        {completedCourses.length === 0 ?
+                            <Empty description={"Sie haben noch keine Kurse abgeschlossen"}/> :
+                            <List
+                                bordered
+                                itemLayout="horizontal"
+                                dataSource={completedCourses}
+                                renderItem={(item: Course) => (
+                                    <List.Item actions={[<Button danger icon={<DeleteOutlined/>}
+                                                                 onClick={() => deleteCourse(item.id)}/>]}>
+                                        <List.Item.Meta
+                                            title={<a href={`/detail/${item.id}`}>{item.name}</a>}
+                                            description={item.description}
+                                        />
+                                    </List.Item>
+                                )}
+                            />
+                        }
+                    </div>
+                </div>
+                <Divider/>
+                <div style={{flexBasis: "100%", marginBottom: "0px"}}>
                     <h2 style={{textAlign: "center"}}>Datenschutz</h2>
                     <p style={{textAlign: "left", background: "#F7F7F7", borderRadius: "10px", padding: "15px"}}>Hier
                         werden irgendwann einmal Informationen zum Datenschutz stehen: Cookies, Datenschutzerklärung
                         etc.</p>
                 </div>
+                <Divider/>
+                <section id="impressum" style={{flexBasis: "100%", marginBottom: "0px"}}>
+                    <h2 style={{textAlign: "center"}}>Impressum</h2>
+                    <p style={{textAlign: "left", background: "#F7F7F7", borderRadius: "10px", padding: "15px"}}>
+                        GovLearn - Ein Projekt der Uni Münster <br/><br/>
+                        Schlossplatz 2 - Münster
+                    </p>
+                </section>
             </div>
         </div>
     );

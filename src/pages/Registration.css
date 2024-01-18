@@ -30,3 +30,19 @@
     height: 64px;
     display: inline-block;
 }
+
+.role-title{
+    cursor: pointer;
+}
+
+.role-title:hover + .role-desc{
+    opacity: 1;
+    height: auto;
+}
+
+.role-desc{
+    transition: opacity 1s ease-out;
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+}

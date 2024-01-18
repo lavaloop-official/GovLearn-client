@@ -1,10 +1,12 @@
-import {Button, Flex, Steps, Switch, Tag, Tooltip, Typography} from "antd";
-import {useEffect, useState} from "react";
-import {useNavigate} from "react-router-dom";
+import { Button, Flex, Steps, Switch, Tag, Tooltip, Typography } from "antd";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import CircleSelect from "../components/Register/CircleSelect/CircleSelect.tsx";
 import Deselect from "../components/Register/Deselect.tsx";
 import "./Registration.css";
-import {QuestionCircleOutlined, StarOutlined, TeamOutlined} from "@ant-design/icons";
+import { QuestionCircleOutlined, StarOutlined, TeamOutlined } from "@ant-design/icons";
+import { Role, RoleTag } from "../interfaces.ts";
+import { fetchWrapper } from "../api/helper.ts";
 
 function Registration() {
     //TODO: move onlick to here and pass down to circleselect so that it can be reset by clicking outside of the circle
@@ -14,16 +16,13 @@ function Registration() {
     const [current, setCurrent] = useState(0);
     const [selected, setSelected] = useState<number[]>(new Array(6).fill(-1));
     const [digitallotse, setDigitallotse] = useState<boolean>(false);
-    const [competences, setCompetences] = useState<string[]>([]);
+    const [deselected, setDeselected] = useState<number[]>([]);
+    const [roles, setRoles] = useState<Role[]>([]);
 
     useEffect(() => {
-        /*
-        fetchWrapper.get("/competences").then((res) => {
-            setCompetences(res);
+        fetchWrapper.get("api/v1/roles").then((res) => {
+            setRoles(res.payload)
         })
-         */
-        //testing
-        setCompetences(["Datenschutz", "Excel", "Word", "Powerpoint", "Führung", "Projektmanagement"]);
     }, []);
 
     useEffect(() => {
@@ -55,22 +54,64 @@ function Registration() {
             "Digitalisierung",
             "Informationstechnik",
             "Smart City",
-            "Nicht-digital",
+            "nicht-digital",
             "Personal"
         ];
         const text = [];
         for (let i = 0; i < selected.length; i++) {
             if (selected[i] != -1) {
                 text.push(
-                    <Tag color="blue" key={i}>
-                        {roles[i]} - {responsibilites[selected[i]]}
-                    </Tag>
+                    { role: roles[i], resp: responsibilites[selected[i]] }
                 );
             }
         }
-        if (text.length == 0) return <Tag color="red">Keine Rollen ausgewählt</Tag>;
         return text;
+    }
+
+    const selectedToDisplay = () => {
+        const text = selectedToText();
+        if (text.length == 0)
+            return <Tag color="red">Keine Rollen ausgewählt</Tag>;
+        return text.map((item, index) => (
+            <Tag color="blue" key={index}>
+                {item.role} - {item.resp}
+            </Tag>
+        ));
     };
+
+    const selectedToCompetences = (rating: number) => {
+        const objects = selectedToText();
+        const competences: RoleTag[] = [];
+        for (const obj of objects) {
+            const role = roles.find((role) => role.name == obj.role && role.verantwortungsbereich == obj.resp);
+            if (role == undefined)
+                continue;
+            competences.push(...role
+                .roleTagWsTos
+                .filter((tag) => tag.rating == rating)
+                .filter((tag) => competences.findIndex((competence) => competence.tagName == tag.tagName) == -1)
+            );
+        }
+        return competences;
+    }
+
+    const handleDeselect = (id: number) => {
+        setDeselected((deselected) => {
+            if (deselected.includes(id)) {
+                return deselected.filter((item) => item != id);
+            } else {
+                return [...deselected, id];
+            }
+        });
+    }
+
+    const handleSubmit = () => {
+        const tags = selectedToCompetences(1).concat(selectedToCompetences(2));
+        //filter out deselected tags
+        const filteredTags = tags.filter((tag) => !deselected.includes(tag.tagID));
+        const objs = filteredTags.map((tag) => ({ tagId: tag.tagID, rating: tag.rating }));
+        return fetchWrapper.post("api/v1/tags/users", objs)
+    }
 
     const digitalLotseInfoText = (
         <>
@@ -93,18 +134,25 @@ function Registration() {
     //TODO: add roles
     const AreaInfoText = (
         <>
-            <h4>Organisation</h4>
-            <p></p>
-            <h4>Digitalisierung</h4>
-            <p></p>
-            <h4>Informationstechnik</h4>
-            <p></p>
-            <h4>Smart City</h4>
-            <p></p>
-            <h4>Nicht-digital</h4>
-            <p></p>
-            <h4>Personal</h4>
-            <p></p>
+            <div className="role">
+                <h4 className="role-title">Organisation</h4>
+                <p className="role-desc">Im Bereich Organisation werden Strukturen und Abläufe innerhalb der öffentlichen Verwaltung geplant, koordiniert und optimiert, um eine effiziente und transparente Arbeitsweise zu gewährleisten.</p>
+            </div>
+            <h4 className="role-title">Digitalisierung</h4>
+            <p className="role-desc">Die Digitalisierung im öffentlichen Dienst konzentriert sich auf die Integration moderner Technologien, um Verwaltungsprozesse zu verbessern, den Bürgerservice zu optimieren und den Zugang zu Informationen zu erleichtern.</p>
+
+            <h4 className="role-title">Informationstechnik</h4>
+            <p className="role-desc">Im Bereich Informationstechnik werden IT-Lösungen entwickelt, implementiert und gewartet, um eine reibungslose Funktionalität der technologischen Infrastruktur der öffentlichen Verwaltung sicherzustellen.</p>
+
+            <h4 className="role-title">Smart City</h4>
+            <p className="role-desc">Smart City bezieht sich auf die Entwicklung und Umsetzung intelligenter Technologien, um städtische Lebensqualität zu verbessern. Dazu gehören etwa die Vernetzung von Verkehrssystemen, Umweltüberwachung und bürgernahe Dienstleistungen.</p>
+
+            <h4 className="role-title">nicht-digital</h4>
+            <p className="role-desc">Im nicht-digitalen Bereich konzentriert sich die Arbeit auf traditionelle Aspekte der Verwaltung, die nicht unmittelbar mit digitalen Technologien verbunden sind. Dazu gehören beispielsweise Personalmanagement und organisatorische Prozesse.</p>
+
+            <h4 className="role-title">Personal</h4>
+            <p className="role-desc">Im Personalbereich werden alle Angelegenheiten rund um die Mitarbeiterinnen und Mitarbeiter des öffentlichen Dienstes verwaltet, einschließlich Personalbeschaffung, -entwicklung, -betreuung und -administration.</p>
+
         </>
     );
 
@@ -118,18 +166,18 @@ function Registration() {
                     padding: "10px"
                 }}
             >
-                <Typography.Title level={4} style={{margin: "5px 0px"}}>
+                <Typography.Title level={4} style={{ margin: "5px 0px" }}>
                     Herzlich Willkommen bei GovLearn
                 </Typography.Title>
                 Ihrer Plattform für gezielte Weiterbildungen im öffentlichen Dienst. Wir freuen uns, Sie als neues
                 Mitglied in unserer wachsenden Gemeinschaft begrüßen zu dürfen. Um Ihnen bestmögliche Empfehlungen
                 bieten zu können, möchten wir Sie durch den einfachen Registrierungsprozess führen.
-                <br/>
-                <Flex vertical style={{marginTop: "10px"}}>
+                <br />
+                <Flex vertical style={{ marginTop: "10px" }}>
                     <Flex align="center">
                         <Flex className="intro-step" vertical justify="center" align="center">
-                            <TeamOutlined style={{fontSize: "64px", color: "#212321"}}/>
-                            <h5 style={{margin: "0"}}>1. Rolle(n) wählen</h5>
+                            <TeamOutlined style={{ fontSize: "64px", color: "#212321" }} />
+                            <h5 style={{ margin: "0" }}>1. Rolle(n) wählen</h5>
                         </Flex>
                         <hr className="vertical"></hr>
                         <p>
@@ -138,11 +186,11 @@ function Registration() {
                             Rolle ausüben – wählen Sie die Rolle, die am besten Ihre beruflichen Aufgaben widerspiegelt.
                         </p>
                     </Flex>
-                    <br/>
+                    <br />
                     <Flex align="center">
                         <Flex className="intro-step" vertical justify="center" align="center">
-                            <StarOutlined style={{fontSize: "64px", color: "#212321"}}/>
-                            <h5 style={{margin: "0"}}>2. Kompetenzen - definieren</h5>
+                            <StarOutlined style={{ fontSize: "64px", color: "#212321" }} />
+                            <h5 style={{ margin: "0" }}>2. Kompetenzen - definieren</h5>
                         </Flex>
                         <hr className="vertical"></hr>
                         <p>
@@ -168,24 +216,24 @@ function Registration() {
                 }}
             >
                 <Flex justify="space-between">
-                    <Typography.Title level={3} style={{margin: "0"}}>
+                    <Typography.Title level={3} style={{ margin: "0" }}>
                         Rollenauswahl
                     </Typography.Title>
-                    <Tooltip placement="leftBottom" title={AreaInfoText} style={{marginRight: "10px"}}>
-                        <QuestionCircleOutlined style={{fontSize: "24px"}}/>
+                    <Tooltip placement="leftBottom" title={AreaInfoText} style={{ marginRight: "10px" }}>
+                        <QuestionCircleOutlined style={{ fontSize: "24px" }} />
                     </Tooltip>
                 </Flex>
                 <Typography.Text>
                     Wählen Sie eine oder mehrere Rollen und den zugehörigen Verantwortungsbereich aus.
                 </Typography.Text>
-                <div style={{display: "flex", flexDirection: "row"}}>
+                <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
                         style={{
                             display: "flex",
                             flexDirection: "column"
                         }}
                     >
-                        <CircleSelect selectCallback={selectCallback} selected={selected}/>
+                        <CircleSelect selectCallback={selectCallback} selected={selected} />
                     </div>
                     <div
                         style={{
@@ -194,19 +242,19 @@ function Registration() {
                             marginTop: "20px"
                         }}
                     >
-                        <div style={{minHeight: "160px"}}>
-                            <Typography.Title level={4} style={{margin: "5px 0px"}}>
+                        <div style={{ minHeight: "160px" }}>
+                            <Typography.Title level={4} style={{ margin: "5px 0px" }}>
                                 Ausgewählte Rollen:
                             </Typography.Title>
-                            <Typography.Text>{selectedToText()}</Typography.Text>
+                            <Typography.Text>{selectedToDisplay()}</Typography.Text>
                         </div>
-                        <Typography.Title level={3} style={{margin: "0"}}>
+                        <Typography.Title level={3} style={{ margin: "0" }}>
                             Zusätzliche Anforderungen
                         </Typography.Title>
                         <Typography.Text>
                             Ich benötige Kompetenzen in meiner Funktion als <b>Digitallotse</b>
                             <Tooltip placement="leftBottom" title={digitalLotseInfoText}>
-                                <QuestionCircleOutlined/>
+                                <QuestionCircleOutlined />
                             </Tooltip>
                         </Typography.Text>
                         <div>
@@ -235,14 +283,14 @@ function Registration() {
                     padding: "10px"
                 }}
             >
-                <Typography.Title level={4} style={{margin: "5px 0px"}}>
+                <Typography.Title level={4} style={{ margin: "5px 0px" }}>
                     Ausgewählte Rollen:
                 </Typography.Title>
                 <Typography.Text>
-                    {selectedToText()}
+                    {selectedToDisplay()}
                     {digitallotse ? <Tag color="green">Digitallotse</Tag> : <></>}
                 </Typography.Text>
-                <Typography.Title level={4} style={{marginTop: "15px"}}>
+                <Typography.Title level={4} style={{ marginTop: "15px" }}>
                     Kompetenzen:
                 </Typography.Title>
                 <Typography.Text>
@@ -251,22 +299,24 @@ function Registration() {
                 </Typography.Text>
                 <div className="competence-container">
                     <div className="competence-inner">
-                        <Typography.Title level={5} style={{margin: "5px 0px"}}>
+                        <Typography.Title level={5} style={{ margin: "5px 0px" }}>
                             Grundlagen-Kompetenzen
                         </Typography.Title>
                         <div className="deselect-grid">
-                            {competences.map((competence, index) => (
-                                <Deselect title={competence} key={index}/>
+                            {selectedToCompetences(1).map((competence, index) => (
+                                <Deselect title={competence.tagName} id={competence.tagID} deselect={handleDeselect}
+                                    key={index} />
                             ))}
                         </div>
                     </div>
                     <div className="competence-inner">
-                        <Typography.Title level={5} style={{margin: "5px 0px"}}>
+                        <Typography.Title level={5} style={{ margin: "5px 0px" }}>
                             Fortgeschrittene Kompetenzen
                         </Typography.Title>
                         <div className="deselect-grid">
-                            {competences.map((competence, index) => (
-                                <Deselect title={competence} key={index}/>
+                            {selectedToCompetences(2).map((competence, index) => (
+                                <Deselect title={competence.tagName} id={competence.tagID} deselect={handleDeselect}
+                                    key={index} />
                             ))}
                         </div>
                     </div>
@@ -300,8 +350,11 @@ function Registration() {
     ];
 
     const next = () => {
-        if (current == content.length - 1) navigate("/discover");
-        else {
+        if (current == content.length - 1) {
+            handleSubmit().then(() => {
+                navigate("/discover");
+            });
+        } else {
             navigate(`/register/${content[current + 1].url}`);
         }
     };
@@ -344,9 +397,9 @@ function Registration() {
                 direction="horizontal"
                 current={current}
                 items={content.map((item) => item.step)}
-                style={{marginBottom: "10px", minWidth: "100%"}}
+                style={{ marginBottom: "10px", minWidth: "100%" }}
             />
-            <div style={{display: "flex", flexDirection: "row", width: "100%"}}>
+            <div style={{ display: "flex", flexDirection: "row", width: "100%" }}>
                 <div
                     style={{
                         width: "100%",
@@ -357,7 +410,7 @@ function Registration() {
                         position: "relative"
                     }}
                 >
-                    <div style={{marginBottom: "40px", width: "100%"}}>{content[current].content}</div>
+                    <div style={{ marginBottom: "40px", width: "100%" }}>{content[current].content}</div>
                     <Button
                         type="primary"
                         onClick={next}
