@@ -60,7 +60,7 @@ function SearchComponent({
                         }
                         {
                             obj ?
-                                <Rate allowHalf disabled defaultValue={obj.ratingAverage}/>
+                                <Rate style={{minWidth: "132px"}} allowHalf disabled defaultValue={obj.ratingAverage}/>
                                 : <Skeleton.Input active/>
                         }
                     </div>
