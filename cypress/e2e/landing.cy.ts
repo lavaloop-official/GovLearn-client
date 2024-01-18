@@ -5,7 +5,9 @@ describe('button', () => {
     })
   })
   it('open_website', () => {
-    cy.url().should('include', 'localhost')
+    cy.fixture('url').then((url) => {
+      cy.url().should('include', 'localhost')
+    })
   })
   it('open_register', () => {
     cy.get('.animated-button').click()
