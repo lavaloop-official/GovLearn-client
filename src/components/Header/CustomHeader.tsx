@@ -112,7 +112,7 @@ function CustomHeader() {
                     {window.location.pathname.includes("reset-password") ? <></> :
                         loggedIn ?
                             <div style={{
-                                margin: "auto 0px auto auto",
+                                margin: "auto 10px auto auto",
                                 minWidth: "60px",
                                 lineHeight: "0px",
                                 display: "flex",
@@ -125,17 +125,17 @@ function CustomHeader() {
                                 </Button>
                                 <div>
                                     <Dropdown menu={{items}} placement="bottomRight" arrow={{pointAtCenter: true}}
-                                            trigger={['click']}>
+                                              trigger={['click']}>
                                         <a onClick={(e) => e.preventDefault()}>
                                             <Avatar icon={<UserOutlined/>}/>
                                         </a>
                                     </Dropdown>
                                 </div>
                             </div>
-                        :
-                        <Button className="loginbtn" type="primary" size="large" onClick={() => {
-                            openLoginModal("login")
-                        }}>Anmelden</Button>
+                            :
+                            <Button className="loginbtn" type="primary" size="large" onClick={() => {
+                                openLoginModal("login")
+                            }}>Anmelden</Button>
                     }
                 </Col>
             </Row>
