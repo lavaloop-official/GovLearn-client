@@ -1,21 +1,29 @@
-import {Carousel} from "antd";
+import {Carousel, Segmented} from "antd";
 import CarouselPane from "../components/CarouselPane.tsx";
 import RecomSlider from "../components/RecomSlider.tsx";
 import {useEffect, useState} from "react";
 import {fetchWrapper} from "../api/helper.ts";
 import {Course} from "../interfaces.ts";
+import {AppstoreOutlined, BarsOutlined} from "@ant-design/icons";
+import Recommendation from "../components/Recommendation.tsx";
 
 function Discover() {
 
     const [featured, setFeatured] = useState<Course[]>([])
     const [recommended, setRecommended] = useState<{ category: string, items: Course[] }[]>([])
+    const [compact, setCompact] = useState<boolean>(false)
 
     useEffect(() => {
+        console.log(compact)
         fetchWrapper.get(`api/v1/recommendations/bundle`).then((res) => {
             setFeatured(res.payload.featured)
             setRecommended(res.payload.categorized)
         })
     }, []);
+
+    const changeView = () => {
+        setCompact(prevState => !prevState)
+    }
 
 
     return (
@@ -49,11 +57,32 @@ function Discover() {
                     maxWidth: "1200px",
                     width: "100%",
                     margin: "auto",
+                    position: "relative"
                 }}>
+                    <div style={{margin: "10px", display: "block", marginLeft: "auto"}}>
+                        <Segmented
+                            options={[
+                                {label: 'Nach Kategorie', value: 'List', icon: <BarsOutlined/>},
+                                {label: 'Kompakte Ansicht', value: 'Kanban', icon: <AppstoreOutlined/>},
+                            ]}
+                            onChange={() => changeView()}
+                        />
+                    </div>
                     {
-                        recommended.length == 0 ? <RecomSlider/> :
-                            recommended.map((item: { category: string, items: Course[] }) => <div key={item.category}>
-                                <RecomSlider title={item.category} data={item.items}/></div>)
+                        compact ?
+                            <div style={{
+                                display: "flex",
+                                flexWrap: "wrap"
+                            }}>{recommended
+                                .map((e) => e.items)
+                                .flat()
+                                .map((item) => <Recommendation obj={item}/>)}</div>
+                            :
+                            recommended.length == 0 ? <RecomSlider/> :
+                                recommended.map((item: { category: string, items: Course[] }) => <div
+                                    key={item.category}>
+                                    <RecomSlider title={item.category} data={item.items}/></div>)
+
                     }
                 </div>
             </div>

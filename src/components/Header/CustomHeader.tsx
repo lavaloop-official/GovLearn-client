@@ -104,7 +104,7 @@ function CustomHeader() {
                     {window.location.pathname.includes("reset-password") ? <></> :
                         loggedIn ?
                             <div style={{
-                                margin: "auto 0px auto auto",
+                                margin: "auto 10px auto auto",
                                 minWidth: "60px",
                                 lineHeight: "0px",
                                 display: "flex",

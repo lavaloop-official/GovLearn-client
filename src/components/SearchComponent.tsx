@@ -13,7 +13,10 @@ import {DeleteOutlined, EditOutlined} from "@ant-design/icons";
  * @param Course obj - The course to be displayed.
  * @param onDelete callback for deleting the course
  */
-function SearchComponent({obj, editable = false, onDelete = () => {}}: { obj?: Course, editable?: boolean, onDelete?: (id: number | undefined) => void}) {
+function SearchComponent({
+                             obj, editable = false, onDelete = () => {
+    }
+                         }: { obj?: Course, editable?: boolean, onDelete?: (id: number | undefined) => void }) {
 
     const navigate = useNavigate();
 
@@ -38,7 +41,7 @@ function SearchComponent({obj, editable = false, onDelete = () => {}}: { obj?: C
                     {obj?.id ? <Bookmark id={obj.id}/> : <></>}
                     {
                         obj ?
-                            <img src={obj.image} alt="Image of searchresult"/>
+                            <img src={obj.image}/>
                             : <Skeleton.Image style={{
                                 objectFit: "contain",
                                 width: "100%",
@@ -57,7 +60,7 @@ function SearchComponent({obj, editable = false, onDelete = () => {}}: { obj?: C
                         }
                         {
                             obj ?
-                                <Rate allowHalf disabled defaultValue={obj.ratingAverage}/>
+                                <Rate style={{minWidth: "132px"}} allowHalf disabled defaultValue={obj.ratingAverage}/>
                                 : <Skeleton.Input active/>
                         }
                     </div>

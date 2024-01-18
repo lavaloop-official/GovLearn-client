@@ -356,12 +356,14 @@ function Registration() {
             });
         } else {
             navigate(`/register/${content[current + 1].url}`);
+            window.scrollTo(0, 0);
         }
     };
 
     const prev = () => {
         if (current != 0) {
             navigate(`/register/${content[current - 1].url}`);
+            window.scrollTo(0, 0);
         }
     };
 
