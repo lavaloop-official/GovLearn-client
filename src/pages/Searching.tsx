@@ -74,7 +74,8 @@ function Searching() {
                         courses && courses.length > 0 ?
                             courses.map((course: Course) => <div key={course.id}><SearchComponent obj={course}/>
                             </div>)
-                            : <div style={{marginTop: "1rem"}}><Empty/></div>
+                            : <div style={{marginTop: "1rem"}}><Empty
+                                description={"Für die angegebenen Kriterien wurden keine Kurse gefunden."}/></div>
                     }
                 </div>
                 <div style={{flexBasis: "100%", display: "flex", justifyContent: "center", marginTop: "20px"}}>
