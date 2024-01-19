@@ -19,16 +19,19 @@ function Discover() {
         {
             title: "Empfehlungen",
             description: "Hier sehen Sie die Empfehlungen, die auf Basis Ihrer Rolle und Kompetenzen am besten zu Ihnen passen.",
-            target: () => featuredRef.current
+            target: () => featuredRef.current,
+            placement: "bottom"
         },
         {
             title: "Weitere Empfehlungen",
             description: "Hier sehen sie weitere Empfehlungen die zu Ihnen passen.",
+            placement: "topRight",
             target: () => recommendedRef.current
         },
         {
             title: "Ansicht",
             description: "Hier können Sie die Ansicht der Empfehlungen ändern.",
+            placement: "top",
             target: () => compactRef.current
         }
     ]
@@ -118,7 +121,7 @@ function Discover() {
                 </div>
             </div>
 
-            <Tour open={tourOpen} onClose={() => finishTour()} steps={steps}/>
+            <Tour open={tourOpen} onClose={() => finishTour()} steps={steps} scrollIntoViewOptions={false}/>
         </>
     )
 }
