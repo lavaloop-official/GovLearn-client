@@ -11,6 +11,7 @@ function Discover() {
     const [recommended, setRecommended] = useState<{ category: string, items: Course[] }[]>([])
 
     useEffect(() => {
+        document.title = "GoLearn - Weiterbildung einfach gemacht";
         fetchWrapper.get(`api/v1/recommendations/bundle`).then((res) => {
             setFeatured(res.payload.featured)
             setRecommended(res.payload.categorized)
