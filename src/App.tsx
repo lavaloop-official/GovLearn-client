@@ -17,6 +17,7 @@ import NotFound from "./pages/NotFound.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
 import Groups from "./pages/Groups.tsx";
 import ResetPassword from "./pages/ResetPassword.tsx";
+import Imprint from "./pages/Imprint.tsx";
 
 function App() {
 
@@ -51,6 +52,7 @@ function App() {
                                 <Route path="/reset-password/*" element={<ResetPassword/>}/>
                                 <Route path="/dashboard/*" element={<Protected><Dashboard/></Protected>}/>
                                 <Route path="/groups" element={<Protected><Groups/></Protected>}/>
+                                <Route path="/imprint" element={<Imprint/>}/>
                                 <Route path="*" element={<NotFound/>}/>
                             </Routes>
                         </Content>
@@ -60,7 +62,7 @@ function App() {
                                 <Divider type='vertical' style={{background:"black"}}/>
                                 <p style={{textAlign:"center", width:"fit-content"}}>Made with ❤ in Münster</p>
                                 <Divider type='vertical' style={{background:"black"}}/>
-                                <Link style={{textAlign:"right", width:"fit-content", textDecoration:"None", color:"black"}} to='/profile#impressum'>Impressum</Link>
+                                <Link style={{textAlign:"right", width:"fit-content", textDecoration:"None", color:"black"}} to='/imprint'>Impressum</Link>
                             </Flex>
                         </Footer>
                     </Layout>
