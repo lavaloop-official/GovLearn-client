@@ -1,10 +1,10 @@
-import {Carousel, Segmented, Tour, TourProps, TourStepProps} from "antd";
+import {Button, Carousel, Segmented, Tour, TourProps, TourStepProps} from "antd";
 import CarouselPane from "../components/CarouselPane.tsx";
 import RecomSlider from "../components/RecomSlider.tsx";
 import {useEffect, useRef, useState} from "react";
 import {fetchWrapper} from "../api/helper.ts";
 import {Course} from "../interfaces.ts";
-import {AppstoreOutlined, BarsOutlined} from "@ant-design/icons";
+import {AppstoreOutlined, BarsOutlined, CheckOutlined, LeftOutlined, QuestionCircleOutlined, RightOutlined} from "@ant-design/icons";
 import Recommendation from "../components/Recommendation.tsx";
 import {checkComplete, setComplete} from "../api/onboarding.ts";
 
@@ -18,21 +18,50 @@ function Discover() {
     const steps: TourProps['steps'] = [
         {
             title: "Empfehlungen",
-            description: "Hier sehen Sie die Empfehlungen, die auf Basis Ihrer Rolle und Kompetenzen am besten zu Ihnen passen.",
+            description: "Hier sehen Sie die Weiterbildungsangebote, die auf Basis Ihren Rollen und Kompetenzen am besten zu Ihnen passen.",
             target: () => featuredRef.current,
-            placement: "bottom"
+            placement: "bottom",
+            nextButtonProps : {
+                children : (
+                    <RightOutlined />
+                )  
+            },
         },
         {
             title: "Weitere Empfehlungen",
-            description: "Hier sehen sie weitere Empfehlungen die zu Ihnen passen.",
+            description: "Hier sehen Sie Weiterbildungsangebote, nach den Kategorien geordnet, welche Zu ihren Rollen und Kompetenzen passen.",
             placement: "topRight",
-            target: () => recommendedRef.current
+            target: () => recommendedRef.current,
+            nextButtonProps : {
+                children : (
+                    <RightOutlined />
+                )  
+            },
+            prevButtonProps : {
+                children : (
+                    <LeftOutlined />
+                )  
+            },
         },
         {
             title: "Ansicht",
             description: "Hier können Sie die Ansicht der Empfehlungen ändern.",
             placement: "top",
-            target: () => compactRef.current
+            target: () => compactRef.current,
+            prevButtonProps : {
+                children : (
+                    <LeftOutlined />
+                )  
+            },
+            nextButtonProps : {
+                children : (
+                    <CheckOutlined />
+                ),
+                style : {
+                    color : "white",
+                    backgroundColor : "green",
+                }  
+            },
         }
     ]
     const finishTour = () => {
