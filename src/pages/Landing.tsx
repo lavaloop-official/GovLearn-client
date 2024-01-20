@@ -116,7 +116,7 @@ function Landing() {
                                                     style={{fontSize: "64px", color: "white"}}
                                                 />
                                                 <p style={{color: "white", fontSize: "large"}}>
-                                                    großes Angebot an Weiterbildungsangeboten
+                                                    Großes Angebot an Weiterbildungsangeboten
                                                 </p>
                                             </Card>
                                         </div>
@@ -139,7 +139,7 @@ function Landing() {
                                                     style={{fontSize: "64px", color: "white"}}
                                                 />
                                                 <p style={{color: "white", fontSize: "large"}}>
-                                                    Finde das Angebot das für dich am besten passt
+                                                    Finde das Angebot, welches für dich am besten passt
                                                 </p>
                                             </Card>
                                         </div>

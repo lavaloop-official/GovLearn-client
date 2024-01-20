@@ -260,7 +260,7 @@ function AddCourse() {
                     />
                 </Form.Item>
                 <Form.Item name="skilllevel" label="Schwierigkeit"
-                           rules={[{required: true, message: 'Please geben Sie eine Schwierigkeit an'}]}>
+                           rules={[{required: true, message: 'Bitte geben Sie eine Schwierigkeit an'}]}>
                     <Select
                         style={{width: 120}}
                         options={[
@@ -430,12 +430,14 @@ function AddCourse() {
             } else {
                 navigate(`/dashboard/add/${content[current + 1].url}`);
             }
+            window.scrollTo(0, 0);
         }
     };
 
     const prev = () => {
         if (current != 0) {
             navigate(`/dashboard/add/${content[current - 1].url}`);
+            window.scrollTo(0, 0);
         } else if (current == 0)
             navigate("/dashboard/");
     };
