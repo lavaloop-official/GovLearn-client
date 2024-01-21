@@ -118,10 +118,11 @@ function Registration() {
     }
 
     const handleSubmit = () => {
+        //concat all RoleTags of all Roles
         const roletags = selectedToCompetences(1).concat(selectedToCompetences(2)).map(role => role.roleTagWsTos);
         let tags:RoleTag[] = [];
         roletags.forEach(roletag => roletag.forEach(tag => tags.push(tag)))
-        console.log(tags)
+
         //filter out deselected tags
         const filteredTags = tags.filter((tag) => !deselected.includes(tag.tagID));
         const objs = filteredTags.map((tag) => ({ tagId: tag.tagID, rating: tag.rating }));
