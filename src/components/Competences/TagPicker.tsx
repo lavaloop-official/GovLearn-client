@@ -11,14 +11,19 @@ type requestBody = {
 
 function TagPicker({tag}: { tag: UserTag }){
     const [value, setValue] = useState<number | undefined>(tag.rating);
+    const [loading, setLoading] = useState<boolean>(false);
     const request: requestBody[] = [];
 
     const updateRating = () => {
+        setLoading(true);
         request.push({tagId: tag.id, rating: value ?? 0});
         fetchWrapper.post(`api/v1/tags/users`, request)
         .then((res) => {
             console.log(res.message);
         });
+        setTimeout(() => {
+            setLoading(false);
+        }, 1000);
     }
 
     return(
@@ -37,6 +42,7 @@ function TagPicker({tag}: { tag: UserTag }){
         </div>
         <Button
           type="primary"
+          loading={loading}
           onClick={() => {
             updateRating()
           }}
