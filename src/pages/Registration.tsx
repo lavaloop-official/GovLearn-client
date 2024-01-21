@@ -169,7 +169,7 @@ function Registration() {
                 <Typography.Title level={4} style={{ margin: "5px 0px" }}>
                     Herzlich Willkommen bei GovLearn
                 </Typography.Title>
-                Ihrer Plattform für gezielte Weiterbildungen im öffentlichen Dienst. Wir freuen uns, Sie als neues
+                ihrer Plattform für gezielte Weiterbildungen im öffentlichen Dienst. Wir freuen uns, Sie als neues
                 Mitglied in unserer wachsenden Gemeinschaft begrüßen zu dürfen. Um Ihnen bestmögliche Empfehlungen
                 bieten zu können, möchten wir Sie durch den einfachen Registrierungsprozess führen.
                 <br />
@@ -182,15 +182,15 @@ function Registration() {
                         <hr className="vertical"></hr>
                         <p>
                             Nach erfolgreicher Registrierung werden Sie gebeten, Ihre aktuelle Rolle im öffentlichen
-                            Dienst auszuwählen. Ob Sie für die Digitalisierung zuständig sind oder eine Nicht-digitale
-                            Rolle ausüben – wählen Sie die Rolle, die am besten Ihre beruflichen Aufgaben widerspiegelt.
+                            Dienst auszuwählen. Wählen Sie hierbei die Rolle(n) aus, die Sie aktuell ausüben oder
+                            ausüben möchten. Sie können auch mehrere Teilrollen auswählen.
                         </p>
                     </Flex>
                     <br />
                     <Flex align="center">
                         <Flex className="intro-step" vertical justify="center" align="center">
                             <StarOutlined style={{ fontSize: "64px", color: "#212321" }} />
-                            <h5 style={{ margin: "0" }}>2. Kompetenzen - definieren</h5>
+                            <h5 style={{ margin: "0" }}>2. Kompetenzen definieren</h5>
                         </Flex>
                         <hr className="vertical"></hr>
                         <p>
