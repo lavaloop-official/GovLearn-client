@@ -81,16 +81,28 @@ function Registration() {
 
     const selectedToCompetences = (rating: number) => {
         const objects = selectedToText();
-        const competences: RoleTag[] = [];
+        const competences: Role[] = [];
         for (const obj of objects) {
-            const role = roles.find((role) => role.name == obj.role && role.verantwortungsbereich == obj.resp);
+            let role = roles.find((role) => role.name == obj.role && role.verantwortungsbereich == obj.resp);
             if (role == undefined)
                 continue;
-            competences.push(...role
-                .roleTagWsTos
-                .filter((tag) => tag.rating == rating)
-                .filter((tag) => competences.findIndex((competence) => competence.tagName == tag.tagName) == -1)
-            );
+
+            // Filter Tags by Tag rating -> Grundlagen or Fortgeschritten
+            role = {id:role.id, name:role.name, description:role.description, verantwortungsbereich:role.verantwortungsbereich,roleTagWsTos:role.roleTagWsTos
+                .filter((tag) => tag.rating == rating)};
+
+            let filteredRoleTags:RoleTag[]=[];
+            
+            // Filter all Tags inside the Role if they already exist in other roles
+            role.roleTagWsTos.forEach(tag => {
+                let roleTags:String[]=[];
+                competences.forEach(competence => competence.roleTagWsTos.forEach(roleTag => roleTags.push(roleTag.tagName)));
+                if(!roleTags.includes(tag.tagName))
+                    filteredRoleTags.push(tag);
+            });
+
+            // Push filtered role
+            competences.push({id:role.id, name:role.name, description:role.description, verantwortungsbereich:role.verantwortungsbereich,roleTagWsTos:filteredRoleTags});
         }
         return competences;
     }
@@ -106,7 +118,10 @@ function Registration() {
     }
 
     const handleSubmit = () => {
-        const tags = selectedToCompetences(1).concat(selectedToCompetences(2));
+        const roletags = selectedToCompetences(1).concat(selectedToCompetences(2)).map(role => role.roleTagWsTos);
+        let tags:RoleTag[] = [];
+        roletags.forEach(roletag => roletag.forEach(tag => tags.push(tag)))
+        console.log(tags)
         //filter out deselected tags
         const filteredTags = tags.filter((tag) => !deselected.includes(tag.tagID));
         const objs = filteredTags.map((tag) => ({ tagId: tag.tagID, rating: tag.rating }));
@@ -303,9 +318,16 @@ function Registration() {
                             Grundlagen-Kompetenzen
                         </Typography.Title>
                         <div className="deselect-grid">
-                            {selectedToCompetences(1).map((competence, index) => (
-                                <Deselect title={competence.tagName} id={competence.tagID} deselect={handleDeselect}
-                                    key={index} />
+                            {selectedToCompetences(1).map(role => (
+                                <div>
+                                    <p>{role.name} - {role.verantwortungsbereich}</p>
+                                    {
+                                        role.roleTagWsTos.map((competence, index) => (
+                                            <Deselect title={competence.tagName} id={competence.tagID} deselect={handleDeselect}
+                                                key={index} />
+                                        ))
+                                    }
+                                </div>
                             ))}
                         </div>
                     </div>
@@ -314,9 +336,16 @@ function Registration() {
                             Fortgeschrittene Kompetenzen
                         </Typography.Title>
                         <div className="deselect-grid">
-                            {selectedToCompetences(2).map((competence, index) => (
-                                <Deselect title={competence.tagName} id={competence.tagID} deselect={handleDeselect}
-                                    key={index} />
+                        {selectedToCompetences(2).map(role => (
+                                <div>
+                                    <p>{role.name} - {role.verantwortungsbereich}</p>
+                                    {
+                                        role.roleTagWsTos.map((competence, index) => (
+                                            <Deselect title={competence.tagName} id={competence.tagID} deselect={handleDeselect}
+                                                key={index} />
+                                        ))
+                                    }
+                                </div>
                             ))}
                         </div>
                     </div>
@@ -405,11 +434,13 @@ function Registration() {
                 <div
                     style={{
                         width: "100%",
-                        background: "#d9d9d9",
+                        background: "#F9F9F9",
                         borderRadius: "20px",
                         padding: "10px",
                         display: "flex",
-                        position: "relative"
+                        position: "relative",
+                        color:"#3F3F3F",
+                        boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px"
                     }}
                 >
                     <div style={{ marginBottom: "40px", width: "100%" }}>{content[current].content}</div>
