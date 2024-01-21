@@ -180,7 +180,7 @@ function Groups() {
                         currentGroup!.role == RoleEnum.Admin ?
                             <Groupadmin currentGroup={currentGroup!} removeCurrentGroup={removeCurrentGroup} handleFetchingOfAllGroups={handleFetchingOfAllGroups} />
                             : <Groupmember currentGroup={currentGroup!} fetchAllGroups={handleFetchingOfAllGroups} />
-                        : <Empty style={{ marginTop: "100px", marginBottom: "100px", marginLeft: "75px" }} description={NO_GROUPS} />
+                        : <Empty style={{ margin:"auto" }} description={NO_GROUPS} />
                 }
 
             </div>

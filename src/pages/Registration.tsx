@@ -54,7 +54,7 @@ function Registration() {
             "Digitalisierung",
             "Informationstechnik",
             "Smart City",
-            "anderer Verantwortungsbereich",
+            "Anderer Verantwortungsbereich",
             "Personal"
         ];
         const text = [];

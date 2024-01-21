@@ -32,10 +32,12 @@ function Discover() {
                 zIndex: "1",
                 display: "flex",
                 justifyContent: "center",
+                alignItems:"center",
                 flexDirection: "column",
-                gap: "10px"
+                gap: "10px",
+                padding:"0px 10px 10px 10px",
             }}>
-                <div style={{maxWidth: "1200px", margin: "auto", width: "100%", padding: "10px 10px"}}>
+                <div style={{maxWidth: "1220px", marginTop:"10px", width: "100%"}}>
                     <Carousel autoplay={true}
                               effect="fade"
                               style={{
@@ -54,10 +56,14 @@ function Discover() {
                     justifyContent: "center",
                     flexDirection: "column",
                     gap: "10px",
-                    maxWidth: "1200px",
+                    maxWidth: "1220px",
+                    padding:"10px",
                     width: "100%",
-                    margin: "auto",
-                    position: "relative"
+                    marginTop:"10px",
+                    position: "relative",
+                    background: "#F9F9F9",
+                    borderRadius: "20px",
+                    boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
                 }}>
                     <div style={{margin: "10px", display: "block", marginLeft: "auto"}}>
                         <Segmented
@@ -72,6 +78,7 @@ function Discover() {
                         compact ?
                             <div style={{
                                 display: "flex",
+                                justifyContent:"center",
                                 flexWrap: "wrap"
                             }}>{recommended
                                 .map((e) => e.items)
