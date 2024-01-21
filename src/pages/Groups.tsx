@@ -76,7 +76,7 @@ function Groups() {
     };
 
     const removeCurrentGroup = (group: Group) => {
-        const removedGroup = fetchWrapper.delete(`api/v1/groups/remove/group/${group.groupId}`).then(res => {
+        const removedGroup = fetchWrapper.delete(`api/v1/groups/${group.groupId}`).then(res => {
             console.log(res.message)
         });
         Promise.all([removedGroup]).then(() => {

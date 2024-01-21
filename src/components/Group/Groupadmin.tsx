@@ -99,7 +99,7 @@ function Groupadmin({ currentGroup, removeCurrentGroup, handleFetchingOfAllGroup
                     <Button style={{ margin: "0px 10px 0px 10px" }} type="text" shape="circle" size="large" icon={<Pen color="grey" size={28} onClick={showEditGroupModal}></Pen>}></Button>
                     <Button type="text" shape="circle" size="large" icon={<Trash color="grey" size={28} onClick={showDeleteGroupModal}></Trash>}></Button>
                 </div>
-                <Modal title="Möchten Sie wirklich diese Gruppe löschen?" open={openDeleteCourseModal} onOk={handleDeleteGroupModalOK} onCancel={handleDeleteGroupModalCancel}>
+                <Modal title="Möchten Sie wirklich diese Gruppe löschen?" open={openDeleteCourseModal} onOk={handleDeleteGroupModalOK} onCancel={handleDeleteGroupModalCancel} okText="Bestätigen" cancelText="Abbrechen">
                     <p>Die Gruppe wird unwiderruflich gelöscht.</p>
                 </Modal>
                 <Modal title="Gruppe bearbeiten" open={isEditGroupModalOpen} onOk={handleEditGroupModalOK} onCancel={handleEditGroupModalCancel}>
