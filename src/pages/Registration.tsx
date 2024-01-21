@@ -311,7 +311,8 @@ function Registration() {
                 </Typography.Title>
                 <Typography.Text>
                     Wählen Sie hier die Kompetenzen ab, welche nicht in die Weiterbildungsempfehlungen einfließen
-                    sollen.
+                    sollen. <br/>
+                    Kompetenzen, die bereits in anderen Rollen enthalten sind, wurden für eine bessere Übersichtlichkeit herausgefiltert.
                 </Typography.Text>
                 <div className="competence-container">
                     <div className="competence-inner">
