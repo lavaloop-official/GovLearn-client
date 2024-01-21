@@ -219,7 +219,8 @@ function Profile() {
                 marginTop: "25px",
                 paddingLeft: "15px",
                 paddingRight: "15px",
-                color: "#3F3F3F"
+                color: "#3F3F3F",
+                boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px" 
             }}>
                 <div>
                     <h1>Profil</h1>
