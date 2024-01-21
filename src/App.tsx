@@ -58,7 +58,7 @@ function App() {
                         </Content>
                         <Footer>
                             <Flex justify='center' align='center' gap='50px'>
-                                <a style={{textAlign:"left", width:"fit-content", textDecoration:"None", color:"black"}} href='/discover'>Govlearn</a>
+                                <a style={{textAlign:"left", width:"fit-content", textDecoration:"None", color:"black"}} href='/discover'>GovLearn</a>
                                 <Divider type='vertical' style={{background:"black"}}/>
                                 <p style={{textAlign:"center", width:"fit-content"}}>Made with ❤ in Münster</p>
                                 <Divider type='vertical' style={{background:"black"}}/>

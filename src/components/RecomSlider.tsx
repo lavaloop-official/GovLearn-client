@@ -152,14 +152,14 @@ function RecomSlider({ title, data }: { title?: string, data?: Course[] }) {
                 </div>
                 <Button className="showmore right"
                     type="text"
-                    icon={<RightOutlined />}
+                    icon={<RightOutlined/>}
                     style={{ display: `${Math.abs(translate) < max ? "block" : "none"}` }}
                     onClick={
                         () => navOnClick("r")
                     } />
                 <Button className="showmore left"
                     type="text"
-                    icon={<LeftOutlined />}
+                    icon={<LeftOutlined/>}
                     style={{ display: `${translate < 0 ? "block" : "none"}` }}
                     onClick={() => {
                         navOnClick("l");

@@ -8,7 +8,7 @@ function Imprint() {
                 <Card>
                 <h2>Impressum</h2>
                 <hr />
-                <p>Govlearn ist Projekt der <a target="_blank" href="https://www.uni-muenster.de/de/">Uni Münster</a>. </p>
+                <p>GovLearn ist ein Projekt der <a target="_blank" href="https://www.uni-muenster.de/de/">Uni Münster</a>. </p>
                 <p>Das Projekt wird im Wintersemester 2023/24 durchgeführt.</p>
                 <p>
                     <b>Angaben gemäß § 5 TMG:</b><br />

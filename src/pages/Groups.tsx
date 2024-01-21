@@ -50,25 +50,6 @@ function Groups() {
         });
     }, []);
 
-    const [loading, setLoading] = useState(false);
-    const [open, setOpen] = useState(false);
-
-    const showModal = () => {
-        setOpen(true);
-    };
-
-    const handleOk = () => {
-        setLoading(true);
-        setTimeout(() => {
-            setLoading(false);
-            setOpen(false);
-        }, 3000);
-    };
-
-    const handleCancel = () => {
-        setOpen(false);
-    };
-
     const [isCreateGroupModalOpen, setIsModalOpen] = useState(false);
 
     const showCreateGroupModal = () => {
@@ -76,7 +57,7 @@ function Groups() {
     };
 
     const removeCurrentGroup = (group: Group) => {
-        const removedGroup = fetchWrapper.delete(`api/v1/groups/remove/group/${group.groupId}`).then(res => {
+        const removedGroup = fetchWrapper.delete(`api/v1/groups/${group.groupId}`).then(res => {
             console.log(res.message)
         });
         Promise.all([removedGroup]).then(() => {
@@ -106,7 +87,6 @@ function Groups() {
         Promise.all([postedGroup]).then(() => {
             handleFetchingOfAllGroups();
         })
-        handleCancel();
         setIsModalOpen(false);
     };
 
@@ -135,28 +115,7 @@ function Groups() {
                                 groups.map((group: Group) => <MyGroups group={group} setCurrentGroup={setCurrentGroup} selected={currentGroup?.groupId == group.groupId} />)
                                 : <div />
                         }
-                        <Button type="primary" style={{ margin: "5px" }} onClick={showModal}>Gruppe hinzufügen</Button>
-                        <Modal
-                            open={open}
-                            title="Gruppe beitreten oder neue Gruppe erstellen."
-                            onOk={handleOk}
-                            onCancel={handleCancel}
-                            okText="Bestätigen" 
-                            cancelText="Abbrechen"
-                            footer={[
-                                <Button loading={loading} onClick={handleCancel}>
-                                    Abbrechen
-                                </Button>,
-                                <Button
-                                    type="primary"
-                                    loading={loading}
-                                    onClick={showCreateGroupModal}
-                                >
-                                    Neue Gruppe erstellen
-                                </Button>,
-                            ]}
-                        >
-                        </Modal>
+                        <Button type="primary" style={{ margin: "5px" }} onClick={showCreateGroupModal}>Gruppe hinzufügen</Button>
                         <Modal title="Gruppe erstellen" open={isCreateGroupModalOpen} onOk={handleCreateGroupModalOK} onCancel={handleCreateGroupModalCancel} okText="Bestätigen" cancelText="Abbrechen">
                             <h3>Gruppenname</h3>
                             <Input placeholder="Geben Sie einen Gruppennamen ein..." onChange={updateCreateGroupTitle} />
@@ -180,7 +139,7 @@ function Groups() {
                         currentGroup!.role == RoleEnum.Admin ?
                             <Groupadmin currentGroup={currentGroup!} removeCurrentGroup={removeCurrentGroup} handleFetchingOfAllGroups={handleFetchingOfAllGroups} />
                             : <Groupmember currentGroup={currentGroup!} fetchAllGroups={handleFetchingOfAllGroups} />
-                        : <Empty style={{ marginTop: "100px", marginBottom: "100px", marginLeft: "75px" }} description={NO_GROUPS} />
+                        : <Empty style={{ margin:"auto" }} description={NO_GROUPS} />
                 }
 
             </div>

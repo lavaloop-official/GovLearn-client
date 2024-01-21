@@ -60,7 +60,7 @@ function CourseInfo({course}: { course: Course }) {
               style={{
                   height: "100%",
                   width: "100%",
-                  background: "#d9d9d9",
+                  background: "#F9F9F9",
                   borderRadius: "20px",
                   boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
                   maxWidth: "1200px",
@@ -213,7 +213,7 @@ function CourseInfo({course}: { course: Course }) {
                 </Card>
                 <Card className="antcard" style={{margin: "5px", width: "30%"}}>
                     <Flex justify="space-evenly">
-                        <Image
+                        <img
                             style={{borderRadius: '50%', width: '100px', height: '100px'}}
                             // TODO: Bilder von Instructor einfügen
                             src="https://img.myloview.de/sticker/default-profile-picture-avatar-photo-placeholder-vector-illustration-700-205664584.jpg"
@@ -222,15 +222,26 @@ function CourseInfo({course}: { course: Course }) {
                         <div>
                             {
                                 course.instructor ? (
-                                    <h3>{course.instructor}</h3>
+                                    <div className="course-attribute">
+                                        <p className="attribute-label">Dozent:</p>
+                                        <p className="attribute-value">{course.instructor}</p>
+                                    </div>
                                 ) : (
-                                    <h3>Unbekannt</h3>
+                                    <p>Kein Dozent angegeben</p>
                                 )
                             }
                         </div>
                     </Flex>
-                    <p>keine Beschreibung
-                        vorhanden.</p> {/* TODO: Kurs für instructor-Beschreibung überarbeiten */}
+                    <hr style={{margin: 0}}/>
+                    <Flex style={{textAlign: "center"}}>
+                        {
+                            course.provider ? (                                                         
+                                <p>{course.provider}</p>                
+                            ) : (
+                                <p>Anbieter nicht angegeben</p>
+                            )
+                        }
+                    </Flex>
                 </Card>
             </Flex>
             <Modal title="Kurs abgeschlossen?" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={[
