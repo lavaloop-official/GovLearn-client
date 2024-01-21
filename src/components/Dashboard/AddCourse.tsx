@@ -186,6 +186,12 @@ function AddCourse() {
                         </Form.Item>*/}
 
                 {!imageUrl && <>
+                    <Tooltip
+                        title='Um eine Bild-URL zu kopieren, rechtsklicke auf das Bild im Internet, wähle "Bildadresse kopieren" oder eine ähnliche Option, um die URL in die Zwischenablage zu übertragen.'>
+                        <Typography.Link style={{margin: "0px 0px 0px 200px"}}
+                                         href="https://de.wikihow.com/Eine-Bild-URL-bekommen">Was ist eine
+                            Bild-URL?</Typography.Link>
+                    </Tooltip>
                     <Form.Item name="image" label="Bild-URL"
                                rules={[{required: true, message: "Bitte geben Sie ein Bild an"}, {
                                    type: 'url',
@@ -196,10 +202,6 @@ function AddCourse() {
                                 {...newCourse!, image: event.target.value}
                             )
                         }}/>
-                        <Tooltip
-                            title='Um eine Bild-URL zu kopieren, rechtsklicke auf das Bild im Internet, wähle "Bildadresse kopieren" oder eine ähnliche Option, um die URL in die Zwischenablage zu übertragen.'><Typography.Link
-                            href="https://de.wikihow.com/Eine-Bild-URL-bekommen">Was ist eine
-                            Bild-URL?</Typography.Link></Tooltip>
                     </Form.Item>
                     <Flex justify="center">
                         {newCourse?.image ?
@@ -293,7 +295,7 @@ function AddCourse() {
                 <p>Diese helfen uns das Weiterbildungsangebot für passende Nutzer vorzuschlagen</p>
                 <hr/>
                 <Flex vertical style={{gap: "10px"}}>
-                    {
+                    {/*
                         categories.map((category) => {
                             return (
                                 <div key={category.id}>
@@ -331,7 +333,7 @@ function AddCourse() {
                                 </div>
                             )
                         })
-                    }
+                    */}
                 </Flex>
             </div>
         </>
