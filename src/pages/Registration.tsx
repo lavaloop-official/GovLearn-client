@@ -54,7 +54,7 @@ function Registration() {
             "Digitalisierung",
             "Informationstechnik",
             "Smart City",
-            "nicht-digital",
+            "anderer Verantwortungsbereich",
             "Personal"
         ];
         const text = [];
@@ -134,10 +134,10 @@ function Registration() {
     //TODO: add roles
     const AreaInfoText = (
         <>
-            <div className="role">
-                <h4 className="role-title">Organisation</h4>
-                <p className="role-desc">Im Bereich Organisation werden Strukturen und Abläufe innerhalb der öffentlichen Verwaltung geplant, koordiniert und optimiert, um eine effiziente und transparente Arbeitsweise zu gewährleisten.</p>
-            </div>
+            
+            <h4 className="role-title">Organisation</h4>
+            <p className="role-desc">Im Bereich Organisation werden Strukturen und Abläufe innerhalb der öffentlichen Verwaltung geplant, koordiniert und optimiert, um eine effiziente und transparente Arbeitsweise zu gewährleisten.</p>
+        
             <h4 className="role-title">Digitalisierung</h4>
             <p className="role-desc">Die Digitalisierung im öffentlichen Dienst konzentriert sich auf die Integration moderner Technologien, um Verwaltungsprozesse zu verbessern, den Bürgerservice zu optimieren und den Zugang zu Informationen zu erleichtern.</p>
 
@@ -147,8 +147,8 @@ function Registration() {
             <h4 className="role-title">Smart City</h4>
             <p className="role-desc">Smart City bezieht sich auf die Entwicklung und Umsetzung intelligenter Technologien, um städtische Lebensqualität zu verbessern. Dazu gehören etwa die Vernetzung von Verkehrssystemen, Umweltüberwachung und bürgernahe Dienstleistungen.</p>
 
-            <h4 className="role-title">nicht-digital</h4>
-            <p className="role-desc">Im nicht-digitalen Bereich konzentriert sich die Arbeit auf traditionelle Aspekte der Verwaltung, die nicht unmittelbar mit digitalen Technologien verbunden sind. Dazu gehören beispielsweise Personalmanagement und organisatorische Prozesse.</p>
+            <h4 className="role-title">anderer Verantwortungsbereich</h4>
+            <p className="role-desc">Dieser Verantwortungsbereich umfasst spezifische Aufgaben, die je nach individuellem Bedarf und Schwerpunktsetzung der öffentlichen Verwaltung variieren können.</p>
 
             <h4 className="role-title">Personal</h4>
             <p className="role-desc">Im Personalbereich werden alle Angelegenheiten rund um die Mitarbeiterinnen und Mitarbeiter des öffentlichen Dienstes verwaltet, einschließlich Personalbeschaffung, -entwicklung, -betreuung und -administration.</p>

@@ -14,7 +14,7 @@ function CircleSelect({ sliceCount = 6, arcCount = 3, selectCallback, selected }
     const dataInner = new Array(sliceCount).fill(1)
     const pie = d3.pie().startAngle(-offset).endAngle(2 * Math.PI - offset)(dataInner);
 
-    const label = ["Organisation", "Digitalisierung", "Informationstechnik", "Smart City", "nicht-digital", "Personal"]
+    const label = ["Organisation", "Digitalisierung", "Informationstechnik", "Smart City", "Sonstiges", "Personal"]
 
     const [focused, setFocused] = useState<number[]>(new Array(sliceCount).fill(0));
     const [middle, setMiddle] = useState<{ x: number, y: number }>({ x: 300, y: 300 });
