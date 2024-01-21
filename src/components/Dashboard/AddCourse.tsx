@@ -295,7 +295,7 @@ function AddCourse() {
                 <p>Diese helfen uns das Weiterbildungsangebot für passende Nutzer vorzuschlagen</p>
                 <hr/>
                 <Flex vertical style={{gap: "10px"}}>
-                    {/*
+                    {
                         categories.map((category) => {
                             return (
                                 <div key={category.id}>
@@ -333,7 +333,7 @@ function AddCourse() {
                                 </div>
                             )
                         })
-                    */}
+                    }
                 </Flex>
             </div>
         </>
