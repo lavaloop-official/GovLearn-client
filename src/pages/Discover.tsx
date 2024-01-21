@@ -14,7 +14,7 @@ function Discover() {
     const [compact, setCompact] = useState<boolean>(false)
 
     useEffect(() => {
-        console.log(compact)
+        document.title = "GoLearn - Weiterbildung einfach gemacht";
         fetchWrapper.get(`api/v1/recommendations/bundle`).then((res) => {
             setFeatured(res.payload.featured)
             setRecommended(res.payload.categorized)
