@@ -222,15 +222,28 @@ function CourseInfo({course}: { course: Course }) {
                         <div>
                             {
                                 course.instructor ? (
-                                    <h3>{course.instructor}</h3>
+                                    <div className="course-attribute">
+                                        <p className="attribute-label">Dozent:</p>
+                                        <p className="attribute-value">{course.instructor}</p>
+                                    </div>
                                 ) : (
-                                    <h3>Unbekannt</h3>
+                                    <p>Kein Dozent angegeben</p>
                                 )
                             }
                         </div>
                     </Flex>
-                    <p>keine Beschreibung
-                        vorhanden.</p> {/* TODO: Kurs für instructor-Beschreibung überarbeiten */}
+                    <hr style={{margin: 0}}/>
+                    <Flex justify="space-evenly" >
+                        {
+                            course.provider ? (
+                                <div className="course-attribute">
+                                        <p className="attribute-value">{course.provider}</p>
+                                    </div>
+                            ) : (
+                                <p>Anbieter nicht angegeben</p>
+                            )
+                        }
+                    </Flex>
                 </Card>
             </Flex>
             <Modal title="Kurs abgeschlossen?" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={[
