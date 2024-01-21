@@ -78,7 +78,7 @@ function Discover() {
                         compact ?
                             <div style={{
                                 display: "flex",
-                                justifyContent:"center",
+                                justifyContent:"flex-start",
                                 flexWrap: "wrap"
                             }}>{recommended
                                 .map((e) => e.items)
