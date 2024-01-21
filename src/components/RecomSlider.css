@@ -24,11 +24,11 @@
     position: absolute;
     bottom: 88px;
     scale: 1.5;
-    background: rgb(69, 69, 69, 0.7);
+    background: rgba(231, 231, 231, 0.7);
 }
 
 .showmore:hover {
-    background: rgb(69, 69, 69, 0.9)
+    background: rgb(69, 69, 69, 0.9);
 }
 
 .showmore.right {

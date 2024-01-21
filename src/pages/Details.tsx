@@ -118,7 +118,7 @@ function Details() {
                             <CourseInfo course={course}></CourseInfo>
                             <div
                                 style={{
-                                    background: "#d9d9d9",
+                                    background: "#F9F9F9",
                                     borderRadius: "20px",
                                     boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
                                     display: "flex",
@@ -137,7 +137,7 @@ function Details() {
                             </div>
                             <div
                                 style={{
-                                    background: "#d9d9d9",
+                                    background: "#F9F9F9",
                                     borderRadius: "20px",
                                     boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
                                 }}
@@ -160,7 +160,7 @@ function Details() {
                             <div style={{ width: "100%", padding: "10px", display: "flex" }}>
                                 <div
                                     style={{
-                                        background: "#d9d9d9",
+                                        background: "#F9F9F9",
                                         borderRadius: "20px",
                                         boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
                                         display: "flex",
