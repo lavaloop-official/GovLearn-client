@@ -63,7 +63,7 @@ function CircleSelect({ sliceCount = 6, arcCount = 3, selectCallback, selected }
                             key={index}
                             radius={70}
                             slice={slice}
-                            sliceColor={'#a9a9a9'}
+                            sliceColor={'#D1D1D1'}
                             arcCount={arcCount}
                             label={label[index]}
                             click={handleClick}
