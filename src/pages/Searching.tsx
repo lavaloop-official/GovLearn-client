@@ -3,7 +3,7 @@ import SearchComponent from "../components/SearchComponent.tsx";
 import {Course, CourseFilterWsTo} from "../interfaces.ts";
 import {fetchWrapper} from "../api/helper.ts";
 import {useLocation} from "react-router-dom";
-import {Button} from 'antd';
+import {Button, Empty} from 'antd';
 import SearchOptions from "../components/SearchOptions.tsx";
 import Search from "antd/es/input/Search";
 
@@ -71,10 +71,11 @@ function Searching() {
                 </div>
                 <div style={{flex: "1", maxWidth: "1000px", marginRight: "1rem"}}>
                     {
-                        courses ?
+                        courses && courses.length > 0 ?
                             courses.map((course: Course) => <div key={course.id}><SearchComponent obj={course}/>
                             </div>)
-                            : <SearchComponent/>
+                            : <div style={{marginTop: "1rem"}}><Empty
+                                description={"Für die angegebenen Kriterien wurden keine Kurse gefunden."}/></div>
                     }
                 </div>
                 <div style={{flexBasis: "100%", display: "flex", justifyContent: "center", marginTop: "20px"}}>

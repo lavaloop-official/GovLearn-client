@@ -5,6 +5,7 @@ import {useEffect, useState} from "react";
 import {useWindowSize} from "@uidotdev/usehooks";
 import Confetti from 'react-confetti'
 import {fetchWrapper} from "../../api/helper.ts";
+import "./CourseInfo.css";
 
 function CourseInfo({course}: { course: Course }) {
     const defaultImageSrc = "https://st4.depositphotos.com/13194036/31587/i/450/depositphotos_315873928-stock-photo-selective-focus-happy-businessman-glasses.jpg"
@@ -16,9 +17,10 @@ function CourseInfo({course}: { course: Course }) {
 
     const [abgeschlossen, setAbgeschlossen] = useState(false);
 
-    useEffect(()=>{
-        fetchWrapper.get(`api/v1/completions/course/${course.id}`).then(res => setAbgeschlossen(res.payload));
-    })
+    useEffect(() => {
+        if (course.id)
+            fetchWrapper.get(`api/v1/completions/course/${course.id}`).then(res => setAbgeschlossen(res.payload));
+    }, [course.id])
 
     const translateFormat = (format: string) => {
         switch (format) {
@@ -36,9 +38,9 @@ function CourseInfo({course}: { course: Course }) {
     }
 
     const gotoCourse = () => {
-        if(!abgeschlossen){
+        if (!abgeschlossen) {
             setIsModalOpen(true);
-        }   
+        }
     }
 
     const handleOk = () => {
@@ -60,7 +62,7 @@ function CourseInfo({course}: { course: Course }) {
               style={{
                   height: "100%",
                   width: "100%",
-                  background: "#d9d9d9",
+                  background: "#F9F9F9",
                   borderRadius: "20px",
                   boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
                   maxWidth: "1200px",
@@ -79,30 +81,26 @@ function CourseInfo({course}: { course: Course }) {
             }
             <Flex className="course">
                 {
-                    abgeschlossen?
-                    <Badge.Ribbon text="Kurs abgeschlossen" placement="start" style={{scale:"1.5", marginLeft:"30px"}} color="green">
+                    <Badge.Ribbon text="Kurs abgeschlossen" placement="start"
+                                  style={{scale: "1.0", display: abgeschlossen ? "block" : "none"}} color="green">
                         {
                             course.image ? (
                                 <img
-                                    src={course.image ? course.image : defaultImageSrc}
+                                    src={course.image}
                                     alt=""
                                     style={{
-                                        width: "100%",
-                                        height: "100%",
-                                        objectFit: "cover",
                                         borderRadius: "20px",
                                         padding: "5px",
-                                        maxWidth: "700px",
-                                        minHeight: "400px"
+                                        height: "450px",
+                                        objectFit: "cover",
+                                        aspectRatio: "8/5",
                                     }}
                                 />
                             ) : (
                                 <div id="detailpic" style={{
                                     padding: "5px",
-                                    maxWidth: "725px",
-                                    maxHeight: "400px",
+                                    height: "450px",
                                     width: "100%",
-                                    height: "400px",
                                     display: "flex",
                                 }}>
                                     <Skeleton.Image active style={{
@@ -113,55 +111,23 @@ function CourseInfo({course}: { course: Course }) {
                                 </div>
                             )
                         }
-                    </Badge.Ribbon>:
-                    <div>
-                        {
-                            course.image ? (
-                                <img
-                                    src={course.image ? course.image : defaultImageSrc}
-                                    alt=""
-                                    style={{
-                                        width: "100%",
-                                        height: "100%",
-                                        objectFit: "cover",
-                                        borderRadius: "20px",
-                                        padding: "5px",
-                                        maxWidth: "700px",
-                                        minHeight: "400px"
-                                    }}
-                                />
-                            ) : (
-                                <div id="detailpic" style={{
-                                    padding: "5px",
-                                    maxWidth: "725px",
-                                    maxHeight: "400px",
-                                    width: "100%",
-                                    height: "400px",
-                                    display: "flex",
-                                }}>
-                                    <Skeleton.Image active style={{
-                                        borderRadius: "15px",
-                                        width: "100%",
-                                        height: "100%",
-                                    }}/>
-                                </div>
-                            )
-                        }
-                    </div>
+                    </Badge.Ribbon>
                 }
                 <Flex className="course-sidebar" vertical gap="middle"
                       style={{
                           maxWidth: "200px",
                           width: "100%",
                           padding: "5px",
+                          minHeight: "450px",
                       }}
                 >
-                    <Card className="antcard" style={{height: "100%"}}>
+                    <Card className="antcard" style={{height: "100%", width: "100%"}}>
                         {course.id ? <Bookmark id={course.id}
                                                style={{position: "absolute", top: "10px", right: "10px"}}/> : <></>}
                         <div className="course-details" style={{
                             padding: "0px",
                             maxWidth: "190px",
+                            width: "100%",
                             wordWrap: "break-word",
                         }}>
                             {course.durationInHours && (
@@ -211,9 +177,9 @@ function CourseInfo({course}: { course: Course }) {
                         <p>keine Beschreibung vorhanden.</p>
                     )}
                 </Card>
-                <Card className="antcard" style={{margin: "5px", width: "30%"}}>
+                <Card className="antcard" style={{margin: "5px", width: "30%", overflow: "hidden"}}>
                     <Flex justify="space-evenly">
-                        <Image
+                        <img
                             style={{borderRadius: '50%', width: '100px', height: '100px'}}
                             // TODO: Bilder von Instructor einfügen
                             src="https://img.myloview.de/sticker/default-profile-picture-avatar-photo-placeholder-vector-illustration-700-205664584.jpg"
@@ -222,15 +188,26 @@ function CourseInfo({course}: { course: Course }) {
                         <div>
                             {
                                 course.instructor ? (
-                                    <h3>{course.instructor}</h3>
+                                    <div className="course-attribute">
+                                        <p className="attribute-label">Dozent:</p>
+                                        <p className="attribute-value">{course.instructor}</p>
+                                    </div>
                                 ) : (
-                                    <h3>Unbekannt</h3>
+                                    <p>Kein Dozent angegeben</p>
                                 )
                             }
                         </div>
                     </Flex>
-                    <p>keine Beschreibung
-                        vorhanden.</p> {/* TODO: Kurs für instructor-Beschreibung überarbeiten */}
+                    <hr style={{margin: 0}}/>
+                    <Flex style={{textAlign: "center"}}>
+                        {
+                            course.provider ? (                                                         
+                                <p>{course.provider}</p>                
+                            ) : (
+                                <p>Anbieter nicht angegeben</p>
+                            )
+                        }
+                    </Flex>
                 </Card>
             </Flex>
             <Modal title="Kurs abgeschlossen?" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={[

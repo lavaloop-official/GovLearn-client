@@ -1,5 +1,5 @@
 import './Deselect.css';
-import {StarOutlined, StarTwoTone} from "@ant-design/icons";
+import {StarFilled, StarOutlined, StarTwoTone} from "@ant-design/icons";
 import {useState} from "react";
 
 function Deselect({title, id, deselect}: { title: string, id: number, deselect: (id: number) => void }) {
@@ -16,7 +16,7 @@ function Deselect({title, id, deselect}: { title: string, id: number, deselect: 
             <div className="deselect-inner">
                 <span>{title}</span>
             </div>
-            <div>{selected ? <StarTwoTone/> : <StarOutlined/>}</div>
+            <div>{selected ? <StarFilled style={{color: "#59a1e5"}}/> : <StarOutlined/>}</div>
         </div>
     );
 }

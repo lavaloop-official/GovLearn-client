@@ -219,7 +219,8 @@ function Profile() {
                 marginTop: "25px",
                 paddingLeft: "15px",
                 paddingRight: "15px",
-                color: "#3F3F3F"
+                color: "#3F3F3F",
+                boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px" 
             }}>
                 <div>
                     <h1>Profil</h1>
@@ -421,21 +422,6 @@ function Profile() {
                         }
                     </div>
                 </div>
-                <Divider/>
-                <div style={{flexBasis: "100%", marginBottom: "0px"}}>
-                    <h2 style={{textAlign: "center"}}>Datenschutz</h2>
-                    <p style={{textAlign: "left", background: "#F7F7F7", borderRadius: "10px", padding: "15px"}}>Hier
-                        werden irgendwann einmal Informationen zum Datenschutz stehen: Cookies, Datenschutzerklärung
-                        etc.</p>
-                </div>
-                <Divider/>
-                <section id="impressum" style={{flexBasis: "100%", marginBottom: "0px"}}>
-                    <h2 style={{textAlign: "center"}}>Impressum</h2>
-                    <p style={{textAlign: "left", background: "#F7F7F7", borderRadius: "10px", padding: "15px"}}>
-                        GovLearn - Ein Projekt der Uni Münster <br/><br/>
-                        Schlossplatz 2 - Münster
-                    </p>
-                </section>
             </div>
         </div>
     );

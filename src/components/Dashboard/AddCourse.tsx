@@ -1,12 +1,27 @@
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import dayjs from 'dayjs';
-import { Button, Checkbox, DatePicker, Flex, Form, Image, Input, InputNumber, message, Select, Steps, Tag } from "antd";
+import {
+    Button,
+    Checkbox,
+    DatePicker,
+    Flex,
+    Form,
+    Image,
+    Input,
+    InputNumber,
+    message,
+    Select,
+    Steps,
+    Tag,
+    Tooltip,
+    Typography
+} from "antd";
 import TextArea from "antd/es/input/TextArea";
-import { Category, Coursetag, CreateCourse } from "../../interfaces";
-import { fetchWrapper } from "../../api/helper";
+import {Category, Coursetag, CreateCourse} from "../../interfaces";
+import {fetchWrapper} from "../../api/helper";
 import CourseInfo from "../Detail/CourseInfo";
-import { useLocation, useNavigate } from "react-router-dom";
-import { URL_WRONG_FORMAT } from "../../constants/de";
+import {useLocation, useNavigate} from "react-router-dom";
+import {URL_WRONG_FORMAT} from "../../constants/de";
 
 /*const getBase64 = (img: RcFile, callback: (url: string) => void) => {
     const reader = new FileReader();
@@ -40,7 +55,7 @@ function AddCourse() {
     const [tags, setTags] = useState<Coursetag[]>([]);
     const [selectedTags, setSelectedTags] = useState<Coursetag[]>([]);
 
-    const [oldData, setOldData] = useState<{ id: number, tags: Coursetag[] }>({ id: -1, tags: [] });
+    const [oldData, setOldData] = useState<{ id: number, tags: Coursetag[] }>({id: -1, tags: []});
 
     const [form] = Form.useForm();
 
@@ -55,7 +70,7 @@ function AddCourse() {
         if (location.state?.obj) {
             fetchWrapper.get('api/v1/tags/courses/' + location.state?.obj.id).then(res => {
                 setSelectedTags(res.payload);
-                setOldData({ id: location.state?.obj.id, tags: res.payload });
+                setOldData({id: location.state?.obj.id, tags: res.payload});
             })
         }
     }, [])
@@ -97,7 +112,7 @@ function AddCourse() {
         const requests: Promise<object>[] = [];
         setLoading(true)
         if (oldData.id != -1) {
-            fetchWrapper.put('api/v1/courses', { ...newCourse, id: oldData.id }).then(() => {
+            fetchWrapper.put('api/v1/courses', {...newCourse, id: oldData.id}).then(() => {
                 selectedTags.forEach((tag) => {
                     requests.push(fetchWrapper.post('api/v1/tags/courses', {
                         courseId: oldData.id,
@@ -115,7 +130,7 @@ function AddCourse() {
 
             })
         } else {
-            fetchWrapper.post('api/v1/courses', { ...newCourse }).then((res) => {
+            fetchWrapper.post('api/v1/courses', {...newCourse}).then((res) => {
                 const course = res.payload;
                 selectedTags.forEach((tag) => {
                     requests.push(fetchWrapper.post('api/v1/tags/courses', {
@@ -149,13 +164,13 @@ function AddCourse() {
             <Form
                 name="basic"
                 form={form}
-                labelCol={{ span: 8 }}
-                wrapperCol={{ span: 16 }}
-                style={{ minWidth: 600, maxWidth: 900 }}
+                labelCol={{span: 8}}
+                wrapperCol={{span: 16}}
+                style={{minWidth: 600, maxWidth: 900}}
                 autoComplete="off"
                 initialValues={getInitialValues()}>
                 <h4>Allgemeines</h4>
-                <hr />
+                <hr/>
                 {/*<Form.Item name="picture" label="Bild">
                                 <Upload
                                     name="avatar"
@@ -171,85 +186,103 @@ function AddCourse() {
                         </Form.Item>*/}
 
                 {!imageUrl && <>
-                    <Form.Item name="image" label="Bild-Url"
-                        rules={[{ required: true, message: "Bitte geben Sie ein Bild an" }, { type: 'url', message: URL_WRONG_FORMAT }]}>
+                    <Tooltip
+                        title='Um eine Bild-URL zu kopieren, rechtsklicke auf das Bild im Internet, wähle "Bildadresse kopieren" oder eine ähnliche Option, um die URL in die Zwischenablage zu übertragen.'>
+                        <Typography.Link style={{margin: "0px 0px 0px 200px"}}
+                                         href="https://de.wikihow.com/Eine-Bild-URL-bekommen">Was ist eine
+                            Bild-URL?</Typography.Link>
+                    </Tooltip>
+                    <Form.Item name="image" label="Bild-URL"
+                               rules={[{required: true, message: "Bitte geben Sie ein Bild an"}, {
+                                   type: 'url',
+                                   message: URL_WRONG_FORMAT
+                               }]}>
                         <Input width={"100px"} onChange={(event) => {
                             setNewCourse(
-                                { ...newCourse!, image: event.target.value }
+                                {...newCourse!, image: event.target.value}
                             )
-                        }} />
+                        }}/>
                     </Form.Item>
                     <Flex justify="center">
-                        {newCourse?.image ? <Image src={newCourse?.image} style={{
-                            margin: "5px 0px 15px",
-                            border: "1px solid black",
-                            borderRadius: "25px",
-                            width: "200px",
-                            height: "150px",
-                            objectFit: "contain"
-                        }} /> : <></>}
+                        {newCourse?.image ?
+                            <Flex vertical style={{margin: "0px 0px 10px 0px"}}>
+                                <img src={newCourse?.image} style={{
+                                    border: "1px solid black",
+                                    borderRadius: "25px",
+                                    width: "200px",
+                                    height: "125px",
+                                    objectFit: "contain"
+                                }}/>
+                                Das Bild sollte ungefähr in diesen Kasten passen <br/>
+                                um später richtig angezeigt zu werden.
+                            </Flex>
+                            : <></>}
                     </Flex>
+
                 </>}
                 <Form.Item name="name" label="Name"
-                    rules={[{ required: true, message: "Bitte geben Sie einen Namen an" }]}>
-                    <Input width={"100px"} />
+                           rules={[{required: true, message: "Bitte geben Sie einen Namen an"}]}>
+                    <Input width={"100px"}/>
                 </Form.Item>
                 <Form.Item name="description" label="Beschreibung"
-                    rules={[{ required: true, message: "Bitte geben Sie eine Beschreibung an" }]}>
-                    <TextArea />
+                           rules={[{required: true, message: "Bitte geben Sie eine Beschreibung an"}]}>
+                    <TextArea/>
                 </Form.Item>
                 <h4>Details</h4>
-                <hr />
+                <hr/>
                 <Form.Item name="createdAt" label="Start-Datum"
-                    rules={[{ required: true, message: "Bitte geben Sie einen Startdatum an" }]}>
-                    <DatePicker />
+                           rules={[{required: true, message: "Bitte geben Sie einen Startdatum an"}]}>
+                    <DatePicker/>
                 </Form.Item>
                 <Form.Item name="durationInHours" label="Dauer">
-                    <InputNumber min={1} addonAfter="Stunden" />
+                    <InputNumber min={1} addonAfter="Stunden"/>
                 </Form.Item>
                 <Form.Item name="instructor" label="Dozent">
-                    <Input width={"100px"} />
+                    <Input width={"100px"}/>
                 </Form.Item>
                 <Form.Item name="provider" label="Anbieter">
-                    <Input width={"100px"} />
+                    <Input width={"100px"}/>
                 </Form.Item>
                 <Form.Item name="costFree" label="Kostenfrei">
-                    <Checkbox />
+                    <Checkbox/>
                 </Form.Item>
                 <Form.Item name="domainSpecific" label="Verwaltungsbezogen">
-                    <Checkbox />
+                    <Checkbox/>
                 </Form.Item>
                 <Form.Item name="format" label="Format"
-                    rules={[{ required: true, message: "Bitte geben Sie ein Format an" }]}>
+                           rules={[{required: true, message: "Bitte geben Sie ein Format an"}]}>
                     <Select
-                        style={{ width: 120 }}
+                        style={{width: 120}}
                         options={[
-                            { value: 'Praesenz', label: 'Präsenz' },
-                            { value: 'OnlineLive', label: 'Live (Online)' },
-                            { value: 'OnlineSelbstorganisiert', label: 'Selbstorganisiert (Online)' },
-                            { value: 'Hybrid', label: 'Hybrid' },
+                            {value: 'Praesenz', label: 'Präsenz'},
+                            {value: 'OnlineLive', label: 'Live (Online)'},
+                            {value: 'OnlineSelbstorganisiert', label: 'Selbstorganisiert (Online)'},
+                            {value: 'Hybrid', label: 'Hybrid'},
                         ]}
                     />
                 </Form.Item>
                 <Form.Item name="skilllevel" label="Schwierigkeit"
-                    rules={[{ required: true, message: 'Please geben Sie eine Schwierigkeit an' }]}>
+                           rules={[{required: true, message: 'Bitte geben Sie eine Schwierigkeit an'}]}>
                     <Select
-                        style={{ width: 120 }}
+                        style={{width: 120}}
                         options={[
-                            { value: 'Anfaenger', label: 'Anfänger' },
-                            { value: 'Fortgeschritten', label: 'Fortgeschritten' },
-                            { value: 'Experte', label: 'Experte' },
+                            {value: 'Anfaenger', label: 'Anfänger'},
+                            {value: 'Fortgeschritten', label: 'Fortgeschritten'},
+                            {value: 'Experte', label: 'Experte'},
                         ]}
                     />
                 </Form.Item>
                 <Form.Item name="certificate" label="Zertifikat">
-                    <Checkbox />
+                    <Checkbox/>
                 </Form.Item>
                 <h4>Links</h4>
-                <hr />
+                <hr/>
                 <Form.Item name="link" label="Website"
-                    rules={[{ required: true, message: "Bitte geben Sie den Link zum Angebot an" }, { type: 'url', message: URL_WRONG_FORMAT }]}>
-                    <Input width={"100px"} />
+                           rules={[{required: true, message: "Bitte geben Sie den Link zum Angebot an"}, {
+                               type: 'url',
+                               message: URL_WRONG_FORMAT
+                           }]}>
+                    <Input width={"100px"}/>
                 </Form.Item>
             </Form>
         </>
@@ -260,8 +293,8 @@ function AddCourse() {
             <div>
                 <h4>Füge passende Tags hinzu</h4>
                 <p>Diese helfen uns das Weiterbildungsangebot für passende Nutzer vorzuschlagen</p>
-                <hr />
-                <Flex vertical style={{ gap: "10px" }}>
+                <hr/>
+                <Flex vertical style={{gap: "10px"}}>
                     {
                         categories.map((category) => {
                             return (
@@ -282,7 +315,7 @@ function AddCourse() {
                                                                     cursor: "pointer",
                                                                     fontWeight: "bold"
                                                                 }}
-                                                                    onClick={() => onTagSelection(tag.id)}>{tag.name}</Tag>
+                                                                     onClick={() => onTagSelection(tag.id)}>{tag.name}</Tag>
                                                                 :
                                                                 <Tag style={{
                                                                     background: "white",
@@ -290,7 +323,7 @@ function AddCourse() {
                                                                     border: "1px solid gray",
                                                                     cursor: "pointer"
                                                                 }}
-                                                                    onClick={() => onTagSelection(tag.id)}>{tag.name}</Tag>
+                                                                     onClick={() => onTagSelection(tag.id)}>{tag.name}</Tag>
                                                         }
                                                     </div>
                                                 )
@@ -308,11 +341,11 @@ function AddCourse() {
 
     const third = (
         <>
-            <Flex vertical justify="center" gap={"2px"} style={{ minWidth: "900px" }}>
+            <Flex vertical justify="center" gap={"2px"} style={{minWidth: "900px"}}>
 
                 <h2>Vorschau: neues Weiterbildungsangebot</h2>
                 {
-                    newCourse && <CourseInfo course={{ ...newCourse, id: 9999, ratingAverage: 0, ratingAmount: 0 }} />
+                    newCourse && <CourseInfo course={{...newCourse, id: 9999, ratingAverage: 0, ratingAmount: 0}}/>
                 }
                 <Flex>
                     {
@@ -399,12 +432,14 @@ function AddCourse() {
             } else {
                 navigate(`/dashboard/add/${content[current + 1].url}`);
             }
+            window.scrollTo(0, 0);
         }
     };
 
     const prev = () => {
         if (current != 0) {
             navigate(`/dashboard/add/${content[current - 1].url}`);
+            window.scrollTo(0, 0);
         } else if (current == 0)
             navigate("/dashboard/");
     };
@@ -427,13 +462,13 @@ function AddCourse() {
 
 
     return (
-        <div style={{ maxWidth: "1200px", minHeight: "860px", margin: "auto", width: "100%", padding: "10px 10px" }}>
+        <div style={{maxWidth: "1200px", minHeight: "860px", margin: "auto", width: "100%", padding: "10px 10px"}}>
             <Steps
                 size="small"
                 onChange={onChange}
                 current={current}
                 items={content.map((item) => item.step)}
-                style={{ marginTop: "5px", marginBottom: "10px" }}
+                style={{marginTop: "5px", marginBottom: "10px"}}
             />
             <div
                 style={{

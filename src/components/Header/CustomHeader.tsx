@@ -74,6 +74,14 @@ function CustomHeader() {
         {
             key: '3',
             label: (
+                <a rel="noopener noreferrer" href="/competences">
+                    Kompetenzen anpassen
+                </a>
+            ),
+        },
+        {
+            key: '4',
+            label: (
                 <a onClick={() => {
                     clearToken("logout")
                 }}>
@@ -90,7 +98,7 @@ function CustomHeader() {
                 <Col span={8}>
                     <Title level={3}>
                         <a href="/discover" style={{color: "#212321"}}>
-                            Govlearn
+                            GovLearn
                         </a>
                     </Title>
                 </Col>
@@ -104,7 +112,7 @@ function CustomHeader() {
                     {window.location.pathname.includes("reset-password") ? <></> :
                         loggedIn ?
                             <div style={{
-                                margin: "auto 0px auto auto",
+                                margin: "auto 10px auto auto",
                                 minWidth: "60px",
                                 lineHeight: "0px",
                                 display: "flex",

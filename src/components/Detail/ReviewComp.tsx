@@ -26,6 +26,10 @@ function ReviewComp({ id }: { id?: number }) {
                     id: feedback.feedbackID
                 })
             }
+            else{
+                setReview(undefined)
+            }
+                
         })
     }, [id]);
 
