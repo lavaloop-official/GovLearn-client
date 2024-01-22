@@ -18,7 +18,7 @@ function Landing() {
     const [api, contextHolder] = notification.useNotification();
 
     useEffect(() => {
-        document.title = "GoLearn - Weiterbildung einfach gemacht";
+        document.title = "GovLearn - Weiterbildung einfach gemacht";
         const openNotification = (message: string, description: string) => {
             api.info({
                 message,

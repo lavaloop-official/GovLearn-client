@@ -14,7 +14,7 @@ function Discover() {
     const [compact, setCompact] = useState<boolean>(false)
 
     useEffect(() => {
-        document.title = "GoLearn - Weiterbildung einfach gemacht";
+        document.title = "GovLearn - Weiterbildung einfach gemacht";
         fetchWrapper.get(`api/v1/recommendations/bundle`).then((res) => {
             setFeatured(res.payload.featured)
             setRecommended(res.payload.categorized)
@@ -32,12 +32,12 @@ function Discover() {
                 zIndex: "1",
                 display: "flex",
                 justifyContent: "center",
-                alignItems:"center",
+                alignItems: "center",
                 flexDirection: "column",
                 gap: "10px",
-                padding:"0px 10px 10px 10px",
+                padding: "0px 10px 10px 10px",
             }}>
-                <div style={{maxWidth: "1220px", marginTop:"10px", width: "100%"}}>
+                <div style={{maxWidth: "1220px", marginTop: "10px", width: "100%"}}>
                     <Carousel autoplay={true}
                               effect="fade"
                               style={{
@@ -57,9 +57,9 @@ function Discover() {
                     flexDirection: "column",
                     gap: "10px",
                     maxWidth: "1220px",
-                    padding:"10px",
+                    padding: "10px",
                     width: "100%",
-                    marginTop:"10px",
+                    marginTop: "10px",
                     position: "relative",
                     background: "#F9F9F9",
                     borderRadius: "20px",
@@ -78,7 +78,7 @@ function Discover() {
                         compact ?
                             <div style={{
                                 display: "flex",
-                                justifyContent:"flex-start",
+                                justifyContent: "flex-start",
                                 flexWrap: "wrap"
                             }}>{recommended
                                 .map((e) => e.items)
