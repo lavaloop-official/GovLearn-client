@@ -74,6 +74,14 @@ function CustomHeader() {
         {
             key: '3',
             label: (
+                <a rel="noopener noreferrer" href="/competences">
+                    Kompetenzen anpassen
+                </a>
+            ),
+        },
+        {
+            key: '4',
+            label: (
                 <a onClick={() => {
                     clearToken("logout")
                 }}>

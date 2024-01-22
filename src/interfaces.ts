@@ -59,6 +59,14 @@ export interface Coursetag {
     "category": string | undefined,
 }
 
+export interface UserTag {
+    "id": number | undefined,
+    "name": string | undefined,
+    "categoryID": number | undefined,
+    "category": string | undefined,
+    "rating": number | undefined,
+}
+
 export interface CourseFilterWsTo {
     "tagIDs": Array<number> | undefined,
     "format": Array<Format> | undefined,

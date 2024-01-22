@@ -18,6 +18,7 @@ import Dashboard from "./pages/Dashboard.tsx";
 import Groups from "./pages/Groups.tsx";
 import ResetPassword from "./pages/ResetPassword.tsx";
 import Imprint from "./pages/Imprint.tsx";
+import Competences from './pages/Competences.tsx';
 
 function App() {
 
@@ -51,6 +52,7 @@ function App() {
                                 <Route path="/searching/:searchString?" element={<Protected><Searching/></Protected>}/>
                                 <Route path="/reset-password/*" element={<ResetPassword/>}/>
                                 <Route path="/dashboard/*" element={<Protected><Dashboard/></Protected>}/>
+                                <Route path="/competences" element={<Protected><Competences/></Protected>}/>
                                 <Route path="/groups" element={<Protected><Groups/></Protected>}/>
                                 <Route path="/imprint" element={<Imprint/>}/>
                                 <Route path="*" element={<NotFound/>}/>
