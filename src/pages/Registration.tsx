@@ -337,7 +337,6 @@ function Registration() {
                                         </div>
                                         :<div/>
                                     }
-
                                 </div>
                             ))}
                         </div>
@@ -349,15 +348,21 @@ function Registration() {
                         <div className="deselect-grid">
                         {selectedToCompetences(2).map(role => (
                                 <div>
-                                    <p>{role.name} - {role.verantwortungsbereich}</p>
-                                    <div style={{display:"flex", flexWrap:"wrap", gap:"5px"}}>
-                                        {
-                                            role.roleTagWsTos.map((competence, index) => (
-                                                <Deselect title={competence.tagName} id={competence.tagID} deselect={handleDeselect}
-                                                    key={index} />
-                                            ))
-                                        }
-                                    </div>
+                                    {
+                                        role.roleTagWsTos.length > 0?
+                                        <div>
+                                            <p>{role.name} - {role.verantwortungsbereich}</p>
+                                            <div style={{display:"flex", flexWrap:"wrap", gap:"5px"}}>
+                                                {
+                                                    role.roleTagWsTos.map((competence, index) => (
+                                                        <Deselect title={competence.tagName} id={competence.tagID} deselect={handleDeselect}
+                                                            key={index} />
+                                                    ))
+                                                }
+                                            </div>
+                                        </div>
+                                        :<div/>
+                                    }
                                 </div>
                             ))}
                         </div>
