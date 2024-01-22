@@ -1,11 +1,28 @@
+import {getToken} from "./auth.ts";
+
 function setComplete(key: onboardingKey) {
-    localStorage.setItem(`onboaring-${key}`, "true")
+    const email = getCurrentlyLoggedIn()
+    const list = JSON.parse(localStorage.getItem(`onboaring-${key}`) ?? "[]")
+    list.push(email)
+    localStorage.setItem(`onboaring-${key}`, JSON.stringify(list))
     return key
 }
 
 function checkComplete(key: onboardingKey): boolean {
-    const item = localStorage.getItem(`onboaring-${key}`)
-    return !!item;
+    const list = JSON.parse(localStorage.getItem(`onboaring-${key}`) ?? "[]")
+    const email = getCurrentlyLoggedIn()
+    return list.includes(email)
+}
+
+function getCurrentlyLoggedIn() {
+    const token = getToken()
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function (c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+
+    return JSON.parse(jsonPayload)?.sub;
 }
 
 function resetComplete() {
