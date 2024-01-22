@@ -2,7 +2,9 @@ import {getToken} from "./auth.ts";
 
 function setComplete(key: onboardingKey) {
     const email = getCurrentlyLoggedIn()
-    const list = JSON.parse(localStorage.getItem(`onboaring-${key}`) ?? "[]")
+    let list = JSON.parse(localStorage.getItem(`onboaring-${key}`) ?? "[]")
+    if (!Array.isArray(list))
+        list = []
     list.push(email)
     localStorage.setItem(`onboaring-${key}`, JSON.stringify(list))
     return key
@@ -10,6 +12,8 @@ function setComplete(key: onboardingKey) {
 
 function checkComplete(key: onboardingKey): boolean {
     const list = JSON.parse(localStorage.getItem(`onboaring-${key}`) ?? "[]")
+    if (!Array.isArray(list))
+        return false
     const email = getCurrentlyLoggedIn()
     return list.includes(email)
 }
