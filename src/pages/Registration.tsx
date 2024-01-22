@@ -1,4 +1,4 @@
-import { Button, Flex, Steps, Switch, Tag, Tooltip, Typography } from "antd";
+import { Alert, Button, Flex, Steps, Switch, Tag, Tooltip, Typography } from "antd";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CircleSelect from "../components/Register/CircleSelect/CircleSelect.tsx";
@@ -311,29 +311,38 @@ function Registration() {
                 </Typography.Title>
                 <Typography.Text>
                     Wählen Sie hier die Kompetenzen ab, welche nicht in die Weiterbildungsempfehlungen einfließen
-                    sollen. <br/>
-                    Kompetenzen, die bereits in anderen Rollen enthalten sind, wurden für eine bessere Übersichtlichkeit herausgefiltert.
+                    sollen.
                 </Typography.Text>
+                <Alert message="Kompetenzen, die bereits in anderen Rollen enthalten sind, wurden für eine bessere Übersichtlichkeit herausgefiltert." type="info" showIcon style={{marginTop:"5px", width:"fit-content"}}></Alert>
                 <div className="competence-container">
-                    <div className="competence-inner">
+                    <div style={{width:"50%"}}>
                         <Typography.Title level={5} style={{ margin: "5px 0px" }}>
                             Grundlagen-Kompetenzen
                         </Typography.Title>
                         <div className="deselect-grid">
                             {selectedToCompetences(1).map(role => (
                                 <div>
-                                    <p>{role.name} - {role.verantwortungsbereich}</p>
                                     {
-                                        role.roleTagWsTos.map((competence, index) => (
-                                            <Deselect title={competence.tagName} id={competence.tagID} deselect={handleDeselect}
-                                                key={index} />
-                                        ))
+                                        role.roleTagWsTos.length > 0?
+                                        <div>
+                                            <p>{role.name} - {role.verantwortungsbereich}</p>
+                                            <div style={{display:"flex", flexWrap:"wrap", gap:"5px"}}>
+                                                {
+                                                    role.roleTagWsTos.map((competence, index) => (
+                                                        <Deselect title={competence.tagName} id={competence.tagID} deselect={handleDeselect}
+                                                            key={index} />
+                                                    ))
+                                                }
+                                            </div>
+                                        </div>
+                                        :<div/>
                                     }
+
                                 </div>
                             ))}
                         </div>
                     </div>
-                    <div className="competence-inner">
+                    <div style={{width:"50%"}}>
                         <Typography.Title level={5} style={{ margin: "5px 0px" }}>
                             Fortgeschrittene Kompetenzen
                         </Typography.Title>
@@ -341,12 +350,14 @@ function Registration() {
                         {selectedToCompetences(2).map(role => (
                                 <div>
                                     <p>{role.name} - {role.verantwortungsbereich}</p>
-                                    {
-                                        role.roleTagWsTos.map((competence, index) => (
-                                            <Deselect title={competence.tagName} id={competence.tagID} deselect={handleDeselect}
-                                                key={index} />
-                                        ))
-                                    }
+                                    <div style={{display:"flex", flexWrap:"wrap", gap:"5px"}}>
+                                        {
+                                            role.roleTagWsTos.map((competence, index) => (
+                                                <Deselect title={competence.tagName} id={competence.tagID} deselect={handleDeselect}
+                                                    key={index} />
+                                            ))
+                                        }
+                                    </div>
                                 </div>
                             ))}
                         </div>
