@@ -76,16 +76,6 @@ function Groupmember({currentGroup, fetchAllGroups}: {currentGroup: groupmember.
             </div>
         </div>
             <div className="course-member-display">
-                <h3>Zugewiesene Kurse</h3>
-                <div style={{maxWidth:"fit-content"}} className="scrollbar course-display">
-                    {
-                        courses.length > 0?
-                            courses.map((course: Course) => <Groupcourse course={course} admin={false}/>)
-                            : <Empty description="Keine zugewiesenen Kurse"/>
-                    }
-                </div>
-            </div>
-            <div className="course-member-display">
                 <h3>Zu bearbeitende Kurse</h3>
                 <div style={{maxWidth:"fit-content"}} className="scrollbar course-display">
                     {
