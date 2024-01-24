@@ -24,7 +24,7 @@ function Discover() {
             nextButtonProps : {
                 children : (
                     <RightOutlined />
-                )  
+                )
             },
         },
         {
@@ -35,12 +35,12 @@ function Discover() {
             nextButtonProps : {
                 children : (
                     <RightOutlined />
-                )  
+                )
             },
             prevButtonProps : {
                 children : (
                     <LeftOutlined />
-                )  
+                )
             },
         },
         {
@@ -51,7 +51,7 @@ function Discover() {
             prevButtonProps : {
                 children : (
                     <LeftOutlined />
-                )  
+                )
             },
             nextButtonProps : {
                 children : (
@@ -60,7 +60,7 @@ function Discover() {
                 style : {
                     color : "white",
                     backgroundColor : "green",
-                }  
+                }
             },
         }
     ]
@@ -74,6 +74,7 @@ function Discover() {
     const [compact, setCompact] = useState<boolean>(false)
 
     useEffect(() => {
+        document.title = "GovLearn - Weiterbildung einfach gemacht";
         setTourOpen(!checkComplete("discover"))
         fetchWrapper.get(`api/v1/recommendations/bundle`).then((res) => {
             setFeatured(res.payload.featured)
@@ -92,11 +93,12 @@ function Discover() {
                 zIndex: "1",
                 display: "flex",
                 justifyContent: "center",
+                alignItems: "center",
                 flexDirection: "column",
-                gap: "10px"
+                gap: "10px",
+                padding: "0px 10px 10px 10px",
             }}>
-                <div ref={featuredRef}
-                     style={{maxWidth: "1200px", margin: "auto", width: "100%", padding: "10px 10px"}}>
+                <div ref={featuredRef} style={{maxWidth: "1220px", marginTop: "10px", width: "100%"}}>
                     <Carousel autoplay={true}
                               effect="fade"
                               style={{
@@ -115,10 +117,14 @@ function Discover() {
                     justifyContent: "center",
                     flexDirection: "column",
                     gap: "10px",
-                    maxWidth: "1200px",
+                    maxWidth: "1220px",
+                    padding: "10px",
                     width: "100%",
-                    margin: "auto",
-                    position: "relative"
+                    marginTop: "10px",
+                    position: "relative",
+                    background: "#F9F9F9",
+                    borderRadius: "20px",
+                    boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
                 }}>
                     <div style={{margin: "10px", display: "block", marginLeft: "auto"}} ref={compactRef}>
                         <Segmented
@@ -134,6 +140,7 @@ function Discover() {
                             compact ?
                                 <div style={{
                                     display: "flex",
+                                justifyContent: "flex-start",
                                     flexWrap: "wrap"
                                 }}>{recommended
                                     .map((e) => e.items)

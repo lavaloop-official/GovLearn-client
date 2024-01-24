@@ -1,6 +1,21 @@
 import {useEffect, useState} from "react";
 import dayjs from 'dayjs';
-import {Button, Checkbox, DatePicker, Flex, Form, Image, Input, InputNumber, message, Select, Steps, Tag} from "antd";
+import {
+    Button,
+    Checkbox,
+    DatePicker,
+    Flex,
+    Form,
+    Image,
+    Input,
+    InputNumber,
+    message,
+    Select,
+    Steps,
+    Tag,
+    Tooltip,
+    Typography
+} from "antd";
 import TextArea from "antd/es/input/TextArea";
 import {Category, Coursetag, CreateCourse} from "../../interfaces";
 import {fetchWrapper} from "../../api/helper";
@@ -171,7 +186,13 @@ function AddCourse() {
                         </Form.Item>*/}
 
                 {!imageUrl && <>
-                    <Form.Item name="image" label="Bild-Url"
+                    <Tooltip
+                        title='Um eine Bild-URL zu kopieren, rechtsklicke auf das Bild im Internet, wähle "Bildadresse kopieren" oder eine ähnliche Option, um die URL in die Zwischenablage zu übertragen.'>
+                        <Typography.Link style={{margin: "0px 0px 0px 200px"}}
+                                         href="https://de.wikihow.com/Eine-Bild-URL-bekommen">Was ist eine
+                            Bild-URL?</Typography.Link>
+                    </Tooltip>
+                    <Form.Item name="image" label="Bild-URL"
                                rules={[{required: true, message: "Bitte geben Sie ein Bild an"}, {
                                    type: 'url',
                                    message: URL_WRONG_FORMAT
@@ -183,15 +204,21 @@ function AddCourse() {
                         }}/>
                     </Form.Item>
                     <Flex justify="center">
-                        {newCourse?.image ? <Image src={newCourse?.image} style={{
-                            margin: "5px 0px 15px",
-                            border: "1px solid black",
-                            borderRadius: "25px",
-                            width: "200px",
-                            height: "150px",
-                            objectFit: "contain"
-                        }}/> : <></>}
+                        {newCourse?.image ?
+                            <Flex vertical style={{margin: "0px 0px 10px 0px"}}>
+                                <img src={newCourse?.image} style={{
+                                    border: "1px solid black",
+                                    borderRadius: "25px",
+                                    width: "200px",
+                                    height: "125px",
+                                    objectFit: "contain"
+                                }}/>
+                                Das Bild sollte ungefähr in diesen Kasten passen <br/>
+                                um später richtig angezeigt zu werden.
+                            </Flex>
+                            : <></>}
                     </Flex>
+
                 </>}
                 <Form.Item name="name" label="Name"
                            rules={[{required: true, message: "Bitte geben Sie einen Namen an"}]}>
@@ -235,7 +262,7 @@ function AddCourse() {
                     />
                 </Form.Item>
                 <Form.Item name="skilllevel" label="Schwierigkeit"
-                           rules={[{required: true, message: 'Please geben Sie eine Schwierigkeit an'}]}>
+                           rules={[{required: true, message: 'Bitte geben Sie eine Schwierigkeit an'}]}>
                     <Select
                         style={{width: 120}}
                         options={[

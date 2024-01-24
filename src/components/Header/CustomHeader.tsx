@@ -74,6 +74,14 @@ function CustomHeader() {
         {
             key: '3',
             label: (
+                <a rel="noopener noreferrer" href="/competences">
+                    Kompetenzen anpassen
+                </a>
+            ),
+        },
+        {
+            key: '4',
+            label: (
                 <a onClick={() => {
                     clearToken("logout")
                 }}>
@@ -90,7 +98,7 @@ function CustomHeader() {
                 <Col span={8}>
                     <Title level={3}>
                         <a href="/discover" style={{color: "#212321"}}>
-                            Govlearn
+                            GovLearn
                         </a>
                     </Title>
                 </Col>
