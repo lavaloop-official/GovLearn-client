@@ -55,9 +55,9 @@ function ReviewComp({id, finishCallback}: { id?: number, finishCallback: () => v
 
     const deleteReview = () => {
         confirm({
-            title: 'Willst du deine Bewertung wirklich löschen?',
+            title: 'Wollen Sie diese Bewertung wirklich löschen?',
             icon: <ExclamationCircleFilled/>,
-            content: 'Deine Bewertung wird unwiderruflich gelöscht.',
+            content: 'Ihre Bewertung wird unwiderruflich gelöscht.',
             okText: 'Ja',
             okType: 'danger',
             cancelText: 'Abbrechen',

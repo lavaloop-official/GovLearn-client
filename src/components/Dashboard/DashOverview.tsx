@@ -1,4 +1,4 @@
-import {Button, Flex, Modal} from "antd";
+import {Button, Empty, Flex, Modal} from "antd";
 import {ExclamationCircleFilled, FileAddOutlined} from "@ant-design/icons";
 import SearchComponent from "../SearchComponent.tsx";
 import {useNavigate} from "react-router-dom";
@@ -21,7 +21,7 @@ function DashOverview() {
 
     function handleDelete(id: number | undefined) {
         confirm({
-            title: 'Bist du dir sicher diesen Kurs zu löschen?',
+            title: 'Wollen Sie diesen Kurs wirklich löschen?',
             icon: <ExclamationCircleFilled/>,
             content: 'Dieser Kurs wird unwiderruflich gelöscht.',
             okText: 'Ja',
@@ -57,7 +57,7 @@ function DashOverview() {
                 {providedCourses.length > 0 ? providedCourses.map((course) => <div key={course.id}><SearchComponent
                         obj={course} editable onDelete={handleDelete} /*TODO: delete durch parent mitgeben*/ />
                     </div>)
-                    : <h2 style={{textAlign: "center"}}>Du hast noch keine Kurse hinzugefügt.</h2>
+                    : <Empty description={"Sie haben noch keine Kurse hinzugefügt."}/>
                 }
             </div>
         </>
