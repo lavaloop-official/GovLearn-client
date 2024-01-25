@@ -1,13 +1,13 @@
-import { Affix, Button, Card, Flex, Image, Rate } from "antd";
-import { useEffect, useState } from "react";
-import { ArrowLeftShort } from "react-bootstrap-icons";
+import {Affix, Button, Card, Flex, Image, Rate} from "antd";
+import {useEffect, useState} from "react";
+import {ArrowLeftShort} from "react-bootstrap-icons";
 import Recommendation from "../components/Recommendation.tsx";
 import Feedback from "../components/Detail/Feedback.tsx";
-import { fetchWrapper } from "../api/helper.ts";
+import {fetchWrapper} from "../api/helper.ts";
 import './Details.css';
-import { Course, Review } from "../interfaces.ts";
+import {Course, Review} from "../interfaces.ts";
 import ReviewComp from "../components/Detail/ReviewComp.tsx";
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import CourseInfo from "../components/Detail/CourseInfo.tsx";
 
 function Details() {
@@ -77,13 +77,29 @@ function Details() {
         });
     }
 
+    const finishCallback = () => {
+        const courseId = window.location.pathname.split('/').pop();
+        setTimeout(() => {
+            fetchWrapper.get(`api/v1/feedback/course/${courseId}?limit=5&offset=0`).then((res) => {
+                setFeedback(res.payload);
+                setOffset(5);
+                if (res.payload.length < 5) {
+                    setNoFeedbackLeft(true);
+                }
+            });
+            fetchWrapper.get(`api/v1/feedback/average/course/${courseId}`).then((res) => {
+                setCourse(prevState => ({...prevState, ratingAverage: res.payload}));
+            });
+        }, 500);
+    }
+
     return (
         <>
             <Flex
                 style={{
                     justifyContent: "center"
                 }}>
-                <div style={{ maxWidth: "1200px", width: "100%" }}>
+                <div style={{maxWidth: "1200px", width: "100%"}}>
                     <Flex
                         gap="small"
                         style={{
@@ -102,18 +118,18 @@ function Details() {
                                 lineHeight: "0px",
                                 alignSelf: "center",
                             }}
-                            icon={<ArrowLeftShort size={40} />}
+                            icon={<ArrowLeftShort size={40}/>}
                         />
-                        <h1 style={{ margin: "0", padding: "0 15px" }}>{course.name}</h1>
+                        <h1 style={{margin: "0", padding: "0 15px"}}>{course.name}</h1>
                     </Flex>
                     <Flex>
                         <Flex vertical className="course-main"
-                            style={{
-                                maxWidth: "1200px",
-                                width: "100%",
-                                margin: "auto",
-                                padding: "10px",
-                            }}
+                              style={{
+                                  maxWidth: "1200px",
+                                  width: "100%",
+                                  margin: "auto",
+                                  padding: "10px",
+                              }}
                         >
                             <CourseInfo course={course}></CourseInfo>
                             <div
@@ -127,12 +143,12 @@ function Details() {
                                     marginTop: "5px",
                                 }}
                             >
-                                <Flex style={{ justifyContent: "space-between", width: "100%" }}>
-                                    <Card className="antcard" style={{ margin: "5px", width: "30%" }}>
-                                        <p style={{ fontWeight: "bold" }}>Durchschnittsbewertung</p>
-                                        <Rate disabled value={course.ratingAverage} />
+                                <Flex style={{justifyContent: "space-between", width: "100%"}}>
+                                    <Card className="antcard" style={{margin: "5px", width: "30%"}}>
+                                        <p style={{fontWeight: "bold"}}>Durchschnittsbewertung</p>
+                                        <Rate disabled value={course.ratingAverage}/>
                                     </Card>
-                                    <ReviewComp id={course.id}></ReviewComp>
+                                    <ReviewComp id={course.id} finishCallback={finishCallback}></ReviewComp>
                                 </Flex>
                             </div>
                             <div
@@ -143,21 +159,22 @@ function Details() {
                                 }}
                             >
                                 <Flex vertical gap="small" className="course-feedback"
-                                    style={{ margin: "5px", borderRadius: "15px" }}>
+                                      style={{margin: "5px", borderRadius: "15px"}}>
                                     {feedback.length > 0 ? (
                                         feedback.map((feedbackItem) => (
                                             <Feedback review={feedbackItem} key={feedbackItem.feedbackID}></Feedback>
                                         ))
                                     ) : (
-                                        <Card className="antcard" style={{ justifyContent: "center" }}>keine Bewertungen
+                                        <Card className="antcard" style={{justifyContent: "center"}}>keine Bewertungen
                                             vorhanden.</Card>
                                     )}
-                                    {!noFeebackLeft && <Button type="primary" onClick={loadFeedback}>mehr Laden</Button>}
+                                    {!noFeebackLeft &&
+                                        <Button type="primary" onClick={loadFeedback}>mehr Laden</Button>}
                                 </Flex>
                             </div>
                         </Flex>
                         <Affix offsetTop={90}>
-                            <div style={{ width: "100%", padding: "10px", display: "flex" }}>
+                            <div style={{width: "100%", padding: "10px", display: "flex"}}>
                                 <div
                                     style={{
                                         background: "#F9F9F9",
@@ -180,12 +197,12 @@ function Details() {
                                     </h2>
                                     {relatedCourses.length > 0 ?
                                         relatedCourses.map((course) => (
-                                            <Recommendation obj={course} key={course.id} />
+                                            <Recommendation obj={course} key={course.id}/>
                                         )) :
                                         <>
-                                            <Recommendation />
-                                            <Recommendation />
-                                            <Recommendation />
+                                            <Recommendation/>
+                                            <Recommendation/>
+                                            <Recommendation/>
                                         </>
                                     }
 
