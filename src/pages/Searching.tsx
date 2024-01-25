@@ -72,15 +72,18 @@ function Searching() {
                 <div style={{flex: "1", maxWidth: "1000px", marginRight: "1rem"}}>
                     {
                         courses && courses.length > 0 ?
-                            courses.map((course: Course) => <div key={course.id}><SearchComponent obj={course}/>
-                            </div>)
-                            : <div style={{marginTop: "1rem"}}><Empty
-                                description={"Für die angegebenen Kriterien wurden keine Kurse gefunden."}/></div>
+                            courses.map((course: Course) =>
+                                <div key={course.id}><SearchComponent obj={course}/></div>
+                            ) :
+                            <div style={{marginTop: "1rem"}}>
+                                <Empty description={"Für die angegebenen Kriterien wurden keine Kurse gefunden."}/>
+                            </div>
                     }
+                    <div style={{flexBasis: "100%", display: "flex", justifyContent: "center", marginTop: "20px"}}>
+                        <Button type="primary" onClick={handlePagination}>Mehr anzeigen</Button>
+                    </div>
                 </div>
-                <div style={{flexBasis: "100%", display: "flex", justifyContent: "center", marginTop: "20px"}}>
-                    <Button type="primary" onClick={handlePagination}>Mehr anzeigen</Button>
-                </div>
+
             </div>
         </div>
 
