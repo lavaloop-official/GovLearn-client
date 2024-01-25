@@ -1,4 +1,4 @@
-import {Affix, Button, Card, Flex, Image, Rate} from "antd";
+import {Affix, Button, Card, Flex, Rate} from "antd";
 import {useEffect, useState} from "react";
 import {ArrowLeftShort} from "react-bootstrap-icons";
 import Recommendation from "../components/Recommendation.tsx";
@@ -11,6 +11,8 @@ import {useNavigate} from "react-router-dom";
 import CourseInfo from "../components/Detail/CourseInfo.tsx";
 
 function Details() {
+
+    const limit = 5;
 
     const navigate = useNavigate();
 
@@ -35,12 +37,12 @@ function Details() {
     });
 
     const [relatedCourses, setRelatedCourses] = useState<Course[]>([]);
-    const [limit, setLimit] = useState<number>(5);
     const [offset, setOffset] = useState<number>(0);
     const [feedback, setFeedback] = useState<Review[]>([]);
     const [noFeebackLeft, setNoFeedbackLeft] = useState<boolean>(false);
 
     useEffect(() => {
+        window.scrollTo(0, 0);
         const courseId = window.location.pathname.split('/').pop();
 
         fetchWrapper.get(`api/v1/courses/${courseId}`).then((res) => {
@@ -60,6 +62,7 @@ function Details() {
             const filtered = res.payload.slice(0, 3);
             setRelatedCourses(filtered);
         });
+
     }, [navigate]);
 
     const onClickBackBtn = () => {
