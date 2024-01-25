@@ -86,7 +86,7 @@ function SearchOptions({onFilterChange, initialTags}: {
     };
 
     const optionsKompetenzstufe = [{label: 'Einsteiger', value: '0'}, {
-        label: 'Fortgeschritten',
+        label: 'Fortgeschrittener',
         value: '1'
     }, {label: 'Experte', value: '2'}];
     const onChangeKompetenzstufe = (checkedValues: CheckboxValueType[]) => {
@@ -126,8 +126,8 @@ function SearchOptions({onFilterChange, initialTags}: {
                 array[index] = undefined
             }
         }
-        console.log({dauerInMinLaengerAls: array[0], dauerInMinKuerzerAls: array[(array.length-1)]})
-        onFilterChange({dauerInMinLaengerAls: array[0], dauerInMinKuerzerAls: array[(array.length-1)]});
+        console.log({dauerInMinLaengerAls: array[0], dauerInMinKuerzerAls: array[(array.length - 1)]})
+        onFilterChange({dauerInMinLaengerAls: array[0], dauerInMinKuerzerAls: array[(array.length - 1)]});
     };
 
     const optionsFormat = [
