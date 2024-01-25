@@ -61,7 +61,7 @@ function Profile() {
                 Modal.error({
                     centered: true,
                     title: "Passwort falsch!",
-                    content: 'Bitte überprüfen Sie Ihr Passwort',
+                    content: 'Bitte überprüfen Sie ihr Passwort',
                 });
             } else if (res.messages[0].message == "success") {
                 setIsModalMailOpen(false);
@@ -103,7 +103,7 @@ function Profile() {
                 Modal.error({
                     centered: true,
                     title: "Passwort falsch!",
-                    content: 'Bitte überprüfen Sie Ihr Passwort',
+                    content: 'Bitte überprüfen Sie ihr Passwort',
                 });
             } else if (res.messages[0].message == "success") {
                 setIsModalNameOpen(false);
@@ -186,10 +186,6 @@ function Profile() {
         setIsModalNewPasswordOpen(false);
     };
 
-    const onChangeNewPassword: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-        setNewPassword(event.target.value);
-    };
-
     //Switch Benachrichtigung
     const onChange = (checked: boolean) => {
         console.log(`switch to ${checked}`);
@@ -220,7 +216,7 @@ function Profile() {
                 paddingLeft: "15px",
                 paddingRight: "15px",
                 color: "#3F3F3F",
-                boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px" 
+                boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px"
             }}>
                 <div>
                     <h1>Profil</h1>

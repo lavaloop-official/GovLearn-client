@@ -1,16 +1,13 @@
-import { Badge, Button, Divider, Modal, Input, Select, SelectProps } from "antd";
-import GroupmemberCourses from "./GroupmemberCourses";
+import {Button, Modal, Select, SelectProps} from "antd";
 import "./GroupmemberCourses.css"
-import { Course, Group, Groupmember } from "../../interfaces";
-import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
-import { Plus } from "react-bootstrap-icons";
-import Groupuser from "./Groupuser";
-import { SearchProps } from "antd/es/input/Search";
-import { fetchWrapper } from "../../api/helper";
+import {Course, Group, Groupmember} from "../../interfaces";
+import {forwardRef, useEffect, useImperativeHandle, useState} from "react";
+import {fetchWrapper} from "../../api/helper";
 
 interface AddCourseProps {
     groupmember: Groupmember | undefined;
     currentGroup: Group | undefined;
+
     addCourseToGroupmember(courseId: number[]): void;
 }
 
@@ -23,7 +20,7 @@ const AddCourse = forwardRef((props: AddCourseProps, ref) => {
     const [courseIDs, setCourseIDs] = useState<number[]>([]);
 
     const handleChange = (value: string[]) => {
-        let courseIDs = value.map(element => {
+        const courseIDs = value.map(element => {
             return Number(element);
         });
         setCourseIDs(courseIDs)
@@ -57,7 +54,7 @@ const AddCourse = forwardRef((props: AddCourseProps, ref) => {
     useEffect(() => {
         const options: SelectProps['options'] = []
         const fetchedCourses = fetchWrapper.get(`api/v1/courses?groupmemberID=${props.groupmember?.memberId}&groupID=${props.currentGroup?.groupId}`).then(res => {
-            let fetchedCourses:Course[] = res.payload;
+            const fetchedCourses: Course[] = res.payload;
             fetchedCourses.forEach(course => {
                 options.push({
                     label: course.name,
@@ -66,7 +63,7 @@ const AddCourse = forwardRef((props: AddCourseProps, ref) => {
                 });
             });
         });
-        Promise.all([fetchedCourses]).then(()=> setOptions(options));
+        Promise.all([fetchedCourses]).then(() => setOptions(options));
     }, [open]);
 
     return (
@@ -91,7 +88,7 @@ const AddCourse = forwardRef((props: AddCourseProps, ref) => {
             >
                 <Select
                     mode="multiple"
-                    style={{ width: '100%' }}
+                    style={{width: '100%'}}
                     placeholder="Kurse suchen"
                     defaultValue={[]}
                     onChange={handleChange}
