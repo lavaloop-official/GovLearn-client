@@ -146,7 +146,7 @@ function Details() {
                                 <Flex style={{justifyContent: "space-between", width: "100%"}}>
                                     <Card className="antcard" style={{margin: "5px", width: "30%"}}>
                                         <p style={{fontWeight: "bold"}}>Durchschnittsbewertung</p>
-                                        <Rate disabled value={course.ratingAverage}/>
+                                        <Rate disabled allowHalf value={course.ratingAverage}/>
                                     </Card>
                                     <ReviewComp id={course.id} finishCallback={finishCallback}></ReviewComp>
                                 </Flex>
