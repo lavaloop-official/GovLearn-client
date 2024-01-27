@@ -1,12 +1,13 @@
 import { Alert, Button, Flex, Steps, Switch, Tag, Tooltip, Typography } from "antd";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import {useEffect, useState} from "react";
+import {useNavigate} from "react-router-dom";
 import CircleSelect from "../components/Register/CircleSelect/CircleSelect.tsx";
 import Deselect from "../components/Register/Deselect.tsx";
 import "./Registration.css";
-import { QuestionCircleOutlined, StarOutlined, TeamOutlined } from "@ant-design/icons";
-import { Role, RoleTag } from "../interfaces.ts";
-import { fetchWrapper } from "../api/helper.ts";
+import {QuestionCircleOutlined, StarOutlined, TeamOutlined} from "@ant-design/icons";
+import {Role, RoleTag} from "../interfaces.ts";
+import {fetchWrapper} from "../api/helper.ts";
+import {checkComplete, setComplete} from "../api/onboarding.ts";
 
 function Registration() {
     //TODO: move onlick to here and pass down to circleselect so that it can be reset by clicking outside of the circle
@@ -27,6 +28,8 @@ function Registration() {
 
     useEffect(() => {
         document.title = "GovLearn - Registrierung";
+        if (checkComplete("register"))
+            navigate("/discover");
     }, []);
 
     const selectCallback = (index: string) => {
@@ -92,7 +95,7 @@ function Registration() {
                 .filter((tag) => tag.rating == rating)};
 
             let filteredRoleTags:RoleTag[]=[];
-            
+
             // Filter all Tags inside the Role if they already exist in other roles
             role.roleTagWsTos.forEach(tag => {
                 let roleTags:String[]=[];
@@ -150,10 +153,10 @@ function Registration() {
     //TODO: add roles
     const AreaInfoText = (
         <>
-            
+
             <h4 className="role-title">Organisation</h4>
             <p className="role-desc">Im Bereich Organisation werden Strukturen und Abläufe innerhalb der öffentlichen Verwaltung geplant, koordiniert und optimiert, um eine effiziente und transparente Arbeitsweise zu gewährleisten.</p>
-        
+
             <h4 className="role-title">Digitalisierung</h4>
             <p className="role-desc">Die Digitalisierung im öffentlichen Dienst konzentriert sich auf die Integration moderner Technologien, um Verwaltungsprozesse zu verbessern, den Bürgerservice zu optimieren und den Zugang zu Informationen zu erleichtern.</p>
 
@@ -400,6 +403,7 @@ function Registration() {
         if (current == content.length - 1) {
             handleSubmit().then(() => {
                 navigate("/discover");
+                setComplete("register")
             });
         } else {
             navigate(`/register/${content[current + 1].url}`);
@@ -446,9 +450,9 @@ function Registration() {
                 direction="horizontal"
                 current={current}
                 items={content.map((item) => item.step)}
-                style={{ marginBottom: "10px", minWidth: "100%" }}
+                style={{marginBottom: "10px", minWidth: "100%"}}
             />
-            <div style={{ display: "flex", flexDirection: "row", width: "100%" }}>
+            <div style={{display: "flex", flexDirection: "row", width: "100%"}}>
                 <div
                     style={{
                         width: "100%",
@@ -461,7 +465,7 @@ function Registration() {
                         boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px"
                     }}
                 >
-                    <div style={{ marginBottom: "40px", width: "100%" }}>{content[current].content}</div>
+                    <div style={{marginBottom: "40px", width: "100%"}}>{content[current].content}</div>
                     <Button
                         type="primary"
                         onClick={next}

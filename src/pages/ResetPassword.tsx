@@ -35,7 +35,7 @@ function ResetPassword() {
             {success ? <Result
                     status="success"
                     title="Ihr Passwort wurde erfolgreich zurückgesetzt."
-                    subTitle="Sie können sich nun mit Ihrem neuen Passwort anmelden."
+                    subTitle="Sie können sich nun mit ihrem neuen Passwort anmelden."
                     extra={[
                         <Button type="primary" key="console" href={"/"}>
                             Zurück zur Startseite

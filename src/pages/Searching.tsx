@@ -13,6 +13,7 @@ function Searching() {
 
     const location = useLocation();
 
+    const [isMore, setIsMore] = useState<boolean>(true);
     const [courses, setCourses] = useState<Course[]>([]);
     const [offset, setOffset] = useState(0);
     const [searchStr, setSearchStr] = useState<string>(location.state?.searchStr ?? "");
@@ -43,6 +44,7 @@ function Searching() {
         setOffset(newOffset)
         fetchWrapper.post('api/v1/filter/limit/' + limit + '/offset/' + newOffset + '/' + searchStr, courseFilter).then((res) => {
             setCourses(courses => [...courses, ...res.payload]);
+            setIsMore(res.payload.length === limit);
         });
     }
 
@@ -50,6 +52,7 @@ function Searching() {
         setOffset(0);
         fetchWrapper.post('api/v1/filter/limit/' + limit + '/offset/' + 0 + '/' + searchStr, courseFilter).then((res) => {
             setCourses(res.payload);
+            setIsMore(res.payload.length === limit);
         });
     }, [searchStr, courseFilter]);
 
@@ -72,15 +75,27 @@ function Searching() {
                 <div style={{flex: "1", maxWidth: "1000px", marginRight: "1rem"}}>
                     {
                         courses && courses.length > 0 ?
-                            courses.map((course: Course) => <div key={course.id}><SearchComponent obj={course}/>
-                            </div>)
-                            : <div style={{marginTop: "1rem"}}><Empty
-                                description={"Für die angegebenen Kriterien wurden keine Kurse gefunden."}/></div>
+                            courses.map((course: Course) =>
+                                <div key={course.id}><SearchComponent obj={course}/></div>
+                            ) :
+                            <div style={{marginTop: "1rem"}}>
+                                <Empty description={"Für die angegebenen Kriterien wurden keine Kurse gefunden."}/>
+                            </div>
+                    }
+                    {
+                        isMore && courses.length > 0 ?
+                            <div style={{
+                                flexBasis: "100%",
+                                display: "flex",
+                                justifyContent: "center",
+                                marginTop: "20px"
+                            }}>
+                                <Button type="primary" onClick={handlePagination}>Mehr anzeigen</Button>
+                            </div> :
+                            <></>
                     }
                 </div>
-                <div style={{flexBasis: "100%", display: "flex", justifyContent: "center", marginTop: "20px"}}>
-                    <Button type="primary" onClick={handlePagination}>Mehr anzeigen</Button>
-                </div>
+
             </div>
         </div>
 

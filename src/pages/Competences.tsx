@@ -1,8 +1,8 @@
-import { Flex, Menu, MenuProps } from "antd";
-import { Header } from "antd/es/layout/layout";
-import { fetchWrapper } from "../api/helper";
-import { useEffect, useState } from "react";
-import { Category, User, UserTag } from "../interfaces";
+import {Flex, Menu, MenuProps} from "antd";
+import {Header} from "antd/es/layout/layout";
+import {fetchWrapper} from "../api/helper";
+import {useEffect, useState} from "react";
+import {Category, User, UserTag} from "../interfaces";
 import TagPicker from "../components/Competences/TagPicker";
 
 function Competences() {
@@ -29,7 +29,7 @@ function Competences() {
                     tag.rating = 0;
                 }
             });
-            
+
         });
     }, [])
 
@@ -37,7 +37,7 @@ function Competences() {
         key: category.id?.toString() ?? '',
         label: `${category.name}`,
     }));
-        
+
 
     return (
         <div style={{
@@ -46,17 +46,18 @@ function Competences() {
             width: "100%",
             padding: "10px 10px"
         }}>
-            <Header style={{ display: 'flex', alignItems: 'center' }}>
+            <Header style={{display: 'flex', alignItems: 'center'}}>
                 <Menu
                     theme="light"
                     mode="horizontal"
                     defaultSelectedKeys={[selec.toString()]}
-                    items={items1.map(item => ({ ...item, onClick: () => setSelec(item?.key) }))}
-                    style={{ flex: 1, minWidth: 0 }}
+                    items={items1.map(item => ({...item, onClick: () => setSelec(item?.key)}))}
+                    style={{flex: 1, minWidth: 0}}
                 />
             </Header>
             <h4>Passe die dir zugeordneten Kompetenzen einfach an.</h4>
-            <p>Hinweis: Durch die von dir abgeschlossen Weiterbildungen werden deine Kompetenzen kontinuierlich angepasst.</p>
+            <p>Hinweis: Durch die von Ihnen abgeschlossen Weiterbildungen werden ihre Kompetenzen kontinuierlich
+                angepasst.</p>
             <Flex vertical wrap="wrap" gap={"10px"}>
                 {
                     tags.map((tag) => {

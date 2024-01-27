@@ -18,7 +18,7 @@ function Landing() {
     const [api, contextHolder] = notification.useNotification();
 
     useEffect(() => {
-        document.title = "GoLearn - Weiterbildung einfach gemacht";
+        document.title = "GovLearn - Weiterbildung einfach gemacht";
         const openNotification = (message: string, description: string) => {
             api.info({
                 message,
@@ -82,7 +82,7 @@ function Landing() {
                                 style={{padding: 64}}
                             >
                                 <Typography.Title level={2}>
-                                    GovLearn - Deine Weiterbildungsangebotsplattform für den
+                                    GovLearn - Ihre Weiterbildungsangebotsplattform für den
                                     öffentlichen Dienst
                                 </Typography.Title>
                                 <Typography.Title level={3}>

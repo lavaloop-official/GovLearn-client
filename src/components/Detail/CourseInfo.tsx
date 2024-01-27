@@ -193,7 +193,7 @@ function CourseInfo({course}: { course: Course }) {
                                         <p className="attribute-value">{course.instructor}</p>
                                     </div>
                                 ) : (
-                                    <p>Kein Dozent angegeben</p>
+                                    <p>Kein Dozent/-in angegeben</p>
                                 )
                             }
                         </div>
@@ -201,8 +201,8 @@ function CourseInfo({course}: { course: Course }) {
                     <hr style={{margin: 0}}/>
                     <Flex style={{textAlign: "center"}}>
                         {
-                            course.provider ? (                                                         
-                                <p>{course.provider}</p>                
+                            course.provider ? (
+                                <p>{course.provider}</p>
                             ) : (
                                 <p>Anbieter nicht angegeben</p>
                             )
@@ -218,8 +218,8 @@ function CourseInfo({course}: { course: Course }) {
                     Abgeschlossen
                 </Button>,
             ]}>
-                <p>Bitte bestätige, dass du den Kurs erfolgreich abgeschlossen hast.</p>
-                <p>Deine Bestätigung wird gespeichert und dient der Verbesserung Ihrer Kursvorschläge.</p>
+                <p>Bitte bestätigen Sie, dass Sie den Kurs erfolgreich abgeschlossen haben.</p>
+                <p>Ihre Bestätigung wird gespeichert und dient der Verbesserung Ihrer Kursvorschläge.</p>
                 <p>Vielen Dank!</p>
             </Modal>
         </Flex>

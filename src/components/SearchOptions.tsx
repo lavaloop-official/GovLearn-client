@@ -77,16 +77,16 @@ function SearchOptions({onFilterChange, initialTags}: {
 
     const optionsVerwaltungsspezifisch = ['Verwaltungsspezifisch'];
     const onChangeVerwaltungsspezifisch = (checkedValues: CheckboxValueType[]) => {
-        onFilterChange({verwaltungsspezifisch: checkedValues.includes("Verwaltungsspezifisch")});
+        onFilterChange({verwaltungsspezifisch: checkedValues.includes("Verwaltungsspezifisch") ? true : undefined});
     };
 
     const optionsZertifikat = ['Zertifikat'];
     const onChangeZertifikat = (checkedValues: CheckboxValueType[]) => {
-        onFilterChange({zertifikat: checkedValues.includes("Zertifikat")});
+        onFilterChange({zertifikat: checkedValues.includes("Zertifikat") ? true : undefined});
     };
 
     const optionsKompetenzstufe = [{label: 'Einsteiger', value: '0'}, {
-        label: 'Fortgeschritten',
+        label: 'Fortgeschrittener',
         value: '1'
     }, {label: 'Experte', value: '2'}];
     const onChangeKompetenzstufe = (checkedValues: CheckboxValueType[]) => {
@@ -126,8 +126,8 @@ function SearchOptions({onFilterChange, initialTags}: {
                 array[index] = undefined
             }
         }
-        console.log({dauerInMinLaengerAls: array[0], dauerInMinKuerzerAls: array[(array.length-1)]})
-        onFilterChange({dauerInMinLaengerAls: array[0], dauerInMinKuerzerAls: array[(array.length-1)]});
+        console.log({dauerInMinLaengerAls: array[0], dauerInMinKuerzerAls: array[(array.length - 1)]})
+        onFilterChange({dauerInMinLaengerAls: array[0], dauerInMinKuerzerAls: array[(array.length - 1)]});
     };
 
     const optionsFormat = [
@@ -141,12 +141,12 @@ function SearchOptions({onFilterChange, initialTags}: {
     };
 
     const onChangeStartdatum: DatePickerProps['onChange'] = (_date, dateString) => {
-        onFilterChange({startdatum: dateString});
+        onFilterChange({startdatum: dateString == "" ? undefined : dateString});
     };
 
     const optionsKosten = ['Kostenlos'];
     const onChangeKosten = (checkedValues: CheckboxValueType[]) => {
-        onFilterChange({kostenlos: checkedValues.includes("Kostenlos")});
+        onFilterChange({kostenlos: checkedValues.includes("Kostenlos") ? true : undefined});
     };
 
     return (
