@@ -33,16 +33,18 @@ function GroupmemberCourses({groupmember, admin, currentGroup}: {
             const existingCourseIds: number[] = courses.map(item => item.id) as number[];
             courseIds = courseIds.filter(element => !existingCourseIds.includes(element))
         }
-        console.log(courseIds)
-        courseIds.forEach(element => {
-            const addedContent = fetchWrapper.post(`api/v1/groups/content`, {
-                memberId: groupmember.memberId,
-                courseId: element
-            }).then(res => console.log(res.message));
-            Promise.all([addedContent]).then(() => {
-                fetchAllContent();
-            })
+                
+        const addedCourses = fetchWrapper.post(`api/v1/groups/content`, {
+            memberId: groupmember.memberId,
+            courseIds: courseIds,
         })
+        Promise.all([addedCourses]).then(() => {
+            fetchAllContent();
+        });
+               
+
+                
+
     }
 
     const removeCourseFromUser = (course: Course) => {
