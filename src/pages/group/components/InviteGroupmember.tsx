@@ -15,7 +15,7 @@ const InviteGroupmember = forwardRef((props: InviteGroupProps, ref) => {
     const [open, setOpen] = useState(false);
 
     const [options, setOptions] = useState<SelectProps['options']>([]);
-    const [invitations, setInvitations] = useState<String[]>([]);
+    const [invitations, setInvitations] = useState<string[]>([]);
 
     const [users, setUsers] = useState<User[]>([]);
 
