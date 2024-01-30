@@ -1,6 +1,6 @@
+import type {SelectProps} from 'antd';
 import {Card, Checkbox, DatePicker, DatePickerProps, Divider, Select, Slider, TreeSelect} from 'antd';
 import type {CheckboxValueType} from 'antd/es/checkbox/Group';
-import type {SelectProps} from 'antd';
 import {SliderMarks, SliderTooltipProps} from "antd/es/slider";
 import {Category, Coursetag} from '../../../constants/interfaces.ts';
 import {useEffect, useState} from 'react';

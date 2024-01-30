@@ -1,9 +1,9 @@
 import {createRef, useEffect, useState} from "react";
-import * as groupmember from "../../../constants/interfaces.ts" ;
+import * as groupmember from "../../../constants/interfaces.ts";
+import {Course} from "../../../constants/interfaces.ts";
 import {Button, Empty} from "antd";
 import Groupuser from "./Groupuser.tsx";
 import Groupcourse from "./Groupcourse.tsx";
-import {Course} from "../../../constants/interfaces.ts";
 import "./GroupmemberCourses.css"
 import {fetchWrapper} from "../../../api/helper.ts";
 import {PersonDashFill} from "react-bootstrap-icons";

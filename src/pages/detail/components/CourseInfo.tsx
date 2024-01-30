@@ -1,4 +1,4 @@
-import {Button, Card, Flex, Skeleton, Image, Modal, Badge} from "antd";
+import {Badge, Button, Card, Flex, Modal, Skeleton} from "antd";
 import Bookmark from "../../bookmark/components/Bookmark.tsx";
 import {Course} from "../../../constants/interfaces.ts";
 import {useEffect, useState} from "react";

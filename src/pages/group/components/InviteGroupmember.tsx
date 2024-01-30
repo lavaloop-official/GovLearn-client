@@ -1,4 +1,4 @@
-import {Button, Form, FormProps, Modal, Select, SelectProps} from "antd";
+import {Button, Form, Modal, Select, SelectProps} from "antd";
 import "./GroupmemberCourses.css"
 import {SendInvitationWsTo, User} from "../../../constants/interfaces.ts";
 import {forwardRef, useEffect, useImperativeHandle, useState} from "react";

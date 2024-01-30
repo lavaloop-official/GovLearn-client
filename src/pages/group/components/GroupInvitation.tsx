@@ -1,5 +1,5 @@
 import {Button, Flex} from "antd";
-import {CloseOutlined, CheckOutlined} from "@ant-design/icons";
+import {CheckOutlined, CloseOutlined} from "@ant-design/icons";
 import {GroupInvitationWsTo} from "../../../constants/interfaces.ts";
 import "./GroupmemberCourses.css";
 import {useState} from "react";

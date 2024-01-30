@@ -2,7 +2,7 @@ import {Flex, Menu, MenuProps} from "antd";
 import {Header} from "antd/es/layout/layout";
 import {fetchWrapper} from "../../api/helper.ts";
 import {useEffect, useState} from "react";
-import {Category, User, UserTag} from "../../constants/interfaces.ts";
+import {Category, UserTag} from "../../constants/interfaces.ts";
 import TagPicker from "./components/TagPicker.tsx";
 
 function Competences() {

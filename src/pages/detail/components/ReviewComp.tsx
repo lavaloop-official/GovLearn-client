@@ -1,5 +1,5 @@
 import {Button, Card, Flex, Form, Input, Modal, Rate} from "antd";
-import {EditOutlined, DeleteOutlined, ExclamationCircleFilled} from "@ant-design/icons";
+import {DeleteOutlined, EditOutlined, ExclamationCircleFilled} from "@ant-design/icons";
 import {useEffect, useState} from "react";
 import {fetchWrapper} from "../../../api/helper.ts";
 import TextArea from "antd/es/input/TextArea";
