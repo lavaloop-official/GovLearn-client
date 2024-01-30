@@ -21,11 +21,15 @@ function SubHeader() {
         <div className="subHeader">
             <Button
                 type="text"
-                href="/bookmarks"
+                href="/groups"
                 style={{
-                    ...styleSelected("bookmarks")
+                    margin: "0",
+                    borderRadius: "0px",
+                    maxWidth: "250px",
+                    width: "100%",
+                    ...styleSelected("groups")
                 }}>
-                Markierte Kurse
+                Gruppen
             </Button>
             <Button
                 type="text"

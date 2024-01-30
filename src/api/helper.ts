@@ -33,7 +33,8 @@ function request(method: string) {
         ).catch(
             (error) => {
                 console.log(error)
-                return handleError(error)
+                handleError(error)
+                return undefined
             }
         )
         return handleResponse(response);
@@ -53,7 +54,7 @@ function generateHeader(url: string, method: string) {
 async function handleResponse(response: Response | undefined) {
     if (!response)
         return handleError(new Error("No response"))
-
+    //console.log(response)
     return response.clone().text().then(text => {
         if (!response.ok) {
             return handleErrorCode(response)
@@ -86,7 +87,7 @@ function handleErrorCode(response: Response) {
 
 function handleError(error: any, response?: Response) {
     console.error(error)
-    if(response){
+    if (response) {
         return response.clone().json();
     }
     return error.message;

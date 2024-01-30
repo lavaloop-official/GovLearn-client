@@ -63,3 +63,19 @@
 .registration-button.next {
     right: 10px;
 }
+
+.role-title{
+    cursor: pointer;
+}
+
+.role-title:hover + .role-desc{
+    opacity: 1;
+    height: auto;
+}
+
+.role-desc{
+    transition: opacity 1s ease-out;
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+}

@@ -22,6 +22,8 @@ import CourseInfo from "../components/Detail/CourseInfo.tsx";
  */
 function Details() {
 
+    const limit = 5;
+
     const navigate = useNavigate();
 
     const [course, setCourse] = useState<Course>({
@@ -45,12 +47,12 @@ function Details() {
     });
 
     const [relatedCourses, setRelatedCourses] = useState<Course[]>([]);
-    const [limit, setLimit] = useState<number>(5);
     const [offset, setOffset] = useState<number>(0);
     const [feedback, setFeedback] = useState<Review[]>([]);
     const [noFeebackLeft, setNoFeedbackLeft] = useState<boolean>(false);
 
     useEffect(() => {
+        window.scrollTo(0, 0);
         const courseId = window.location.pathname.split('/').pop();
 
         fetchWrapper.get(`api/v1/courses/${courseId}`).then((res) => {
@@ -70,6 +72,7 @@ function Details() {
             const filtered = res.payload.slice(0, 3);
             setRelatedCourses(filtered);
         });
+
     }, [navigate]);
 
     const onClickBackBtn = () => {
@@ -85,6 +88,22 @@ function Details() {
                 setNoFeedbackLeft(true);
             }
         });
+    }
+
+    const finishCallback = () => {
+        const courseId = window.location.pathname.split('/').pop();
+        setTimeout(() => {
+            fetchWrapper.get(`api/v1/feedback/course/${courseId}?limit=5&offset=0`).then((res) => {
+                setFeedback(res.payload);
+                setOffset(5);
+                if (res.payload.length < 5) {
+                    setNoFeedbackLeft(true);
+                }
+            });
+            fetchWrapper.get(`api/v1/feedback/average/course/${courseId}`).then((res) => {
+                setCourse(prevState => ({...prevState, ratingAverage: res.payload}));
+            });
+        }, 500);
     }
 
     return (
@@ -128,7 +147,7 @@ function Details() {
                             <CourseInfo course={course}></CourseInfo>
                             <div
                                 style={{
-                                    background: "#d9d9d9",
+                                    background: "#F9F9F9",
                                     borderRadius: "20px",
                                     boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
                                     display: "flex",
@@ -140,14 +159,14 @@ function Details() {
                                 <Flex style={{justifyContent: "space-between", width: "100%"}}>
                                     <Card className="antcard" style={{margin: "5px", width: "30%"}}>
                                         <p style={{fontWeight: "bold"}}>Durchschnittsbewertung</p>
-                                        <Rate disabled value={course.ratingAverage}/>
+                                        <Rate disabled allowHalf value={course.ratingAverage}/>
                                     </Card>
-                                    <ReviewComp id={course.id}></ReviewComp>
+                                    <ReviewComp id={course.id} finishCallback={finishCallback}></ReviewComp>
                                 </Flex>
                             </div>
                             <div
                                 style={{
-                                    background: "#d9d9d9",
+                                    background: "#F9F9F9",
                                     borderRadius: "20px",
                                     boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
                                 }}
@@ -171,7 +190,7 @@ function Details() {
                             <div style={{width: "100%", padding: "10px", display: "flex"}}>
                                 <div
                                     style={{
-                                        background: "#d9d9d9",
+                                        background: "#F9F9F9",
                                         borderRadius: "20px",
                                         boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
                                         display: "flex",

@@ -23,6 +23,7 @@ function Landing() {
     const [api, contextHolder] = notification.useNotification();
 
     useEffect(() => {
+        document.title = "GovLearn - Weiterbildung einfach gemacht";
         const openNotification = (message: string, description: string) => {
             api.info({
                 message,
@@ -30,7 +31,6 @@ function Landing() {
                 placement: "top",
             });
         }
-        console.log(location.state?.reason);
         if (location.state?.reason === "logout")
             openNotification("Erfolgreich ausgeloggt", "Sie wurden erfolgreich ausgeloggt.");
         else if (location.state?.reason === "401")
@@ -74,7 +74,7 @@ function Landing() {
                                 style={{padding: 64}}
                             >
                                 <Typography.Title level={2}>
-                                    GovLearn - Deine Weiterbildungsangebotsplattform für den
+                                    GovLearn - Ihre Weiterbildungsangebotsplattform für den
                                     öffentlichen Dienst
                                 </Typography.Title>
                                 <Typography.Title level={3}>
@@ -108,7 +108,7 @@ function Landing() {
                                                     style={{fontSize: "64px", color: "white"}}
                                                 />
                                                 <p style={{color: "white", fontSize: "large"}}>
-                                                    großes Angebot an Weiterbildungsangeboten
+                                                    Großes Angebot an Weiterbildungsangeboten
                                                 </p>
                                             </Card>
                                         </div>
@@ -131,7 +131,7 @@ function Landing() {
                                                     style={{fontSize: "64px", color: "white"}}
                                                 />
                                                 <p style={{color: "white", fontSize: "large"}}>
-                                                    Finde das Angebot das für dich am besten passt
+                                                    Finde das Angebot, welches für dich am besten passt
                                                 </p>
                                             </Card>
                                         </div>

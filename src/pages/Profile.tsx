@@ -1,12 +1,13 @@
 import {useEffect, useState} from "react";
-import {UserOutlined} from "@ant-design/icons";
-import {Button, Divider, Form, Input, Modal, Skeleton, Switch} from "antd";
+import {DeleteOutlined, UserOutlined} from "@ant-design/icons";
+import {Button, Divider, Empty, Form, Input, List, Modal, Skeleton, Switch} from "antd";
 import './Profile.css';
 import edit from '../assets/edit.png';
 import {EMAIL_WRONG_FORMAT, ENTER_EMAIL, ENTER_PASSWORD, REENTER_PASSWORD} from "../constants/de.ts";
 import {fetchWrapper} from "../api/helper";
 import {Key} from "react-bootstrap-icons";
 import {setToken} from "../api/auth.ts";
+import {Course} from "../interfaces.ts";
 
 function Profile() {
 
@@ -18,12 +19,17 @@ function Profile() {
     const [oldPassword, setOldPassword] = useState('')
     const [newPassword, setNewPassword] = useState('')
     const [submitPassword, setSubmitPassword] = useState(true)
+    const [completedCourses, setCompletedCourses] = useState<Course[]>([])
 
     useEffect(() => {
         fetchWrapper.get('api/v1/users').then(res => {
             setEmail(res.payload.email)
             setName(res.payload.name)
         })
+        //TODO: change to use completed courses endpoint
+        fetchWrapper.get('api/v1/completions').then(res => {
+            setCompletedCourses(res?.payload ?? [])
+        });
     }, [])
 
     // E-Mail ändern
@@ -55,7 +61,7 @@ function Profile() {
                 Modal.error({
                     centered: true,
                     title: "Passwort falsch!",
-                    content: 'Bitte überprüfen Sie Ihr Passwort',
+                    content: 'Bitte überprüfen Sie ihr Passwort',
                 });
             } else if (res.messages[0].message == "success") {
                 setIsModalMailOpen(false);
@@ -97,7 +103,7 @@ function Profile() {
                 Modal.error({
                     centered: true,
                     title: "Passwort falsch!",
-                    content: 'Bitte überprüfen Sie Ihr Passwort',
+                    content: 'Bitte überprüfen Sie ihr Passwort',
                 });
             } else if (res.messages[0].message == "success") {
                 setIsModalNameOpen(false);
@@ -187,9 +193,31 @@ function Profile() {
 
     const [form] = Form.useForm();
 
+    const deleteCourse = (id: number | undefined) => {
+        if (!id)
+            return
+        fetchWrapper.delete(`api/v1/completions/course/${id}`)
+        setCompletedCourses(prevState => prevState.filter((course: Course) => course.id !== id))
+    }
+
     return (
-        <div className="profile-container">
-            <div className="profile-content">
+        <div style={{width: "100%", display: "flex", justifyContent: "center"}}>
+            <div style={{
+                display: "flex",
+                flexWrap: "wrap",
+                justifyContent: "center",
+                minWidth: "400px",
+                maxWidth: "800px",
+                marginLeft: "20%",
+                marginRight: "20%",
+                background: "#F9F9F9",
+                borderRadius: "20px",
+                marginTop: "25px",
+                paddingLeft: "15px",
+                paddingRight: "15px",
+                color: "#3F3F3F",
+                boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px"
+            }}>
                 <div>
                     <h1>Profil</h1>
                 </div>
@@ -354,10 +382,26 @@ function Profile() {
                 </div>
                 <Divider/>
                 <div style={{flexBasis: "100%", marginBottom: "0px"}}>
-                    <h2 style={{textAlign: "center"}}>Datenschutz</h2>
-                    <p style={{textAlign: "left", background: "#F7F7F7", borderRadius: "10px", padding: "15px"}}>Hier
-                        werden irgendwann einmal Informationen zum Datenschutz stehen: Cookies, Datenschutzerklärung
-                        etc.</p>
+                    <h2 style={{textAlign: "center"}}>Beendete Kurse</h2>
+                    <div style={{textAlign: "left", background: "#F7F7F7", borderRadius: "10px", padding: "15px"}}>
+                        {completedCourses.length === 0 ?
+                            <Empty description={"Sie haben noch keine Kurse abgeschlossen"}/> :
+                            <List
+                                bordered
+                                itemLayout="horizontal"
+                                dataSource={completedCourses}
+                                renderItem={(item: Course) => (
+                                    <List.Item actions={[<Button danger icon={<DeleteOutlined/>}
+                                                                 onClick={() => deleteCourse(item.id)}/>]}>
+                                        <List.Item.Meta
+                                            title={<a href={`/detail/${item.id}`}>{item.name}</a>}
+                                            description={item.description}
+                                        />
+                                    </List.Item>
+                                )}
+                            />
+                        }
+                    </div>
                 </div>
             </div>
         </div>

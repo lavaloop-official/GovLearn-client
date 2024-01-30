@@ -75,23 +75,18 @@ function SearchOptions({onFilterChange, initialTags}: {
         onFilterChange({anbieter: value});
     };
 
-    const optionsWissensbezug = ["Theorie", "Praxis"];
-    const onChangeWissensbezug = (checkedValues: CheckboxValueType[]) => {
-        onFilterChange({wissensbezug: checkedValues});
-    };
-
     const optionsVerwaltungsspezifisch = ['Verwaltungsspezifisch'];
     const onChangeVerwaltungsspezifisch = (checkedValues: CheckboxValueType[]) => {
-        onFilterChange({verwaltungsspezifisch: checkedValues.includes("Verwaltungsspezifisch")});
+        onFilterChange({verwaltungsspezifisch: checkedValues.includes("Verwaltungsspezifisch") ? true : undefined});
     };
 
     const optionsZertifikat = ['Zertifikat'];
     const onChangeZertifikat = (checkedValues: CheckboxValueType[]) => {
-        onFilterChange({zertifikat: checkedValues.includes("Zertifikat")});
+        onFilterChange({zertifikat: checkedValues.includes("Zertifikat") ? true : undefined});
     };
 
     const optionsKompetenzstufe = [{label: 'Einsteiger', value: '0'}, {
-        label: 'Fortgeschritten',
+        label: 'Fortgeschrittener',
         value: '1'
     }, {label: 'Experte', value: '2'}];
     const onChangeKompetenzstufe = (checkedValues: CheckboxValueType[]) => {
@@ -99,9 +94,12 @@ function SearchOptions({onFilterChange, initialTags}: {
     };
 
     const dauer: SliderMarks = {
-        0: '<10 Min.',
-        50: '1 Std.',
-        100: '8+Std.'
+        0: '<1',
+        20: '3',
+        40: '6',
+        60: '9',
+        80: '12',
+        100: '>15',
     };
 
     const tooltip: SliderTooltipProps = {
@@ -111,18 +109,25 @@ function SearchOptions({onFilterChange, initialTags}: {
 
     const onChangeDauer = (checkedValues: CheckboxValueType[]) => {
         console.log('checked = ', checkedValues);
-        const array: string[] = []
+        const array: (string[] | undefined[]) = []
         for (let index = 0; index < checkedValues.length; index++) {
             const value = Number(checkedValues[index]);
             if (value == 0) {
-                array[index] = "<10 Min."
-            } else if (value == 50) {
-                array[index] = "1 Std."
+                array[index] = undefined
+            } else if (value == 20) {
+                array[index] = "180"
+            } else if (value == 40) {
+                array[index] = "360"
+            } else if (value == 60) {
+                array[index] = "540"
+            } else if (value == 80) {
+                array[index] = "720"
             } else if (value == 100) {
-                array[index] = "8+Std."
+                array[index] = undefined
             }
         }
-        onFilterChange({dauer: array});
+        console.log({dauerInMinLaengerAls: array[0], dauerInMinKuerzerAls: array[(array.length - 1)]})
+        onFilterChange({dauerInMinLaengerAls: array[0], dauerInMinKuerzerAls: array[(array.length - 1)]});
     };
 
     const optionsFormat = [
@@ -136,12 +141,12 @@ function SearchOptions({onFilterChange, initialTags}: {
     };
 
     const onChangeStartdatum: DatePickerProps['onChange'] = (_date, dateString) => {
-        onFilterChange({startdatum: dateString});
+        onFilterChange({startdatum: dateString == "" ? undefined : dateString});
     };
 
     const optionsKosten = ['Kostenlos'];
     const onChangeKosten = (checkedValues: CheckboxValueType[]) => {
-        onFilterChange({kosten: checkedValues.includes("Kostenlos")});
+        onFilterChange({kostenlos: checkedValues.includes("Kostenlos") ? true : undefined});
     };
 
     return (
@@ -173,10 +178,6 @@ function SearchOptions({onFilterChange, initialTags}: {
             />
             <Divider/>
 
-            <p>Wissensbezug</p>
-            <Checkbox.Group onChange={onChangeWissensbezug} options={optionsWissensbezug}/>
-            <Divider/>
-
             <p>Verwaltungsspezifisch</p>
             <Checkbox.Group onChange={onChangeVerwaltungsspezifisch} options={optionsVerwaltungsspezifisch}/>
             <Divider/>
@@ -189,7 +190,7 @@ function SearchOptions({onFilterChange, initialTags}: {
             <Checkbox.Group onChange={onChangeKompetenzstufe} options={optionsKompetenzstufe}/>
             <Divider/>
 
-            <p>Dauer</p>
+            <p>Dauer in Stunden</p>
             <Slider range marks={dauer} onChange={onChangeDauer} tooltip={tooltip} step={null} defaultValue={[0, 100]}
                     style={{marginLeft: "20px", marginRight: "20px"}}/>
             <Divider/>
@@ -204,9 +205,6 @@ function SearchOptions({onFilterChange, initialTags}: {
 
             <p>Kosten</p>
             <Checkbox.Group onChange={onChangeKosten} options={optionsKosten}/>
-            <Divider/>
-
-            <p>Sonstiges</p>
         </Card>
     );
 }

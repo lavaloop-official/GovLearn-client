@@ -1,10 +1,13 @@
-import {Button, Flex, Steps, Switch, Tag, Tooltip, Typography} from "antd";
+import { Alert, Button, Flex, Steps, Switch, Tag, Tooltip, Typography } from "antd";
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import CircleSelect from "../components/Register/CircleSelect/CircleSelect.tsx";
 import Deselect from "../components/Register/Deselect.tsx";
 import "./Registration.css";
 import {QuestionCircleOutlined, StarOutlined, TeamOutlined} from "@ant-design/icons";
+import {Role, RoleTag} from "../interfaces.ts";
+import {fetchWrapper} from "../api/helper.ts";
+import {checkComplete, setComplete} from "../api/onboarding.ts";
 
 /**
  * Registration component for the application.
@@ -19,23 +22,24 @@ function Registration() {
     const [current, setCurrent] = useState(0);
     const [selected, setSelected] = useState<number[]>(new Array(6).fill(-1));
     const [digitallotse, setDigitallotse] = useState<boolean>(false);
-    const [competences, setCompetences] = useState<string[]>([]);
+    const [deselected, setDeselected] = useState<number[]>([]);
+    const [roles, setRoles] = useState<Role[]>([]);
 
     /**
      * Fetch competences on component mount
      */
     useEffect(() => {
-        document.title = "GovLearn - Registrierung";
-        /*
-        fetchWrapper.get("/competences").then((res) => {
-            setCompetences(res);
+        fetchWrapper.get("api/v1/roles").then((res) => {
+            setRoles(res.payload)
         })
-         */
-        //testing
-        setCompetences(["Datenschutz", "Excel", "Word", "Powerpoint", "Führung", "Projektmanagement"]);
     }, []);
 
-    // Callback function to handle selection in the CircleSelect component
+    useEffect(() => {
+        document.title = "GovLearn - Registrierung";
+        if (checkComplete("register"))
+            navigate("/discover");
+    }, []);
+
     const selectCallback = (index: string) => {
         const slice = parseInt(index.charAt(0));
         const arc = parseInt(index.charAt(2));
@@ -62,22 +66,80 @@ function Registration() {
             "Digitalisierung",
             "Informationstechnik",
             "Smart City",
-            "Nicht-digital",
+            "Anderer Verantwortungsbereich",
             "Personal"
         ];
         const text = [];
         for (let i = 0; i < selected.length; i++) {
             if (selected[i] != -1) {
                 text.push(
-                    <Tag color="blue" key={i}>
-                        {roles[i]} - {responsibilites[selected[i]]}
-                    </Tag>
+                    { role: roles[i], resp: responsibilites[selected[i]] }
                 );
             }
         }
-        if (text.length == 0) return <Tag color="red">Keine Rollen ausgewählt</Tag>;
         return text;
+    }
+
+    const selectedToDisplay = () => {
+        const text = selectedToText();
+        if (text.length == 0)
+            return <Tag color="red">Keine Rollen ausgewählt</Tag>;
+        return text.map((item, index) => (
+            <Tag color="blue" key={index}>
+                {item.role} - {item.resp}
+            </Tag>
+        ));
     };
+
+    const selectedToCompetences = (rating: number) => {
+        const objects = selectedToText();
+        const competences: Role[] = [];
+        for (const obj of objects) {
+            let role = roles.find((role) => role.name == obj.role && role.verantwortungsbereich == obj.resp);
+            if (role == undefined)
+                continue;
+
+            // Filter Tags by Tag rating -> Grundlagen or Fortgeschritten
+            role = {id:role.id, name:role.name, description:role.description, verantwortungsbereich:role.verantwortungsbereich,roleTagWsTos:role.roleTagWsTos
+                .filter((tag) => tag.rating == rating)};
+
+            let filteredRoleTags:RoleTag[]=[];
+
+            // Filter all Tags inside the Role if they already exist in other roles
+            role.roleTagWsTos.forEach(tag => {
+                let roleTags:String[]=[];
+                competences.forEach(competence => competence.roleTagWsTos.forEach(roleTag => roleTags.push(roleTag.tagName)));
+                if(!roleTags.includes(tag.tagName))
+                    filteredRoleTags.push(tag);
+            });
+
+            // Push filtered role
+            competences.push({id:role.id, name:role.name, description:role.description, verantwortungsbereich:role.verantwortungsbereich,roleTagWsTos:filteredRoleTags});
+        }
+        return competences;
+    }
+
+    const handleDeselect = (id: number) => {
+        setDeselected((deselected) => {
+            if (deselected.includes(id)) {
+                return deselected.filter((item) => item != id);
+            } else {
+                return [...deselected, id];
+            }
+        });
+    }
+
+    const handleSubmit = () => {
+        //concat all RoleTags of all Roles
+        const roletags = selectedToCompetences(1).concat(selectedToCompetences(2)).map(role => role.roleTagWsTos);
+        let tags:RoleTag[] = [];
+        roletags.forEach(roletag => roletag.forEach(tag => tags.push(tag)))
+
+        //filter out deselected tags
+        const filteredTags = tags.filter((tag) => !deselected.includes(tag.tagID));
+        const objs = filteredTags.map((tag) => ({ tagId: tag.tagID, rating: tag.rating }));
+        return fetchWrapper.post("api/v1/tags/users", objs)
+    }
 
     // Content for the tooltips
     const digitalLotseInfoText = (
@@ -101,18 +163,25 @@ function Registration() {
     //TODO: add roles
     const AreaInfoText = (
         <>
-            <h4>Organisation</h4>
-            <p></p>
-            <h4>Digitalisierung</h4>
-            <p></p>
-            <h4>Informationstechnik</h4>
-            <p></p>
-            <h4>Smart City</h4>
-            <p></p>
-            <h4>Nicht-digital</h4>
-            <p></p>
-            <h4>Personal</h4>
-            <p></p>
+
+            <h4 className="role-title">Organisation</h4>
+            <p className="role-desc">Im Bereich Organisation werden Strukturen und Abläufe innerhalb der öffentlichen Verwaltung geplant, koordiniert und optimiert, um eine effiziente und transparente Arbeitsweise zu gewährleisten.</p>
+
+            <h4 className="role-title">Digitalisierung</h4>
+            <p className="role-desc">Die Digitalisierung im öffentlichen Dienst konzentriert sich auf die Integration moderner Technologien, um Verwaltungsprozesse zu verbessern, den Bürgerservice zu optimieren und den Zugang zu Informationen zu erleichtern.</p>
+
+            <h4 className="role-title">Informationstechnik</h4>
+            <p className="role-desc">Im Bereich Informationstechnik werden IT-Lösungen entwickelt, implementiert und gewartet, um eine reibungslose Funktionalität der technologischen Infrastruktur der öffentlichen Verwaltung sicherzustellen.</p>
+
+            <h4 className="role-title">Smart City</h4>
+            <p className="role-desc">Smart City bezieht sich auf die Entwicklung und Umsetzung intelligenter Technologien, um städtische Lebensqualität zu verbessern. Dazu gehören etwa die Vernetzung von Verkehrssystemen, Umweltüberwachung und bürgernahe Dienstleistungen.</p>
+
+            <h4 className="role-title">Anderer Verantwortungsbereich</h4>
+            <p className="role-desc">Dieser Verantwortungsbereich umfasst spezifische Aufgaben, die je nach individuellem Bedarf und Schwerpunktsetzung der öffentlichen Verwaltung variieren können.</p>
+
+            <h4 className="role-title">Personal</h4>
+            <p className="role-desc">Im Personalbereich werden alle Angelegenheiten rund um die Mitarbeiterinnen und Mitarbeiter des öffentlichen Dienstes verwaltet, einschließlich Personalbeschaffung, -entwicklung, -betreuung und -administration.</p>
+
         </>
     );
 
@@ -126,31 +195,31 @@ function Registration() {
                     padding: "10px"
                 }}
             >
-                <Typography.Title level={4} style={{margin: "5px 0px"}}>
+                <Typography.Title level={4} style={{ margin: "5px 0px" }}>
                     Herzlich Willkommen bei GovLearn
                 </Typography.Title>
-                Ihrer Plattform für gezielte Weiterbildungen im öffentlichen Dienst. Wir freuen uns, Sie als neues
+                ihrer Plattform für gezielte Weiterbildungen im öffentlichen Dienst. Wir freuen uns, Sie als neues
                 Mitglied in unserer wachsenden Gemeinschaft begrüßen zu dürfen. Um Ihnen bestmögliche Empfehlungen
                 bieten zu können, möchten wir Sie durch den einfachen Registrierungsprozess führen.
-                <br/>
-                <Flex vertical style={{marginTop: "10px"}}>
+                <br />
+                <Flex vertical style={{ marginTop: "10px" }}>
                     <Flex align="center">
                         <Flex className="intro-step" vertical justify="center" align="center">
-                            <TeamOutlined style={{fontSize: "64px", color: "#212321"}}/>
-                            <h5 style={{margin: "0"}}>1. Rolle(n) wählen</h5>
+                            <TeamOutlined style={{ fontSize: "64px", color: "#212321" }} />
+                            <h5 style={{ margin: "0" }}>1. Rolle(n) wählen</h5>
                         </Flex>
                         <hr className="vertical"></hr>
                         <p>
                             Nach erfolgreicher Registrierung werden Sie gebeten, Ihre aktuelle Rolle im öffentlichen
-                            Dienst auszuwählen. Ob Sie für die Digitalisierung zuständig sind oder eine Nicht-digitale
-                            Rolle ausüben – wählen Sie die Rolle, die am besten Ihre beruflichen Aufgaben widerspiegelt.
+                            Dienst auszuwählen. Wählen Sie hierbei die Rolle(n) aus, die Sie aktuell ausüben oder
+                            ausüben möchten. Sie können auch mehrere Teilrollen auswählen.
                         </p>
                     </Flex>
-                    <br/>
+                    <br />
                     <Flex align="center">
                         <Flex className="intro-step" vertical justify="center" align="center">
-                            <StarOutlined style={{fontSize: "64px", color: "#212321"}}/>
-                            <h5 style={{margin: "0"}}>2. Kompetenzen - definieren</h5>
+                            <StarOutlined style={{ fontSize: "64px", color: "#212321" }} />
+                            <h5 style={{ margin: "0" }}>2. Kompetenzen definieren</h5>
                         </Flex>
                         <hr className="vertical"></hr>
                         <p>
@@ -176,24 +245,24 @@ function Registration() {
                 }}
             >
                 <Flex justify="space-between">
-                    <Typography.Title level={3} style={{margin: "0"}}>
+                    <Typography.Title level={3} style={{ margin: "0" }}>
                         Rollenauswahl
                     </Typography.Title>
-                    <Tooltip placement="leftBottom" title={AreaInfoText} style={{marginRight: "10px"}}>
-                        <QuestionCircleOutlined style={{fontSize: "24px"}}/>
+                    <Tooltip placement="leftBottom" title={AreaInfoText} style={{ marginRight: "10px" }}>
+                        <QuestionCircleOutlined style={{ fontSize: "24px" }} />
                     </Tooltip>
                 </Flex>
                 <Typography.Text>
                     Wählen Sie eine oder mehrere Rollen und den zugehörigen Verantwortungsbereich aus.
                 </Typography.Text>
-                <div style={{display: "flex", flexDirection: "row"}}>
+                <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
                         style={{
                             display: "flex",
                             flexDirection: "column"
                         }}
                     >
-                        <CircleSelect selectCallback={selectCallback} selected={selected}/>
+                        <CircleSelect selectCallback={selectCallback} selected={selected} />
                     </div>
                     <div
                         style={{
@@ -202,19 +271,19 @@ function Registration() {
                             marginTop: "20px"
                         }}
                     >
-                        <div style={{minHeight: "160px"}}>
-                            <Typography.Title level={4} style={{margin: "5px 0px"}}>
+                        <div style={{ minHeight: "160px" }}>
+                            <Typography.Title level={4} style={{ margin: "5px 0px" }}>
                                 Ausgewählte Rollen:
                             </Typography.Title>
-                            <Typography.Text>{selectedToText()}</Typography.Text>
+                            <Typography.Text>{selectedToDisplay()}</Typography.Text>
                         </div>
-                        <Typography.Title level={3} style={{margin: "0"}}>
+                        <Typography.Title level={3} style={{ margin: "0" }}>
                             Zusätzliche Anforderungen
                         </Typography.Title>
                         <Typography.Text>
                             Ich benötige Kompetenzen in meiner Funktion als <b>Digitallotse</b>
                             <Tooltip placement="leftBottom" title={digitalLotseInfoText}>
-                                <QuestionCircleOutlined/>
+                                <QuestionCircleOutlined />
                             </Tooltip>
                         </Typography.Text>
                         <div>
@@ -243,38 +312,71 @@ function Registration() {
                     padding: "10px"
                 }}
             >
-                <Typography.Title level={4} style={{margin: "5px 0px"}}>
+                <Typography.Title level={4} style={{ margin: "5px 0px" }}>
                     Ausgewählte Rollen:
                 </Typography.Title>
                 <Typography.Text>
-                    {selectedToText()}
+                    {selectedToDisplay()}
                     {digitallotse ? <Tag color="green">Digitallotse</Tag> : <></>}
                 </Typography.Text>
-                <Typography.Title level={4} style={{marginTop: "15px"}}>
+                <Typography.Title level={4} style={{ marginTop: "15px" }}>
                     Kompetenzen:
                 </Typography.Title>
                 <Typography.Text>
                     Wählen Sie hier die Kompetenzen ab, welche nicht in die Weiterbildungsempfehlungen einfließen
                     sollen.
                 </Typography.Text>
+                <Alert message="Kompetenzen, die bereits in anderen Rollen enthalten sind, wurden für eine bessere Übersichtlichkeit herausgefiltert." type="info" showIcon style={{marginTop:"5px", width:"fit-content"}}></Alert>
                 <div className="competence-container">
-                    <div className="competence-inner">
-                        <Typography.Title level={5} style={{margin: "5px 0px"}}>
+                    <div style={{width:"50%"}}>
+                        <Typography.Title level={5} style={{ margin: "5px 0px" }}>
                             Grundlagen-Kompetenzen
                         </Typography.Title>
                         <div className="deselect-grid">
-                            {competences.map((competence, index) => (
-                                <Deselect title={competence} key={index}/>
+                            {selectedToCompetences(1).map(role => (
+                                <div>
+                                    {
+                                        role.roleTagWsTos.length > 0?
+                                        <div>
+                                            <p>{role.name} - {role.verantwortungsbereich}</p>
+                                            <div style={{display:"flex", flexWrap:"wrap", gap:"5px"}}>
+                                                {
+                                                    role.roleTagWsTos.map((competence, index) => (
+                                                        <Deselect title={competence.tagName} id={competence.tagID} deselect={handleDeselect}
+                                                            key={index} />
+                                                    ))
+                                                }
+                                            </div>
+                                        </div>
+                                        :<div/>
+                                    }
+                                </div>
                             ))}
                         </div>
                     </div>
-                    <div className="competence-inner">
-                        <Typography.Title level={5} style={{margin: "5px 0px"}}>
+                    <div style={{width:"50%"}}>
+                        <Typography.Title level={5} style={{ margin: "5px 0px" }}>
                             Fortgeschrittene Kompetenzen
                         </Typography.Title>
                         <div className="deselect-grid">
-                            {competences.map((competence, index) => (
-                                <Deselect title={competence} key={index}/>
+                        {selectedToCompetences(2).map(role => (
+                                <div>
+                                    {
+                                        role.roleTagWsTos.length > 0?
+                                        <div>
+                                            <p>{role.name} - {role.verantwortungsbereich}</p>
+                                            <div style={{display:"flex", flexWrap:"wrap", gap:"5px"}}>
+                                                {
+                                                    role.roleTagWsTos.map((competence, index) => (
+                                                        <Deselect title={competence.tagName} id={competence.tagID} deselect={handleDeselect}
+                                                            key={index} />
+                                                    ))
+                                                }
+                                            </div>
+                                        </div>
+                                        :<div/>
+                                    }
+                                </div>
                             ))}
                         </div>
                     </div>
@@ -309,15 +411,21 @@ function Registration() {
     ];
 
     const next = () => {
-        if (current == content.length - 1) navigate("/discover");
-        else {
+        if (current == content.length - 1) {
+            handleSubmit().then(() => {
+                navigate("/discover");
+                setComplete("register")
+            });
+        } else {
             navigate(`/register/${content[current + 1].url}`);
+            window.scrollTo(0, 0);
         }
     };
 
     const prev = () => {
         if (current != 0) {
             navigate(`/register/${content[current - 1].url}`);
+            window.scrollTo(0, 0);
         }
     };
 
@@ -346,7 +454,18 @@ function Registration() {
                 style={{marginBottom: "10px", minWidth: "100%"}}
             />
             <div style={{display: "flex", flexDirection: "row", width: "100%"}}>
-                <div className="registration-content">
+                <div
+                    style={{
+                        width: "100%",
+                        background: "#F9F9F9",
+                        borderRadius: "20px",
+                        padding: "10px",
+                        display: "flex",
+                        position: "relative",
+                        color:"#3F3F3F",
+                        boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px"
+                    }}
+                >
                     <div style={{marginBottom: "40px", width: "100%"}}>{content[current].content}</div>
                     <Button
                         type="primary"

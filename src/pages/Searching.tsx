@@ -3,7 +3,7 @@ import SearchComponent from "../components/SearchComponent.tsx";
 import {Course, CourseFilterWsTo} from "../interfaces.ts";
 import {fetchWrapper} from "../api/helper.ts";
 import {useLocation} from "react-router-dom";
-import {Button} from 'antd';
+import {Button, Empty} from 'antd';
 import SearchOptions from "../components/SearchOptions.tsx";
 import Search from "antd/es/input/Search";
 import './Searching.css';
@@ -19,21 +19,21 @@ function Searching() {
 
     const location = useLocation();
 
+    const [isMore, setIsMore] = useState<boolean>(true);
     const [courses, setCourses] = useState<Course[]>([]);
     const [offset, setOffset] = useState(0);
     const [searchStr, setSearchStr] = useState<string>(location.state?.searchStr ?? "");
     const [courseFilter, setCourseFilter] = useState<CourseFilterWsTo>({
         tagIDs: location.state?.tagIDs ?? [],
-        anbieter: [],
-        wissensbezug: [],
-        verwaltungsspezifisch: false,
-        zertifikat: false,
-        kompetenzstufe: [],
         format: [],
+        dauerInMinLaengerAls: undefined,
+        verwaltungsspezifisch: undefined,
+        dauerInMinKuerzerAls: undefined,
+        anbieter: [],
         startdatum: undefined,
-        dauer: [],
-        kostenlos: false,
-        sonstiges: []
+        kompetenzstufe: [],
+        zertifikat: undefined,
+        kostenlos: undefined
     });
 
     const onSearch = (value: string) => {
@@ -55,6 +55,7 @@ function Searching() {
         setOffset(newOffset)
         fetchWrapper.post('api/v1/filter/limit/' + limit + '/offset/' + newOffset + '/' + searchStr, courseFilter).then((res) => {
             setCourses(courses => [...courses, ...res.payload]);
+            setIsMore(res.payload.length === limit);
         });
     }
 
@@ -65,6 +66,7 @@ function Searching() {
         setOffset(0);
         fetchWrapper.post('api/v1/filter/limit/' + limit + '/offset/' + 0 + '/' + searchStr, courseFilter).then((res) => {
             setCourses(res.payload);
+            setIsMore(res.payload.length === limit);
         });
     }, [searchStr, courseFilter]);
 
@@ -80,15 +82,28 @@ function Searching() {
                 </div>
                 <div className="courses-list">
                     {
-                        courses ?
-                            courses.map((course: Course) => <div key={course.id}><SearchComponent obj={course}/>
-                            </div>)
-                            : <SearchComponent/>
+                        courses && courses.length > 0 ?
+                            courses.map((course: Course) =>
+                                <div key={course.id}><SearchComponent obj={course}/></div>
+                            ) :
+                            <div style={{marginTop: "1rem"}}>
+                                <Empty description={"Für die angegebenen Kriterien wurden keine Kurse gefunden."}/>
+                            </div>
+                    }
+                    {
+                        isMore && courses.length > 0 ?
+                            <div style={{
+                                flexBasis: "100%",
+                                display: "flex",
+                                justifyContent: "center",
+                                marginTop: "20px"
+                            }}>
+                                <Button type="primary" onClick={handlePagination}>Mehr anzeigen</Button>
+                            </div> :
+                            <></>
                     }
                 </div>
-                <div className="show-more">
-                    <Button type="primary" onClick={handlePagination}>Mehr anzeigen</Button>
-                </div>
+
             </div>
         </div>
     );
