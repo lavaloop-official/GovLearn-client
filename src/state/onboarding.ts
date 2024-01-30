@@ -1,4 +1,4 @@
-import {getToken} from "./auth.ts";
+import {getToken} from "../api/auth.ts";
 
 function setComplete(key: onboardingKey) {
     const email = getCurrentlyLoggedIn()
