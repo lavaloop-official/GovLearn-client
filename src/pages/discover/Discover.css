@@ -1,0 +1,25 @@
+.discover-container {
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.carousel-container {
+    max-width: 1200px;
+    margin: auto;
+    width: 100%;
+    padding: 10px 10px;
+}
+
+.recommended-container {
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 1200px;
+    width: 100%;
+    margin: auto;
+}

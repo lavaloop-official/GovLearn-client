@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {changeBookmarkStatus, getBookmarks} from "../api/bookmarks.ts";
-import {Course} from "../interfaces.ts";
+import {Course} from "../constants/interfaces.ts";
 
 const intialState: { bookmarks: number[] } = {
     bookmarks: await getBookmarks().then((bookmarks: Course[]) => bookmarks.map((bookmark) => bookmark.id) as number[])

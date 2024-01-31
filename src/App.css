@@ -25,3 +25,7 @@ main {
     text-align: center;
     background: #fdfdfd;
 }
+
+.layout {
+    min-height: 100vh;
+}
