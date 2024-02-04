@@ -1,13 +1,11 @@
 describe('navigation', () => {
     beforeEach(() => {
-        // register values
         let random_name = 'name' + new Date().toLocaleTimeString().replace(/:/g, '');
         let random_mail = random_name + '@test.com';
         let random_password = random_name;
         cy.fixture('url').then((url) => {
             cy.visit(url.url)
         })
-        // register
         cy.get('.animated-button').click()
         cy.get('#normal_login_name').type(random_name.toString())
         cy.get('#normal_login_email').type(random_mail.toString())

@@ -81,19 +81,15 @@ describe('login_form', () => {
   })
   it('correct_login', () => {
     cy.fixture('user').then((user) => {
-      cy.get('#normal_login_email').type(user.existing_user.email)
-      cy.get('#normal_login_password').type(user.existing_user.password)
-    })
-    cy.get('button[type="submit"]').click()
+      cy.login(user.existing_user.email, user.existing_user.password)
+  })
     // Discover page is accessed after login
     cy.url().should('include', 'discover')
   })
   it('wrong_login', () => {
     cy.fixture('user').then((user) => {
-      cy.get('#normal_login_email').type(user.not_existing_user.email)
-      cy.get('#normal_login_password').type(user.not_existing_user.password)
-    })
-    cy.get('button[type="submit"]').click()
+      cy.login(user.not_existing_user.email, user.not_existing_user.password)
+  })
     cy.get('.ant-alert-message').contains('Die eingegebenen Anmeldedaten sind nicht korrekt!').should('be.visible')
   })
   it('forgot_password', () => {
