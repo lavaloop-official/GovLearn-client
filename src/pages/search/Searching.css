@@ -1,0 +1,39 @@
+.searching-container {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.search-bar {
+    flex-basis: 100%;
+    text-align: center;
+    margin-top: 1rem;
+    max-width: 400px;
+}
+
+.search-results {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.search-options {
+    margin: 1rem;
+}
+
+.courses-list {
+    flex: 1;
+    max-width: 1000px;
+    margin-right: 1rem;
+}
+
+.show-more {
+    flex-basis: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}

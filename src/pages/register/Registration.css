@@ -1,0 +1,81 @@
+.competence-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    flex-grow: 1;
+    gap: 24px
+}
+
+.competence-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.competence-inner {
+    width: 100%;
+}
+
+.deselect-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.intro-step {
+    min-width: 100px;
+}
+
+.vertical {
+    width: 1px;
+    height: 64px;
+    display: inline-block;
+}
+
+.registration-container {
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+    margin: 10px auto;
+    max-width: 1200px;
+    padding: 10px 10px;
+}
+
+.registration-content {
+    width: 100%;
+    background: #d9d9d9;
+    border-radius: 20px;
+    padding: 10px;
+    display: flex;
+    position: relative;
+}
+
+.registration-button {
+    position: absolute;
+    bottom: 10px;
+}
+
+.registration-button.back {
+    left: 10px;
+}
+
+.registration-button.next {
+    right: 10px;
+}
+
+.role-title{
+    cursor: pointer;
+}
+
+.role-title:hover + .role-desc{
+    opacity: 1;
+    height: auto;
+}
+
+.role-desc{
+    transition: opacity 1s ease-out;
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+}
