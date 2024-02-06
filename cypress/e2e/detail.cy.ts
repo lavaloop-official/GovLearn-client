@@ -23,6 +23,16 @@ describe('Feedback', () => {
             cy.get('.ant-btn-dangerous').contains('Ja').click()
             cy.wait('@delete_feedback').its('response.statusCode').should('eq', 200)
     })
+    it('bookmark', () => {
+        // add bookmark
+        cy.intercept('POST','http://localhost:8080/api/v1/bookmarks/*').as('bookmark');
+        cy.get('.bookmark-outer').first().click()
+        cy.wait('@bookmark').its('response.statusCode').should('eq', 200)
+        // delete bookmark
+        cy.intercept('DELETE','http://localhost:8080/api/v1/bookmarks/*').as('delete_bookmark');
+        cy.get('.bookmark-outer').first().click()
+        cy.wait('@delete_bookmark').its('response.statusCode').should('eq', 200)
+    })
 
     
 })
