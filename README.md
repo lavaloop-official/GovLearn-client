@@ -38,11 +38,12 @@ Before running the tests, make sure you have the following prerequisites install
 
 To install dependencies, run:
 
-```bash
+```
 npm install
+```
 To execute the Cypress tests, use the following command:
 
-bash
-Copy code
+```
 npx cypress open
+```
 This will open the Cypress Test Runner, allowing you to select and run specific tests.
