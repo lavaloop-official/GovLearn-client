@@ -1,15 +1,7 @@
 describe('Feedback', () => {
     beforeEach(() => {
         cy.fixture('url').then((url) => {
-            cy.visit(url.url)
-        })
-        cy.get('button').contains('Anmelden').click()
-        cy.fixture('user').then((user) => {
-            cy.login(user.existing_user.email, user.existing_user.password)
-        })
-        cy.get('.ant-tour-next-btn').click()
-        cy.fixture('url').then((url) => {
-            cy.visit(url.url + 'detail/1')
+            cy.setup(url.url + 'detail/1')
         })
     })
     it('send_feedback', () => {
@@ -27,8 +19,8 @@ describe('Feedback', () => {
             
         // delete feedback
             cy.intercept('DELETE','http://localhost:8080/api/v1/feedback/*').as('delete_feedback')
-            cy.get('.ant-btn-dangerous').click()
-            cy.contains('Ja').click()
+            cy.get('#feedback-delete').click()
+            cy.get('.ant-btn-dangerous').contains('Ja').click()
             cy.wait('@delete_feedback').its('response.statusCode').should('eq', 200)
     })
 

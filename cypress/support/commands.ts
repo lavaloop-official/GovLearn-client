@@ -14,6 +14,7 @@ declare namespace Cypress {
     interface Chainable<Subject = any> {
         login(email: string, password: string): Chainable<Subject>;
         generateString(length: number): string;
+        setup(url: string): Chainable<Subject>;
     }
   }
 
@@ -21,6 +22,21 @@ Cypress.Commands.add('login', (email: string, password: string) => {
     cy.get('#normal_login_email').type(email);
     cy.get('#normal_login_password').type(password);
     cy.get('button[type=submit]').click();
+});
+
+
+Cypress.Commands.add('setup', (url: string) => {
+    cy.fixture('url').then((url) => {
+        cy.visit(url.url)
+    })
+    cy.get('button').contains('Anmelden').click()
+    cy.fixture('user').then((user) => {
+        cy.login(user.existing_user.email, user.existing_user.password)
+    })
+    cy.get('.ant-tour-next-btn').click()
+    
+    cy.visit(url)
+    
 });
 
 // This Command is used to generate names and emails that not exist in the database

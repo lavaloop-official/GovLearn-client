@@ -113,7 +113,7 @@ function ReviewComp({id, finishCallback}: { id?: number, finishCallback: () => v
                             right: "10px"
                         }}>
                             <Button icon={<EditOutlined/>} onClick={() => setEditing(true)}/>
-                            <Button danger icon={<DeleteOutlined/>} onClick={() => deleteReview()}/>
+                            <Button id="feedback-delete" danger icon={<DeleteOutlined/>} onClick={() => deleteReview()}/>
                         </div>
                     </>
 
