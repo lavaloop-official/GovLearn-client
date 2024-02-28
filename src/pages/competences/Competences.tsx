@@ -55,7 +55,7 @@ function Competences() {
                     style={{flex: 1, minWidth: 0}}
                 />
             </Header>
-            <h4>Passe die dir zugeordneten Kompetenzen einfach an.</h4>
+            <h4>Passen Sie die Ihnen zugeordneten Kompetenzen einfach an.</h4>
             <p>Hinweis: Durch die von Ihnen abgeschlossen Weiterbildungen werden ihre Kompetenzen kontinuierlich
                 angepasst.</p>
             <Flex vertical wrap="wrap" gap={"10px"}>

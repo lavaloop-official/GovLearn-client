@@ -116,7 +116,7 @@ function Landing() {
                                             <Card style={attributeCardStyle}>
                                                 <p style={{color: "white", fontSize: "large"}}>
                                                     Unser breites Spektrum an Weiterbildungsangeboten
-                                                    ermöglicht es dir, deine Fähigkeiten zu erweitern und
+                                                    ermöglicht es Ihnen, ihre Fähigkeiten zu erweitern und
                                                     beruflich voranzukommen.
                                                 </p>
                                             </Card>
@@ -131,15 +131,15 @@ function Landing() {
                                                     style={{fontSize: "64px", color: "white"}}
                                                 />
                                                 <p style={{color: "white", fontSize: "large"}}>
-                                                    Finde das Angebot, welches für dich am besten passt
+                                                    Finden Sie das Angebot, welches für Sie am besten passt
                                                 </p>
                                             </Card>
                                         </div>
                                         <div className="flip-box-back">
                                             <Card style={attributeCardStyle}>
                                                 <p style={{color: "white", fontSize: "large"}}>
-                                                    Unsere Plattform nutzt moderne Technologie, um dir
-                                                    gezielt Weiterbildungsangebote vorzuschlagen, die deinen
+                                                    Unsere Plattform nutzt moderne Technologie, um Ihnen
+                                                    gezielt Weiterbildungsangebote vorzuschlagen, die ihren
                                                     Bedürfnissen entsprechen.
                                                 </p>
                                             </Card>
@@ -154,15 +154,15 @@ function Landing() {
                                                     style={{fontSize: "64px", color: "white"}}
                                                 />
                                                 <p style={{color: "white", fontSize: "large"}}>
-                                                    Ordne deinem Team Angebote zu
+                                                    Ordnen Sie ihrem Team Angebote zu
                                                 </p>
                                             </Card>
                                         </div>
                                         <div className="flip-box-back">
                                             <Card style={attributeCardStyle}>
                                                 <p style={{color: "white", fontSize: "large"}}>
-                                                    Unsere Plattform ermöglicht es dir,
-                                                    Weiterbildungsangebote effizient an dein Team zuzuweisen
+                                                    Unsere Plattform ermöglicht es Ihnen,
+                                                    Weiterbildungsangebote effizient an ihr Team zuzuweisen
                                                     und deren berufliche Entwicklung zu fördern.
                                                 </p>
                                             </Card>
