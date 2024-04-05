@@ -1,0 +1,40 @@
+.slider {
+    position: relative;
+    display: flex;
+}
+
+.slider.inner {
+    background: rgb(244, 244, 244);
+    flex-direction: row;
+    overflow-x: hidden;
+    padding: 10px 10px;
+    border-radius: 30px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.slider.outer {
+    max-width: 1200px;
+    padding: 0px 10px;
+    width: 100%;
+    margin: auto;
+    flex-direction: column;
+}
+
+.showmore {
+    position: absolute;
+    bottom: 88px;
+    scale: 1.5;
+    background: rgba(231, 231, 231, 0.7);
+}
+
+.showmore:hover {
+    background: rgb(69, 69, 69, 0.9);
+}
+
+.showmore.right {
+    right: 30px;
+}
+
+.showmore.left {
+    left: 30px;
+}

@@ -1,1 +1,1 @@
-export const BACKEND_URL = "https://govlearn-production-825c.up.railway.app:8080/";
+export const BACKEND_URL = import.meta.env.VITE_API_URL;

@@ -1,4 +1,4 @@
-import {Course} from "../interfaces.ts";
+import {Course} from "../constants/interfaces.ts";
 import {fetchWrapper} from "./helper.ts";
 
 export function changeBookmarkStatus(id: number, status: boolean) {

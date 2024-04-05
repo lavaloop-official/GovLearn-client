@@ -1,0 +1,12 @@
+{
+  "existing_user": {
+    "name": "test",
+    "email": "test@test.de",
+    "password": "testtest"
+  },
+  "not_existing_user": {
+    "name": "test2",
+    "email": "test2@test2.de",
+    "password": "testtest"
+  }
+}
