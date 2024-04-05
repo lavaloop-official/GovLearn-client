@@ -1,1 +1,1 @@
-export const BACKEND_URL = "http://localhost:8080/";
+export const BACKEND_URL = "https://govlearn-production-825c.up.railway.app:8080/";
